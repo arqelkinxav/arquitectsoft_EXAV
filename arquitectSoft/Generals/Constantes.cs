@@ -22,14 +22,14 @@ namespace arquitectSoft.Generals
             + " Cantidad_Adicional,"
             + " Aplica_Decremento) VALUES (?,?,?,?,?,?);";
         public static String QUERY_GET_COMPONENTE_DETALLE = "componenteDetalleCargar";
-
+        public static String QUERY_DELETE_COMPONENTE = "DELETE FROM arquitectdb.componentes WHERE Id_Componente = ?;";
         public static String QUERY_DELETE_COMPONENTE_DETALLE = "DELETE FROM arquitectdb.componentes_detalle WHERE Id_Componente = ?;";
 
         //Sub Componente
         public static String QUERY_SUBCOMPONENTES = "SELECT Id_SubComponente,Codigo_Homologacion,Descripcion FROM arquitectdb.subcomponentes ";
 
         //Unidad Calculada
-        public static String QUERY_UNIDADCALCULADA = "SELECT Id_Unidad_Calculada,Descripcion FROM arquitectdb.unidades_calculadas ";
+        public static String QUERY_UNIDADCALCULADA = "SELECT Id_Unidad_Calculada,Descripcion FROM arquitectdb.unidades_calculadas";
 
 
     }

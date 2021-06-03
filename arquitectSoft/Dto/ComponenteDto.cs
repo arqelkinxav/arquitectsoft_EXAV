@@ -151,6 +151,29 @@ namespace arquitectSoft.Dto
             return SwSave;
         }
 
+        public string DeleteComponent(int idComponente)
+        {
+            Generals.Conexion con = new Generals.Conexion();
+            string fail = "";
+            string resul = "";
+            con.Open(out fail);
+            string[] param = { idComponente.ToString() };
+            try { 
+
+                con.ExecuteNonQuery(Generals.Constantes.QUERY_DELETE_COMPONENTE, out fail, param);
+                con.ExecuteNonQuery(Generals.Constantes.QUERY_DELETE_COMPONENTE_DETALLE, out fail, param);
+
+                resul = "Registro Eliminado Correctamente";
+            
+            }
+            catch (Exception ex)
+            {
+                resul = ex.Message.ToString();
+                con.Close();
+            }
+            return resul;
+        }
+
 
 
 

@@ -22,10 +22,21 @@ namespace arquitectSoft.View
 
         public string Opc;
 
-        private void BtnSalir_Click(object sender, EventArgs e)
+        private void FrmComponente_Load(object sender, EventArgs e)
         {
-            this.Close();
+            // TODO: This line of code loads data into the 'arquitectdbDataSet.unidades_calculadas' table. You can move, or remove it, as needed.
+
+            txtCodigo.Enabled = false;
+            txtDescripcion.Enabled = false;
+            chkNoSubComp.Enabled = false;
+            BtnCheck.Enabled = false;
+            BtnAgregar.Enabled = false;
+            BtnBorrar.Enabled = false;
+
+            initialize_datagrid();
         }
+
+        #region Botones
 
         private void BtnNuevo_Click(object sender, EventArgs e)
         {
@@ -33,7 +44,6 @@ namespace arquitectSoft.View
             ClearComponent();
             habilitarNuevo(null);
         }
-
         private void BtnGuardar_Click(object sender, EventArgs e)
         {
             Dto.ComponenteDto dto = new Dto.ComponenteDto();
@@ -64,23 +74,43 @@ namespace arquitectSoft.View
             BloquearCancelar();
 
         }
-
-        private void BtnCheck_Click(object sender, EventArgs e)
+        private void BtnEditar_Click(object sender, EventArgs e)
         {
-            Dto.ComponenteDto dto = new Dto.ComponenteDto();
-            string resul = dto.ExistComponent(txtCodigo.Text, txtDescripcion.Text);
-            resul = (resul!="") ? "Componente ya Existe" : "Componente Disponible para Guardar";
-            MessageBox.Show(resul, "Mensaje Alerta", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        }
+            Opc = "Editar";
+            DialogResult result = MessageBox.Show("Esta seguro de editar el registro?", "Mensaje Alerta", MessageBoxButtons.YesNo);
+            if (result == DialogResult.Yes)
+            {
+                txtDescripcion.Enabled = true;
+                chkNoSubComp.Enabled = true;
+                BtnAgregar.Enabled = true;
+                BtnBorrar.Enabled = true;
 
-        private void BtnCancelar_Click(object sender, EventArgs e)
+                habilitarNuevo(Opc);
+            }
+
+
+        }
+        private void BtnEliminar_Click(object sender, EventArgs e)
         {
-            ClearComponent();
-            BloquearCancelar();
-        }
+            Opc = "Eliminar";
+            DialogResult result = MessageBox.Show("Esta seguro de eliminar el registro?", "Mensaje Alerta", MessageBoxButtons.YesNo);
+            if (result == DialogResult.Yes)
+            {
 
+                Dto.ComponenteDto dto = new Dto.ComponenteDto();
+                string resul = dto.ExistComponent(txtCodigo.Text, txtDescripcion.Text);
+
+                resul = dto.DeleteComponent(Int32.Parse(resul));
+
+                MessageBox.Show(resul, "Mensaje Alerta", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+
+
+        }
         private void BtnBuscar_Click(object sender, EventArgs e)
         {
+            GridViewComponente.DataSource = null;
+            bindingSource1.Clear();
             Dto.ComponenteDto dto = new Dto.ComponenteDto();
             FrmBuscar bsc = new FrmBuscar();
             bsc.ShowDialog();
@@ -96,11 +126,26 @@ namespace arquitectSoft.View
                 int decre = Int32.Parse(row["ADecremento"].ToString());
                 bool adrecre = decre == 1 ? true : false;
 
-                bindingSource1.Add(new Sub_Component(row["Codigo"].ToString(), row["Descripcion"].ToString(), (int)row["Cxdefecto"], (int)row["CAdicional"], row["UnidadCalculada"].ToString(), adrecre, (int)row["IdSubcomponente"])); 
-            }            
+                bindingSource1.Add(new Sub_Component(row["Codigo"].ToString(), row["Descripcion"].ToString(), (int)row["Cxdefecto"], (int)row["CAdicional"], row["Id_Unidad_Calculada"].ToString(), adrecre, (int)row["IdSubcomponente"]));
+            }
 
             GridViewComponente.DataSource = bindingSource1;
-            
+            GridViewComponente.Refresh();
+
+            if (dt.Rows.Count > 0)
+            {
+                foreach (DataGridViewRow row in GridViewComponente.Rows)
+                {
+                    int uni = Int32.Parse(dt.Rows[row.Index]["Id_Unidad_Calculada"].ToString());
+                    if (uni > 0 && uni < 6)
+                    {
+                        DataGridViewComboBoxCell comboBoxCell = (DataGridViewComboBoxCell)(row.Cells[3]);
+                        comboBoxCell.Value = uni;
+                    }
+                }
+            }
+
+
 
             txtCodigo.Enabled = false;
             txtDescripcion.Enabled = false;
@@ -109,95 +154,31 @@ namespace arquitectSoft.View
             BtnCancelar.Enabled = true;
             BtnEditar.Enabled = true;
             BtnEliminar.Enabled = true;
-            
-        }
+            GridViewComponente.Enabled = false;
 
-        private void FrmComponente_Load(object sender, EventArgs e)
+
+        }
+        private void BtnCancelar_Click(object sender, EventArgs e)
         {
-            // TODO: This line of code loads data into the 'arquitectdbDataSet.unidades_calculadas' table. You can move, or remove it, as needed.
-           
-            txtCodigo.Enabled = false;
-            txtDescripcion.Enabled = false;
-            chkNoSubComp.Enabled = false;
-            BtnCheck.Enabled = false;
-            BtnAgregar.Enabled = false;
-            BtnBorrar.Enabled = false;
-            initialize_datagrid();
+            ClearComponent();
+            BloquearCancelar();
         }
-
-        private void BtnEditar_Click(object sender, EventArgs e)
+        private void BtnSalir_Click(object sender, EventArgs e)
         {
-            Opc = "Editar";
-            DialogResult result = MessageBox.Show("Esta seguro de editar el registro?", "Mensaje Alerta", MessageBoxButtons.YesNo);
-            if (result == DialogResult.Yes)
-            {
-                txtDescripcion.Enabled = true;
-                chkNoSubComp.Enabled = true;
-                BtnAgregar.Enabled = true;
-                BtnBorrar.Enabled = true;
-                habilitarNuevo(Opc);
-            }
-
-            
+            this.Close();
         }
-
-        private void ClearComponent()
+        private void BtnCheck_Click(object sender, EventArgs e)
         {
-            txtCodigo.Text = "";
-            txtDescripcion.Text = "";
-            chkNoSubComp.Checked = false;
-            GridViewComponente.DataSource = "";
-
+            Dto.ComponenteDto dto = new Dto.ComponenteDto();
+            string resul = dto.ExistComponent(txtCodigo.Text, txtDescripcion.Text);
+            resul = (resul != "0") ? "Componente ya Existe" : "Componente Disponible para Guardar";
+            MessageBox.Show(resul, "Mensaje Alerta", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
-
-        private void habilitarNuevo(string opcion)
-        {
-            BtnGuardar.Enabled = true;
-            BtnCancelar.Enabled = true;
-            BtnCheck.Enabled = true; 
-            switch (opcion)
-            {
-                case "Editar": txtCodigo.Enabled = false;
-                    break;
-                default: txtCodigo.Enabled = true;
-                    break;
-            }
-            
-            txtDescripcion.Enabled = true;
-            chkNoSubComp.Enabled = true;
-            BtnAgregar.Enabled = true;
-            BtnBorrar.Enabled = true;
-
-            BtnNuevo.Enabled = false;
-            BtnEditar.Enabled = false;
-            BtnEliminar.Enabled = false;
-            BtnBuscar.Enabled = false;
-        }
-
-        private void BloquearCancelar()
-        {
-            BtnCancelar.Enabled = false;
-            BtnGuardar.Enabled = false;
-            BtnCheck.Enabled = false;
-            txtCodigo.Enabled = false;
-            txtDescripcion.Enabled = false;
-            chkNoSubComp.Enabled = false;
-            BtnAgregar.Enabled = false;
-            BtnBorrar.Enabled = false;
-
-            BtnNuevo.Enabled = true;
-            BtnEditar.Enabled = false;
-            BtnEliminar.Enabled = false;
-            BtnBuscar.Enabled = true;
-
-            bindingSource1.Clear();
-        }
-
         private void BtnAgregar_Click(object sender, EventArgs e)
         {
             if (!chkNoSubComp.Checked)
             {
-               
+
                 FrmBuscar bsc = new FrmBuscar();
                 bsc.Consulta = "SubComp";
                 bsc.ShowDialog();
@@ -211,9 +192,27 @@ namespace arquitectSoft.View
                 MessageBox.Show("Debe Primero Quitar el Check de No Sub componente", "Mensaje Alerta", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
 
-           
+
 
         }
+
+        private void BtnBorrar_Click(object sender, EventArgs e)
+        {
+
+         
+            string descripcion = GridViewComponente.Rows[GridViewComponente.CurrentCell.RowIndex].Cells[2].Value.ToString();
+
+            DialogResult result = MessageBox.Show(string.Format("Esta seguro de Borrar el Item de Detalle: {0} ?", descripcion), "Mensaje Alerta", MessageBoxButtons.YesNo);
+            if (result == DialogResult.Yes)
+            {
+                GridViewComponente.Rows.RemoveAt(GridViewComponente.CurrentCell.RowIndex);
+            }
+        }
+
+        #endregion
+
+
+        #region Metodos
 
         private void initialize_datagrid()
         {
@@ -232,12 +231,57 @@ namespace arquitectSoft.View
             GridViewComponente.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             GridViewComponente.Columns[0].ReadOnly = true;
             GridViewComponente.Columns[1].ReadOnly = true;
+            GridViewComponente.Columns[2].ReadOnly = true;
 
             //GridViewComponente.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             GridViewComponente.RowHeadersVisible = false;
 
         }
+        private void habilitarNuevo(string opcion)
+        {
+            BtnGuardar.Enabled = true;
+            BtnCancelar.Enabled = true;
+            BtnCheck.Enabled = true;
+            switch (opcion)
+            {
+                case "Editar":
+                    txtCodigo.Enabled = false;
+                    break;
+                default:
+                    txtCodigo.Enabled = true;
+                    break;
+            }
 
+            txtDescripcion.Enabled = true;
+            chkNoSubComp.Enabled = true;
+            BtnAgregar.Enabled = true;
+            BtnBorrar.Enabled = true;
+            GridViewComponente.Enabled = true;
+
+            BtnNuevo.Enabled = false;
+            BtnEditar.Enabled = false;
+            BtnEliminar.Enabled = false;
+            BtnBuscar.Enabled = false;
+        }
+        private void BloquearCancelar()
+        {
+            BtnCancelar.Enabled = false;
+            BtnGuardar.Enabled = false;
+            BtnCheck.Enabled = false;
+            txtCodigo.Enabled = false;
+            txtDescripcion.Enabled = false;
+            chkNoSubComp.Enabled = false;
+            BtnAgregar.Enabled = false;
+            BtnBorrar.Enabled = false;
+            GridViewComponente.Enabled = false;
+
+            BtnNuevo.Enabled = true;
+            BtnEditar.Enabled = false;
+            BtnEliminar.Enabled = false;
+            BtnBuscar.Enabled = true;
+
+            bindingSource1.Clear();
+        }
         private void SaveComponent(Dto.ComponenteDto dto)
         {
             string resul = "0";
@@ -266,7 +310,7 @@ namespace arquitectSoft.View
 
 
 
-                resul = dto.SaveComponent(txtCodigo.Text, txtDescripcion.Text, chkNoSubComp.Checked,Opc, Sbarray,resul);
+                resul = dto.SaveComponent(txtCodigo.Text, txtDescripcion.Text, chkNoSubComp.Checked, Opc, Sbarray, resul);
                 ClearComponent();
                 MessageBox.Show(resul, "Mensaje Alerta", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -275,7 +319,18 @@ namespace arquitectSoft.View
                 MessageBox.Show(resul, "Mensaje Alerta", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
+        private void ClearComponent()
+        {
+            txtCodigo.Text = "";
+            txtDescripcion.Text = "";
+            chkNoSubComp.Checked = false;
+            GridViewComponente.DataSource = "";
 
+        }
+
+
+
+        #endregion
 
 
     }

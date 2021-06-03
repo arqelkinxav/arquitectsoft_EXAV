@@ -211,10 +211,13 @@ namespace arquitectSoft.View
             this.unidadCalculadaDataGridViewTextBoxColumn1,
             this.aDecrementoDataGridViewTextBoxColumn1});
             this.GridViewComponente.DataSource = this.subComponentBindingSource;
+            this.GridViewComponente.Enabled = false;
             this.GridViewComponente.Location = new System.Drawing.Point(1, 179);
             this.GridViewComponente.Name = "GridViewComponente";
+            this.GridViewComponente.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.GridViewComponente.Size = new System.Drawing.Size(787, 230);
             this.GridViewComponente.TabIndex = 23;
+
             // 
             // BtnCheck
             // 
@@ -247,6 +250,7 @@ namespace arquitectSoft.View
             this.BtnBorrar.TabIndex = 26;
             this.BtnBorrar.Text = "Borrar";
             this.BtnBorrar.UseVisualStyleBackColor = true;
+            this.BtnBorrar.Click += new System.EventHandler(this.BtnBorrar_Click);
             // 
             // BtnCancelar
             // 
@@ -333,6 +337,7 @@ namespace arquitectSoft.View
             this.BtnEliminar.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.BtnEliminar.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.BtnEliminar.UseVisualStyleBackColor = false;
+            this.BtnEliminar.Click += new System.EventHandler(this.BtnEliminar_Click);
             // 
             // BtnEditar
             // 
