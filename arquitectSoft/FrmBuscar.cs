@@ -107,7 +107,7 @@ namespace arquitectSoft
         {
             if (e.KeyCode == Keys.Enter)
             {
-                Buscar();
+                Buscar();//Refactoring
             }
 
    
