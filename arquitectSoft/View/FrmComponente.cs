@@ -51,27 +51,28 @@ namespace arquitectSoft.View
 
             bool SwSave = dto.ValilidationSaveComponenet(txtCodigo.Text, txtDescripcion.Text, chkNoSubComp.Checked, GridViewComponente.RowCount, out fail);
 
-            if (chkNoSubComp.Checked == true)
-            {
-                DialogResult result = MessageBox.Show("Esta seguro de marcar que no posee subcomponente?", "Mensaje Alerta", MessageBoxButtons.YesNo);
-                if (result == DialogResult.No)
-                {
-                    fail = "No se Guardo ningun Registro!";
-                    SwSave = false;
-                }
-            }
+            //if (chkNoSubComp.Checked == true)
+            //{
+            //    DialogResult result = MessageBox.Show("Esta seguro de marcar que no posee subcomponente?", "Mensaje Alerta", MessageBoxButtons.YesNo);
+            //    if (result == DialogResult.No)
+            //    {
+            //        fail = "No se Guardo ningun Registro!";
+            //        SwSave = false;
+            //    }
+            //}
 
 
             if (SwSave == true)
             {
                 SaveComponent(dto);
+                BloquearCancelar();
             }
             else
             {
                 MessageBox.Show(fail, "Mensaje Alerta", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
 
-            BloquearCancelar();
+          
 
         }
         private void BtnEditar_Click(object sender, EventArgs e)
@@ -102,6 +103,8 @@ namespace arquitectSoft.View
 
                 resul = dto.DeleteComponent(Int32.Parse(resul));
 
+                BloquearCancelar();
+
                 MessageBox.Show(resul, "Mensaje Alerta", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
 
@@ -114,10 +117,13 @@ namespace arquitectSoft.View
             Dto.ComponenteDto dto = new Dto.ComponenteDto();
             FrmBuscar bsc = new FrmBuscar();
             bsc.ShowDialog();
-
+            if (bsc.ReturnItem1 == null)
+            {
+                return;
+            }
             txtCodigo.Text = bsc.ReturnItem1;
             txtDescripcion.Text = bsc.ReturnItem2;
-            chkNoSubComp.Checked = bsc.ReturnItem3 == "1" ? true : false;
+            //chkNoSubComp.Checked = bsc.ReturnItem3 == "1" ? true : false;
 
             DataTable dt = dto.GetComponentDetalle(bsc.ReturnItem4);
 
@@ -154,6 +160,7 @@ namespace arquitectSoft.View
             BtnCancelar.Enabled = true;
             BtnEditar.Enabled = true;
             BtnEliminar.Enabled = true;
+            BtnDuplicar.Enabled = true;
             GridViewComponente.Enabled = false;
 
 
@@ -183,9 +190,12 @@ namespace arquitectSoft.View
                 bsc.Consulta = "SubComp";
                 bsc.ShowDialog();
 
-                bindingSource1.Add(new Sub_Component(bsc.ReturnItem2, bsc.ReturnItem3, 1, 30, "", false, Int32.Parse(bsc.ReturnItem1)));
+                if(bsc.ReturnItem0 != null)
+                {
+                    bindingSource1.Add(new Sub_Component(bsc.ReturnItem1, bsc.ReturnItem2, 1, 30, "", false, Int32.Parse(bsc.ReturnItem0)));
 
-                GridViewComponente.DataSource = bindingSource1;
+                    GridViewComponente.DataSource = bindingSource1;
+                }
             }
             else
             {
@@ -195,7 +205,6 @@ namespace arquitectSoft.View
 
 
         }
-
         private void BtnBorrar_Click(object sender, EventArgs e)
         {
 
@@ -262,6 +271,7 @@ namespace arquitectSoft.View
             BtnEditar.Enabled = false;
             BtnEliminar.Enabled = false;
             BtnBuscar.Enabled = false;
+            BtnDuplicar.Enabled = false;
         }
         private void BloquearCancelar()
         {
@@ -278,6 +288,7 @@ namespace arquitectSoft.View
             BtnNuevo.Enabled = true;
             BtnEditar.Enabled = false;
             BtnEliminar.Enabled = false;
+            BtnDuplicar.Enabled = false;
             BtnBuscar.Enabled = true;
 
             bindingSource1.Clear();
@@ -309,7 +320,6 @@ namespace arquitectSoft.View
                 }
 
 
-
                 resul = dto.SaveComponent(txtCodigo.Text, txtDescripcion.Text, chkNoSubComp.Checked, Opc, Sbarray, resul);
                 ClearComponent();
                 MessageBox.Show(resul, "Mensaje Alerta", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -330,8 +340,17 @@ namespace arquitectSoft.View
 
 
 
+
         #endregion
 
+        private void BtnDuplicar_Click(object sender, EventArgs e)
+        {
+            Opc = "Duplicar";
+            txtCodigo.Enabled = true;            
+            txtCodigo.Text = "";
+            txtDescripcion.Text = "";
 
+            habilitarNuevo(Opc);
+        }
     }
 }

@@ -103,7 +103,7 @@ namespace arquitectSoft.Generals
             return null;
         }
 
-        public int ExecuteNonQuery(string sql, out string fail, string[] param)
+        public int ExecuteNonQuery(string sql, out string fail, string[] param,int IsSP)
         {
             try
             {
@@ -112,6 +112,8 @@ namespace arquitectSoft.Generals
                 MySqlTransaction mytransaction = conn.BeginTransaction();
                 MySqlCommand cmd = conn.CreateCommand();
                 cmd.CommandText = sql;
+                cmd.CommandType = IsSP==1? CommandType.Text : CommandType.Text;
+
                 foreach (string i in param)
                 {
                     cmd.Parameters.Add(new MySqlParameter("", i));

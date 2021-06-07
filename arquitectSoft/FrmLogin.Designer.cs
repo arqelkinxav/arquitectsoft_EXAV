@@ -89,7 +89,7 @@ namespace arquitectSoft
             this.TxtUser.Location = new System.Drawing.Point(130, 77);
             this.TxtUser.Name = "TxtUser";
             this.TxtUser.Size = new System.Drawing.Size(137, 20);
-            this.TxtUser.TabIndex = 4;
+            this.TxtUser.TabIndex = 1;
             // 
             // TxtPass
             // 
@@ -97,7 +97,7 @@ namespace arquitectSoft
             this.TxtPass.Name = "TxtPass";
             this.TxtPass.PasswordChar = '*';
             this.TxtPass.Size = new System.Drawing.Size(137, 20);
-            this.TxtPass.TabIndex = 5;
+            this.TxtPass.TabIndex = 2;
             // 
             // BtnIngresar
             // 
@@ -107,7 +107,7 @@ namespace arquitectSoft
             this.BtnIngresar.Location = new System.Drawing.Point(205, 158);
             this.BtnIngresar.Name = "BtnIngresar";
             this.BtnIngresar.Size = new System.Drawing.Size(75, 23);
-            this.BtnIngresar.TabIndex = 6;
+            this.BtnIngresar.TabIndex = 3;
             this.BtnIngresar.Text = "Ingresar";
             this.BtnIngresar.UseVisualStyleBackColor = false;
             this.BtnIngresar.Click += new System.EventHandler(this.BtnIngresar_Click);

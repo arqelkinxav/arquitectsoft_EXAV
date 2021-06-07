@@ -123,7 +123,8 @@ namespace arquitectSoft
             this.txtBuscar.Location = new System.Drawing.Point(79, 130);
             this.txtBuscar.Name = "txtBuscar";
             this.txtBuscar.Size = new System.Drawing.Size(425, 20);
-            this.txtBuscar.TabIndex = 25;
+            this.txtBuscar.TabIndex = 1;
+            this.txtBuscar.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtBuscar_KeyDown);
             // 
             // GridViewBusqueda
             // 
@@ -139,7 +140,7 @@ namespace arquitectSoft
             this.GridViewBusqueda.ReadOnly = true;
             this.GridViewBusqueda.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.GridViewBusqueda.Size = new System.Drawing.Size(593, 273);
-            this.GridViewBusqueda.TabIndex = 24;            
+            this.GridViewBusqueda.TabIndex = 24;
             this.GridViewBusqueda.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.GridViewBusqueda_CellMouseDoubleClick);
             // 
             // BtnSalir

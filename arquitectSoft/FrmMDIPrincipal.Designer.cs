@@ -41,8 +41,8 @@ namespace arquitectSoft
             this.TMSItem_procesos = new System.Windows.Forms.ToolStripMenuItem();
             this.calcularCantidadesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.salirToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.acercaDeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.Mdi_nameConnect = new System.Windows.Forms.ToolStripStatusLabel();
             this.menuStrip.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -93,6 +93,7 @@ namespace arquitectSoft
             this.TMSItem_subComponente.Name = "TMSItem_subComponente";
             this.TMSItem_subComponente.Size = new System.Drawing.Size(228, 22);
             this.TMSItem_subComponente.Text = "SubComponente";
+            this.TMSItem_subComponente.Click += new System.EventHandler(this.TMSItem_subComponente_Click);
             // 
             // TMSItem_configuracion
             // 
@@ -106,13 +107,13 @@ namespace arquitectSoft
             // TMSItem_acabados
             // 
             this.TMSItem_acabados.Name = "TMSItem_acabados";
-            this.TMSItem_acabados.Size = new System.Drawing.Size(180, 22);
+            this.TMSItem_acabados.Size = new System.Drawing.Size(126, 22);
             this.TMSItem_acabados.Text = "Acabados";
             // 
             // TMSItem_cortes
             // 
             this.TMSItem_cortes.Name = "TMSItem_cortes";
-            this.TMSItem_cortes.Size = new System.Drawing.Size(180, 22);
+            this.TMSItem_cortes.Size = new System.Drawing.Size(126, 22);
             this.TMSItem_cortes.Text = "Cortes";
             // 
             // TMSItem_procesos
@@ -127,7 +128,7 @@ namespace arquitectSoft
             // calcularCantidadesToolStripMenuItem
             // 
             this.calcularCantidadesToolStripMenuItem.Name = "calcularCantidadesToolStripMenuItem";
-            this.calcularCantidadesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.calcularCantidadesToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
             this.calcularCantidadesToolStripMenuItem.Text = "Calcular Cantidades";
             // 
             // salirToolStripMenuItem
@@ -138,6 +139,13 @@ namespace arquitectSoft
             this.salirToolStripMenuItem.Text = "Salir";
             this.salirToolStripMenuItem.Click += new System.EventHandler(this.salirToolStripMenuItem_Click);
             // 
+            // acercaDeToolStripMenuItem
+            // 
+            this.acercaDeToolStripMenuItem.Name = "acercaDeToolStripMenuItem";
+            this.acercaDeToolStripMenuItem.Size = new System.Drawing.Size(71, 20);
+            this.acercaDeToolStripMenuItem.Text = "Acerca de";
+            this.acercaDeToolStripMenuItem.Click += new System.EventHandler(this.acercaDeToolStripMenuItem_Click);
+            // 
             // statusStrip1
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -147,13 +155,6 @@ namespace arquitectSoft
             this.statusStrip1.Size = new System.Drawing.Size(632, 22);
             this.statusStrip1.TabIndex = 2;
             this.statusStrip1.Text = "statusStrip1";
-            // 
-            // acercaDeToolStripMenuItem
-            // 
-            this.acercaDeToolStripMenuItem.Name = "acercaDeToolStripMenuItem";
-            this.acercaDeToolStripMenuItem.Size = new System.Drawing.Size(71, 20);
-            this.acercaDeToolStripMenuItem.Text = "Acerca de";
-            this.acercaDeToolStripMenuItem.Click += new System.EventHandler(this.acercaDeToolStripMenuItem_Click);
             // 
             // Mdi_nameConnect
             // 

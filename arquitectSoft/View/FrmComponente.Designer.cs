@@ -40,20 +40,6 @@ namespace arquitectSoft.View
             this.lbletiquetaDescripcion = new System.Windows.Forms.Label();
             this.chkNoSubComp = new System.Windows.Forms.CheckBox();
             this.GridViewComponente = new System.Windows.Forms.DataGridView();
-            this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
-            this.BtnCheck = new System.Windows.Forms.Button();
-            this.BtnAgregar = new System.Windows.Forms.Button();
-            this.BtnBorrar = new System.Windows.Forms.Button();
-            this.BtnCancelar = new System.Windows.Forms.Button();
-            this.BtnSalir = new System.Windows.Forms.Button();
-            this.BtnBuscar = new System.Windows.Forms.Button();
-            this.BtnNuevo = new System.Windows.Forms.Button();
-            this.BtnEliminar = new System.Windows.Forms.Button();
-            this.BtnEditar = new System.Windows.Forms.Button();
-            this.BtnGuardar = new System.Windows.Forms.Button();
-            this.arquitectdbDataSet = new arquitectSoft.arquitectdbDataSet();
-            this.unidadescalculadasBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.unidades_calculadasTableAdapter = new arquitectSoft.arquitectdbDataSetTableAdapters.unidades_calculadasTableAdapter();
             this.codigoDataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.descripcionDataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cxdefectoDataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -61,13 +47,28 @@ namespace arquitectSoft.View
             this.unidadCalculadaDataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.aDecrementoDataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.subComponentBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.BtnCheck = new System.Windows.Forms.Button();
+            this.BtnAgregar = new System.Windows.Forms.Button();
+            this.BtnBorrar = new System.Windows.Forms.Button();
+            this.arquitectdbDataSet = new arquitectSoft.arquitectdbDataSet();
+            this.unidadescalculadasBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.unidades_calculadasTableAdapter = new arquitectSoft.arquitectdbDataSetTableAdapters.unidades_calculadasTableAdapter();
+            this.BtnCancelar = new System.Windows.Forms.Button();
+            this.BtnSalir = new System.Windows.Forms.Button();
+            this.BtnBuscar = new System.Windows.Forms.Button();
+            this.BtnNuevo = new System.Windows.Forms.Button();
+            this.BtnEliminar = new System.Windows.Forms.Button();
+            this.BtnEditar = new System.Windows.Forms.Button();
+            this.BtnGuardar = new System.Windows.Forms.Button();
+            this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
             this.subComponentBindingSource1 = new System.Windows.Forms.BindingSource(this.components);
+            this.BtnDuplicar = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.GridViewComponente)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.subComponentBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.arquitectdbDataSet)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.unidadescalculadasBindingSource)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.subComponentBindingSource)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.subComponentBindingSource1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -169,7 +170,7 @@ namespace arquitectSoft.View
             // 
             this.txtDescripcion.Location = new System.Drawing.Point(236, 143);
             this.txtDescripcion.Name = "txtDescripcion";
-            this.txtDescripcion.Size = new System.Drawing.Size(391, 20);
+            this.txtDescripcion.Size = new System.Drawing.Size(417, 20);
             this.txtDescripcion.TabIndex = 21;
             // 
             // lbletiquetaDescripcion
@@ -187,12 +188,13 @@ namespace arquitectSoft.View
             // 
             this.chkNoSubComp.AutoSize = true;
             this.chkNoSubComp.ForeColor = System.Drawing.SystemColors.Control;
-            this.chkNoSubComp.Location = new System.Drawing.Point(651, 145);
+            this.chkNoSubComp.Location = new System.Drawing.Point(659, 145);
             this.chkNoSubComp.Name = "chkNoSubComp";
             this.chkNoSubComp.Size = new System.Drawing.Size(125, 17);
             this.chkNoSubComp.TabIndex = 22;
             this.chkNoSubComp.Text = "No Sub Componente";
             this.chkNoSubComp.UseVisualStyleBackColor = true;
+            this.chkNoSubComp.Visible = false;
             // 
             // GridViewComponente
             // 
@@ -217,7 +219,58 @@ namespace arquitectSoft.View
             this.GridViewComponente.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.GridViewComponente.Size = new System.Drawing.Size(787, 230);
             this.GridViewComponente.TabIndex = 23;
-
+            // 
+            // codigoDataGridViewTextBoxColumn1
+            // 
+            this.codigoDataGridViewTextBoxColumn1.DataPropertyName = "Codigo";
+            this.codigoDataGridViewTextBoxColumn1.HeaderText = "Codigo";
+            this.codigoDataGridViewTextBoxColumn1.Name = "codigoDataGridViewTextBoxColumn1";
+            this.codigoDataGridViewTextBoxColumn1.ReadOnly = true;
+            this.codigoDataGridViewTextBoxColumn1.Width = 65;
+            // 
+            // descripcionDataGridViewTextBoxColumn1
+            // 
+            this.descripcionDataGridViewTextBoxColumn1.DataPropertyName = "Descripcion";
+            this.descripcionDataGridViewTextBoxColumn1.HeaderText = "Descripcion";
+            this.descripcionDataGridViewTextBoxColumn1.Name = "descripcionDataGridViewTextBoxColumn1";
+            this.descripcionDataGridViewTextBoxColumn1.ReadOnly = true;
+            this.descripcionDataGridViewTextBoxColumn1.Width = 88;
+            // 
+            // cxdefectoDataGridViewTextBoxColumn1
+            // 
+            this.cxdefectoDataGridViewTextBoxColumn1.DataPropertyName = "Cxdefecto";
+            this.cxdefectoDataGridViewTextBoxColumn1.HeaderText = "Cxdefecto";
+            this.cxdefectoDataGridViewTextBoxColumn1.Name = "cxdefectoDataGridViewTextBoxColumn1";
+            this.cxdefectoDataGridViewTextBoxColumn1.ReadOnly = true;
+            this.cxdefectoDataGridViewTextBoxColumn1.Width = 80;
+            // 
+            // cAdicionalDataGridViewTextBoxColumn1
+            // 
+            this.cAdicionalDataGridViewTextBoxColumn1.DataPropertyName = "CAdicional";
+            this.cAdicionalDataGridViewTextBoxColumn1.HeaderText = "CAdicional";
+            this.cAdicionalDataGridViewTextBoxColumn1.Name = "cAdicionalDataGridViewTextBoxColumn1";
+            this.cAdicionalDataGridViewTextBoxColumn1.ReadOnly = true;
+            this.cAdicionalDataGridViewTextBoxColumn1.Width = 82;
+            // 
+            // unidadCalculadaDataGridViewTextBoxColumn1
+            // 
+            this.unidadCalculadaDataGridViewTextBoxColumn1.DataPropertyName = "UnidadCalculada";
+            this.unidadCalculadaDataGridViewTextBoxColumn1.HeaderText = "UnidadCalculada";
+            this.unidadCalculadaDataGridViewTextBoxColumn1.Name = "unidadCalculadaDataGridViewTextBoxColumn1";
+            this.unidadCalculadaDataGridViewTextBoxColumn1.ReadOnly = true;
+            this.unidadCalculadaDataGridViewTextBoxColumn1.Width = 113;
+            // 
+            // aDecrementoDataGridViewTextBoxColumn1
+            // 
+            this.aDecrementoDataGridViewTextBoxColumn1.DataPropertyName = "ADecremento";
+            this.aDecrementoDataGridViewTextBoxColumn1.HeaderText = "ADecremento";
+            this.aDecrementoDataGridViewTextBoxColumn1.Name = "aDecrementoDataGridViewTextBoxColumn1";
+            this.aDecrementoDataGridViewTextBoxColumn1.ReadOnly = true;
+            this.aDecrementoDataGridViewTextBoxColumn1.Width = 97;
+            // 
+            // subComponentBindingSource
+            // 
+            this.subComponentBindingSource.DataSource = typeof(arquitectSoft.Class.Sub_Component);
             // 
             // BtnCheck
             // 
@@ -251,6 +304,20 @@ namespace arquitectSoft.View
             this.BtnBorrar.Text = "Borrar";
             this.BtnBorrar.UseVisualStyleBackColor = true;
             this.BtnBorrar.Click += new System.EventHandler(this.BtnBorrar_Click);
+            // 
+            // arquitectdbDataSet
+            // 
+            this.arquitectdbDataSet.DataSetName = "arquitectdbDataSet";
+            this.arquitectdbDataSet.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
+            // 
+            // unidadescalculadasBindingSource
+            // 
+            this.unidadescalculadasBindingSource.DataMember = "unidades_calculadas";
+            this.unidadescalculadasBindingSource.DataSource = this.arquitectdbDataSet;
+            // 
+            // unidades_calculadasTableAdapter
+            // 
+            this.unidades_calculadasTableAdapter.ClearBeforeFill = true;
             // 
             // BtnCancelar
             // 
@@ -375,75 +442,27 @@ namespace arquitectSoft.View
             this.BtnGuardar.UseVisualStyleBackColor = false;
             this.BtnGuardar.Click += new System.EventHandler(this.BtnGuardar_Click);
             // 
-            // arquitectdbDataSet
-            // 
-            this.arquitectdbDataSet.DataSetName = "arquitectdbDataSet";
-            this.arquitectdbDataSet.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
-            // 
-            // unidadescalculadasBindingSource
-            // 
-            this.unidadescalculadasBindingSource.DataMember = "unidades_calculadas";
-            this.unidadescalculadasBindingSource.DataSource = this.arquitectdbDataSet;
-            // 
-            // unidades_calculadasTableAdapter
-            // 
-            this.unidades_calculadasTableAdapter.ClearBeforeFill = true;
-            // 
-            // codigoDataGridViewTextBoxColumn1
-            // 
-            this.codigoDataGridViewTextBoxColumn1.DataPropertyName = "Codigo";
-            this.codigoDataGridViewTextBoxColumn1.HeaderText = "Codigo";
-            this.codigoDataGridViewTextBoxColumn1.Name = "codigoDataGridViewTextBoxColumn1";
-            this.codigoDataGridViewTextBoxColumn1.ReadOnly = true;
-            this.codigoDataGridViewTextBoxColumn1.Width = 65;
-            // 
-            // descripcionDataGridViewTextBoxColumn1
-            // 
-            this.descripcionDataGridViewTextBoxColumn1.DataPropertyName = "Descripcion";
-            this.descripcionDataGridViewTextBoxColumn1.HeaderText = "Descripcion";
-            this.descripcionDataGridViewTextBoxColumn1.Name = "descripcionDataGridViewTextBoxColumn1";
-            this.descripcionDataGridViewTextBoxColumn1.ReadOnly = true;
-            this.descripcionDataGridViewTextBoxColumn1.Width = 88;
-            // 
-            // cxdefectoDataGridViewTextBoxColumn1
-            // 
-            this.cxdefectoDataGridViewTextBoxColumn1.DataPropertyName = "Cxdefecto";
-            this.cxdefectoDataGridViewTextBoxColumn1.HeaderText = "Cxdefecto";
-            this.cxdefectoDataGridViewTextBoxColumn1.Name = "cxdefectoDataGridViewTextBoxColumn1";
-            this.cxdefectoDataGridViewTextBoxColumn1.ReadOnly = true;
-            this.cxdefectoDataGridViewTextBoxColumn1.Width = 80;
-            // 
-            // cAdicionalDataGridViewTextBoxColumn1
-            // 
-            this.cAdicionalDataGridViewTextBoxColumn1.DataPropertyName = "CAdicional";
-            this.cAdicionalDataGridViewTextBoxColumn1.HeaderText = "CAdicional";
-            this.cAdicionalDataGridViewTextBoxColumn1.Name = "cAdicionalDataGridViewTextBoxColumn1";
-            this.cAdicionalDataGridViewTextBoxColumn1.ReadOnly = true;
-            this.cAdicionalDataGridViewTextBoxColumn1.Width = 82;
-            // 
-            // unidadCalculadaDataGridViewTextBoxColumn1
-            // 
-            this.unidadCalculadaDataGridViewTextBoxColumn1.DataPropertyName = "UnidadCalculada";
-            this.unidadCalculadaDataGridViewTextBoxColumn1.HeaderText = "UnidadCalculada";
-            this.unidadCalculadaDataGridViewTextBoxColumn1.Name = "unidadCalculadaDataGridViewTextBoxColumn1";
-            this.unidadCalculadaDataGridViewTextBoxColumn1.ReadOnly = true;
-            this.unidadCalculadaDataGridViewTextBoxColumn1.Width = 113;
-            // 
-            // aDecrementoDataGridViewTextBoxColumn1
-            // 
-            this.aDecrementoDataGridViewTextBoxColumn1.DataPropertyName = "ADecremento";
-            this.aDecrementoDataGridViewTextBoxColumn1.HeaderText = "ADecremento";
-            this.aDecrementoDataGridViewTextBoxColumn1.Name = "aDecrementoDataGridViewTextBoxColumn1";
-            this.aDecrementoDataGridViewTextBoxColumn1.ReadOnly = true;
-            this.aDecrementoDataGridViewTextBoxColumn1.Width = 97;
-            // 
-            // subComponentBindingSource
-            // 
-            this.subComponentBindingSource.DataSource = typeof(arquitectSoft.Class.Sub_Component);
-            // 
             // subComponentBindingSource1
             // 
             this.subComponentBindingSource1.DataSource = typeof(arquitectSoft.Class.Sub_Component);
+            // 
+            // BtnDuplicar
+            // 
+            this.BtnDuplicar.BackColor = System.Drawing.SystemColors.Control;
+            this.BtnDuplicar.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.BtnDuplicar.Enabled = false;
+            this.BtnDuplicar.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.BtnDuplicar.ImageIndex = 6;
+            this.BtnDuplicar.ImageList = this.ImgLista;
+            this.BtnDuplicar.Location = new System.Drawing.Point(396, 9);
+            this.BtnDuplicar.Name = "BtnDuplicar";
+            this.BtnDuplicar.Size = new System.Drawing.Size(58, 60);
+            this.BtnDuplicar.TabIndex = 28;
+            this.BtnDuplicar.Text = "Duplicar";
+            this.BtnDuplicar.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.BtnDuplicar.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.BtnDuplicar.UseVisualStyleBackColor = false;
+            this.BtnDuplicar.Click += new System.EventHandler(this.BtnDuplicar_Click);
             // 
             // FrmComponente
             // 
@@ -451,12 +470,14 @@ namespace arquitectSoft.View
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(70)))), ((int)(((byte)(86)))));
             this.ClientSize = new System.Drawing.Size(788, 450);
+            this.Controls.Add(this.panel1);
+            this.Controls.Add(this.chkNoSubComp);
+            this.Controls.Add(this.BtnDuplicar);
             this.Controls.Add(this.BtnCancelar);
             this.Controls.Add(this.BtnBorrar);
             this.Controls.Add(this.BtnAgregar);
             this.Controls.Add(this.BtnCheck);
             this.Controls.Add(this.GridViewComponente);
-            this.Controls.Add(this.chkNoSubComp);
             this.Controls.Add(this.txtDescripcion);
             this.Controls.Add(this.lbletiquetaDescripcion);
             this.Controls.Add(this.txtCodigo);
@@ -467,7 +488,6 @@ namespace arquitectSoft.View
             this.Controls.Add(this.BtnEliminar);
             this.Controls.Add(this.BtnEditar);
             this.Controls.Add(this.BtnGuardar);
-            this.Controls.Add(this.panel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
@@ -478,10 +498,10 @@ namespace arquitectSoft.View
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.GridViewComponente)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.subComponentBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.arquitectdbDataSet)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.unidadescalculadasBindingSource)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.subComponentBindingSource)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.subComponentBindingSource1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -520,5 +540,6 @@ namespace arquitectSoft.View
         private System.Windows.Forms.DataGridViewTextBoxColumn cAdicionalDataGridViewTextBoxColumn1;
         private System.Windows.Forms.DataGridViewTextBoxColumn unidadCalculadaDataGridViewTextBoxColumn1;
         private System.Windows.Forms.DataGridViewTextBoxColumn aDecrementoDataGridViewTextBoxColumn1;
+        private System.Windows.Forms.Button BtnDuplicar;
     }
 }

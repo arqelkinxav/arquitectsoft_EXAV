@@ -41,12 +41,12 @@ namespace arquitectSoft.Dto
                 }
 
              
-               int idComponente = con.ExecuteNonQuery(sqlquery, out fail, param);
+               int idComponente = con.ExecuteNonQuery(sqlquery, out fail, param,0);
 
                idComponente = opcion == "Editar" ? Int32.Parse(IdComponenteExist) : idComponente;
 
                string[] paramdelete = { idComponente.ToString() };
-               con.ExecuteNonQuery(Generals.Constantes.QUERY_DELETE_COMPONENTE_DETALLE, out fail, paramdelete);
+               con.ExecuteNonQuery(Generals.Constantes.QUERY_DELETE_COMPONENTE_DETALLE, out fail, paramdelete,0);
 
 
                 con.Close();
@@ -81,7 +81,7 @@ namespace arquitectSoft.Dto
                 string[] param = { idComponente.ToString(), row.IdSubcomponente.ToString(), row.UnidadCalculada
                         ,row.Cxdefecto.ToString(),row.CAdicional.ToString(),adecre.ToString() };
 
-                int var = con.ExecuteNonQuery(Generals.Constantes.QUERY_INSERT_COMPONENTE_DETALLE, out fail, param);
+                int var = con.ExecuteNonQuery(Generals.Constantes.QUERY_INSERT_COMPONENTE_DETALLE, out fail, param,0);
             }
             con.Close();
 
@@ -160,8 +160,8 @@ namespace arquitectSoft.Dto
             string[] param = { idComponente.ToString() };
             try { 
 
-                con.ExecuteNonQuery(Generals.Constantes.QUERY_DELETE_COMPONENTE, out fail, param);
-                con.ExecuteNonQuery(Generals.Constantes.QUERY_DELETE_COMPONENTE_DETALLE, out fail, param);
+                con.ExecuteNonQuery(Generals.Constantes.QUERY_DELETE_COMPONENTE, out fail, param,0);
+                con.ExecuteNonQuery(Generals.Constantes.QUERY_DELETE_COMPONENTE_DETALLE, out fail, param,0);
 
                 resul = "Registro Eliminado Correctamente";
             

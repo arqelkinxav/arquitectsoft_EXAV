@@ -84,5 +84,20 @@ namespace arquitectSoft
                 MessageBox.Show("Ya hay una ventana activa!", "Mensaje Alerta", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
         }
+
+        private void TMSItem_subComponente_Click(object sender, EventArgs e)
+        {
+            if (this.MdiChildren.Count() == 0)
+            {
+                View.FrmSubComponente formAbout = new View.FrmSubComponente();
+                formAbout.MdiParent = this;
+                formAbout.StartPosition = FormStartPosition.CenterScreen;
+                formAbout.Show();
+            }
+            else
+            {
+                MessageBox.Show("Ya hay una ventana activa!", "Mensaje Alerta", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
+        }
     }
 }

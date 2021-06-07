@@ -110,7 +110,9 @@
       <DependentUpon>arquitectdbDataSet.xsd</DependentUpon>
     </Compile>
     <Compile Include="Class\Sub_Component.cs" />
+    <Compile Include="Dto\AcabadoDto.cs" />
     <Compile Include="Dto\ComponenteDto.cs" />
+    <Compile Include="Dto\SubComponenteDto.cs" />
     <Compile Include="Dto\UnidadCalculadaDto.cs" />
     <Compile Include="FrmAbout.cs">
       <SubType>Form</SubType>
@@ -148,6 +150,12 @@
     <Compile Include="View\FrmComponente.Designer.cs">
       <DependentUpon>FrmComponente.cs</DependentUpon>
     </Compile>
+    <Compile Include="View\FrmSubComponente.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\FrmSubComponente.Designer.cs">
+      <DependentUpon>FrmSubComponente.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="FrmAbout.resx">
       <DependentUpon>FrmAbout.cs</DependentUpon>
     </EmbeddedResource>
@@ -172,6 +180,9 @@
     </Compile>
     <EmbeddedResource Include="View\FrmComponente.resx">
       <DependentUpon>FrmComponente.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\FrmSubComponente.resx">
+      <DependentUpon>FrmSubComponente.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="arquitectdbDataSet.xsc">
       <DependentUpon>arquitectdbDataSet.xsd</DependentUpon>
