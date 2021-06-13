@@ -20,14 +20,23 @@ namespace arquitectSoft.Generals
             + " Id_Unidad_Calculada,"
             + " Cantidad_Default,"
             + " Cantidad_Adicional,"
-            + " Aplica_Decremento) VALUES (?,?,?,?,?,?);";
+            + " Aplica_Decremento,"
+            + " elevado,"
+            + " idCorte ) VALUES (?,?,?,?,?,?,?,?);";
+        public static String QUERY_INSERT_COMPONENTE_ESPECIAL_DETALLE = "INSERT arquitectdb.componentes_especial_detalle (Id_Componente_especial,"
+            + " Id_Subcomponente,"
+            + " select_Columna,"
+            + " Cantidad_Default,"
+            + " Cantidad_Adicional ) VALUES (?,?,?,?,?);";
         public static String QUERY_GET_COMPONENTE_DETALLE = "componenteDetalleCargar";
+        public static String QUERY_GET_COMPONENTE_ESPECIAL_DETALLE = "componenteEspecialDetalleCargar";
         public static String QUERY_DELETE_COMPONENTE = "DELETE FROM arquitectdb.componentes WHERE Id_Componente = ?;";
         public static String QUERY_DELETE_COMPONENTE_DETALLE = "DELETE FROM arquitectdb.componentes_detalle WHERE Id_Componente = ?;";
+        public static String QUERY_DELETE_COMPONENTE_ESPECIAL_DETALLE = "DELETE FROM arquitectdb.componentes_especial_detalle WHERE Id_Componente_especial = ?;";
 
         //Sub Componente
         public static String QUERY_EXITS_SUBCOMPONENTES = "SELECT Id_SubComponente FROM arquitectdb.subcomponentes where Codigo_Homologacion = ? or Descripcion = ?;";
-        public static String QUERY_SUBCOMPONENTES = "SELECT Id_SubComponente,Codigo_Homologacion,Descripcion,Id_Acabado,Id_SubcomponenteEspecial FROM arquitectdb.subcomponentes ";
+        public static String QUERY_SUBCOMPONENTES = "SELECT Id_SubComponente,Codigo_Homologacion,Descripcion,Id_Acabado,Especial FROM arquitectdb.subcomponentes ";
         public static String QUERY_INSERT_SUBCOMPONENTES = "CALL spSubComponenteRegistrar(?,?,?,?,?);";
         public static String QUERY_UPDATE_SUBCOMPONENTES = "CALL spSubcomponenteUpdate(?,?,?,?,?);";
         public static String QUERY_DELETE_SUBCOMPONENTES = "DELETE FROM arquitectdb.subcomponentes WHERE Id_subcomponente = ?";
@@ -37,6 +46,9 @@ namespace arquitectSoft.Generals
 
         //Acabado
         public static String QUERY_ACABADO = "SELECT Id_Acabado,Descripcion FROM arquitectdb.acabados;";
+
+        //Corte
+        public static String QUERY_CORTE = "SELECT Id_Corte,Descripcion FROM arquitectdb.cortes;";
 
 
     }

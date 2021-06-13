@@ -38,6 +38,7 @@ namespace arquitectSoft
             this.GridViewBusqueda = new System.Windows.Forms.DataGridView();
             this.BtnSalir = new System.Windows.Forms.Button();
             this.BtnBuscar = new System.Windows.Forms.Button();
+            this.chkVidriospanles = new System.Windows.Forms.CheckBox();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.GridViewBusqueda)).BeginInit();
             this.SuspendLayout();
@@ -120,7 +121,7 @@ namespace arquitectSoft
             // 
             // txtBuscar
             // 
-            this.txtBuscar.Location = new System.Drawing.Point(79, 130);
+            this.txtBuscar.Location = new System.Drawing.Point(85, 122);
             this.txtBuscar.Name = "txtBuscar";
             this.txtBuscar.Size = new System.Drawing.Size(425, 20);
             this.txtBuscar.TabIndex = 1;
@@ -177,12 +178,26 @@ namespace arquitectSoft
             this.BtnBuscar.UseVisualStyleBackColor = false;
             this.BtnBuscar.Click += new System.EventHandler(this.BtnBuscar_Click);
             // 
+            // chkVidriospanles
+            // 
+            this.chkVidriospanles.AutoSize = true;
+            this.chkVidriospanles.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chkVidriospanles.ForeColor = System.Drawing.SystemColors.Control;
+            this.chkVidriospanles.Location = new System.Drawing.Point(223, 151);
+            this.chkVidriospanles.Name = "chkVidriospanles";
+            this.chkVidriospanles.Size = new System.Drawing.Size(123, 20);
+            this.chkVidriospanles.TabIndex = 44;
+            this.chkVidriospanles.Text = "Vidrios/Paneles";
+            this.chkVidriospanles.UseVisualStyleBackColor = true;
+            this.chkVidriospanles.CheckedChanged += new System.EventHandler(this.chkVidriospanles_CheckedChanged);
+            // 
             // FrmBuscar
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(70)))), ((int)(((byte)(86)))));
             this.ClientSize = new System.Drawing.Size(594, 450);
+            this.Controls.Add(this.chkVidriospanles);
             this.Controls.Add(this.BtnSalir);
             this.Controls.Add(this.BtnBuscar);
             this.Controls.Add(this.txtBuscar);
@@ -210,5 +225,6 @@ namespace arquitectSoft
         public System.Windows.Forms.DataGridView GridViewBusqueda;
         private System.Windows.Forms.Button BtnSalir;
         private System.Windows.Forms.Button BtnBuscar;
+        private System.Windows.Forms.CheckBox chkVidriospanles;
     }
 }

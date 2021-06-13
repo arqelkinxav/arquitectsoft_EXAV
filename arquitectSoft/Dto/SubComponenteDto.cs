@@ -33,10 +33,11 @@ namespace arquitectSoft.Dto
                         sqlquery = Generals.Constantes.QUERY_UPDATE_SUBCOMPONENTES;
                         
                         param[0] = acabado;
-                        param[1] = check.ToString();
-                        param[2] = codigo;
-                        param[3] = descripcion;
-                        param[4] = IdComponenteExist;
+                        param[1] = codigo;
+                        param[2] = descripcion;
+                        param[3] = IdComponenteExist;
+                        param[4] = check.ToString();
+
                         MsgResul = "Registro Editado Correctamente";
                         break;
                     default:

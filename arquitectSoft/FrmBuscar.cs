@@ -25,53 +25,26 @@ namespace arquitectSoft
 
         private void FrmBuscar_Load(object sender, EventArgs e)
         {
-            Generals.Conexion con = new Generals.Conexion();
-            string fail = "";
+            bool filter = chkVidriospanles.Checked;
+            Buscar(filter);
 
-            try
+            switch (Consulta)
             {
-
-                string sqlquery = "";
-                switch (Consulta)
-                {
-                    case "SubComp":
-                        sqlquery = Generals.Constantes.QUERY_SUBCOMPONENTES;
-                        break;
-                    default:
-                        sqlquery = Generals.Constantes.QUERY_COMPONENTES;
-                        break;
-                }
-
-                con.Open(out fail);             
-                GridViewBusqueda.AutoGenerateColumns = true;
-                GridViewBusqueda.DataSource = con.ExecuteDataSet(sqlquery, out fail).Tables[0];
-                con.Close();
-
-                switch (Consulta)
-                {
-                    case "SubComp":
-                        GridViewBusqueda.Columns[3].Visible = false;
-                        GridViewBusqueda.Columns[4].Visible = false;
-                        break;
-                    default:
-                        GridViewBusqueda.Columns[3].Visible = false;
-                        break;
-                }
-
-
-
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Mensaje Alerta", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                con.Close();
+                case "SubComp":
+                    GridViewBusqueda.Columns[3].Visible = false;
+                    GridViewBusqueda.Columns[4].Visible = false;
+                    break;
+                default:
+                    GridViewBusqueda.Columns[3].Visible = false;
+                    break;
             }
 
         }
 
         private void BtnBuscar_Click(object sender, EventArgs e)
         {
-            Buscar();
+            bool filter = chkVidriospanles.Checked;
+            Buscar(filter);
         }
 
         private void BtnSalir_Click(object sender, EventArgs e)
@@ -105,30 +78,36 @@ namespace arquitectSoft
 
         private void txtBuscar_KeyDown(object sender, KeyEventArgs e)
         {
+            bool filter = chkVidriospanles.Checked;
+
             if (e.KeyCode == Keys.Enter)
             {
-                Buscar();//Refactoring
+                Buscar(filter);//Refactoring
             }
 
    
         }
 
-        private void Buscar()
+        private void Buscar(bool filter)
         {
             Generals.Conexion con = new Generals.Conexion();
             string fail = "";
-
+            string Fil = "";
             try
             {
                 con.Open(out fail);
                 string sqlquery = "";
+                Fil = filter == true ? "1" : "0";
+
+
+
                 switch (Consulta)
                 {
                     case "SubComp":
-                        sqlquery = Generals.Constantes.QUERY_SUBCOMPONENTES + " where CONCAT(Codigo_Homologacion,' - ',Descripcion) lIKE '%" + txtBuscar.Text + "%'";
+                        sqlquery = Generals.Constantes.QUERY_SUBCOMPONENTES + " where CONCAT(Codigo_Homologacion,' - ',Descripcion) lIKE '%" + txtBuscar.Text + "%' and Especial = " + Fil;
                         break;
                     default:
-                        sqlquery = Generals.Constantes.QUERY_COMPONENTES + " where CONCAT(Codigo,' - ',Descripcion) lIKE '%" + txtBuscar.Text + "%'";
+                        sqlquery = Generals.Constantes.QUERY_COMPONENTES + " where CONCAT(Codigo,' - ',Descripcion) lIKE '%" + txtBuscar.Text + "%' and Especial = " + Fil;
                         break;
                 }
 
@@ -144,6 +123,11 @@ namespace arquitectSoft
                 con.Close();
             }
         }
-    
+
+        private void chkVidriospanles_CheckedChanged(object sender, EventArgs e)
+        {
+            bool filter = chkVidriospanles.Checked;
+            Buscar(filter);//Refactoring
+        }
     }
 }

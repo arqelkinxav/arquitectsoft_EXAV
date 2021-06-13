@@ -11,7 +11,7 @@ namespace arquitectSoft.Dto
 {
     class ComponenteDto
     {
-        public string SaveComponent(string codigo, string descripcion, bool checkSubComponente,string opcion, Sub_Component[] Sbarray,string IdComponenteExist)
+        public string SaveComponent(string codigo, string descripcion, bool checkSubComponente,string opcion, Sub_Component[] Sbarray, Sub_ComponentEspecial[] SbarrayEsp, string IdComponenteExist)
         {
             
             string resul = "";
@@ -47,11 +47,14 @@ namespace arquitectSoft.Dto
 
                string[] paramdelete = { idComponente.ToString() };
                con.ExecuteNonQuery(Generals.Constantes.QUERY_DELETE_COMPONENTE_DETALLE, out fail, paramdelete,0);
+               con.ExecuteNonQuery(Generals.Constantes.QUERY_DELETE_COMPONENTE_ESPECIAL_DETALLE, out fail, paramdelete, 0);
 
 
-                con.Close();
+               con.Close();
 
                SaveSubComponentDetalle(idComponente, Sbarray);
+
+               SaveSubComponentEspecialDetalle(idComponente, SbarrayEsp);
 
                 resul = fail == "" ? MsgResul : fail;
                
@@ -79,9 +82,28 @@ namespace arquitectSoft.Dto
                 int adecre = (row.ADecremento)? 1:0;
 
                 string[] param = { idComponente.ToString(), row.IdSubcomponente.ToString(), row.UnidadCalculada
-                        ,row.Cxdefecto.ToString(),row.CAdicional.ToString(),adecre.ToString() };
+                        ,row.Cxdefecto.ToString(),row.CAdicional.ToString(),adecre.ToString(),row.Elevado.ToString(),row.Cortes.ToString() };
 
                 int var = con.ExecuteNonQuery(Generals.Constantes.QUERY_INSERT_COMPONENTE_DETALLE, out fail, param,0);
+            }
+            con.Close();
+
+        }
+
+        private void SaveSubComponentEspecialDetalle(int idComponente, Sub_ComponentEspecial[] Sbarray)
+        {
+            Generals.Conexion con = new Generals.Conexion();
+
+            string fail = "";
+            con.Open(out fail);
+
+
+            foreach (Sub_ComponentEspecial row in Sbarray)
+            {
+                string[] param = { idComponente.ToString(), row.IdSubcomponente.ToString(), row.Columna
+                        ,row.Cxdefecto.ToString(),row.CAdicional.ToString() };
+
+                int var = con.ExecuteNonQuery(Generals.Constantes.QUERY_INSERT_COMPONENTE_ESPECIAL_DETALLE, out fail, param, 0);
             }
             con.Close();
 
@@ -121,13 +143,25 @@ namespace arquitectSoft.Dto
 
             con.Open(out fail);
             DataTable row;
-            string[] param = {  };
             row = con.ExecuteDataSetSP(Generals.Constantes.QUERY_GET_COMPONENTE_DETALLE, out fail, IdComponente);
             con.Close();
             return row;
         }
 
-        public bool ValilidationSaveComponenet(string codigo,string descripcion,bool chkNoSubcomp,int RowCountGrid,out string fail)
+        public DataTable GetComponentEspecialDetalle(string IdComponente)
+        {
+
+            Generals.Conexion con = new Generals.Conexion();
+            string fail = "";
+
+            con.Open(out fail);
+            DataTable row;
+            row = con.ExecuteDataSetSP(Generals.Constantes.QUERY_GET_COMPONENTE_ESPECIAL_DETALLE, out fail, IdComponente);
+            con.Close();
+            return row;
+        }
+
+        public bool ValilidationSaveComponenet(string codigo,string descripcion,bool chkespecial, int RowCountGrid, int RowCountGridEsp, out string fail)
         {
             bool SwSave = true;
             fail = null;
@@ -141,12 +175,16 @@ namespace arquitectSoft.Dto
                 fail = "Debe Digitar un Descripcion";
                 SwSave = false;
             }
-            else if (chkNoSubcomp == true && RowCountGrid == 0)
+            else if (chkespecial == false && RowCountGrid == 0)
             {
                 fail = "Debe Agregar un Sub Componente al menos!!!";
                 SwSave = false;
-            }
 
+            }else if (chkespecial == true && RowCountGridEsp == 0)
+            {
+                fail = "Debe Agregar un Sub Componente Especial al menos!!!";
+                SwSave = false;
+            }
             
             return SwSave;
         }
