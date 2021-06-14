@@ -33,7 +33,6 @@ namespace arquitectSoft
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.TMSItem_Administracion = new System.Windows.Forms.ToolStripMenuItem();
             this.TMSItem_componente = new System.Windows.Forms.ToolStripMenuItem();
-            this.TMSItem_componenteVidriosPaneles = new System.Windows.Forms.ToolStripMenuItem();
             this.TMSItem_subComponente = new System.Windows.Forms.ToolStripMenuItem();
             this.TMSItem_configuracion = new System.Windows.Forms.ToolStripMenuItem();
             this.TMSItem_acabados = new System.Windows.Forms.ToolStripMenuItem();
@@ -66,7 +65,6 @@ namespace arquitectSoft
             // 
             this.TMSItem_Administracion.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.TMSItem_componente,
-            this.TMSItem_componenteVidriosPaneles,
             this.TMSItem_subComponente,
             this.TMSItem_configuracion});
             this.TMSItem_Administracion.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -78,20 +76,14 @@ namespace arquitectSoft
             // TMSItem_componente
             // 
             this.TMSItem_componente.Name = "TMSItem_componente";
-            this.TMSItem_componente.Size = new System.Drawing.Size(228, 22);
+            this.TMSItem_componente.Size = new System.Drawing.Size(180, 22);
             this.TMSItem_componente.Text = "Componente";
             this.TMSItem_componente.Click += new System.EventHandler(this.TMSItem_componente_Click);
-            // 
-            // TMSItem_componenteVidriosPaneles
-            // 
-            this.TMSItem_componenteVidriosPaneles.Name = "TMSItem_componenteVidriosPaneles";
-            this.TMSItem_componenteVidriosPaneles.Size = new System.Drawing.Size(228, 22);
-            this.TMSItem_componenteVidriosPaneles.Text = "Componente Vidrios/Paneles";
             // 
             // TMSItem_subComponente
             // 
             this.TMSItem_subComponente.Name = "TMSItem_subComponente";
-            this.TMSItem_subComponente.Size = new System.Drawing.Size(228, 22);
+            this.TMSItem_subComponente.Size = new System.Drawing.Size(180, 22);
             this.TMSItem_subComponente.Text = "SubComponente";
             this.TMSItem_subComponente.Click += new System.EventHandler(this.TMSItem_subComponente_Click);
             // 
@@ -101,7 +93,7 @@ namespace arquitectSoft
             this.TMSItem_acabados,
             this.TMSItem_cortes});
             this.TMSItem_configuracion.Name = "TMSItem_configuracion";
-            this.TMSItem_configuracion.Size = new System.Drawing.Size(228, 22);
+            this.TMSItem_configuracion.Size = new System.Drawing.Size(180, 22);
             this.TMSItem_configuracion.Text = "Configuracion";
             // 
             // TMSItem_acabados
@@ -196,7 +188,6 @@ namespace arquitectSoft
         private System.Windows.Forms.MenuStrip menuStrip;
         private System.Windows.Forms.ToolStripMenuItem TMSItem_Administracion;
         private System.Windows.Forms.ToolStripMenuItem TMSItem_componente;
-        private System.Windows.Forms.ToolStripMenuItem TMSItem_componenteVidriosPaneles;
         private System.Windows.Forms.ToolStripMenuItem TMSItem_subComponente;
         private System.Windows.Forms.ToolStripMenuItem TMSItem_configuracion;
         private System.Windows.Forms.ToolStripMenuItem TMSItem_acabados;
