@@ -136,13 +136,14 @@ namespace arquitectSoft.View
             Dto.ComponenteDto dto = new Dto.ComponenteDto();
             FrmBuscar bsc = new FrmBuscar();
             bsc.ShowDialog();
+
             if (bsc.ReturnItem1 == null)
             {
                 return;
             }
             txtCodigo.Text = bsc.ReturnItem1;
             txtDescripcion.Text = bsc.ReturnItem2;
-            //chkNoSubComp.Checked = bsc.ReturnItem3 == "1" ? true : false;
+            chkEspecial.Checked = bsc.ReturnItem3 == "1" ? true : false;
 
             //Obtener detalle componente generico
             DataTable dt = dto.GetComponentDetalle(bsc.ReturnItem4);
@@ -174,6 +175,7 @@ namespace arquitectSoft.View
         {
             ClearComponent();
             BloquearCancelar();
+            HabilitarEspecial(false);
         }
         private void BtnSalir_Click(object sender, EventArgs e)
         {
@@ -192,6 +194,13 @@ namespace arquitectSoft.View
             FrmBuscar bsc = new FrmBuscar();
             bsc.Consulta = "SubComp";
             bsc.ShowDialog();
+
+
+            if (bsc.ReturnItem0 == null && bsc.ReturnItem4 == null)
+            {
+                return;
+            }
+            
 
             if (bsc.ReturnItem0 != null && bsc.ReturnItem4 == "0")
             {
@@ -362,6 +371,7 @@ namespace arquitectSoft.View
             BtnAgregar.Enabled = false;
             BtnBorrar.Enabled = false;
             GridViewComponente.Enabled = false;
+            GridViewComponenteEsp.Enabled = false;
 
             BtnNuevo.Enabled = true;
             BtnEditar.Enabled = false;
@@ -370,6 +380,7 @@ namespace arquitectSoft.View
             BtnBuscar.Enabled = true;
 
             bindingSource1.Clear();
+            bindingSource2.Clear();
         }
         private void SaveComponent(Dto.ComponenteDto dto)
         {
@@ -479,7 +490,7 @@ namespace arquitectSoft.View
         {
             foreach (DataRow row in dt.Rows)
             {
-                bindingSource2.Add(new Sub_ComponentEspecial(row["Codigo"].ToString(), row["Descripcion"].ToString(), row["select_Columna"].ToString(), (int)row["Cantidad_Default"], (int)row["Cantidad_Adicional"], (int)row["Id_Subcomponente"]));
+                bindingSource2.Add(new Sub_ComponentEspecial(row["Codigo"].ToString(), row["Descripcion"].ToString(), row["Id_Columna"].ToString(), (int)row["Cantidad_Default"], (int)row["Cantidad_Adicional"], (int)row["Id_Subcomponente"]));
             }
 
             GridViewComponenteEsp.DataSource = bindingSource2;
@@ -494,8 +505,7 @@ namespace arquitectSoft.View
                     {
                         DataGridViewComboBoxCell comboBoxCell = (DataGridViewComboBoxCell)(row.Cells[3]);
                         comboBoxCell.Value = uni;
-                    }
-                   
+                    }                   
                 }
             }
 

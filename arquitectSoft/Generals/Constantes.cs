@@ -12,9 +12,9 @@ namespace arquitectSoft.Generals
         
         //Componentes
         public static String QUERY_EXITS_COMPONENTES = "SELECT Id_Componente FROM arquitectdb.componentes where Codigo = ? or Descripcion = ?;";
-        public static String QUERY_INSERT_COMPONENTES = "INSERT arquitectdb.componentes(codigo, descripcion, NoSubcomponente) VALUES (?,?,?);";
-        public static String QUERY_COMPONENTES = "SELECT Id_Componente,Codigo,Descripcion,NoSubcomponente FROM arquitectdb.componentes ";
-        public static String QUERY_UPDATE_COMPONENTES = "UPDATE arquitectdb.componentes SET descripcion = ?, NoSubcomponente = ? WHERE Codigo = ?";
+        public static String QUERY_INSERT_COMPONENTES = "INSERT arquitectdb.componentes(codigo, descripcion, Especial) VALUES (?,?,?);";
+        public static String QUERY_COMPONENTES = "SELECT Id_Componente,Codigo,Descripcion,Especial FROM arquitectdb.componentes ";
+        public static String QUERY_UPDATE_COMPONENTES = "UPDATE arquitectdb.componentes SET descripcion = ?, Especial = ? WHERE Codigo = ?";
         public static String QUERY_INSERT_COMPONENTE_DETALLE = "INSERT arquitectdb.componentes_detalle (Id_Componente,"
             + " Id_Subcomponente,"
             + " Id_Unidad_Calculada,"

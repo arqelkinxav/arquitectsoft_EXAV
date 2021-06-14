@@ -44,14 +44,19 @@ namespace arquitectSoft.Generals
         {
 
             DataTable dto = new DataTable();
-            dto.Columns.Add("Id_Columna");
-            dto.Columns.Add("Descripcion");
+            DataColumn Id_Columna = new DataColumn("Id_Columna");
+            Id_Columna.DataType = System.Type.GetType("System.Int32");
+            dto.Columns.Add(Id_Columna);
 
-            dto.Rows.Add("1", "Columna #1");
-            dto.Rows.Add("2", "Columna #2");
-            dto.Rows.Add("3", "Columna #3");
-            dto.Rows.Add("4", "Columna #4");
-            dto.Rows.Add("5", "Columna #5");
+            DataColumn Descripcion = new DataColumn("Descripcion");
+            Descripcion.DataType = System.Type.GetType("System.String");
+            dto.Columns.Add(Descripcion);
+
+            dto.Rows.Add(1, "Columna #1");
+            dto.Rows.Add(2, "Columna #2");
+            dto.Rows.Add(3, "Columna #3");
+            dto.Rows.Add(4, "Columna #4");
+            dto.Rows.Add(5, "Columna #5");
 
             dto.AcceptChanges();
 
