@@ -30,6 +30,10 @@ namespace arquitectSoft
 
             switch (Consulta)
             {
+                case "Corte":
+                    break;
+                case "Acaba":
+                    break;
                 case "SubComp":
                     GridViewBusqueda.Columns[3].Visible = false;
                     GridViewBusqueda.Columns[4].Visible = false;
@@ -38,7 +42,6 @@ namespace arquitectSoft
                     GridViewBusqueda.Columns[3].Visible = false;
                     break;
             }
-
         }
 
         private void BtnBuscar_Click(object sender, EventArgs e)
@@ -52,11 +55,22 @@ namespace arquitectSoft
             this.Close();
         }
 
-           private void GridViewBusqueda_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
+        private void GridViewBusqueda_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
         {
 
             switch (Consulta)
             {
+                case "Corte":
+                    ReturnItem0 = GridViewBusqueda.SelectedCells[0].Value.ToString();
+                    ReturnItem1 = GridViewBusqueda.SelectedCells[1].Value.ToString();
+                    ReturnItem2 = GridViewBusqueda.SelectedCells[2].Value.ToString();
+                    ReturnItem3 = GridViewBusqueda.SelectedCells[3].Value.ToString();
+                    break;
+                case "Acaba":
+                    ReturnItem0 = GridViewBusqueda.SelectedCells[0].Value.ToString();
+                    ReturnItem1 = GridViewBusqueda.SelectedCells[1].Value.ToString();
+                    ReturnItem2 = GridViewBusqueda.SelectedCells[2].Value.ToString();
+                    break;
                 case "SubComp":
                     ReturnItem0 = GridViewBusqueda.SelectedCells[0].Value.ToString();
                     ReturnItem1 = GridViewBusqueda.SelectedCells[1].Value.ToString();
@@ -103,6 +117,12 @@ namespace arquitectSoft
 
                 switch (Consulta)
                 {
+                    case "Corte":
+                        sqlquery = Generals.Constantes.QUERY_CORTE + " where Descripcion lIKE '%" + txtBuscar.Text + "%'";
+                        break;
+                    case "Acaba":
+                        sqlquery = Generals.Constantes.QUERY_ACABADO + " where CONCAT(Codigo_Homologacion,' - ',Descripcion) lIKE '%" + txtBuscar.Text +"%'";
+                        break;
                     case "SubComp":
                         sqlquery = Generals.Constantes.QUERY_SUBCOMPONENTES + " where CONCAT(Codigo_Homologacion,' - ',Descripcion) lIKE '%" + txtBuscar.Text + "%' and Especial = " + Fil;
                         break;

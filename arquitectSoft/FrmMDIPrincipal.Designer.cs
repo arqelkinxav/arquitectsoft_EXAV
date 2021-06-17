@@ -99,13 +99,14 @@ namespace arquitectSoft
             // TMSItem_acabados
             // 
             this.TMSItem_acabados.Name = "TMSItem_acabados";
-            this.TMSItem_acabados.Size = new System.Drawing.Size(126, 22);
+            this.TMSItem_acabados.Size = new System.Drawing.Size(180, 22);
             this.TMSItem_acabados.Text = "Acabados";
+            this.TMSItem_acabados.Click += new System.EventHandler(this.TMSItem_acabados_Click);
             // 
             // TMSItem_cortes
             // 
             this.TMSItem_cortes.Name = "TMSItem_cortes";
-            this.TMSItem_cortes.Size = new System.Drawing.Size(126, 22);
+            this.TMSItem_cortes.Size = new System.Drawing.Size(180, 22);
             this.TMSItem_cortes.Text = "Cortes";
             // 
             // TMSItem_procesos

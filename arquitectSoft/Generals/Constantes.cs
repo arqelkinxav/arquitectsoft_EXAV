@@ -45,10 +45,19 @@ namespace arquitectSoft.Generals
         public static String QUERY_UNIDADCALCULADA = "SELECT Id_Unidad_Calculada,Descripcion FROM arquitectdb.unidades_calculadas";
 
         //Acabado
-        public static String QUERY_ACABADO = "SELECT Id_Acabado,Descripcion FROM arquitectdb.acabados;";
+        public static String QUERY_ACABADO = "SELECT Id_Acabado,Codigo_Homologacion,Descripcion FROM arquitectdb.acabados";
+        public static String QUERY_INSERT_ACABADO = "INSERT arquitectdb.acabados (Codigo_Homologacion, descripcion)VALUES(?,?)";
+        public static String QUERY_DELETE_ACABADO = "DELETE FROM arquitectdb.acabados WHERE Id_Acabado = ?";
+        public static String QUERY_UPDATE_ACABADO = "UPDATE arquitectdb.acabados SET descripcion = ? WHERE Id_Acabado = ?";
+        public static String QUERY_EXITS_ACABADO = "SELECT Id_Acabado FROM arquitectdb.acabados where Codigo_Homologacion = ? or Descripcion = ?;";
 
         //Corte
-        public static String QUERY_CORTE = "SELECT Id_Corte,Descripcion FROM arquitectdb.cortes;";
+        public static String QUERY_CORTE = "SELECT Id_Corte,Descripcion,Corte_Derecho,Corte_Izquierdo FROM arquitectdb.cortes";
+        public static String QUERY_INSERT_CORTE = "INSERT arquitectdb.cortes (descripcion,Corte_Derecho,Corte_Izquierdo) VALUES(?,?,?)";
+        public static String QUERY_DELETE_CORTE = "DELETE FROM arquitectdb.cortes WHERE Id_Corte = ?";
+        public static String QUERY_UPDATE_CORTE = "UPDATE arquitectdb.cortes SET descripcion = ?,Corte_Derecho = ?, Corte_Izquierdo = ? WHERE Id_Corte = ?";
+        public static String QUERY_EXITS_CORTE = "SELECT Id_Corte FROM arquitectdb.cortes where Descripcion = ?;";
+        public static String QUERY_CORTE_MAX = "SELECT Max(Id_Corte) + 1 Id_Corte FROM arquitectdb.cortes";
 
 
     }
