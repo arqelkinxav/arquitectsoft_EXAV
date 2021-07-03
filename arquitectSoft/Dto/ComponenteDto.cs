@@ -162,7 +162,7 @@ namespace arquitectSoft.Dto
             return row;
         }
 
-        public bool ValilidationSaveComponenet(string codigo,string descripcion,bool chkespecial, int RowCountGrid, int RowCountGridEsp, out string fail)
+        public bool ValilidationSaveComponenet(string codigo,string descripcion,bool chkespecial,int acabado, int RowCountGrid, int RowCountGridEsp, out string fail)
         {
             bool SwSave = true;
             fail = null;
@@ -186,7 +186,12 @@ namespace arquitectSoft.Dto
                 fail = "Debe Agregar un Sub Componente Especial al menos!!!";
                 SwSave = false;
             }
-            
+            else if (acabado == 0)
+            {
+                fail = "Debe Seleccionar un Acabado!!!";
+                SwSave = false;
+            }
+
             return SwSave;
         }
 

@@ -98,9 +98,9 @@ namespace arquitectSoft.View
             {
 
                 Dto.UnidadMedidaDto dto = new Dto.UnidadMedidaDto();
-                string resul = dto.ExistUnidadMedida(txtCodigo.Text, txtDescripcion.Text);
+                //string resul = dto.ExistUnidadMedida(txtDescripcion.Text);
 
-                resul = dto.DeleteUnidadMedida(Int32.Parse(resul));
+                string resul = dto.DeleteUnidadMedida(Int32.Parse(txtCodigo.Text));
 
                 BloquearCancelar();
                 ClearComponent();
@@ -168,7 +168,7 @@ namespace arquitectSoft.View
         {
             string resul = "0";
 
-            resul = dto.ExistUnidadMedida(txtCodigo.Text, txtDescripcion.Text);
+            resul = dto.ExistUnidadMedida(txtCodigo.Text);
 
             if (resul == "0" || Opc == "Editar")
             {

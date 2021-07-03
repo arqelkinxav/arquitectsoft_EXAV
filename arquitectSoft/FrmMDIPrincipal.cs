@@ -39,7 +39,7 @@ namespace arquitectSoft
 
         private void FrmMDIPrincipal_Load(object sender, EventArgs e)
         {
-            
+
             Controls.OfType<MdiClient>().FirstOrDefault().BackColor = Color.FromArgb(176, 196, 222);
             Mdi_nameConnect.Text = Mdi_nameConnect.Text + " " + Generals.Global.NameConnect.ToUpper();
         }
@@ -58,61 +58,68 @@ namespace arquitectSoft
 
         private void TMSItem_componente_Click(object sender, EventArgs e)
         {
-            if (this.MdiChildren.Count() == 0){
-                View.FrmComponente formComp = new View.FrmComponente();
-                formComp.MdiParent = this;
-                formComp.StartPosition = FormStartPosition.CenterScreen;
-                formComp.Show();
-            }
-            else{
-                MessageBox.Show("Ya hay una ventana activa!","Mensaje Alerta",MessageBoxButtons.OK,MessageBoxIcon.Exclamation);
-            }
-            
+
+            View.FrmComponente formComp = new View.FrmComponente();
+            formComp.MdiParent = this;
+            formComp.StartPosition = FormStartPosition.CenterScreen;
+            formComp.Show();
+
+
         }
 
         private void acercaDeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (this.MdiChildren.Count() == 0)
-            {
-                FrmAbout formAbout = new FrmAbout();
-                formAbout.MdiParent = this;
-                formAbout.StartPosition = FormStartPosition.CenterScreen;
-                formAbout.Show();
-            }
-            else
-            {
-                MessageBox.Show("Ya hay una ventana activa!", "Mensaje Alerta", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-            }
+
+            FrmAbout formAbout = new FrmAbout();
+            formAbout.MdiParent = this;
+            formAbout.StartPosition = FormStartPosition.CenterScreen;
+            formAbout.Show();
+
         }
 
         private void TMSItem_subComponente_Click(object sender, EventArgs e)
         {
-            if (this.MdiChildren.Count() == 0)
-            {
-                View.FrmSubComponente formAbout = new View.FrmSubComponente();
-                formAbout.MdiParent = this;
-                formAbout.StartPosition = FormStartPosition.CenterScreen;
-                formAbout.Show();
-            }
-            else
-            {
-                MessageBox.Show("Ya hay una ventana activa!", "Mensaje Alerta", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-            }
+
+            View.FrmSubComponente formSubcomp = new View.FrmSubComponente();
+            formSubcomp.MdiParent = this;
+            formSubcomp.StartPosition = FormStartPosition.CenterScreen;
+            formSubcomp.Show();
+
         }
 
         private void TMSItem_acabados_Click(object sender, EventArgs e)
         {
-            if (this.MdiChildren.Count() == 0)
-            {
-                View.FrmAcabados formAbout = new View.FrmAcabados();
-                formAbout.MdiParent = this;
-                formAbout.StartPosition = FormStartPosition.CenterScreen;
-                formAbout.Show();
-            }
-            else
-            {
-                MessageBox.Show("Ya hay una ventana activa!", "Mensaje Alerta", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-            }
+
+            View.FrmAcabados formAbout = new View.FrmAcabados();
+            formAbout.MdiParent = this;
+            formAbout.StartPosition = FormStartPosition.CenterScreen;
+            formAbout.Show();
+
+        }
+
+        private void calcularCantidadesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            View.FrmAnalisisDatos formDataAnalitics = new View.FrmAnalisisDatos();
+            formDataAnalitics.MdiParent = this;
+            formDataAnalitics.StartPosition = FormStartPosition.CenterScreen;
+            formDataAnalitics.Show();
+
+        }
+
+        private void TMSItem_cortes_Click(object sender, EventArgs e)
+        {
+            View.FrmCorte formcortes = new View.FrmCorte();
+            formcortes.MdiParent = this;
+            formcortes.StartPosition = FormStartPosition.CenterScreen;
+            formcortes.Show();
+        }
+
+        private void unidadDeMedidaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            View.FrmUnidadMedida formUnidadMedida = new View.FrmUnidadMedida();
+            formUnidadMedida.MdiParent = this;
+            formUnidadMedida.StartPosition = FormStartPosition.CenterScreen;
+            formUnidadMedida.Show();
         }
     }
 }

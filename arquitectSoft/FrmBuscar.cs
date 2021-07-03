@@ -86,10 +86,11 @@ namespace arquitectSoft
                     ReturnItem4 = GridViewBusqueda.SelectedCells[4].Value.ToString();
                     break;
                 default:
+                    ReturnItem0 = GridViewBusqueda.SelectedCells[0].Value.ToString();
                     ReturnItem1 = GridViewBusqueda.SelectedCells[1].Value.ToString();
                     ReturnItem2 = GridViewBusqueda.SelectedCells[2].Value.ToString();
                     ReturnItem3 = GridViewBusqueda.SelectedCells[3].Value.ToString();
-                    ReturnItem4 = GridViewBusqueda.SelectedCells[0].Value.ToString();
+                    ReturnItem4 = GridViewBusqueda.SelectedCells[4].Value.ToString();
                     break;
             }
 

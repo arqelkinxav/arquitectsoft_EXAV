@@ -30,6 +30,7 @@ namespace arquitectSoft.View
             txtCodigo.Enabled = false;
             txtDescripcion.Enabled = false;
             chkEspecial.Enabled = false;
+            CmbAcabado.Enabled = false;
             BtnCheck.Enabled = false;
             BtnAgregar.Enabled = false;
             BtnBorrar.Enabled = false;
@@ -52,8 +53,8 @@ namespace arquitectSoft.View
         {
             Dto.ComponenteDto dto = new Dto.ComponenteDto();
             string fail = "";
-
-            bool SwSave = dto.ValilidationSaveComponenet(txtCodigo.Text, txtDescripcion.Text, chkEspecial.Checked, GridViewComponente.RowCount, GridViewComponenteEsp.RowCount, out fail);
+            int acabado = Int32.Parse(CmbAcabado.SelectedValue.ToString());
+            bool SwSave = dto.ValilidationSaveComponenet(txtCodigo.Text, txtDescripcion.Text, chkEspecial.Checked, acabado, GridViewComponente.RowCount, GridViewComponenteEsp.RowCount, out fail);
 
             foreach (DataGridViewRow row in GridViewComponente.Rows)
             {
@@ -148,13 +149,14 @@ namespace arquitectSoft.View
             txtCodigo.Text = bsc.ReturnItem1;
             txtDescripcion.Text = bsc.ReturnItem2;
             chkEspecial.Checked = bsc.ReturnItem3 == "1" ? true : false;
+            
 
             //Obtener detalle componente generico
-            DataTable dt = dto.GetComponentDetalle(bsc.ReturnItem4);
+            DataTable dt = dto.GetComponentDetalle(bsc.ReturnItem0);
             CargarDataDetalle(dt);
 
             //Obtener detalle componente especial
-            DataTable dtespecial = dto.GetComponentEspecialDetalle(bsc.ReturnItem4);
+            DataTable dtespecial = dto.GetComponentEspecialDetalle(bsc.ReturnItem0);
             bool swesp = dtespecial.Rows.Count > 0 ? true : false;
             HabilitarEspecial(swesp);
             if (swesp)
@@ -162,7 +164,7 @@ namespace arquitectSoft.View
                 CargarDataDetalleEspecial(dtespecial);
             }
 
-
+            CmbAcabado.SelectedValue = bsc.ReturnItem4 == ""? "0": bsc.ReturnItem4;
             txtCodigo.Enabled = false;
             txtDescripcion.Enabled = false;
             chkEspecial.Enabled = false;
@@ -331,6 +333,7 @@ namespace arquitectSoft.View
             GridViewComponenteEsp.Columns.Add(DGV_Handler.CreateColumnasComboBox());
             GridViewComponenteEsp.Columns.Add(DGV_Handler.CreateTextBox("Cxdefecto", "Cx. efecto", "Cxdefecto", true));
             GridViewComponenteEsp.Columns.Add(DGV_Handler.CreateTextBox("CAdicional", "C. Adicional", "CAdicional", true));
+            GridViewComponenteEsp.Columns.Add(DGV_Handler.CreateCheckBox("Tbd", "To be define", "Tbd"));
 
             GridViewComponente.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             GridViewComponente.Columns[0].ReadOnly = true;
@@ -386,6 +389,7 @@ namespace arquitectSoft.View
             txtCodigo.Enabled = false;
             txtDescripcion.Enabled = false;
             chkEspecial.Enabled = false;
+            CmbAcabado.Enabled = false;
             BtnAgregar.Enabled = false;
             BtnBorrar.Enabled = false;
             GridViewComponente.Enabled = false;

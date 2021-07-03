@@ -11,7 +11,7 @@ namespace arquitectSoft.Dto
     class UnidadMedidaDto
     {
        
-        public string ExistUnidadMedida(string codigo, string descripcion)
+        public string ExistUnidadMedida(string codigo)
         {
             string resul = "0";
             Generals.Conexion con = new Generals.Conexion();
@@ -20,7 +20,7 @@ namespace arquitectSoft.Dto
             {
                 con.Open(out fail);
                 MySqlDataReader row;
-                string[] param = { codigo, descripcion };
+                string[] param = { codigo };
                 row = con.ExecuteReader(Generals.Constantes.QUERY_EXITS_UNIDADMEDIDA, out fail, param);
                 while (row.Read())
                 {

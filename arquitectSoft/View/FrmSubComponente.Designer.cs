@@ -323,6 +323,7 @@ namespace arquitectSoft.View
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(70)))), ((int)(((byte)(86)))));
             this.ClientSize = new System.Drawing.Size(788, 255);
+            this.ControlBox = false;
             this.Controls.Add(this.chkVidriospanles);
             this.Controls.Add(this.CmbAcabado);
             this.Controls.Add(this.label2);
@@ -338,7 +339,7 @@ namespace arquitectSoft.View
             this.Controls.Add(this.BtnEliminar);
             this.Controls.Add(this.BtnEditar);
             this.Controls.Add(this.BtnGuardar);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "FrmSubComponente";
             this.Text = "FrmSubComponente";
             this.Load += new System.EventHandler(this.FrmSubComponente_Load);

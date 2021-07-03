@@ -13,7 +13,7 @@ namespace arquitectSoft.Generals
         //Componentes
         public static String QUERY_EXITS_COMPONENTES = "SELECT Id_Componente FROM arquitectdb.componentes where Codigo = ? or Descripcion = ?;";
         public static String QUERY_INSERT_COMPONENTES = "INSERT arquitectdb.componentes(codigo, descripcion, Especial,AcabadoPrincipal) VALUES (?,?,?,?);";
-        public static String QUERY_COMPONENTES = "SELECT Id_Componente,Codigo,Descripcion,Especial FROM arquitectdb.componentes ";
+        public static String QUERY_COMPONENTES = "SELECT Id_Componente,Codigo,Descripcion,Especial,AcabadoPrincipal FROM arquitectdb.componentes ";
         public static String QUERY_UPDATE_COMPONENTES = "UPDATE arquitectdb.componentes SET descripcion = ?, Especial = ?,AcabadoPrincipal = ? WHERE Codigo = ?";
         public static String QUERY_INSERT_COMPONENTE_DETALLE = "INSERT arquitectdb.componentes_detalle (Id_Componente,"
             + " Id_Subcomponente,"
@@ -66,7 +66,7 @@ namespace arquitectSoft.Generals
         public static String QUERY_INSERT_UNIDADMEDIDA = "INSERT arquitectdb.unidades_medidas (Descripcion,Convencion) VALUES(?,?)";
         public static String QUERY_DELETE_UNIDADMEDIDA = "DELETE FROM arquitectdb.unidades_medidas WHERE Id_Unidad_Medida = ?";
         public static String QUERY_UPDATE_UNIDADMEDIDA = "UPDATE arquitectdb.unidades_medidas SET descripcion = ?,Convencion = ? WHERE Id_Unidad_Medida = ?";
-        public static String QUERY_EXITS_UNIDADMEDIDA = "SELECT Id_Corte FROM arquitectdb.cortes where Descripcion = ?;";
+        public static String QUERY_EXITS_UNIDADMEDIDA = "SELECT Id_Unidad_Medida FROM arquitectdb.unidades_medidas where Id_Unidad_Medida = ?;";
         public static String QUERY_UNIDADMEDIDA_MAX = "SELECT Max(Id_Unidad_Medida) + 1 Id_Corte FROM arquitectdb.unidades_medidas";
 
         //Analisis de Datos
