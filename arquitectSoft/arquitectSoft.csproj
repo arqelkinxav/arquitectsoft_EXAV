@@ -112,10 +112,12 @@
     <Compile Include="Class\Sub_Component.cs" />
     <Compile Include="Class\Sub_ComponentEspecial.cs" />
     <Compile Include="Dto\AcabadoDto.cs" />
+    <Compile Include="Dto\AnalisisDatosDto.cs" />
     <Compile Include="Dto\ComponenteDto.cs" />
     <Compile Include="Dto\CorteDto.cs" />
     <Compile Include="Dto\SubComponenteDto.cs" />
     <Compile Include="Dto\UnidadCalculadaDto.cs" />
+    <Compile Include="Dto\UnidadMedidaDto.cs" />
     <Compile Include="FrmAbout.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -146,6 +148,18 @@
     <Compile Include="Generals\Global.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="View\FrmAnalisisDatos.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\FrmAnalisisDatos.Designer.cs">
+      <DependentUpon>FrmAnalisisDatos.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\FrmUnidadMedida.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\FrmUnidadMedida.Designer.cs">
+      <DependentUpon>FrmUnidadMedida.cs</DependentUpon>
+    </Compile>
     <Compile Include="View\FrmCorte.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -198,6 +212,12 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="View\FrmAnalisisDatos.resx">
+      <DependentUpon>FrmAnalisisDatos.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\FrmUnidadMedida.resx">
+      <DependentUpon>FrmUnidadMedida.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="View\FrmCorte.resx">
       <DependentUpon>FrmCorte.cs</DependentUpon>
     </EmbeddedResource>

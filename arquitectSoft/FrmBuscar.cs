@@ -30,6 +30,8 @@ namespace arquitectSoft
 
             switch (Consulta)
             {
+                case "Umed":
+                    break;
                 case "Corte":
                     break;
                 case "Acaba":
@@ -60,6 +62,11 @@ namespace arquitectSoft
 
             switch (Consulta)
             {
+                case "Umed":
+                    ReturnItem0 = GridViewBusqueda.SelectedCells[0].Value.ToString();
+                    ReturnItem1 = GridViewBusqueda.SelectedCells[1].Value.ToString();
+                    ReturnItem2 = GridViewBusqueda.SelectedCells[2].Value.ToString();
+                    break;
                 case "Corte":
                     ReturnItem0 = GridViewBusqueda.SelectedCells[0].Value.ToString();
                     ReturnItem1 = GridViewBusqueda.SelectedCells[1].Value.ToString();
@@ -117,6 +124,9 @@ namespace arquitectSoft
 
                 switch (Consulta)
                 {
+                    case "Umed":
+                        sqlquery = Generals.Constantes.QUERY_UNIDADMEDIDA + " where Descripcion lIKE '%" + txtBuscar.Text + "%'";
+                        break;
                     case "Corte":
                         sqlquery = Generals.Constantes.QUERY_CORTE + " where Descripcion lIKE '%" + txtBuscar.Text + "%'";
                         break;
@@ -124,7 +134,7 @@ namespace arquitectSoft
                         sqlquery = Generals.Constantes.QUERY_ACABADO + " where CONCAT(Codigo_Homologacion,' - ',Descripcion) lIKE '%" + txtBuscar.Text +"%'";
                         break;
                     case "SubComp":
-                        sqlquery = Generals.Constantes.QUERY_SUBCOMPONENTES + " where CONCAT(Codigo_Homologacion,' - ',Descripcion) lIKE '%" + txtBuscar.Text + "%' and Especial = " + Fil;
+                        sqlquery = Generals.Constantes.QUERY_SUBCOMPONENTES + " where CONCAT(subcomponentes.Codigo_Homologacion,' - ',subcomponentes.Descripcion) lIKE '%" + txtBuscar.Text + "%' and Especial = " + Fil;
                         break;
                     default:
                         sqlquery = Generals.Constantes.QUERY_COMPONENTES + " where CONCAT(Codigo,' - ',Descripcion) lIKE '%" + txtBuscar.Text + "%' and Especial = " + Fil;

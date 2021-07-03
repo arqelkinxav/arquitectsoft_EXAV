@@ -8,41 +8,10 @@ using System.Threading.Tasks;
 
 namespace arquitectSoft.Dto
 {
-    class AcabadoDto
+    class UnidadMedidaDto
     {
-        public DataTable GetAcabado()
-        {
-            Generals.Conexion con = new Generals.Conexion();
-            string fail = "";
-            con.Open(out fail);
-
-
-            DataTable dt = con.ExecuteDataSet("Select 0 Id_Acabado,00 Codigo_Homologacion, '(Seleccione)' Descripcion union all " + Generals.Constantes.QUERY_ACABADO, out fail).Tables[0];
-            con.Close();
-
-            return dt;
-        }
-
-        public DataTable GetAcabadoParam(string id)
-        {
-            Generals.Conexion con = new Generals.Conexion();
-            string fail = "";
-            con.Open(out fail);
-
        
-            string condicion = id == "" ? " Where 1=2" : " where Codigo_Homologacion in (" + id + ")";
-
-
-            DataTable dt = con.ExecuteDataSet("Select 0 Id_Acabado,00 Codigo_Homologacion, '(Seleccione)' Descripcion union all "
-                                                + Generals.Constantes.QUERY_ACABADO
-                                                + condicion
-                                                , out fail).Tables[0];
-            con.Close();
-
-            return dt;
-        }
-
-        public string ExistAcabado(string codigo, string descripcion)
+        public string ExistUnidadMedida(string codigo, string descripcion)
         {
             string resul = "0";
             Generals.Conexion con = new Generals.Conexion();
@@ -52,7 +21,7 @@ namespace arquitectSoft.Dto
                 con.Open(out fail);
                 MySqlDataReader row;
                 string[] param = { codigo, descripcion };
-                row = con.ExecuteReader(Generals.Constantes.QUERY_EXITS_ACABADO, out fail, param);
+                row = con.ExecuteReader(Generals.Constantes.QUERY_EXITS_UNIDADMEDIDA, out fail, param);
                 while (row.Read())
                 {
                     resul = row.GetString(0);
@@ -68,7 +37,7 @@ namespace arquitectSoft.Dto
             return resul;
         }
 
-        public string DeleteAcabado(int idComponente)
+        public string DeleteUnidadMedida(int idComponente)
         {
             Generals.Conexion con = new Generals.Conexion();
             string fail = "";
@@ -78,7 +47,7 @@ namespace arquitectSoft.Dto
             try
             {
 
-                con.ExecuteNonQuery(Generals.Constantes.QUERY_DELETE_ACABADO, out fail, param, 0);
+                con.ExecuteNonQuery(Generals.Constantes.QUERY_DELETE_UNIDADMEDIDA, out fail, param, 0);
 
                 resul = "Registro Eliminado Correctamente";
 
@@ -91,7 +60,7 @@ namespace arquitectSoft.Dto
             return resul;
         }
 
-        public string SaveAcabado(string codigo, string descripcion, string opcion, string IdAcabadoExist)
+        public string SaveUnidadMedida(string codigo, string descripcion,string convencion, string opcion, string IdUnidadMExist)
         {
 
             string resul = "";
@@ -102,21 +71,22 @@ namespace arquitectSoft.Dto
             try
             {
                 con.Open(out fail);
-                string[] param = { codigo, descripcion };
+                string[] param = {  descripcion, convencion, codigo };
                 string MsgResul = "Guardado Exitosamente";
                 string sqlquery = "";
                 switch (opcion)
                 {
                     case "Editar":
-                        sqlquery = Generals.Constantes.QUERY_UPDATE_ACABADO;
+                        sqlquery = Generals.Constantes.QUERY_UPDATE_UNIDADMEDIDA;
 
                         param[0] = descripcion;
-                        param[1] = IdAcabadoExist;
+                        param[1] = convencion;
+                        param[2] = IdUnidadMExist;
 
                         MsgResul = "Registro Editado Correctamente";
                         break;
                     default:
-                        sqlquery = Generals.Constantes.QUERY_INSERT_ACABADO;
+                        sqlquery = Generals.Constantes.QUERY_INSERT_UNIDADMEDIDA;
                         break;
                 }
 
@@ -135,7 +105,7 @@ namespace arquitectSoft.Dto
             return resul;
         }
 
-        public bool ValilidationSaveAcabado(string codigo, string descripcion, out string fail)
+        public bool ValilidationSaveUnidadMedida(string codigo, string descripcion,string convencion, out string fail)
         {
             bool SwSave = true;
             fail = null;
@@ -149,8 +119,39 @@ namespace arquitectSoft.Dto
                 fail = "Debe Digitar un Descripcion";
                 SwSave = false;
             }
+            else if (convencion == "")
+            {
+                fail = "Debe Digitar una convencion";
+                SwSave = false;
+            }
 
             return SwSave;
+        }
+
+        public string MaximaUnidadMedida()
+        {
+            string resul = "0";
+            Generals.Conexion con = new Generals.Conexion();
+            string fail = "";
+            try
+            {
+                con.Open(out fail);
+                MySqlDataReader row;
+                string[] param = { };
+                row = con.ExecuteReader(Generals.Constantes.QUERY_UNIDADMEDIDA_MAX, out fail, param);
+                while (row.Read())
+                {
+                    resul = row.GetString(0);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                resul = ex.Message.ToString();
+                con.Close();
+            }
+
+            return resul;
         }
     }
 }

@@ -11,7 +11,7 @@ namespace arquitectSoft.Dto
 {
     class ComponenteDto
     {
-        public string SaveComponent(string codigo, string descripcion, bool checkSubComponente,string opcion, Sub_Component[] Sbarray, Sub_ComponentEspecial[] SbarrayEsp, string IdComponenteExist)
+        public string SaveComponent(string codigo, string descripcion, bool checkSubComponente, string acabado, string opcion, Sub_Component[] Sbarray, Sub_ComponentEspecial[] SbarrayEsp, string IdComponenteExist)
         {
             
             string resul = "";
@@ -22,7 +22,7 @@ namespace arquitectSoft.Dto
 
                 con.Open(out fail);
                 int check = checkSubComponente == true ? 1 : 0;
-                string[] param = { codigo, descripcion, check.ToString() };
+                string[] param = { codigo, descripcion, check.ToString(), acabado.ToString() };
 
                 string MsgResul = "Guardado Exitosamente";
                 string sqlquery = "";
@@ -32,7 +32,8 @@ namespace arquitectSoft.Dto
                         sqlquery = Generals.Constantes.QUERY_UPDATE_COMPONENTES;
                         param[0] = descripcion;
                         param[1] = check.ToString();
-                        param[2] = codigo;
+                        param[2] = acabado.ToString();
+                        param[3] = codigo;
                         MsgResul = "Registro Editado Correctamente";
                         break;
                     default:

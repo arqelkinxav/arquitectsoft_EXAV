@@ -21,6 +21,7 @@ namespace arquitectSoft.View
         }
 
         public string Opc;
+        public string condicionAcabado = "";
 
         private void FrmComponente_Load(object sender, EventArgs e)
         {
@@ -32,6 +33,9 @@ namespace arquitectSoft.View
             BtnCheck.Enabled = false;
             BtnAgregar.Enabled = false;
             BtnBorrar.Enabled = false;
+
+
+            GetAcabadoSelect("");
 
             initialize_datagrid();
         }
@@ -207,6 +211,11 @@ namespace arquitectSoft.View
                 bindingSource1.Add(new Sub_Component(bsc.ReturnItem1, bsc.ReturnItem2, 1, 30, "", false, Int32.Parse(bsc.ReturnItem0), 0, 0));
 
                 GridViewComponente.DataSource = bindingSource1;
+
+                string valorinicial = condicionAcabado == "" ? "'" : ",'";
+                condicionAcabado += valorinicial + bsc.ReturnItem1.ToString().Split('-')[1].Trim() + "'";
+      
+                GetAcabadoSelect(condicionAcabado);
             }
             else
             {
@@ -215,6 +224,11 @@ namespace arquitectSoft.View
                     bindingSource2.Add(new Sub_ComponentEspecial(bsc.ReturnItem1, bsc.ReturnItem2, "",1,1, Int32.Parse(bsc.ReturnItem0)));
 
                     GridViewComponenteEsp.DataSource = bindingSource2;
+
+                    string valorinicial = condicionAcabado == "" ? "'" : ",'";
+                    condicionAcabado += valorinicial + bsc.ReturnItem1.ToString().Split('-')[1].Trim() + "'";
+
+                    GetAcabadoSelect(condicionAcabado);
 
                 }
                 else
@@ -344,11 +358,14 @@ namespace arquitectSoft.View
                     break;
                 default:
                     txtCodigo.Enabled = true;
+                    condicionAcabado = "";
+                    GetAcabadoSelect("");
                     break;
             }
 
             txtDescripcion.Enabled = true;
             chkEspecial.Enabled = true;
+            CmbAcabado.Enabled = true;
             BtnAgregar.Enabled = true;
             BtnBorrar.Enabled = true;
             GridViewComponente.Enabled = true;
@@ -359,6 +376,7 @@ namespace arquitectSoft.View
             BtnEliminar.Enabled = false;
             BtnBuscar.Enabled = false;
             BtnDuplicar.Enabled = false;
+     
         }
         private void BloquearCancelar()
         {
@@ -381,6 +399,9 @@ namespace arquitectSoft.View
 
             bindingSource1.Clear();
             bindingSource2.Clear();
+            GetAcabadoSelect("");
+            condicionAcabado = "";
+
         }
         private void SaveComponent(Dto.ComponenteDto dto)
         {
@@ -430,7 +451,7 @@ namespace arquitectSoft.View
 
 
 
-                resul = dto.SaveComponent(txtCodigo.Text, txtDescripcion.Text, chkEspecial.Checked, Opc, Sbarray, SbarrayEsp, resul);
+                resul = dto.SaveComponent(txtCodigo.Text, txtDescripcion.Text, chkEspecial.Checked, CmbAcabado.SelectedValue.ToString(), Opc, Sbarray, SbarrayEsp, resul);
                 ClearComponent();
                 MessageBox.Show(resul, "Mensaje Alerta", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -449,6 +470,7 @@ namespace arquitectSoft.View
         }
         private void CargarDataDetalle(DataTable dt)
         {
+            condicionAcabado = "";
             foreach (DataRow row in dt.Rows)
             {
                 int decre = Int32.Parse(row["Aplica_Decremento"].ToString());
@@ -457,11 +479,15 @@ namespace arquitectSoft.View
 
                 bindingSource1.Add(new Sub_Component(row["Codigo"].ToString(), row["Descripcion"].ToString(), (int)row["Cantidad_Default"], (int)row["Cantidad_Adicional"], row["Id_Unidad_Calculada"].ToString(), adrecre, (int)row["Id_Subcomponente"], (int)row["elevado"], cort));
 
-                
+             
+                string valorinicial = condicionAcabado == "" ? "'" : ",'";
+                condicionAcabado += valorinicial + row["Codigo"].ToString().Split('-')[1] + "'";
             }
 
             GridViewComponente.DataSource = bindingSource1;
             GridViewComponente.Refresh();
+
+            GetAcabadoSelect(condicionAcabado);
 
             if (dt.Rows.Count > 0)
             {
@@ -488,13 +514,17 @@ namespace arquitectSoft.View
         }
         private void CargarDataDetalleEspecial(DataTable dt)
         {
+            condicionAcabado = condicionAcabado == "" ? "" : condicionAcabado;
             foreach (DataRow row in dt.Rows)
             {
                 bindingSource2.Add(new Sub_ComponentEspecial(row["Codigo"].ToString(), row["Descripcion"].ToString(), row["Id_Columna"].ToString(), (int)row["Cantidad_Default"], (int)row["Cantidad_Adicional"], (int)row["Id_Subcomponente"]));
+                string valorinicial = condicionAcabado == "" ? "'" : ",'";
+                condicionAcabado += valorinicial + row["Codigo"].ToString().Split('-')[1] + "'";
             }
 
             GridViewComponenteEsp.DataSource = bindingSource2;
             GridViewComponenteEsp.Refresh();
+            GetAcabadoSelect(condicionAcabado);
 
             if (dt.Rows.Count > 0)
             {
@@ -524,6 +554,14 @@ namespace arquitectSoft.View
                 GridViewComponenteEsp.DataSource = "";
                 GridViewComponenteEsp.Visible = false;
             }
+        }
+
+        private void GetAcabadoSelect(string condicion)
+        {
+            Dto.AcabadoDto Acb = new Dto.AcabadoDto();
+            CmbAcabado.DataSource = Acb.GetAcabadoParam(condicion);
+            CmbAcabado.DisplayMember = "Descripcion";
+            CmbAcabado.ValueMember = "Id_Acabado";
         }
         #endregion
 

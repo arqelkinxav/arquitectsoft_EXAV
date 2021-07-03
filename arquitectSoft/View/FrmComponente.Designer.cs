@@ -77,6 +77,8 @@ namespace arquitectSoft.View
             this.cortesDataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.subComponentBindingSource1 = new System.Windows.Forms.BindingSource(this.components);
             this.bindingSource2 = new System.Windows.Forms.BindingSource(this.components);
+            this.CmbAcabado = new System.Windows.Forms.ComboBox();
+            this.label2 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.GridViewComponente)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.subComponentBindingSource)).BeginInit();
@@ -186,7 +188,7 @@ namespace arquitectSoft.View
             // txtDescripcion
             // 
             this.txtDescripcion.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
-            this.txtDescripcion.Location = new System.Drawing.Point(236, 143);
+            this.txtDescripcion.Location = new System.Drawing.Point(167, 143);
             this.txtDescripcion.Name = "txtDescripcion";
             this.txtDescripcion.Size = new System.Drawing.Size(417, 20);
             this.txtDescripcion.TabIndex = 21;
@@ -196,7 +198,7 @@ namespace arquitectSoft.View
             this.lbletiquetaDescripcion.AutoSize = true;
             this.lbletiquetaDescripcion.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbletiquetaDescripcion.ForeColor = System.Drawing.SystemColors.Control;
-            this.lbletiquetaDescripcion.Location = new System.Drawing.Point(233, 124);
+            this.lbletiquetaDescripcion.Location = new System.Drawing.Point(164, 124);
             this.lbletiquetaDescripcion.Name = "lbletiquetaDescripcion";
             this.lbletiquetaDescripcion.Size = new System.Drawing.Size(83, 16);
             this.lbletiquetaDescripcion.TabIndex = 20;
@@ -206,7 +208,7 @@ namespace arquitectSoft.View
             // 
             this.chkEspecial.AutoSize = true;
             this.chkEspecial.ForeColor = System.Drawing.SystemColors.Control;
-            this.chkEspecial.Location = new System.Drawing.Point(727, 145);
+            this.chkEspecial.Location = new System.Drawing.Point(842, 113);
             this.chkEspecial.Name = "chkEspecial";
             this.chkEspecial.Size = new System.Drawing.Size(66, 17);
             this.chkEspecial.TabIndex = 22;
@@ -312,7 +314,7 @@ namespace arquitectSoft.View
             // BtnCheck
             // 
             this.BtnCheck.ImageList = this.ImgLista;
-            this.BtnCheck.Location = new System.Drawing.Point(151, 141);
+            this.BtnCheck.Location = new System.Drawing.Point(81, 121);
             this.BtnCheck.Name = "BtnCheck";
             this.BtnCheck.Size = new System.Drawing.Size(64, 23);
             this.BtnCheck.TabIndex = 24;
@@ -592,12 +594,33 @@ namespace arquitectSoft.View
             // 
             this.subComponentBindingSource1.DataSource = typeof(arquitectSoft.Class.Sub_Component);
             // 
+            // CmbAcabado
+            // 
+            this.CmbAcabado.FormattingEnabled = true;
+            this.CmbAcabado.Location = new System.Drawing.Point(591, 142);
+            this.CmbAcabado.Name = "CmbAcabado";
+            this.CmbAcabado.Size = new System.Drawing.Size(317, 21);
+            this.CmbAcabado.TabIndex = 44;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.ForeColor = System.Drawing.SystemColors.Control;
+            this.label2.Location = new System.Drawing.Point(588, 123);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(67, 16);
+            this.label2.TabIndex = 43;
+            this.label2.Text = "Acabado:";
+            // 
             // FrmComponente
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(70)))), ((int)(((byte)(86)))));
             this.ClientSize = new System.Drawing.Size(920, 526);
+            this.Controls.Add(this.CmbAcabado);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.GridViewComponenteEsp);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.chkEspecial);
@@ -686,5 +709,7 @@ namespace arquitectSoft.View
         private System.Windows.Forms.DataGridViewTextBoxColumn idSubcomponenteDataGridViewTextBoxColumn1;
         private System.Windows.Forms.DataGridViewTextBoxColumn elevadoDataGridViewTextBoxColumn1;
         private System.Windows.Forms.DataGridViewTextBoxColumn cortesDataGridViewTextBoxColumn1;
+        private System.Windows.Forms.ComboBox CmbAcabado;
+        private System.Windows.Forms.Label label2;
     }
 }
