@@ -81,5 +81,14 @@ namespace arquitectSoft.Generals
                                 "componentes_especial.descripcion, concat('Columna #',select_Columna) Columns FROM  componentes_especial_detalle " +
                         "JOIN componentes_especial ON componentes_especial_detalle.Id_Componente_especial = componentes_especial.Id_Componente_especial " +
                         "WHERE componentes_especial.Codigo = ? ";
+
+        public static String QUERY_INSERT_PROYECTO_VIDRIO_PANEL = "INSERT INTO proyecto_vp "
+                        + "(Id_Subcomponente, "
+                        + " Altura, "
+                        + " Anchura,"
+                        + " Cantidad,Id_Unidad_Medida,medida,medidaAdicional) "
+                        + "VALUES (?,?,?,?,?,?,?)";
+
+        public static String QUERY_GET_PROYECTO_VIDRIO_PANEL = "spSubComponenteVidrioPanelAgrupar";
     }
 }

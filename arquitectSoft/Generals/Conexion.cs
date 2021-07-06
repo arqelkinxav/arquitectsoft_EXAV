@@ -98,13 +98,14 @@ namespace arquitectSoft.Generals
                 MySqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection);
                 var table = new DataTable();
                 table.Load(dr);
-
+                conn.Close();
                 fail = "";
                 return table;
             }
             catch (Exception ex)
             {
                 fail = "Conexion Error ! " + ex.Message;
+                conn.Close();
             }
             return null;
         }
@@ -158,6 +159,7 @@ namespace arquitectSoft.Generals
             }
             return -1;
         }
+
 
     }
 }

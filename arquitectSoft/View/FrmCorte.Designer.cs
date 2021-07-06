@@ -331,6 +331,7 @@ namespace arquitectSoft.View
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(70)))), ((int)(((byte)(86)))));
             this.ClientSize = new System.Drawing.Size(788, 223);
+            this.ControlBox = false;
             this.Controls.Add(this.NudRight);
             this.Controls.Add(this.NudLeft);
             this.Controls.Add(this.label3);
@@ -347,7 +348,7 @@ namespace arquitectSoft.View
             this.Controls.Add(this.BtnEliminar);
             this.Controls.Add(this.BtnEditar);
             this.Controls.Add(this.BtnGuardar);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "FrmCorte";
             this.Text = "FrmSubComponente";
             this.Load += new System.EventHandler(this.FrmCorte_Load);

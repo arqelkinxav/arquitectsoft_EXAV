@@ -27,7 +27,7 @@ namespace arquitectSoft.Dto
             return resul;
         }
 
-        public List<String> setCreateColumns(int index) 
+        public List<String> setCreateColumns(int index)
         {
             List<String> listColumns = new List<String>();
             switch (index)
@@ -96,7 +96,7 @@ namespace arquitectSoft.Dto
 
         public List<Object[]> readFileTxt(string file, char delimeter)
         {
-            List<Object[]> list = new List<Object[]>();       
+            List<Object[]> list = new List<Object[]>();
             Object[] array;
 
             using (var sr = new StreamReader(file))
@@ -123,16 +123,18 @@ namespace arquitectSoft.Dto
         }
 
 
-        public DataTable showTab(int index, List<String> ListColumns, List<Object[]> ListData) 
+        public DataTable showTab(int index, List<String> ListColumns, List<Object[]> ListData)
         {
             DataTable dt = new DataTable();
 
 
-            ListColumns.ForEach(delegate (string s) {
+            ListColumns.ForEach(delegate (string s)
+            {
                 dt.Columns.Add(s);
             });
 
-            ListData.ForEach(delegate (Object[] s) {
+            ListData.ForEach(delegate (Object[] s)
+            {
                 dt.Rows.Add(s);
             });
 
@@ -146,7 +148,7 @@ namespace arquitectSoft.Dto
             switch (index)
             {
                 case 1:
-                    
+
                     dt.Columns.Add("Codigo");
                     dt.Columns.Add("Descripcion");
                     dt.Columns.Add("Longitud");
@@ -163,12 +165,43 @@ namespace arquitectSoft.Dto
                     foreach (var row in groupedData)
                     {
 
-                        dt.Rows.Add(row.Codigo.ToString().Trim().Replace("\"", ""), "",row.Longitud.ToString().Trim().Replace("\"", ""), row.Count);
+                        dt.Rows.Add(row.Codigo.ToString().Trim().Replace("\"", ""), "", row.Longitud.ToString().Trim().Replace("\"", ""), row.Count);
                     }
                     break;
 
                 case 2:
-                    dt = GetCalculateVidriosPaneles(dtmodel);
+                    SetAuxAnchura(dtmodel);
+                    List<List<object[]>> list = getSubComponenteEspecialCalc(dtmodel);
+                    //dt = GetCalculateVidriosPaneles(dtmodel);
+
+                    DataTable dtModelVidriosPaneles = new DataTable();
+                    dtModelVidriosPaneles.Columns.Add("id_subcomponente");
+                    dtModelVidriosPaneles.Columns.Add("Id_Unidad_Medida");
+                    dtModelVidriosPaneles.Columns.Add("codigo");
+                    dtModelVidriosPaneles.Columns.Add("descripcion");
+                    dtModelVidriosPaneles.Columns.Add("altura");
+                    dtModelVidriosPaneles.Columns.Add("anchura");
+                    dtModelVidriosPaneles.Columns.Add("cantidad");
+                    dtModelVidriosPaneles.Columns.Add("medida");
+                    dtModelVidriosPaneles.Columns.Add("cantidadAdicional");
+                    dtModelVidriosPaneles.Columns.Add("Se_Calcula_Por");
+                    list.ForEach(delegate (List<object[]> list1)
+                    {
+                        list1.ForEach(delegate (object[] data)
+                        {
+                            dtModelVidriosPaneles.Rows.Add(data);
+                        });
+                    });
+
+                    List<object[]> listEnd = getComponenteVidrioPanelCalc(dtModelVidriosPaneles);
+
+                    dtModelVidriosPaneles.Rows.Clear();
+                    dtModelVidriosPaneles.Columns.RemoveAt(1);
+                    listEnd.ForEach(delegate (object[] data)
+                    {
+                        dtModelVidriosPaneles.Rows.Add(data);
+                    });
+                    dt = dtModelVidriosPaneles;
                     break;
             }
 
@@ -244,6 +277,93 @@ namespace arquitectSoft.Dto
             return dt;
         }
 
+        private List<List<object[]>> getSubComponenteEspecialCalc(DataTable dtmodel)
+        {
+            DataTable dt = new DataTable();
+            List<List<object[]>> list = new List<List<object[]>>();
+
+            string codigo;
+            string auxAltura;
+
+            foreach (DataRow row in dtmodel.Rows)
+            {
+                codigo = row["Codigo"].ToString().Replace("\"", "").Trim();
+                auxAltura = row["Altura"].ToString().Replace("\"", "").Trim();
+
+
+                Generals.Conexion con = new Generals.Conexion();
+                string fail = "";
+                string[] param = { "pCodigo-" + codigo, "pAltura-" + auxAltura };
+                con.Open(out fail);
+                DataTable dtResult = con.ExecuteDataSetSPparam(Generals.Constantes.QUERY_GET_CALCULATE_VIDRIOPANEL, out fail, param);
+                con.Close();
+
+                List<object[]> listDta = new List<object[]>();
+
+                foreach (DataRow rowResult in dtResult.Rows)
+                {
+                    object[] data = new object[9];
+                    data[0] = rowResult[0].ToString();
+                    data[1] = rowResult[1].ToString();
+                    data[2] = rowResult[2].ToString();
+                    data[3] = rowResult[3].ToString();
+                    data[4] = rowResult[4].ToString();
+                    data[5] = rowResult[5].ToString();
+                    data[6] = rowResult[6].ToString();
+                    data[7] = rowResult[7].ToString();
+                    data[8] = rowResult[8].ToString();
+                    listDta.Add(data);
+                }
+
+                list.Add(listDta);
+
+            }
+
+
+            return list;
+        }
+
+        public List<object[]> getComponenteVidrioPanelCalc(DataTable dtmodel)
+        {
+            List<object[]> list = new List<object[]>();
+            Generals.Conexion con = new Generals.Conexion();
+            string fail = "";
+            foreach (DataRow row in dtmodel.Rows)
+            {
+                fail = "";
+                string[] param = { row["id_subcomponente"].ToString(), row["Altura"].ToString(),
+                                    row["Anchura"].ToString(), row["cantidad"].ToString(), row["Id_Unidad_Medida"].ToString(), 
+                                    row["medida"].ToString(), row["cantidadAdicional"].ToString() };
+                con.Open(out fail);
+                MySqlDataReader drResult = con.ExecuteReader(Generals.Constantes.QUERY_INSERT_PROYECTO_VIDRIO_PANEL, out fail, param);
+                con.Close();
+            }
+
+            fail = "";
+            string[] paramGet = { };
+            con.Open(out fail);
+            DataTable dtResult = con.ExecuteDataSetSPparam(Generals.Constantes.QUERY_GET_PROYECTO_VIDRIO_PANEL, out fail, paramGet);
+            con.Close();
+
+            foreach (DataRow rowResult in dtResult.Rows)
+            {
+                object[] data = new object[9];
+                data[0] = Int32.Parse(rowResult[0].ToString());
+                data[1] = rowResult[1].ToString();
+                data[2] = rowResult[2].ToString();
+                data[3] = Int32.Parse(rowResult[3].ToString());
+                data[4] = Int32.Parse(rowResult[4].ToString());
+                data[5] = Int32.Parse(rowResult[5].ToString());
+                data[6] = Int32.Parse(rowResult[6].ToString());
+                data[7] = decimal.Parse(rowResult[7].ToString());
+                data[8] = rowResult[8].ToString();
+
+                list.Add(data);
+            }
+
+            return list;
+        }
+
         private void SetAuxAnchura(DataTable dtmodel)
         {
             Generals.Conexion con = new Generals.Conexion();
@@ -256,15 +376,19 @@ namespace arquitectSoft.Dto
 
             foreach (DataRow row in dtmodel.Rows)
             {
+                string Anchura2 = row["Anchura2"].ToString().Trim().Replace("\"", "") == "" ? "0" : row["Anchura2"].ToString().Trim().Replace("\"", "");
+                string Anchura3 = row["Anchura3"].ToString().Trim().Replace("\"", "") == "" ? "0" : row["Anchura3"].ToString().Trim().Replace("\"", "");
+                string Anchura4 = row["Anchura4"].ToString().Trim().Replace("\"", "") == "" ? "0" : row["Anchura4"].ToString().Trim().Replace("\"", "");
+                string Anchura5 = row["Anchura5"].ToString().Trim().Replace("\"", "") == "" ? "0" : row["Anchura5"].ToString().Trim().Replace("\"", "");
+
                 string[] param = { row["Codigo"].ToString().Trim().Replace("\"",""),row["Altura"].ToString().Trim().Replace("\"",""), row["Anchura"].ToString().Trim().Replace("\"",""),
-                                            row["Anchura2"].ToString().Trim().Replace("\"",""), row["Anchura3"].ToString().Trim().Replace("\"",""), row["Anchura4"].ToString().Trim().Replace("\"",""),
-                                            row["Anchura5"].ToString().Trim().Replace("\"","") };
+                                    Anchura2,Anchura3,Anchura4,Anchura5         };
 
                 con.Open(out fail);
                 con.ExecuteNonQuery(Generals.Constantes.QUERY_INSERT_AUXANCHURA, out fail, param, 1);
                 con.Close();
             }
-        } 
+        }
 
         private DataTable GetComponentesColumnas(DataTable dtmodel)
         {
@@ -296,13 +420,13 @@ namespace arquitectSoft.Dto
             }
 
 
-            
+
             return dt;
         }
 
 
-        
-       
+
+
 
 
 
