@@ -11,7 +11,7 @@ namespace arquitectSoft.Class
     public class Sub_Component
     {
 
-        public Sub_Component(string codigo, string descripcion, int cxdefecto, int cadicional, string unidadcalculada, bool adecremento,int IdSubcomponente, int elevado, int corte)
+        public Sub_Component(string codigo, string descripcion, int cxdefecto, int cadicional, string unidadcalculada, bool adecremento,int IdSubcomponente, int elevado, int corte, bool extra)
 
         {
 
@@ -24,6 +24,7 @@ namespace arquitectSoft.Class
             this.IdSubcomponente = IdSubcomponente;
             this.Elevado = elevado;
             this.Cortes = corte;
+            this.Extra = extra;
 
         }
 
@@ -44,5 +45,6 @@ namespace arquitectSoft.Class
         public int Elevado { get; set; }
 
         public int Cortes { get; set; }
+        public bool Extra { get; set; }
     }
 }

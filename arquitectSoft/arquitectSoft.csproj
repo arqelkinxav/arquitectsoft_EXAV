@@ -118,6 +118,12 @@
     <Compile Include="Dto\SubComponenteDto.cs" />
     <Compile Include="Dto\UnidadCalculadaDto.cs" />
     <Compile Include="Dto\UnidadMedidaDto.cs" />
+    <Compile Include="FrmLoading.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmLoading.Designer.cs">
+      <DependentUpon>FrmLoading.cs</DependentUpon>
+    </Compile>
     <Compile Include="FrmAbout.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -190,6 +196,9 @@
     <Compile Include="View\FrmSubComponente.Designer.cs">
       <DependentUpon>FrmSubComponente.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="FrmLoading.resx">
+      <DependentUpon>FrmLoading.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FrmAbout.resx">
       <DependentUpon>FrmAbout.cs</DependentUpon>
     </EmbeddedResource>
@@ -279,6 +288,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\036-pencil.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\construyendo.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

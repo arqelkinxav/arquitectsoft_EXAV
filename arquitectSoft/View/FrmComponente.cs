@@ -210,7 +210,7 @@ namespace arquitectSoft.View
 
             if (bsc.ReturnItem0 != null && bsc.ReturnItem4 == "0")
             {
-                bindingSource1.Add(new Sub_Component(bsc.ReturnItem1, bsc.ReturnItem2, 1, 30, "", false, Int32.Parse(bsc.ReturnItem0), 0, 0));
+                bindingSource1.Add(new Sub_Component(bsc.ReturnItem1, bsc.ReturnItem2, 1, 30, "", false, Int32.Parse(bsc.ReturnItem0), 0, 0, false));
 
                 GridViewComponente.DataSource = bindingSource1;
 
@@ -326,6 +326,7 @@ namespace arquitectSoft.View
             GridViewComponente.Columns.Add(DGV_Handler.CreateCheckBox("ADecremento", "A. Decremento", "ADecremento"));
             GridViewComponente.Columns.Add(DGV_Handler.CreateTextBox("Elevado", "Elevado", "Elevado", true));
             GridViewComponente.Columns.Add(DGV_Handler.CreateCorteComboBox());
+            GridViewComponente.Columns.Add(DGV_Handler.CreateCheckBox("Extra", "Extra", "Extra"));
 
             GridViewComponenteEsp.Columns.Add(DGV_Handler.CreateTextBox("IdSubcomponente", "Id", "IdSubcomponente", false));
             GridViewComponenteEsp.Columns.Add(DGV_Handler.CreateTextBox("Codigo", "Codigo", "Codigo", false));
@@ -333,7 +334,7 @@ namespace arquitectSoft.View
             GridViewComponenteEsp.Columns.Add(DGV_Handler.CreateColumnasComboBox());
             GridViewComponenteEsp.Columns.Add(DGV_Handler.CreateTextBox("Cxdefecto", "Cx. efecto", "Cxdefecto", true));
             GridViewComponenteEsp.Columns.Add(DGV_Handler.CreateTextBox("CAdicional", "C. Adicional", "CAdicional", true));
-            GridViewComponenteEsp.Columns.Add(DGV_Handler.CreateCheckBox("Tbd", "To be define", "Tbd"));
+            
 
             GridViewComponente.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             GridViewComponente.Columns[0].ReadOnly = true;
@@ -428,8 +429,9 @@ namespace arquitectSoft.View
                     bool ADecremento = (bool)row.Cells["ADecremento"].Value;
                     int Elevado = (int)row.Cells["Elevado"].Value;
                     int Corte = (int)row.Cells["Cortes"].Value;
+                    bool Extra = (bool)row.Cells["Extra"].Value;
 
-                    Sub_Component sub = new Sub_Component(codigo, descripcion, Cxdefecto, CAdicional, unidadcalculada, ADecremento, id, Elevado, Corte);
+                    Sub_Component sub = new Sub_Component(codigo, descripcion, Cxdefecto, CAdicional, unidadcalculada, ADecremento, id, Elevado, Corte, Extra);
 
                     Sbarray[row.Index] = sub;
                 }
@@ -478,10 +480,11 @@ namespace arquitectSoft.View
             foreach (DataRow row in dt.Rows)
             {
                 int decre = Int32.Parse(row["Aplica_Decremento"].ToString());
+                int extra = Int32.Parse(row["extra"].ToString());
                 int cort = Int32.Parse(row["corte"].ToString());
                 bool adrecre = decre == 1 ? true : false;
-
-                bindingSource1.Add(new Sub_Component(row["Codigo"].ToString(), row["Descripcion"].ToString(), (int)row["Cantidad_Default"], (int)row["Cantidad_Adicional"], row["Id_Unidad_Calculada"].ToString(), adrecre, (int)row["Id_Subcomponente"], (int)row["elevado"], cort));
+                bool extracomp = extra == 1 ? true : false;
+                bindingSource1.Add(new Sub_Component(row["Codigo"].ToString(), row["Descripcion"].ToString(), (int)row["Cantidad_Default"], (int)row["Cantidad_Adicional"], row["Id_Unidad_Calculada"].ToString(), adrecre, (int)row["Id_Subcomponente"], (int)row["elevado"], cort, extracomp));
 
              
                 string valorinicial = condicionAcabado == "" ? "'" : ",'";

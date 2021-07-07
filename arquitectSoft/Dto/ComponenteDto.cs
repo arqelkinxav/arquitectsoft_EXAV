@@ -81,9 +81,10 @@ namespace arquitectSoft.Dto
             {
 
                 int adecre = (row.ADecremento)? 1:0;
+                int extra = (row.Extra) ? 1 : 0;
 
                 string[] param = { idComponente.ToString(), row.IdSubcomponente.ToString(), row.UnidadCalculada
-                        ,row.Cxdefecto.ToString(),row.CAdicional.ToString(),adecre.ToString(),row.Elevado.ToString(),row.Cortes.ToString() };
+                        ,row.Cxdefecto.ToString(),row.CAdicional.ToString(),adecre.ToString(),row.Elevado.ToString(),row.Cortes.ToString(),extra.ToString() };
 
                 int var = con.ExecuteNonQuery(Generals.Constantes.QUERY_INSERT_COMPONENTE_DETALLE, out fail, param,0);
             }

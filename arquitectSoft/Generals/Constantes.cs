@@ -22,7 +22,7 @@ namespace arquitectSoft.Generals
             + " Cantidad_Adicional,"
             + " Aplica_Decremento,"
             + " elevado,"
-            + " idCorte ) VALUES (?,?,?,?,?,?,?,?);";
+            + " idCorte, extra ) VALUES (?,?,?,?,?,?,?,?,?);";
         public static String QUERY_INSERT_COMPONENTE_ESPECIAL_DETALLE = "INSERT arquitectdb.componentes_especial_detalle (Id_Componente_especial,"
             + " Id_Subcomponente,"
             + " select_Columna,"
@@ -82,6 +82,14 @@ namespace arquitectSoft.Generals
                         "JOIN componentes_especial ON componentes_especial_detalle.Id_Componente_especial = componentes_especial.Id_Componente_especial " +
                         "WHERE componentes_especial.Codigo = ? ";
 
+        public static String QUERY_INSERT_PROYECTO = "INSERT INTO proyecto "
+                        + "(Id_Subcomponente, "
+                        + " Id_Unidad_Medida, "
+                        + " cantidad, "
+                        + " medidaAdicional,"
+                        + " medida) "
+                        + "VALUES (?,?,?,?,?)";        
+
         public static String QUERY_INSERT_PROYECTO_VIDRIO_PANEL = "INSERT INTO proyecto_vp "
                         + "(Id_Subcomponente, "
                         + " Altura, "
@@ -89,6 +97,20 @@ namespace arquitectSoft.Generals
                         + " Cantidad,Id_Unidad_Medida,medida,medidaAdicional) "
                         + "VALUES (?,?,?,?,?,?,?)";
 
+        public static String QUERY_INSERT_PROYECTO_MAMPARAS = "INSERT INTO proyecto_mp "
+                       + "(codigo, "
+                       + " descripcion, "
+                       + " medida,puertas,areapuertas)"
+                       + "VALUES (?,?,?,?,?)";
+
+        public static String QUERY_GET_PROYECTO = "spSubComponenteAgrupar";
+
         public static String QUERY_GET_PROYECTO_VIDRIO_PANEL = "spSubComponenteVidrioPanelAgrupar";
+
+        public static String QUERY_GET_CALCULATE_PERFILES = "spComponentePerfilesCargar";       
+
+        public static String QUERY_GET_CALCULATE_MAMPARAS = "spSubComponenteMamparaAgrupar";
+
+        public static String QUERY_GET_CALCULATE_PUERTAS = "componentePuertaDetalleCargar";
     }
 }

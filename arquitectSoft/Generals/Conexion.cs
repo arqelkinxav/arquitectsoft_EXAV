@@ -92,7 +92,7 @@ namespace arquitectSoft.Generals
                 cmd.CommandType = CommandType.StoredProcedure;
                 foreach (string i in param)
                 {
-                    var isplit = i.Split('-');
+                    var isplit = i.Split('|');
                     cmd.Parameters.Add(new MySqlParameter(isplit[0], isplit[1]));
                 }
                 MySqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection);
