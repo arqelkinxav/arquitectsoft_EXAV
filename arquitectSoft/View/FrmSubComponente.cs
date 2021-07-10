@@ -101,7 +101,9 @@ namespace arquitectSoft.View
             {
 
                 Dto.SubComponenteDto dto = new Dto.SubComponenteDto();
-                string resul = dto.ExistSubComponent(txtCodigo.Text, txtDescripcion.Text);
+                var codSplit = txtCodigo.Text.Split('-')[0].Trim();
+                var desSplit = txtDescripcion.Text.Split('(')[0].Trim();
+                string resul = dto.ExistSubComponent(codSplit, desSplit);
 
                 resul = dto.DeleteComponent(Int32.Parse(resul));
 
@@ -188,7 +190,7 @@ namespace arquitectSoft.View
             }
             else
             {
-                MessageBox.Show(resul, "Mensaje Alerta", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("El codigo ya se encuentra registrado en el sistema", "Mensaje Alerta", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 

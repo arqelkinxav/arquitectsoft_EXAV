@@ -13,7 +13,9 @@ namespace arquitectSoft.Generals
         //Componentes
         public static String QUERY_EXITS_COMPONENTES = "SELECT Id_Componente FROM arquitectdb.componentes where Codigo = ? or Descripcion = ?;";
         public static String QUERY_INSERT_COMPONENTES = "INSERT arquitectdb.componentes(codigo, descripcion, Especial,AcabadoPrincipal) VALUES (?,?,?,?);";
-        public static String QUERY_COMPONENTES = "SELECT Id_Componente,Codigo,Descripcion,Especial,AcabadoPrincipal FROM arquitectdb.componentes ";
+        public static String QUERY_COMPONENTES = "SELECT Id_Componente,CONCAT(Codigo , IFNULL(concat('-',acabados.Codigo_Homologacion),'')) Codigo,arquitectdb.componentes.Descripcion,Especial,AcabadoPrincipal" +
+                                                    " FROM arquitectdb.componentes " +
+                                                            "LEFT JOIN arquitectdb.acabados ON acabados.Id_Acabado = AcabadoPrincipal ";
         public static String QUERY_UPDATE_COMPONENTES = "UPDATE arquitectdb.componentes SET descripcion = ?, Especial = ?,AcabadoPrincipal = ? WHERE Codigo = ?";
         public static String QUERY_INSERT_COMPONENTE_DETALLE = "INSERT arquitectdb.componentes_detalle (Id_Componente,"
             + " Id_Subcomponente,"
@@ -36,7 +38,7 @@ namespace arquitectSoft.Generals
 
         //Sub Componente
         public static String QUERY_EXITS_SUBCOMPONENTES = "SELECT Id_SubComponente FROM arquitectdb.subcomponentes where Codigo_Homologacion = ? or Descripcion = ?;";
-        public static String QUERY_SUBCOMPONENTES = "SELECT Id_SubComponente,CONCAT(subcomponentes.Codigo_Homologacion , ' - ' , acabados.Codigo_Homologacion) Codigo_Homologacion" +
+        public static String QUERY_SUBCOMPONENTES = "SELECT Id_SubComponente,CONCAT(subcomponentes.Codigo_Homologacion , '-' , acabados.Codigo_Homologacion) Codigo_Homologacion" +
                                                     ", CONCAT(subcomponentes.Descripcion , '(' , acabados.Descripcion,') ') Descripcion,subcomponentes.Id_Acabado,Especial " +
                                                     "FROM arquitectdb.subcomponentes JOIN arquitectdb.acabados ON subcomponentes.Id_Acabado = acabados.Id_Acabado ";
         public static String QUERY_INSERT_SUBCOMPONENTES = "CALL spSubComponenteRegistrar(?,?,?,?,?);";
@@ -44,10 +46,10 @@ namespace arquitectSoft.Generals
         public static String QUERY_DELETE_SUBCOMPONENTES = "DELETE FROM arquitectdb.subcomponentes WHERE Id_subcomponente = ?";
 
         //Unidad Calculada
-        public static String QUERY_UNIDADCALCULADA = "SELECT Id_Unidad_Calculada,Descripcion FROM arquitectdb.unidades_calculadas";
+        public static String QUERY_UNIDADCALCULADA = "SELECT Id_Unidad_Calculada,Concat(Id_Unidad_Calculada, ' - ', Descripcion) Descripcion FROM arquitectdb.unidades_calculadas";
 
         //Acabado
-        public static String QUERY_ACABADO = "SELECT Id_Acabado,Codigo_Homologacion,Descripcion FROM arquitectdb.acabados";
+        public static String QUERY_ACABADO = "SELECT Id_Acabado,Codigo_Homologacion,CONCAT(Codigo_Homologacion , ' - ' ,Descripcion) FROM arquitectdb.acabados";
         public static String QUERY_INSERT_ACABADO = "INSERT arquitectdb.acabados (Codigo_Homologacion, descripcion)VALUES(?,?)";
         public static String QUERY_DELETE_ACABADO = "DELETE FROM arquitectdb.acabados WHERE Id_Acabado = ?";
         public static String QUERY_UPDATE_ACABADO = "UPDATE arquitectdb.acabados SET descripcion = ? WHERE Id_Acabado = ?";
@@ -62,7 +64,7 @@ namespace arquitectSoft.Generals
         public static String QUERY_CORTE_MAX = "SELECT Max(Id_Corte) + 1 Id_Corte FROM arquitectdb.cortes";
 
         //Unidad de Medida
-        public static String QUERY_UNIDADMEDIDA = "SELECT Id_Unidad_Medida,Descripcion,Convencion FROM arquitectdb.unidades_medidas";
+        public static String QUERY_UNIDADMEDIDA = "SELECT Id_Unidad_Medida,Concat(Id_Unidad_Medida, ' - ', Descripcion) Descripcion,Convencion FROM arquitectdb.unidades_medidas";
         public static String QUERY_INSERT_UNIDADMEDIDA = "INSERT arquitectdb.unidades_medidas (Descripcion,Convencion) VALUES(?,?)";
         public static String QUERY_DELETE_UNIDADMEDIDA = "DELETE FROM arquitectdb.unidades_medidas WHERE Id_Unidad_Medida = ?";
         public static String QUERY_UPDATE_UNIDADMEDIDA = "UPDATE arquitectdb.unidades_medidas SET descripcion = ?,Convencion = ? WHERE Id_Unidad_Medida = ?";
@@ -70,17 +72,14 @@ namespace arquitectSoft.Generals
         public static String QUERY_UNIDADMEDIDA_MAX = "SELECT Max(Id_Unidad_Medida) + 1 Id_Corte FROM arquitectdb.unidades_medidas";
 
         //Analisis de Datos
-        public static String QUERY_GET_CALCULATE_VIDRIOPANEL = "spComponenteVidrioPanel";
+        public static String QUERY_GET_CALCULATE_VIDRIOPANEL = "spComponenteVidrioPanelv2";
         public static String QUERY_INSERT_AUXANCHURA = "INSERT tbauxanchura(Codigo, Altura, Columna1,"
                         + "Columna2,"
                         + "Columna3,"
                         + "Columna4,"
-                        + "Columna5)VALUES(?,?,?,?,?,?,?);";
+                        + "Columna5,ubicacion)VALUES(?,?,?,?,?,?,?,?);";
 
-        public static String QUERY_GET_AUXANCHURA = "SELECT componentes_especial.Codigo,componentes_especial_detalle.id,select_Columna, " +
-                                "componentes_especial.descripcion, concat('Columna #',select_Columna) Columns FROM  componentes_especial_detalle " +
-                        "JOIN componentes_especial ON componentes_especial_detalle.Id_Componente_especial = componentes_especial.Id_Componente_especial " +
-                        "WHERE componentes_especial.Codigo = ? ";
+        public static String QUERY_GET_AUXANCHURA = "select distinct * FROM arquitectdb.tbauxanchura";
 
         public static String QUERY_INSERT_PROYECTO = "INSERT INTO proyecto "
                         + "(Id_Subcomponente, "
@@ -94,8 +93,8 @@ namespace arquitectSoft.Generals
                         + "(Id_Subcomponente, "
                         + " Altura, "
                         + " Anchura,"
-                        + " Cantidad,Id_Unidad_Medida,medida,medidaAdicional) "
-                        + "VALUES (?,?,?,?,?,?,?)";
+                        + " Cantidad,Ubicacion) "
+                        + "VALUES (?,?,?,?,?)";
 
         public static String QUERY_INSERT_PROYECTO_MAMPARAS = "INSERT INTO proyecto_mp "
                        + "(codigo, "
@@ -112,5 +111,9 @@ namespace arquitectSoft.Generals
         public static String QUERY_GET_CALCULATE_MAMPARAS = "spSubComponenteMamparaAgrupar";
 
         public static String QUERY_GET_CALCULATE_PUERTAS = "componentePuertaDetalleCargar";
+
+        public static String QUERY_GET_CALCULATE_PUERTAS_GENERAL = "componentePuertaCargar";
+
+        public static String QUERY_GET_COMPONENTE_CODIGOACABADO = "spComponenteGetCodigoAcabado";
     }
 }

@@ -46,16 +46,21 @@ namespace arquitectSoft.View
                     Console.WriteLine("Mean:    {0:N2}", sum / n);
                     Console.WriteLine("N:       {0:N0}", n);
                 });
-                TimeSpan ts = TimeSpan.FromMilliseconds(1500);
+                TimeSpan ts = TimeSpan.FromMilliseconds(15000);
                 if (!t.Wait(ts))
                     Console.WriteLine("The timeout interval elapsed.");
 
                 DataTable dtPuertas = new DataTable();
+                DataTable dtPerfil = new DataTable();
                 int pageinitial = 0;
+                bool perfilandvidrios = false;
+                           
+
                 foreach (String file in openFileDialog1.FileNames)
                 {
                     FileInfo Archivo = new FileInfo(file);
                     int idDocumento = int.Parse(Archivo.Name.ToString().Split('-')[0].Trim());
+                    
 
                     pageinitial = idDocumento < pageinitial ? idDocumento : pageinitial;
 
@@ -73,8 +78,19 @@ namespace arquitectSoft.View
                 
                     dtPuertas = idDocumento == 3 ? dtResul : dtPuertas;
 
-                    dtcalculate = dto.CalculateTab(idDocumento, dtResul, dtPuertas);
-                  
+                    if (idDocumento == 2)
+                    {
+                        dtcalculate = dto.CalculateTab(1, dtResul, dtPuertas, true);
+                        dtcalculate.Merge(dtPerfil);
+                        dataGridViewPMCalculate.DataSource = dtcalculate;
+                        dataGridViewPMCalculate.Columns[0].Visible = false;
+                        dataGridViewPMCalculate.Columns[6].Visible = false;
+                    }  
+
+                    dtcalculate = dto.CalculateTab(idDocumento, dtResul, dtPuertas, perfilandvidrios);
+
+                    if (idDocumento == 1) { dtPerfil = dtcalculate; }
+
                     SetDataView(dtResul, dtcalculate, idDocumento);
                     
                 }
@@ -83,8 +99,6 @@ namespace arquitectSoft.View
 
             }
         } 
-
-
 
         private void FrmAnalisisDatos_Load(object sender, EventArgs e)
         {
@@ -112,21 +126,26 @@ namespace arquitectSoft.View
                 case 1:
                     dataGridViewPM.DataSource = dt;
                     dataGridViewPMCalculate.DataSource = dtcalculate;
+                    dataGridViewPMCalculate.Columns[0].Visible = false;
+                    dataGridViewPMCalculate.Columns[6].Visible = false;
                     break;
                 case 2:
                     dataGridViewVP.DataSource = dt;
                     dataGridViewVPCalculate.DataSource = dtcalculate;
+                    dataGridViewVPCalculate.Columns[0].Visible = false;
                     break;
                 case 3:
                     dataGridViewP.DataSource = dt;
                     dataGridViewPCalculate.DataSource = dtcalculate;
                     dataGridViewPCalculate.Refresh();
-
+                    dataGridViewPCalculate.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
 
                     break;
                 case 4:
                     dataGridViewTM.DataSource = dt;
                     dataGridViewTMCalculate.DataSource = dtcalculate;
+                    dataGridViewTMCalculate.Columns[0].Visible = false;
+                    dataGridViewTMCalculate.Columns[6].Visible = false;
                     break;
                 case 5:
                     dataGridViewM.DataSource = dt;
@@ -146,7 +165,7 @@ namespace arquitectSoft.View
                     r.DefaultCellStyle.BackColor = Color.Gray;
                 }else if (r.Cells[0].Value.ToString().Contains("Puerta"))
                 {
-                    r.DefaultCellStyle.BackColor = Color.DarkSalmon;
+                    r.DefaultCellStyle.BackColor = Color.Orange;
                 }
             }
         }

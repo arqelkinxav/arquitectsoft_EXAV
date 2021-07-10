@@ -40,6 +40,16 @@ namespace arquitectSoft.View
             this.lbletiquetaDescripcion = new System.Windows.Forms.Label();
             this.chkEspecial = new System.Windows.Forms.CheckBox();
             this.GridViewComponente = new System.Windows.Forms.DataGridView();
+            this.codigoDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.descripcionDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cxdefectoDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cAdicionalDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.unidadCalculadaDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.aDecrementoDataGridViewCheckBoxColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.idSubcomponenteDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.elevadoDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cortesDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.subComponentBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.BtnCheck = new System.Windows.Forms.Button();
             this.BtnAgregar = new System.Windows.Forms.Button();
             this.BtnBorrar = new System.Windows.Forms.Button();
@@ -56,9 +66,6 @@ namespace arquitectSoft.View
             this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
             this.BtnDuplicar = new System.Windows.Forms.Button();
             this.GridViewComponenteEsp = new System.Windows.Forms.DataGridView();
-            this.bindingSource2 = new System.Windows.Forms.BindingSource(this.components);
-            this.CmbAcabado = new System.Windows.Forms.ComboBox();
-            this.label2 = new System.Windows.Forms.Label();
             this.codigoDataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.descripcionDataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cxdefectoDataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -69,25 +76,18 @@ namespace arquitectSoft.View
             this.elevadoDataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cortesDataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.subComponentBindingSource1 = new System.Windows.Forms.BindingSource(this.components);
-            this.codigoDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.descripcionDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cxdefectoDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cAdicionalDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.unidadCalculadaDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.aDecrementoDataGridViewCheckBoxColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.idSubcomponenteDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.elevadoDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cortesDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.subComponentBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.bindingSource2 = new System.Windows.Forms.BindingSource(this.components);
+            this.CmbAcabado = new System.Windows.Forms.ComboBox();
+            this.label2 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.GridViewComponente)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.subComponentBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.arquitectdbDataSet)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.unidadescalculadasBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.GridViewComponenteEsp)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.bindingSource2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.subComponentBindingSource1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.subComponentBindingSource)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bindingSource2)).BeginInit();
             this.SuspendLayout();
             // 
             // panel1
@@ -212,11 +212,11 @@ namespace arquitectSoft.View
             this.chkEspecial.AutoSize = true;
             this.chkEspecial.ForeColor = System.Drawing.SystemColors.Control;
             this.chkEspecial.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.chkEspecial.Location = new System.Drawing.Point(842, 113);
+            this.chkEspecial.Location = new System.Drawing.Point(820, 113);
             this.chkEspecial.Name = "chkEspecial";
-            this.chkEspecial.Size = new System.Drawing.Size(66, 17);
+            this.chkEspecial.Size = new System.Drawing.Size(100, 17);
             this.chkEspecial.TabIndex = 22;
-            this.chkEspecial.Text = "Especial";
+            this.chkEspecial.Text = "Vidrios/Paneles";
             this.chkEspecial.UseVisualStyleBackColor = true;
             this.chkEspecial.CheckedChanged += new System.EventHandler(this.chkEspecial_CheckedChanged);
             // 
@@ -247,6 +247,73 @@ namespace arquitectSoft.View
             this.GridViewComponente.Size = new System.Drawing.Size(919, 300);
             this.GridViewComponente.TabIndex = 23;
             this.GridViewComponente.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.GridViewComponente_DataError);
+            // 
+            // codigoDataGridViewTextBoxColumn
+            // 
+            this.codigoDataGridViewTextBoxColumn.DataPropertyName = "Codigo";
+            this.codigoDataGridViewTextBoxColumn.HeaderText = "Codigo";
+            this.codigoDataGridViewTextBoxColumn.Name = "codigoDataGridViewTextBoxColumn";
+            this.codigoDataGridViewTextBoxColumn.Width = 65;
+            // 
+            // descripcionDataGridViewTextBoxColumn
+            // 
+            this.descripcionDataGridViewTextBoxColumn.DataPropertyName = "Descripcion";
+            this.descripcionDataGridViewTextBoxColumn.HeaderText = "Descripcion";
+            this.descripcionDataGridViewTextBoxColumn.Name = "descripcionDataGridViewTextBoxColumn";
+            this.descripcionDataGridViewTextBoxColumn.Width = 88;
+            // 
+            // cxdefectoDataGridViewTextBoxColumn
+            // 
+            this.cxdefectoDataGridViewTextBoxColumn.DataPropertyName = "Cxdefecto";
+            this.cxdefectoDataGridViewTextBoxColumn.HeaderText = "Cxdefecto";
+            this.cxdefectoDataGridViewTextBoxColumn.Name = "cxdefectoDataGridViewTextBoxColumn";
+            this.cxdefectoDataGridViewTextBoxColumn.Width = 80;
+            // 
+            // cAdicionalDataGridViewTextBoxColumn
+            // 
+            this.cAdicionalDataGridViewTextBoxColumn.DataPropertyName = "CAdicional";
+            this.cAdicionalDataGridViewTextBoxColumn.HeaderText = "CAdicional";
+            this.cAdicionalDataGridViewTextBoxColumn.Name = "cAdicionalDataGridViewTextBoxColumn";
+            this.cAdicionalDataGridViewTextBoxColumn.Width = 82;
+            // 
+            // unidadCalculadaDataGridViewTextBoxColumn
+            // 
+            this.unidadCalculadaDataGridViewTextBoxColumn.DataPropertyName = "UnidadCalculada";
+            this.unidadCalculadaDataGridViewTextBoxColumn.HeaderText = "UnidadCalculada";
+            this.unidadCalculadaDataGridViewTextBoxColumn.Name = "unidadCalculadaDataGridViewTextBoxColumn";
+            this.unidadCalculadaDataGridViewTextBoxColumn.Width = 113;
+            // 
+            // aDecrementoDataGridViewCheckBoxColumn
+            // 
+            this.aDecrementoDataGridViewCheckBoxColumn.DataPropertyName = "ADecremento";
+            this.aDecrementoDataGridViewCheckBoxColumn.HeaderText = "ADecremento";
+            this.aDecrementoDataGridViewCheckBoxColumn.Name = "aDecrementoDataGridViewCheckBoxColumn";
+            this.aDecrementoDataGridViewCheckBoxColumn.Width = 78;
+            // 
+            // idSubcomponenteDataGridViewTextBoxColumn
+            // 
+            this.idSubcomponenteDataGridViewTextBoxColumn.DataPropertyName = "IdSubcomponente";
+            this.idSubcomponenteDataGridViewTextBoxColumn.HeaderText = "IdSubcomponente";
+            this.idSubcomponenteDataGridViewTextBoxColumn.Name = "idSubcomponenteDataGridViewTextBoxColumn";
+            this.idSubcomponenteDataGridViewTextBoxColumn.Width = 119;
+            // 
+            // elevadoDataGridViewTextBoxColumn
+            // 
+            this.elevadoDataGridViewTextBoxColumn.DataPropertyName = "Elevado";
+            this.elevadoDataGridViewTextBoxColumn.HeaderText = "Elevado";
+            this.elevadoDataGridViewTextBoxColumn.Name = "elevadoDataGridViewTextBoxColumn";
+            this.elevadoDataGridViewTextBoxColumn.Width = 71;
+            // 
+            // cortesDataGridViewTextBoxColumn
+            // 
+            this.cortesDataGridViewTextBoxColumn.DataPropertyName = "Cortes";
+            this.cortesDataGridViewTextBoxColumn.HeaderText = "Cortes";
+            this.cortesDataGridViewTextBoxColumn.Name = "cortesDataGridViewTextBoxColumn";
+            this.cortesDataGridViewTextBoxColumn.Width = 62;
+            // 
+            // subComponentBindingSource
+            // 
+            this.subComponentBindingSource.DataSource = typeof(arquitectSoft.Class.Sub_Component);
             // 
             // BtnCheck
             // 
@@ -475,26 +542,6 @@ namespace arquitectSoft.View
             this.GridViewComponenteEsp.TabIndex = 29;
             this.GridViewComponenteEsp.Visible = false;
             // 
-            // CmbAcabado
-            // 
-            this.CmbAcabado.FormattingEnabled = true;
-            this.CmbAcabado.Location = new System.Drawing.Point(591, 142);
-            this.CmbAcabado.Name = "CmbAcabado";
-            this.CmbAcabado.Size = new System.Drawing.Size(317, 21);
-            this.CmbAcabado.TabIndex = 44;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F);
-            this.label2.ForeColor = System.Drawing.SystemColors.Control;
-            this.label2.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.label2.Location = new System.Drawing.Point(588, 123);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(67, 16);
-            this.label2.TabIndex = 43;
-            this.label2.Text = "Acabado:";
-            // 
             // codigoDataGridViewTextBoxColumn1
             // 
             this.codigoDataGridViewTextBoxColumn1.DataPropertyName = "Codigo";
@@ -562,72 +609,25 @@ namespace arquitectSoft.View
             // 
             this.subComponentBindingSource1.DataSource = typeof(arquitectSoft.Class.Sub_Component);
             // 
-            // codigoDataGridViewTextBoxColumn
+            // CmbAcabado
             // 
-            this.codigoDataGridViewTextBoxColumn.DataPropertyName = "Codigo";
-            this.codigoDataGridViewTextBoxColumn.HeaderText = "Codigo";
-            this.codigoDataGridViewTextBoxColumn.Name = "codigoDataGridViewTextBoxColumn";
-            this.codigoDataGridViewTextBoxColumn.Width = 65;
+            this.CmbAcabado.FormattingEnabled = true;
+            this.CmbAcabado.Location = new System.Drawing.Point(591, 142);
+            this.CmbAcabado.Name = "CmbAcabado";
+            this.CmbAcabado.Size = new System.Drawing.Size(317, 21);
+            this.CmbAcabado.TabIndex = 44;
             // 
-            // descripcionDataGridViewTextBoxColumn
+            // label2
             // 
-            this.descripcionDataGridViewTextBoxColumn.DataPropertyName = "Descripcion";
-            this.descripcionDataGridViewTextBoxColumn.HeaderText = "Descripcion";
-            this.descripcionDataGridViewTextBoxColumn.Name = "descripcionDataGridViewTextBoxColumn";
-            this.descripcionDataGridViewTextBoxColumn.Width = 88;
-            // 
-            // cxdefectoDataGridViewTextBoxColumn
-            // 
-            this.cxdefectoDataGridViewTextBoxColumn.DataPropertyName = "Cxdefecto";
-            this.cxdefectoDataGridViewTextBoxColumn.HeaderText = "Cxdefecto";
-            this.cxdefectoDataGridViewTextBoxColumn.Name = "cxdefectoDataGridViewTextBoxColumn";
-            this.cxdefectoDataGridViewTextBoxColumn.Width = 80;
-            // 
-            // cAdicionalDataGridViewTextBoxColumn
-            // 
-            this.cAdicionalDataGridViewTextBoxColumn.DataPropertyName = "CAdicional";
-            this.cAdicionalDataGridViewTextBoxColumn.HeaderText = "CAdicional";
-            this.cAdicionalDataGridViewTextBoxColumn.Name = "cAdicionalDataGridViewTextBoxColumn";
-            this.cAdicionalDataGridViewTextBoxColumn.Width = 82;
-            // 
-            // unidadCalculadaDataGridViewTextBoxColumn
-            // 
-            this.unidadCalculadaDataGridViewTextBoxColumn.DataPropertyName = "UnidadCalculada";
-            this.unidadCalculadaDataGridViewTextBoxColumn.HeaderText = "UnidadCalculada";
-            this.unidadCalculadaDataGridViewTextBoxColumn.Name = "unidadCalculadaDataGridViewTextBoxColumn";
-            this.unidadCalculadaDataGridViewTextBoxColumn.Width = 113;
-            // 
-            // aDecrementoDataGridViewCheckBoxColumn
-            // 
-            this.aDecrementoDataGridViewCheckBoxColumn.DataPropertyName = "ADecremento";
-            this.aDecrementoDataGridViewCheckBoxColumn.HeaderText = "ADecremento";
-            this.aDecrementoDataGridViewCheckBoxColumn.Name = "aDecrementoDataGridViewCheckBoxColumn";
-            this.aDecrementoDataGridViewCheckBoxColumn.Width = 78;
-            // 
-            // idSubcomponenteDataGridViewTextBoxColumn
-            // 
-            this.idSubcomponenteDataGridViewTextBoxColumn.DataPropertyName = "IdSubcomponente";
-            this.idSubcomponenteDataGridViewTextBoxColumn.HeaderText = "IdSubcomponente";
-            this.idSubcomponenteDataGridViewTextBoxColumn.Name = "idSubcomponenteDataGridViewTextBoxColumn";
-            this.idSubcomponenteDataGridViewTextBoxColumn.Width = 119;
-            // 
-            // elevadoDataGridViewTextBoxColumn
-            // 
-            this.elevadoDataGridViewTextBoxColumn.DataPropertyName = "Elevado";
-            this.elevadoDataGridViewTextBoxColumn.HeaderText = "Elevado";
-            this.elevadoDataGridViewTextBoxColumn.Name = "elevadoDataGridViewTextBoxColumn";
-            this.elevadoDataGridViewTextBoxColumn.Width = 71;
-            // 
-            // cortesDataGridViewTextBoxColumn
-            // 
-            this.cortesDataGridViewTextBoxColumn.DataPropertyName = "Cortes";
-            this.cortesDataGridViewTextBoxColumn.HeaderText = "Cortes";
-            this.cortesDataGridViewTextBoxColumn.Name = "cortesDataGridViewTextBoxColumn";
-            this.cortesDataGridViewTextBoxColumn.Width = 62;
-            // 
-            // subComponentBindingSource
-            // 
-            this.subComponentBindingSource.DataSource = typeof(arquitectSoft.Class.Sub_Component);
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F);
+            this.label2.ForeColor = System.Drawing.SystemColors.Control;
+            this.label2.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.label2.Location = new System.Drawing.Point(588, 123);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(67, 16);
+            this.label2.TabIndex = 43;
+            this.label2.Text = "Acabado:";
             // 
             // FrmComponente
             // 
@@ -658,7 +658,6 @@ namespace arquitectSoft.View
             this.Controls.Add(this.BtnEditar);
             this.Controls.Add(this.BtnGuardar);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.ImeMode = System.Windows.Forms.ImeMode.NoControl;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FrmComponente";
@@ -668,13 +667,13 @@ namespace arquitectSoft.View
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.GridViewComponente)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.subComponentBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.arquitectdbDataSet)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.unidadescalculadasBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.GridViewComponenteEsp)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.bindingSource2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.subComponentBindingSource1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.subComponentBindingSource)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bindingSource2)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

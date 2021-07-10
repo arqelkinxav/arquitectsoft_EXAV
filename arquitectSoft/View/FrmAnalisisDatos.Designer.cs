@@ -45,7 +45,6 @@ namespace arquitectSoft.View
             this.dataGridViewTMCalculate = new System.Windows.Forms.DataGridView();
             this.tabPuertas = new System.Windows.Forms.TabPage();
             this.dataGridViewPCalculate = new System.Windows.Forms.DataGridView();
-            this.dataGridViewP = new System.Windows.Forms.DataGridView();
             this.tabVidrioPaneles = new System.Windows.Forms.TabPage();
             this.dataGridViewVPCalculate = new System.Windows.Forms.DataGridView();
             this.dataGridViewVP = new System.Windows.Forms.DataGridView();
@@ -55,6 +54,7 @@ namespace arquitectSoft.View
             this.tabPrincipal = new System.Windows.Forms.TabControl();
             this.BtnCancelar = new System.Windows.Forms.Button();
             this.lblestadosAnalitica = new System.Windows.Forms.Label();
+            this.dataGridViewP = new System.Windows.Forms.DataGridView();
             this.panel1.SuspendLayout();
             this.tabMamparas.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewM)).BeginInit();
@@ -64,7 +64,6 @@ namespace arquitectSoft.View
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTMCalculate)).BeginInit();
             this.tabPuertas.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewPCalculate)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewP)).BeginInit();
             this.tabVidrioPaneles.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewVPCalculate)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewVP)).BeginInit();
@@ -72,6 +71,7 @@ namespace arquitectSoft.View
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewPMCalculate)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewPM)).BeginInit();
             this.tabPrincipal.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewP)).BeginInit();
             this.SuspendLayout();
             // 
             // ImgLista
@@ -256,8 +256,8 @@ namespace arquitectSoft.View
             // 
             // tabPuertas
             // 
-            this.tabPuertas.Controls.Add(this.dataGridViewPCalculate);
             this.tabPuertas.Controls.Add(this.dataGridViewP);
+            this.tabPuertas.Controls.Add(this.dataGridViewPCalculate);
             this.tabPuertas.Location = new System.Drawing.Point(4, 22);
             this.tabPuertas.Name = "tabPuertas";
             this.tabPuertas.Size = new System.Drawing.Size(1191, 414);
@@ -269,7 +269,6 @@ namespace arquitectSoft.View
             // 
             this.dataGridViewPCalculate.AllowUserToAddRows = false;
             this.dataGridViewPCalculate.AllowUserToDeleteRows = false;
-            this.dataGridViewPCalculate.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewPCalculate.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewPCalculate.Location = new System.Drawing.Point(3, 204);
             this.dataGridViewPCalculate.Name = "dataGridViewPCalculate";
@@ -277,15 +276,6 @@ namespace arquitectSoft.View
             this.dataGridViewPCalculate.Size = new System.Drawing.Size(1185, 207);
             this.dataGridViewPCalculate.TabIndex = 4;
             this.dataGridViewPCalculate.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dataGridViewPCalculate_CellFormatting);
-            // 
-            // dataGridViewP
-            // 
-            this.dataGridViewP.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dataGridViewP.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewP.Location = new System.Drawing.Point(3, 4);
-            this.dataGridViewP.Name = "dataGridViewP";
-            this.dataGridViewP.Size = new System.Drawing.Size(1185, 194);
-            this.dataGridViewP.TabIndex = 2;
             // 
             // tabVidrioPaneles
             // 
@@ -399,6 +389,17 @@ namespace arquitectSoft.View
             this.lblestadosAnalitica.Size = new System.Drawing.Size(0, 18);
             this.lblestadosAnalitica.TabIndex = 50;
             // 
+            // dataGridViewP
+            // 
+            this.dataGridViewP.AllowUserToAddRows = false;
+            this.dataGridViewP.AllowUserToDeleteRows = false;
+            this.dataGridViewP.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewP.Location = new System.Drawing.Point(3, 3);
+            this.dataGridViewP.Name = "dataGridViewP";
+            this.dataGridViewP.ReadOnly = true;
+            this.dataGridViewP.Size = new System.Drawing.Size(1185, 195);
+            this.dataGridViewP.TabIndex = 9;
+            // 
             // FrmAnalisisDatos
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -425,7 +426,6 @@ namespace arquitectSoft.View
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTMCalculate)).EndInit();
             this.tabPuertas.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewPCalculate)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewP)).EndInit();
             this.tabVidrioPaneles.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewVPCalculate)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewVP)).EndInit();
@@ -433,6 +433,7 @@ namespace arquitectSoft.View
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewPMCalculate)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewPM)).EndInit();
             this.tabPrincipal.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewP)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -449,7 +450,6 @@ namespace arquitectSoft.View
         private System.Windows.Forms.TabPage tabMamparas;
         private System.Windows.Forms.TabPage tabTubosMetalicos;
         private System.Windows.Forms.TabPage tabPuertas;
-        private System.Windows.Forms.DataGridView dataGridViewP;
         private System.Windows.Forms.TabPage tabVidrioPaneles;
         private System.Windows.Forms.DataGridView dataGridViewVP;
         private System.Windows.Forms.TabPage tabPerfilMetallico;
@@ -464,5 +464,6 @@ namespace arquitectSoft.View
         private System.Windows.Forms.DataGridView dataGridViewMCalculate;
         private System.Windows.Forms.DataGridView dataGridViewPCalculate;
         private System.Windows.Forms.Label lblestadosAnalitica;
+        private System.Windows.Forms.DataGridView dataGridViewP;
     }
 }
