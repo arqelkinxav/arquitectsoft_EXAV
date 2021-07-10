@@ -49,7 +49,7 @@ namespace arquitectSoft.Generals
         public static String QUERY_UNIDADCALCULADA = "SELECT Id_Unidad_Calculada,Concat(Id_Unidad_Calculada, ' - ', Descripcion) Descripcion FROM arquitectdb.unidades_calculadas";
 
         //Acabado
-        public static String QUERY_ACABADO = "SELECT Id_Acabado,Codigo_Homologacion,CONCAT(Codigo_Homologacion , ' - ' ,Descripcion) FROM arquitectdb.acabados";
+        public static String QUERY_ACABADO = "SELECT Id_Acabado,Codigo_Homologacion,CONCAT(Codigo_Homologacion , ' - ' ,Descripcion) Descripcion FROM arquitectdb.acabados";
         public static String QUERY_INSERT_ACABADO = "INSERT arquitectdb.acabados (Codigo_Homologacion, descripcion)VALUES(?,?)";
         public static String QUERY_DELETE_ACABADO = "DELETE FROM arquitectdb.acabados WHERE Id_Acabado = ?";
         public static String QUERY_UPDATE_ACABADO = "UPDATE arquitectdb.acabados SET descripcion = ? WHERE Id_Acabado = ?";
@@ -64,7 +64,7 @@ namespace arquitectSoft.Generals
         public static String QUERY_CORTE_MAX = "SELECT Max(Id_Corte) + 1 Id_Corte FROM arquitectdb.cortes";
 
         //Unidad de Medida
-        public static String QUERY_UNIDADMEDIDA = "SELECT Id_Unidad_Medida,Concat(Id_Unidad_Medida, ' - ', Descripcion) Descripcion,Convencion FROM arquitectdb.unidades_medidas";
+        public static String QUERY_UNIDADMEDIDA = "SELECT Id_Unidad_Medida, Descripcion,Convencion FROM arquitectdb.unidades_medidas";
         public static String QUERY_INSERT_UNIDADMEDIDA = "INSERT arquitectdb.unidades_medidas (Descripcion,Convencion) VALUES(?,?)";
         public static String QUERY_DELETE_UNIDADMEDIDA = "DELETE FROM arquitectdb.unidades_medidas WHERE Id_Unidad_Medida = ?";
         public static String QUERY_UPDATE_UNIDADMEDIDA = "UPDATE arquitectdb.unidades_medidas SET descripcion = ?,Convencion = ? WHERE Id_Unidad_Medida = ?";

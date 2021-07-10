@@ -296,7 +296,6 @@ namespace arquitectSoft.View
         private void BtnDuplicar_Click(object sender, EventArgs e)
         {
             Opc = "Duplicar";
-            txtCodigo.Enabled = true;
             txtCodigo.Text = "";
             txtDescripcion.Text = "";
 
@@ -359,6 +358,9 @@ namespace arquitectSoft.View
             {
                 case "Editar":
                     txtCodigo.Enabled = false;
+                    break;
+                case "Duplicar":
+                    txtCodigo.Enabled = true;
                     break;
                 default:
                     txtCodigo.Enabled = true;

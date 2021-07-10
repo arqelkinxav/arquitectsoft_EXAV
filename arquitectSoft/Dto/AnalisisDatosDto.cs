@@ -129,6 +129,7 @@ namespace arquitectSoft.Dto
                     listColumns.Add("cantidad");
                     listColumns.Add("medida");
                     listColumns.Add("Medidida Calculada");
+                    listColumns.Add("Corte");
                     //-----------------
                     break;
             }
@@ -224,23 +225,7 @@ namespace arquitectSoft.Dto
                     break;
                 case 3:
                     dt = getComponentePuertas(dtmodel);
-                    //foreach (DataRow rowM in dtmodel.Rows)
-                    //{
-                    //    string Codigo = rowM["Codigo"].ToString().Replace("\"", "").Trim();
-                    //    if (Codigo != "")
-                    //    {
-                    //       string Apertura = rowM["Apertura de Puerta"].ToString().Replace("\"", "").Trim();
-                    //       string Acabado = rowM["Acabado Perfileria Puertas"].ToString().Replace("\"", "").Trim();
-                    //       Codigo = Codigo + Apertura + "-" + Acabado.Split('-')[0].Trim();
-
-                    //        rowM["Codigo"] = Codigo;
-                    //    }
-                    //}
-
-                    //dtmodel.AcceptChanges();
-
-                    //string StrCantPuertas = index == 1 && !VidrioPanel ? "Longitud" : "Altura";
-                    //dt = GetDataFinal(dtmodel, StrCantPuertas);
+                   
                     break;
                 case 5:
                     List<string> listColumnsMamp = setCreateColumns(8);
@@ -328,11 +313,11 @@ namespace arquitectSoft.Dto
                             {
                                 if (rowaddExtra & Int32.Parse(rowP["Extra"].ToString()) == 1)
                                 {
-                                    dtresulPuerta.Rows.Add("Item-Extra", rowP["codigo"].ToString(), rowP["Descripcion"].ToString(),Int32.Parse(rowP["cantidad"].ToString())* rowaddExtraCant, rowP["medidabase"].ToString(), rowP["medida"].ToString());
+                                    dtresulPuerta.Rows.Add("Item-Extra", rowP["codigo"].ToString(), rowP["Descripcion"].ToString(),Int32.Parse(rowP["cantidad"].ToString())* rowaddExtraCant, rowP["medidabase"].ToString(), rowP["medida"].ToString(), rowP["corte"].ToString());
                                 }
                                 else if (Int32.Parse(rowP["Extra"].ToString()) == 0)
                                 {
-                                    dtresulPuerta.Rows.Add("Item", rowP["codigo"].ToString(), rowP["Descripcion"].ToString(), rowP["cantidad"].ToString(), rowP["medidabase"].ToString(), rowP["medida"].ToString());
+                                    dtresulPuerta.Rows.Add("Item", rowP["codigo"].ToString(), rowP["Descripcion"].ToString(), rowP["cantidad"].ToString(), rowP["medidabase"].ToString(), rowP["medida"].ToString(), rowP["corte"].ToString());
                                 }
 
                             }

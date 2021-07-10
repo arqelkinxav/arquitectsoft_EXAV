@@ -13,6 +13,10 @@ namespace arquitectSoft.View
 {
     public partial class FrmAnalisisDatos : Form
     {
+        DataTable dtPuertas = new DataTable();
+        DataTable dtPerfil = new DataTable();
+        DataTable dtPerfilOfVidrioPanel = new DataTable();
+
         public FrmAnalisisDatos()
         {
             InitializeComponent();
@@ -33,7 +37,8 @@ namespace arquitectSoft.View
                 FrmLoading frmloading = new FrmLoading();
                 frmloading.Show();
 
-                Task t = Task.Run(() => {
+                Task t = Task.Run(() =>
+                {
                     Random rnd = new Random();
                     long sum = 0;
                     int n = 5000000;
@@ -50,17 +55,16 @@ namespace arquitectSoft.View
                 if (!t.Wait(ts))
                     Console.WriteLine("The timeout interval elapsed.");
 
-                DataTable dtPuertas = new DataTable();
-                DataTable dtPerfil = new DataTable();
+
                 int pageinitial = 0;
                 bool perfilandvidrios = false;
-                           
+
 
                 foreach (String file in openFileDialog1.FileNames)
                 {
                     FileInfo Archivo = new FileInfo(file);
                     int idDocumento = int.Parse(Archivo.Name.ToString().Split('-')[0].Trim());
-                    
+
 
                     pageinitial = idDocumento < pageinitial ? idDocumento : pageinitial;
 
@@ -75,30 +79,42 @@ namespace arquitectSoft.View
                     DataTable dtcalculate = new DataTable();
 
                     dtResul = dto.showTab(idDocumento, listColumns, listData);
-                
+
                     dtPuertas = idDocumento == 3 ? dtResul : dtPuertas;
 
                     if (idDocumento == 2)
                     {
-                        dtcalculate = dto.CalculateTab(1, dtResul, dtPuertas, true);
-                        dtcalculate.Merge(dtPerfil);
-                        dataGridViewPMCalculate.DataSource = dtcalculate;
+
+                        DataTable dtresulVP = new DataTable();
+                        dtPerfilOfVidrioPanel = dto.CalculateTab(1, dtResul, dtPuertas, true);
+                        dtresulVP = dtPerfilOfVidrioPanel.Copy();
+                        dtresulVP.Merge(dtPerfil);
+
+                        dataGridViewPMCalculate.DataSource = dtresulVP;
                         dataGridViewPMCalculate.Columns[0].Visible = false;
                         dataGridViewPMCalculate.Columns[6].Visible = false;
-                    }  
+                    }
 
                     dtcalculate = dto.CalculateTab(idDocumento, dtResul, dtPuertas, perfilandvidrios);
 
-                    if (idDocumento == 1) { dtPerfil = dtcalculate; }
+                    if (idDocumento == 1)
+                    {
+                        dtPerfil = dtcalculate;
+
+                        DataTable dtresulPM = new DataTable();
+                        dtresulPM = dtPerfilOfVidrioPanel.Copy();
+                        dtresulPM.Merge(dtPerfil);
+                        dtcalculate = dtresulPM;
+                    }
 
                     SetDataView(dtResul, dtcalculate, idDocumento);
-                    
+
                 }
                 frmloading.Close();
                 lblestadosAnalitica.Text = "Analitica Aplicada Correctamente!";
 
             }
-        } 
+        }
 
         private void FrmAnalisisDatos_Load(object sender, EventArgs e)
         {
@@ -116,7 +132,7 @@ namespace arquitectSoft.View
 
             this.openFileDialog1.Title = "My Image Browser";
         }
-       
+
 
         private void SetDataView(DataTable dt, DataTable dtcalculate, int index)
         {
@@ -163,7 +179,8 @@ namespace arquitectSoft.View
                 if (r.Cells[0].Value.ToString() == "")
                 {
                     r.DefaultCellStyle.BackColor = Color.Gray;
-                }else if (r.Cells[0].Value.ToString().Contains("Puerta"))
+                }
+                else if (r.Cells[0].Value.ToString().Contains("Puerta"))
                 {
                     r.DefaultCellStyle.BackColor = Color.Orange;
                 }
@@ -181,11 +198,15 @@ namespace arquitectSoft.View
                         if (d is DataGridView)
                         {
                             DataGridView dgv = (DataGridView)d;
-                            dgv.DataSource = "";                            
+                            dgv.DataSource = "";
                         }
                     }
                 }
             }
+
+            dtPuertas.Rows.Clear();
+            dtPerfil.Rows.Clear();
+            dtPerfilOfVidrioPanel.Rows.Clear();
 
             lblestadosAnalitica.Text = "";
         }
