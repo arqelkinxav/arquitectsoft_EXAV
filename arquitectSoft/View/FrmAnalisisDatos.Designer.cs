@@ -44,6 +44,7 @@ namespace arquitectSoft.View
             this.dataGridViewTM = new System.Windows.Forms.DataGridView();
             this.dataGridViewTMCalculate = new System.Windows.Forms.DataGridView();
             this.tabPuertas = new System.Windows.Forms.TabPage();
+            this.dataGridViewP = new System.Windows.Forms.DataGridView();
             this.dataGridViewPCalculate = new System.Windows.Forms.DataGridView();
             this.tabVidrioPaneles = new System.Windows.Forms.TabPage();
             this.dataGridViewVPCalculate = new System.Windows.Forms.DataGridView();
@@ -54,7 +55,8 @@ namespace arquitectSoft.View
             this.tabPrincipal = new System.Windows.Forms.TabControl();
             this.BtnCancelar = new System.Windows.Forms.Button();
             this.lblestadosAnalitica = new System.Windows.Forms.Label();
-            this.dataGridViewP = new System.Windows.Forms.DataGridView();
+            this.btnExportar = new System.Windows.Forms.Button();
+            this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.panel1.SuspendLayout();
             this.tabMamparas.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewM)).BeginInit();
@@ -63,6 +65,7 @@ namespace arquitectSoft.View
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTM)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTMCalculate)).BeginInit();
             this.tabPuertas.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewP)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewPCalculate)).BeginInit();
             this.tabVidrioPaneles.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewVPCalculate)).BeginInit();
@@ -71,7 +74,6 @@ namespace arquitectSoft.View
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewPMCalculate)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewPM)).BeginInit();
             this.tabPrincipal.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewP)).BeginInit();
             this.SuspendLayout();
             // 
             // ImgLista
@@ -265,6 +267,17 @@ namespace arquitectSoft.View
             this.tabPuertas.Text = "Puertas";
             this.tabPuertas.UseVisualStyleBackColor = true;
             // 
+            // dataGridViewP
+            // 
+            this.dataGridViewP.AllowUserToAddRows = false;
+            this.dataGridViewP.AllowUserToDeleteRows = false;
+            this.dataGridViewP.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewP.Location = new System.Drawing.Point(3, 3);
+            this.dataGridViewP.Name = "dataGridViewP";
+            this.dataGridViewP.ReadOnly = true;
+            this.dataGridViewP.Size = new System.Drawing.Size(1185, 195);
+            this.dataGridViewP.TabIndex = 9;
+            // 
             // dataGridViewPCalculate
             // 
             this.dataGridViewPCalculate.AllowUserToAddRows = false;
@@ -389,16 +402,22 @@ namespace arquitectSoft.View
             this.lblestadosAnalitica.Size = new System.Drawing.Size(0, 18);
             this.lblestadosAnalitica.TabIndex = 50;
             // 
-            // dataGridViewP
+            // btnExportar
             // 
-            this.dataGridViewP.AllowUserToAddRows = false;
-            this.dataGridViewP.AllowUserToDeleteRows = false;
-            this.dataGridViewP.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewP.Location = new System.Drawing.Point(3, 3);
-            this.dataGridViewP.Name = "dataGridViewP";
-            this.dataGridViewP.ReadOnly = true;
-            this.dataGridViewP.Size = new System.Drawing.Size(1185, 195);
-            this.dataGridViewP.TabIndex = 9;
+            this.btnExportar.BackColor = System.Drawing.SystemColors.Control;
+            this.btnExportar.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.btnExportar.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnExportar.ImageIndex = 30;
+            this.btnExportar.ImageList = this.ImgLista;
+            this.btnExportar.Location = new System.Drawing.Point(143, 12);
+            this.btnExportar.Name = "btnExportar";
+            this.btnExportar.Size = new System.Drawing.Size(58, 60);
+            this.btnExportar.TabIndex = 51;
+            this.btnExportar.Text = "Exportar";
+            this.btnExportar.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.btnExportar.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.btnExportar.UseVisualStyleBackColor = false;
+            this.btnExportar.Click += new System.EventHandler(this.btnExportar_Click);
             // 
             // FrmAnalisisDatos
             // 
@@ -406,6 +425,7 @@ namespace arquitectSoft.View
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(70)))), ((int)(((byte)(86)))));
             this.ClientSize = new System.Drawing.Size(1219, 569);
+            this.Controls.Add(this.btnExportar);
             this.Controls.Add(this.lblestadosAnalitica);
             this.Controls.Add(this.tabPrincipal);
             this.Controls.Add(this.BtnCargar);
@@ -425,6 +445,7 @@ namespace arquitectSoft.View
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTM)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewTMCalculate)).EndInit();
             this.tabPuertas.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewP)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewPCalculate)).EndInit();
             this.tabVidrioPaneles.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewVPCalculate)).EndInit();
@@ -433,7 +454,6 @@ namespace arquitectSoft.View
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewPMCalculate)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewPM)).EndInit();
             this.tabPrincipal.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewP)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -465,5 +485,7 @@ namespace arquitectSoft.View
         private System.Windows.Forms.DataGridView dataGridViewPCalculate;
         private System.Windows.Forms.Label lblestadosAnalitica;
         private System.Windows.Forms.DataGridView dataGridViewP;
+        private System.Windows.Forms.Button btnExportar;
+        private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
     }
 }

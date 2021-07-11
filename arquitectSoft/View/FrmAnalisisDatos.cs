@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ClosedXML.Excel;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -34,37 +35,17 @@ namespace arquitectSoft.View
             DialogResult dr = this.openFileDialog1.ShowDialog();
             if (dr == System.Windows.Forms.DialogResult.OK)
             {
-                FrmLoading frmloading = new FrmLoading();
-                frmloading.Show();
-
-                Task t = Task.Run(() =>
-                {
-                    Random rnd = new Random();
-                    long sum = 0;
-                    int n = 5000000;
-                    for (int ctr = 1; ctr <= n; ctr++)
-                    {
-                        int number = rnd.Next(0, 101);
-                        sum += number;
-                    }
-                    Console.WriteLine("Total:   {0:N0}", sum);
-                    Console.WriteLine("Mean:    {0:N2}", sum / n);
-                    Console.WriteLine("N:       {0:N0}", n);
-                });
-                TimeSpan ts = TimeSpan.FromMilliseconds(15000);
-                if (!t.Wait(ts))
-                    Console.WriteLine("The timeout interval elapsed.");
-
 
                 int pageinitial = 0;
                 bool perfilandvidrios = false;
-
+                List<int> UseTab = new List<int>();
 
                 foreach (String file in openFileDialog1.FileNames)
                 {
                     FileInfo Archivo = new FileInfo(file);
                     int idDocumento = int.Parse(Archivo.Name.ToString().Split('-')[0].Trim());
 
+                    UseTab.Add(idDocumento);
 
                     pageinitial = idDocumento < pageinitial ? idDocumento : pageinitial;
 
@@ -110,7 +91,26 @@ namespace arquitectSoft.View
                     SetDataView(dtResul, dtcalculate, idDocumento);
 
                 }
-                frmloading.Close();
+
+                switch (UseTab.First())
+                {
+                    case 1:
+                        tabPrincipal.SelectTab(tabPerfilMetallico);
+                        break;
+                    case 2:
+                        tabPrincipal.SelectTab(tabVidrioPaneles);
+                        break;
+                    case 3:
+                        tabPrincipal.SelectTab(tabPuertas);
+                        break;
+                    case 4:
+                        tabPrincipal.SelectTab(tabTubosMetalicos);
+                        break;
+                    case 5:
+                        tabPrincipal.SelectTab(tabMamparas);
+                        break;
+                }
+
                 lblestadosAnalitica.Text = "Analitica Aplicada Correctamente!";
 
             }
@@ -119,6 +119,7 @@ namespace arquitectSoft.View
         private void FrmAnalisisDatos_Load(object sender, EventArgs e)
         {
             InitializeOpenFileDialog();
+           
         }
 
         private void InitializeOpenFileDialog()
@@ -203,12 +204,178 @@ namespace arquitectSoft.View
                     }
                 }
             }
-
+            tabPrincipal.SelectTab(tabPerfilMetallico);
             dtPuertas.Rows.Clear();
             dtPerfil.Rows.Clear();
             dtPerfilOfVidrioPanel.Rows.Clear();
 
             lblestadosAnalitica.Text = "";
+        }
+
+        private void btnExportar_Click(object sender, EventArgs e)
+        {
+
+            bool swexport = false;
+            if (dataGridViewPMCalculate.RowCount > 0)
+            {
+                swexport = true;
+            }else if (dataGridViewVPCalculate.RowCount > 0)
+            {
+                swexport = true;
+            }else if (dataGridViewPCalculate.RowCount > 0)
+            {
+                swexport = true;
+            }else if (dataGridViewTMCalculate.RowCount > 0)
+            {
+                swexport = true;
+            }
+            else if (dataGridViewMCalculate.RowCount > 0)
+            {
+                swexport = true;
+            }
+
+            if (swexport)
+            {
+                FnExportar();
+            }
+            else
+            {
+                MessageBox.Show("No Existen Datos Analizados para Exportar!!", "Mensaje Alerta", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
+            
+        }
+
+
+        private void FnExportar()
+        {
+            string folderPath = "";
+            string filefinish = "";
+            FolderBrowserDialog profilePath = new FolderBrowserDialog();
+            if (profilePath.ShowDialog() == DialogResult.OK)
+            {
+                folderPath = profilePath.SelectedPath;
+            }
+           
+            if (folderPath != "")
+            {
+                //Exporting to Excel.
+
+                if (!Directory.Exists(folderPath))
+                {
+                    Directory.CreateDirectory(folderPath);
+                }
+                using (XLWorkbook wb = new XLWorkbook())
+                {
+
+                    string Range = "A1:G1";
+                    string rangetwo = "A{0}:G{0}";
+                    string sheets = "";
+                    int sheetscount = 0;
+                    DataGridView table = new DataGridView();
+                    for (int Datagrid = 1; Datagrid <= 5; Datagrid++)
+                    {
+                        switch (Datagrid)
+                        {
+                            case 1:
+                                sheets = "PERFIL METALICO";
+                                table = dataGridViewPMCalculate;
+                                break;
+                            case 2:
+                                sheets = "VIDRIOS Y PANELES";
+                                table = dataGridViewVPCalculate;
+                                break;
+                            case 3:
+                                sheets = "PUERTAS";
+                                table = dataGridViewPCalculate;
+                                break;
+                            case 4:
+                                sheets = "TUBO METALICOS";
+                                table = dataGridViewTMCalculate;
+                                break;
+                            case 5:
+                                Range = "A1:E1";
+                                rangetwo = "A{0}:E{0}";
+                                sheets = "MAMPARAS";
+                                table = dataGridViewMCalculate;
+                                break;
+                        }
+
+                        if (table.Rows.Count > 0)
+                        {
+                            sheetscount += 1;
+                            //Creating DataTable.
+                            DataTable dt = new DataTable();
+
+                            //Adding the Columns.
+                            foreach (DataGridViewColumn column in table.Columns)
+                            {
+                                dt.Columns.Add(column.HeaderText, column.ValueType);
+                            }
+
+                            //Adding the Rows.
+                            foreach (DataGridViewRow row in table.Rows)
+                            {
+                                dt.Rows.Add();
+                                foreach (DataGridViewCell cell in row.Cells)
+                                {
+                                    dt.Rows[dt.Rows.Count - 1][cell.ColumnIndex] = cell.Value.ToString();
+                                }
+                            }
+
+                            wb.Worksheets.Add(dt, sheets);
+
+                            //Set the color of Header Row.
+                            //A resembles First Column while C resembles Third column.
+                            wb.Worksheet(sheetscount).Cells(Range).Style.Fill.BackgroundColor = XLColor.DarkCoral;
+                            for (int i = 1; i <= dt.Rows.Count; i++)
+                            {
+                                //A resembles First Column while C resembles Third column.
+                                //Header row is at Position 1 and hence First row starts from Index 2.
+                                string cellRange = string.Format(rangetwo, i + 1);
+                                string cellIniPuertas = string.Format("A{0}", i + 1);
+                                string valueP = wb.Worksheet(sheetscount).Cell(cellIniPuertas).Value.ToString();
+                                if (valueP.Contains("Puerta"))
+                                {
+                                    wb.Worksheet(sheetscount).Cells(cellRange).Style.Fill.BackgroundColor = XLColor.LightGreen;
+                                }
+                                else
+                                {
+                                    if (i % 2 != 0)
+                                    {
+                                        wb.Worksheet(sheetscount).Cells(cellRange).Style.Fill.BackgroundColor = XLColor.White;
+                                    }
+                                    else
+                                    {
+                                        wb.Worksheet(sheetscount).Cells(cellRange).Style.Fill.BackgroundColor = XLColor.LightGray;
+                                    }
+                                }
+                               
+
+                            }
+                            //Adjust widths of Columns.
+                            wb.Worksheet(sheetscount).Columns().AdjustToContents();
+                        }
+
+
+                    }
+
+                    //Save the Excel file.
+                    filefinish = folderPath + "\\DataExport.xlsx";
+                    wb.SaveAs(filefinish);
+                }
+            }
+       
+            DialogResult result = MessageBox.Show("Se ha Exportado Correctamente los datos!!, Desea Abrirlo En este Momento?", "Mensaje Alerta", MessageBoxButtons.YesNo);
+            if (result == DialogResult.Yes)
+            {
+                System.Diagnostics.Process.Start(filefinish);
+            }
+            else
+            {
+                MessageBox.Show("Recuerda que encontraras el archivo en la siguiente ruta: " + filefinish, "Mensaje Alerta", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            
+
         }
     }
 }

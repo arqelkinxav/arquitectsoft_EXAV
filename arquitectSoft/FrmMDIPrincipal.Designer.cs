@@ -37,13 +37,14 @@ namespace arquitectSoft
             this.TMSItem_configuracion = new System.Windows.Forms.ToolStripMenuItem();
             this.TMSItem_acabados = new System.Windows.Forms.ToolStripMenuItem();
             this.TMSItem_cortes = new System.Windows.Forms.ToolStripMenuItem();
+            this.unidadDeMedidaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.TMSItem_procesos = new System.Windows.Forms.ToolStripMenuItem();
             this.calcularCantidadesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.salirToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.acercaDeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.Mdi_nameConnect = new System.Windows.Forms.ToolStripStatusLabel();
-            this.unidadDeMedidaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.minimizarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -54,7 +55,8 @@ namespace arquitectSoft
             this.TMSItem_Administracion,
             this.TMSItem_procesos,
             this.salirToolStripMenuItem,
-            this.acercaDeToolStripMenuItem});
+            this.acercaDeToolStripMenuItem,
+            this.minimizarToolStripMenuItem});
             this.menuStrip.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
@@ -77,14 +79,14 @@ namespace arquitectSoft
             // TMSItem_componente
             // 
             this.TMSItem_componente.Name = "TMSItem_componente";
-            this.TMSItem_componente.Size = new System.Drawing.Size(180, 22);
+            this.TMSItem_componente.Size = new System.Drawing.Size(164, 22);
             this.TMSItem_componente.Text = "Componente";
             this.TMSItem_componente.Click += new System.EventHandler(this.TMSItem_componente_Click);
             // 
             // TMSItem_subComponente
             // 
             this.TMSItem_subComponente.Name = "TMSItem_subComponente";
-            this.TMSItem_subComponente.Size = new System.Drawing.Size(180, 22);
+            this.TMSItem_subComponente.Size = new System.Drawing.Size(164, 22);
             this.TMSItem_subComponente.Text = "SubComponente";
             this.TMSItem_subComponente.Click += new System.EventHandler(this.TMSItem_subComponente_Click);
             // 
@@ -95,22 +97,29 @@ namespace arquitectSoft
             this.TMSItem_cortes,
             this.unidadDeMedidaToolStripMenuItem});
             this.TMSItem_configuracion.Name = "TMSItem_configuracion";
-            this.TMSItem_configuracion.Size = new System.Drawing.Size(180, 22);
+            this.TMSItem_configuracion.Size = new System.Drawing.Size(164, 22);
             this.TMSItem_configuracion.Text = "Configuracion";
             // 
             // TMSItem_acabados
             // 
             this.TMSItem_acabados.Name = "TMSItem_acabados";
-            this.TMSItem_acabados.Size = new System.Drawing.Size(180, 22);
+            this.TMSItem_acabados.Size = new System.Drawing.Size(171, 22);
             this.TMSItem_acabados.Text = "Acabados";
             this.TMSItem_acabados.Click += new System.EventHandler(this.TMSItem_acabados_Click);
             // 
             // TMSItem_cortes
             // 
             this.TMSItem_cortes.Name = "TMSItem_cortes";
-            this.TMSItem_cortes.Size = new System.Drawing.Size(180, 22);
+            this.TMSItem_cortes.Size = new System.Drawing.Size(171, 22);
             this.TMSItem_cortes.Text = "Cortes";
             this.TMSItem_cortes.Click += new System.EventHandler(this.TMSItem_cortes_Click);
+            // 
+            // unidadDeMedidaToolStripMenuItem
+            // 
+            this.unidadDeMedidaToolStripMenuItem.Name = "unidadDeMedidaToolStripMenuItem";
+            this.unidadDeMedidaToolStripMenuItem.Size = new System.Drawing.Size(171, 22);
+            this.unidadDeMedidaToolStripMenuItem.Text = "Unidad de Medida";
+            this.unidadDeMedidaToolStripMenuItem.Click += new System.EventHandler(this.unidadDeMedidaToolStripMenuItem_Click);
             // 
             // TMSItem_procesos
             // 
@@ -124,7 +133,7 @@ namespace arquitectSoft
             // calcularCantidadesToolStripMenuItem
             // 
             this.calcularCantidadesToolStripMenuItem.Name = "calcularCantidadesToolStripMenuItem";
-            this.calcularCantidadesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.calcularCantidadesToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
             this.calcularCantidadesToolStripMenuItem.Text = "Analisis de Datos";
             this.calcularCantidadesToolStripMenuItem.Click += new System.EventHandler(this.calcularCantidadesToolStripMenuItem_Click);
             // 
@@ -161,12 +170,13 @@ namespace arquitectSoft
             this.Mdi_nameConnect.Size = new System.Drawing.Size(111, 17);
             this.Mdi_nameConnect.Text = "Usuario Conectado:";
             // 
-            // unidadDeMedidaToolStripMenuItem
+            // minimizarToolStripMenuItem
             // 
-            this.unidadDeMedidaToolStripMenuItem.Name = "unidadDeMedidaToolStripMenuItem";
-            this.unidadDeMedidaToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.unidadDeMedidaToolStripMenuItem.Text = "Unidad de Medida";
-            this.unidadDeMedidaToolStripMenuItem.Click += new System.EventHandler(this.unidadDeMedidaToolStripMenuItem_Click);
+            this.minimizarToolStripMenuItem.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.minimizarToolStripMenuItem.Name = "minimizarToolStripMenuItem";
+            this.minimizarToolStripMenuItem.Size = new System.Drawing.Size(72, 20);
+            this.minimizarToolStripMenuItem.Text = "Minimizar";
+            this.minimizarToolStripMenuItem.Click += new System.EventHandler(this.minimizarToolStripMenuItem_Click);
             // 
             // FrmMDIPrincipal
             // 
@@ -211,6 +221,7 @@ namespace arquitectSoft
         private System.Windows.Forms.ToolStripMenuItem acercaDeToolStripMenuItem;
         private System.Windows.Forms.ToolStripStatusLabel Mdi_nameConnect;
         private System.Windows.Forms.ToolStripMenuItem unidadDeMedidaToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem minimizarToolStripMenuItem;
     }
 }
 

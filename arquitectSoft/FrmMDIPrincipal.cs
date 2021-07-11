@@ -121,5 +121,10 @@ namespace arquitectSoft
             formUnidadMedida.StartPosition = FormStartPosition.CenterScreen;
             formUnidadMedida.Show();
         }
+
+        private void minimizarToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.WindowState = FormWindowState.Minimized;
+        }
     }
 }
