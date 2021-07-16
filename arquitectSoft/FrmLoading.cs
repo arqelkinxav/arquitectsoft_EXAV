@@ -11,6 +11,13 @@ namespace arquitectSoft
 {
     partial class FrmLoading : Form
     {
+        public string Fecha { get; set; }
+        public string Numero { get; set; }
+        public string Nombre { get; set; }
+        public string Tecnico { get; set; }
+        public string Acabado1 { get; set; }
+        public string Acabado2 { get; set; }
+
         public FrmLoading()
         {
             InitializeComponent();
@@ -96,18 +103,45 @@ namespace arquitectSoft
                 return ((AssemblyCompanyAttribute)attributes[0]).Company;
             }
         }
+
+
+
+
         #endregion
 
-        private void okButton_Click(object sender, EventArgs e)
+        private void FrmLoading_Load(object sender, EventArgs e)
         {
+            Dto.AcabadoDto Acb = new Dto.AcabadoDto();
+            CmbAcabado1.DataSource = Acb.GetAcabado();
+            CmbAcabado1.DisplayMember = "Descripcion";
+            CmbAcabado1.ValueMember = "Id_Acabado";
+
+            CmbAcabado2.DataSource = Acb.GetAcabado();
+            CmbAcabado2.DisplayMember = "Descripcion";
+            CmbAcabado2.ValueMember = "Id_Acabado";
+        }
+
+        private void BtnAceptar_Click(object sender, EventArgs e)
+        {
+            Fecha = datetimePFecha.Value.ToString("yyyy-MM-dd");
+            Numero = txtnumero.Text;
+            Nombre = txtNombre.Text;
+            Tecnico = txtTecnico.Text;
+            Acabado1 = CmbAcabado1.Text;
+            Acabado2 = CmbAcabado2.Text;
+            
             this.Close();
         }
 
-        private void FrmAbout_Load(object sender, EventArgs e)
+        private void btncancelar_Click(object sender, EventArgs e)
         {
-       
+            Fecha = null;
+            Numero = null;
+            Nombre = null;
+            Tecnico = null;
+            Acabado1 = null;
+            Acabado2 = null;
+            this.Close();
         }
-
-      
     }
 }

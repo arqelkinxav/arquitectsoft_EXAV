@@ -1,4 +1,5 @@
 ﻿using ClosedXML.Excel;
+using DocumentFormat.OpenXml;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -63,6 +64,16 @@ namespace arquitectSoft.View
 
                     dtPuertas = idDocumento == 3 ? dtResul : dtPuertas;
 
+                    if (idDocumento == 1)
+                    {
+                        dtPerfil = dtcalculate;
+
+                        DataTable dtresulPM = new DataTable();
+                        dtresulPM = dtPerfilOfVidrioPanel.Copy();
+                        dtresulPM.Merge(dtPerfil);
+                        dtcalculate = dtresulPM;
+                    }
+
                     if (idDocumento == 2)
                     {
 
@@ -76,17 +87,18 @@ namespace arquitectSoft.View
                         dataGridViewPMCalculate.Columns[6].Visible = false;
                     }
 
+                    if (idDocumento == 3)
+                    {
+
+                        DataTable dtresulPC = new DataTable();
+                        dtresulPC = dto.CalculateTab(6, dtResul, dtPuertas, true); 
+                        dataGridViewP2Calculate.DataSource = dtresulPC;
+                        dataGridViewP2Calculate.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                    }
+
                     dtcalculate = dto.CalculateTab(idDocumento, dtResul, dtPuertas, perfilandvidrios);
 
-                    if (idDocumento == 1)
-                    {
-                        dtPerfil = dtcalculate;
-
-                        DataTable dtresulPM = new DataTable();
-                        dtresulPM = dtPerfilOfVidrioPanel.Copy();
-                        dtresulPM.Merge(dtPerfil);
-                        dtcalculate = dtresulPM;
-                    }
+                    
 
                     SetDataView(dtResul, dtcalculate, idDocumento);
 
@@ -153,6 +165,7 @@ namespace arquitectSoft.View
                     break;
                 case 3:
                     dataGridViewP.DataSource = dt;
+                    dataGridViewP2.DataSource = dt;
                     dataGridViewPCalculate.DataSource = dtcalculate;
                     dataGridViewPCalculate.Refresh();
                     dataGridViewPCalculate.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
@@ -215,6 +228,16 @@ namespace arquitectSoft.View
         private void btnExportar_Click(object sender, EventArgs e)
         {
 
+            FrmLoading bsc = new FrmLoading();
+            bsc.ShowDialog();
+
+            if (bsc.Numero == null)
+            {
+                return;
+            }
+
+            string[] param = { bsc.Numero, bsc.Nombre, bsc.Tecnico, bsc.Fecha, bsc.Acabado1, bsc.Acabado2 };
+
             bool swexport = false;
             if (dataGridViewPMCalculate.RowCount > 0)
             {
@@ -233,10 +256,14 @@ namespace arquitectSoft.View
             {
                 swexport = true;
             }
+            else if (dataGridViewP2Calculate.RowCount > 0)
+            {
+                swexport = true;
+            }
 
             if (swexport)
             {
-                FnExportar();
+                FnExportar(param);
             }
             else
             {
@@ -246,10 +273,12 @@ namespace arquitectSoft.View
         }
 
 
-        private void FnExportar()
+        private void FnExportar(string[] param)
         {
             string folderPath = "";
             string filefinish = "";
+            bool swend = true;
+
             FolderBrowserDialog profilePath = new FolderBrowserDialog();
             if (profilePath.ShowDialog() == DialogResult.OK)
             {
@@ -266,13 +295,65 @@ namespace arquitectSoft.View
                 }
                 using (XLWorkbook wb = new XLWorkbook())
                 {
+                    
 
                     string Range = "A1:G1";
                     string rangetwo = "A{0}:G{0}";
                     string sheets = "";
-                    int sheetscount = 0;
+                    int sheetscount = 1;
+
+                    wb.Worksheets.Add("PRINCIPAL");
+                    wb.Worksheet(1).ShowGridLines = new BooleanValue(false);
+                    wb.Worksheet(1).Cell("B7").Value = "DATOS";
+                    var range = wb.Worksheet(1).Range("B7:C7");
+                    range.Merge().Style.Font.SetBold().Font.FontSize = 16;
+                    range.Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+
+                    //var rangelogo = wb.Worksheet(1).Range("B2:C6");
+                    //rangelogo.Merge().Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+
+                    string path = Directory.GetCurrentDirectory();
+                    var imagePath = @"\LOGO.jpg";
+                    var image = wb.Worksheet(1).AddPicture(path+imagePath)
+                        .MoveTo(wb.Worksheet(1).Cell("B2"))
+                        .Scale(.5); // optional: resize picture
+
+                    wb.Worksheet(1).Cell("C4").Value = "INFORMACION DEL PROYECTO";
+                    wb.Worksheet(1).Cell("C4").Style.Font.SetBold().Font.SetFontColor(XLColor.DarkCoral);
+                    string rangeboder = "B7:C13";
+                    wb.Worksheet(1).Range(rangeboder).Style.Border.TopBorder = XLBorderStyleValues.Thin;
+                    wb.Worksheet(1).Range(rangeboder).Style.Border.InsideBorder = XLBorderStyleValues.Dotted;
+                    wb.Worksheet(1).Range(rangeboder).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                    wb.Worksheet(1).Range(rangeboder).Style.Border.LeftBorder = XLBorderStyleValues.Thin;
+                    wb.Worksheet(1).Range(rangeboder).Style.Border.RightBorder = XLBorderStyleValues.Thin;
+                    wb.Worksheet(1).Range(rangeboder).Style.Border.TopBorder = XLBorderStyleValues.Thin;
+
+                    //Style Cell
+                    for (int x = 8; x <= 13; x++)
+                    {
+                        wb.Worksheet(1).Cell(string.Format("B{0}", x)).Style.Font.SetBold();
+                        wb.Worksheet(1).Cell(string.Format("C{0}", x)).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Right);
+                    }
+                       
+                   
+
+                    wb.Worksheet(1).Cell(string.Format("B{0}", 8)).Value = "Numero del proyecto:"; 
+                    wb.Worksheet(1).Cell(string.Format("B{0}", 9)).Value = "Nombre del proyecto:";
+                    wb.Worksheet(1).Cell(string.Format("B{0}", 10)).Value = "Tecnico a Cargo:";
+                    wb.Worksheet(1).Cell(string.Format("B{0}", 11)).Value = "Fecha:";
+                    wb.Worksheet(1).Cell(string.Format("B{0}", 12)).Value = "Acabado de Perfileria:";
+                    wb.Worksheet(1).Cell(string.Format("B{0}", 13)).Value = "Acabado de Melamina:";
+
+                    wb.Worksheet(1).Cell(string.Format("C{0}", 8)).Value = param[0];
+                    wb.Worksheet(1).Cell(string.Format("C{0}", 9)).Value = param[1];
+                    wb.Worksheet(1).Cell(string.Format("C{0}", 10)).Value = param[2];
+                    wb.Worksheet(1).Cell(string.Format("C{0}", 11)).Value = param[3];
+                    wb.Worksheet(1).Cell(string.Format("C{0}", 12)).Value = param[4];
+                    wb.Worksheet(1).Cell(string.Format("C{0}", 13)).Value = param[5];
+                    wb.Worksheet(1).Columns().AdjustToContents();
+                    
                     DataGridView table = new DataGridView();
-                    for (int Datagrid = 1; Datagrid <= 5; Datagrid++)
+                    for (int Datagrid = 1; Datagrid <= 6; Datagrid++)
                     {
                         switch (Datagrid)
                         {
@@ -298,6 +379,12 @@ namespace arquitectSoft.View
                                 sheets = "MAMPARAS";
                                 table = dataGridViewMCalculate;
                                 break;
+                            case 6:
+                                Range = "A1:E1";
+                                rangetwo = "A{0}:E{0}";
+                                sheets = "PUERTAS CANTIDAD";
+                                table = dataGridViewP2Calculate;
+                                break;
                         }
 
                         if (table.Rows.Count > 0)
@@ -321,9 +408,10 @@ namespace arquitectSoft.View
                                     dt.Rows[dt.Rows.Count - 1][cell.ColumnIndex] = cell.Value.ToString();
                                 }
                             }
+                            
 
-                            wb.Worksheets.Add(dt, sheets);
-
+                            wb.Worksheets.Add(dt,sheets);
+                            
                             //Set the color of Header Row.
                             //A resembles First Column while C resembles Third column.
                             wb.Worksheet(sheetscount).Cells(Range).Style.Fill.BackgroundColor = XLColor.DarkCoral;
@@ -349,8 +437,6 @@ namespace arquitectSoft.View
                                         wb.Worksheet(sheetscount).Cells(cellRange).Style.Fill.BackgroundColor = XLColor.LightGray;
                                     }
                                 }
-                               
-
                             }
                             //Adjust widths of Columns.
                             wb.Worksheet(sheetscount).Columns().AdjustToContents();
@@ -361,19 +447,33 @@ namespace arquitectSoft.View
 
                     //Save the Excel file.
                     filefinish = folderPath + "\\DataExport.xlsx";
-                    wb.SaveAs(filefinish);
+                    try
+                    {
+                        wb.SaveAs(filefinish);
+                        
+                    }
+                    catch(Exception ex)
+                    {
+                        swend = false;
+                        MessageBox.Show("Un Archivo se encontraba abierto por favor cerrarlo e intentalo nuevamente", "Mensaje Alerta", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                  
                 }
             }
        
-            DialogResult result = MessageBox.Show("Se ha Exportado Correctamente los datos!!, Desea Abrirlo En este Momento?", "Mensaje Alerta", MessageBoxButtons.YesNo);
-            if (result == DialogResult.Yes)
+            if (swend)
             {
-                System.Diagnostics.Process.Start(filefinish);
+                DialogResult result = MessageBox.Show("Se ha Exportado Correctamente los datos!!, Desea Abrirlo En este Momento?", "Mensaje Alerta", MessageBoxButtons.YesNo);
+                if (result == DialogResult.Yes)
+                {
+                    System.Diagnostics.Process.Start(filefinish);
+                }
+                else
+                {
+                    MessageBox.Show("Recuerda que encontraras el archivo en la siguiente ruta: " + filefinish, "Mensaje Alerta", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
             }
-            else
-            {
-                MessageBox.Show("Recuerda que encontraras el archivo en la siguiente ruta: " + filefinish, "Mensaje Alerta", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
+            
             
 
         }

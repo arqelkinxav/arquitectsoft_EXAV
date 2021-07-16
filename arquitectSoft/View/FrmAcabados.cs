@@ -44,7 +44,7 @@ namespace arquitectSoft.View
             }
 
             txtCodigo.Text = bsc.ReturnItem1;
-            txtDescripcion.Text = bsc.ReturnItem2;
+            txtDescripcion.Text = bsc.ReturnItem2.ToString().Split('-')[1].Trim();
 
             txtCodigo.Enabled = false;
             txtDescripcion.Enabled = false;

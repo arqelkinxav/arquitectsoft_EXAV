@@ -50,6 +50,7 @@ namespace arquitectSoft.Generals
 
         //Acabado
         public static String QUERY_ACABADO = "SELECT Id_Acabado,Codigo_Homologacion,CONCAT(Codigo_Homologacion , ' - ' ,Descripcion) Descripcion FROM arquitectdb.acabados";
+
         public static String QUERY_INSERT_ACABADO = "INSERT arquitectdb.acabados (Codigo_Homologacion, descripcion)VALUES(?,?)";
         public static String QUERY_DELETE_ACABADO = "DELETE FROM arquitectdb.acabados WHERE Id_Acabado = ?";
         public static String QUERY_UPDATE_ACABADO = "UPDATE arquitectdb.acabados SET descripcion = ? WHERE Id_Acabado = ?";
