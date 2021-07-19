@@ -34,7 +34,6 @@ namespace arquitectSoft.View
             this.ImgLista = new System.Windows.Forms.ImageList(this.components);
             this.panel1 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
-            this.BtnSalir = new System.Windows.Forms.Button();
             this.BtnCargar = new System.Windows.Forms.Button();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.tabMamparas = new System.Windows.Forms.TabPage();
@@ -53,13 +52,13 @@ namespace arquitectSoft.View
             this.dataGridViewPMCalculate = new System.Windows.Forms.DataGridView();
             this.dataGridViewPM = new System.Windows.Forms.DataGridView();
             this.tabPrincipal = new System.Windows.Forms.TabControl();
+            this.tabPuertascant = new System.Windows.Forms.TabPage();
+            this.dataGridViewP2 = new System.Windows.Forms.DataGridView();
+            this.dataGridViewP2Calculate = new System.Windows.Forms.DataGridView();
             this.BtnCancelar = new System.Windows.Forms.Button();
             this.lblestadosAnalitica = new System.Windows.Forms.Label();
             this.btnExportar = new System.Windows.Forms.Button();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
-            this.tabPuertascant = new System.Windows.Forms.TabPage();
-            this.dataGridViewP2 = new System.Windows.Forms.DataGridView();
-            this.dataGridViewP2Calculate = new System.Windows.Forms.DataGridView();
             this.panel1.SuspendLayout();
             this.tabMamparas.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewM)).BeginInit();
@@ -158,27 +157,11 @@ namespace arquitectSoft.View
             this.label1.TabIndex = 6;
             this.label1.Text = "Analisis de Datos";
             // 
-            // BtnSalir
-            // 
-            this.BtnSalir.BackColor = System.Drawing.SystemColors.Control;
-            this.BtnSalir.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.BtnSalir.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.BtnSalir.ImageIndex = 50;
-            this.BtnSalir.ImageList = this.ImgLista;
-            this.BtnSalir.Location = new System.Drawing.Point(1149, 12);
-            this.BtnSalir.Name = "BtnSalir";
-            this.BtnSalir.Size = new System.Drawing.Size(58, 60);
-            this.BtnSalir.TabIndex = 45;
-            this.BtnSalir.Text = "Salir";
-            this.BtnSalir.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.BtnSalir.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.BtnSalir.UseVisualStyleBackColor = false;
-            this.BtnSalir.Click += new System.EventHandler(this.BtnSalir_Click);
-            // 
             // BtnCargar
             // 
             this.BtnCargar.BackColor = System.Drawing.SystemColors.Control;
             this.BtnCargar.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.BtnCargar.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.BtnCargar.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
             this.BtnCargar.ImageIndex = 33;
             this.BtnCargar.ImageList = this.ImgLista;
@@ -382,50 +365,6 @@ namespace arquitectSoft.View
             this.tabPrincipal.Size = new System.Drawing.Size(1199, 440);
             this.tabPrincipal.TabIndex = 49;
             // 
-            // BtnCancelar
-            // 
-            this.BtnCancelar.BackColor = System.Drawing.SystemColors.Control;
-            this.BtnCancelar.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.BtnCancelar.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.BtnCancelar.ImageIndex = 3;
-            this.BtnCancelar.ImageList = this.ImgLista;
-            this.BtnCancelar.Location = new System.Drawing.Point(79, 12);
-            this.BtnCancelar.Name = "BtnCancelar";
-            this.BtnCancelar.Size = new System.Drawing.Size(58, 60);
-            this.BtnCancelar.TabIndex = 46;
-            this.BtnCancelar.Text = "Cancelar";
-            this.BtnCancelar.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.BtnCancelar.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.BtnCancelar.UseVisualStyleBackColor = false;
-            this.BtnCancelar.Click += new System.EventHandler(this.BtnCancelar_Click);
-            // 
-            // lblestadosAnalitica
-            // 
-            this.lblestadosAnalitica.AutoSize = true;
-            this.lblestadosAnalitica.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblestadosAnalitica.ForeColor = System.Drawing.Color.LightCoral;
-            this.lblestadosAnalitica.Location = new System.Drawing.Point(876, 112);
-            this.lblestadosAnalitica.Name = "lblestadosAnalitica";
-            this.lblestadosAnalitica.Size = new System.Drawing.Size(0, 18);
-            this.lblestadosAnalitica.TabIndex = 50;
-            // 
-            // btnExportar
-            // 
-            this.btnExportar.BackColor = System.Drawing.SystemColors.Control;
-            this.btnExportar.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.btnExportar.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.btnExportar.ImageIndex = 30;
-            this.btnExportar.ImageList = this.ImgLista;
-            this.btnExportar.Location = new System.Drawing.Point(143, 12);
-            this.btnExportar.Name = "btnExportar";
-            this.btnExportar.Size = new System.Drawing.Size(58, 60);
-            this.btnExportar.TabIndex = 51;
-            this.btnExportar.Text = "Exportar";
-            this.btnExportar.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.btnExportar.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.btnExportar.UseVisualStyleBackColor = false;
-            this.btnExportar.Click += new System.EventHandler(this.btnExportar_Click);
-            // 
             // tabPuertascant
             // 
             this.tabPuertascant.Controls.Add(this.dataGridViewP2);
@@ -459,6 +398,52 @@ namespace arquitectSoft.View
             this.dataGridViewP2Calculate.Size = new System.Drawing.Size(1185, 207);
             this.dataGridViewP2Calculate.TabIndex = 10;
             // 
+            // BtnCancelar
+            // 
+            this.BtnCancelar.BackColor = System.Drawing.SystemColors.Control;
+            this.BtnCancelar.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.BtnCancelar.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.BtnCancelar.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.BtnCancelar.ImageIndex = 3;
+            this.BtnCancelar.ImageList = this.ImgLista;
+            this.BtnCancelar.Location = new System.Drawing.Point(79, 12);
+            this.BtnCancelar.Name = "BtnCancelar";
+            this.BtnCancelar.Size = new System.Drawing.Size(58, 60);
+            this.BtnCancelar.TabIndex = 46;
+            this.BtnCancelar.Text = "Cancelar";
+            this.BtnCancelar.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.BtnCancelar.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.BtnCancelar.UseVisualStyleBackColor = false;
+            this.BtnCancelar.Click += new System.EventHandler(this.BtnCancelar_Click);
+            // 
+            // lblestadosAnalitica
+            // 
+            this.lblestadosAnalitica.AutoSize = true;
+            this.lblestadosAnalitica.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblestadosAnalitica.ForeColor = System.Drawing.Color.LightCoral;
+            this.lblestadosAnalitica.Location = new System.Drawing.Point(876, 112);
+            this.lblestadosAnalitica.Name = "lblestadosAnalitica";
+            this.lblestadosAnalitica.Size = new System.Drawing.Size(0, 18);
+            this.lblestadosAnalitica.TabIndex = 50;
+            // 
+            // btnExportar
+            // 
+            this.btnExportar.BackColor = System.Drawing.SystemColors.Control;
+            this.btnExportar.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.btnExportar.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnExportar.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.btnExportar.ImageIndex = 30;
+            this.btnExportar.ImageList = this.ImgLista;
+            this.btnExportar.Location = new System.Drawing.Point(143, 12);
+            this.btnExportar.Name = "btnExportar";
+            this.btnExportar.Size = new System.Drawing.Size(58, 60);
+            this.btnExportar.TabIndex = 51;
+            this.btnExportar.Text = "Exportar";
+            this.btnExportar.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.btnExportar.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.btnExportar.UseVisualStyleBackColor = false;
+            this.btnExportar.Click += new System.EventHandler(this.btnExportar_Click);
+            // 
             // FrmAnalisisDatos
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -471,10 +456,11 @@ namespace arquitectSoft.View
             this.Controls.Add(this.BtnCargar);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.BtnCancelar);
-            this.Controls.Add(this.BtnSalir);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "FrmAnalisisDatos";
-            this.Text = "FrmAnalisisDatos";
+            this.Text = "Analisis Datos";
             this.Load += new System.EventHandler(this.FrmAnalisisDatos_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
@@ -507,7 +493,6 @@ namespace arquitectSoft.View
         private System.Windows.Forms.ImageList ImgLista;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button BtnSalir;
         private System.Windows.Forms.Button BtnCargar;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.TabPage tabMamparas;

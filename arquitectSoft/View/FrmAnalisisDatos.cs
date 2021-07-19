@@ -24,10 +24,7 @@ namespace arquitectSoft.View
             InitializeComponent();
         }
 
-        private void BtnSalir_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
+     
 
         private void BtnCargar_Click(object sender, EventArgs e)
         {
@@ -64,16 +61,6 @@ namespace arquitectSoft.View
 
                     dtPuertas = idDocumento == 3 ? dtResul : dtPuertas;
 
-                    if (idDocumento == 1)
-                    {
-                        dtPerfil = dtcalculate;
-
-                        DataTable dtresulPM = new DataTable();
-                        dtresulPM = dtPerfilOfVidrioPanel.Copy();
-                        dtresulPM.Merge(dtPerfil);
-                        dtcalculate = dtresulPM;
-                    }
-
                     if (idDocumento == 2)
                     {
 
@@ -87,18 +74,27 @@ namespace arquitectSoft.View
                         dataGridViewPMCalculate.Columns[6].Visible = false;
                     }
 
+                    
+
+                    dtcalculate = dto.CalculateTab(idDocumento, dtResul, dtPuertas, perfilandvidrios);
+
+                    if (idDocumento == 1)
+                    {
+                        dtPerfil = dtcalculate;
+
+                        DataTable dtresulPM = new DataTable();
+                        dtresulPM = dtPerfilOfVidrioPanel.Copy();
+                        dtresulPM.Merge(dtPerfil);
+                        dtcalculate = dtresulPM;
+                    }
                     if (idDocumento == 3)
                     {
 
                         DataTable dtresulPC = new DataTable();
-                        dtresulPC = dto.CalculateTab(6, dtResul, dtPuertas, true); 
+                        dtresulPC = dto.CalculateTab(6, dtResul, dtPuertas, true);
                         dataGridViewP2Calculate.DataSource = dtresulPC;
                         dataGridViewP2Calculate.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
                     }
-
-                    dtcalculate = dto.CalculateTab(idDocumento, dtResul, dtPuertas, perfilandvidrios);
-
-                    
 
                     SetDataView(dtResul, dtcalculate, idDocumento);
 
@@ -477,5 +473,7 @@ namespace arquitectSoft.View
             
 
         }
+
+    
     }
 }

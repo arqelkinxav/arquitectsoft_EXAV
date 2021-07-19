@@ -103,7 +103,7 @@ namespace arquitectSoft.View
                 Dto.SubComponenteDto dto = new Dto.SubComponenteDto();
                 var codSplit = txtCodigo.Text.Split('-')[0].Trim();
                 var desSplit = txtDescripcion.Text.Split('(')[0].Trim();
-                string resul = dto.ExistSubComponent(codSplit, desSplit);
+                string resul = dto.ExistSubComponent(codSplit, desSplit,CmbAcabado.SelectedValue.ToString());
 
                 resul = dto.DeleteComponent(Int32.Parse(resul));
 
@@ -179,7 +179,7 @@ namespace arquitectSoft.View
         {
             string resul = "0";
 
-            resul = dto.ExistSubComponent(txtCodigo.Text, txtDescripcion.Text);
+            resul = dto.ExistSubComponent(txtCodigo.Text, txtDescripcion.Text, CmbAcabado.SelectedValue.ToString());
 
             if (resul == "0" || Opc == "Editar")
             {

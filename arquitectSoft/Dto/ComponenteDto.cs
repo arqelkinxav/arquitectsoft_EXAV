@@ -111,7 +111,7 @@ namespace arquitectSoft.Dto
 
         }
 
-        public string ExistComponent(string codigo, string descripcion)
+        public string ExistComponent(string codigo, string descripcion, string acabado)
         {
             string resul = "0";
             Generals.Conexion con = new Generals.Conexion();
@@ -120,7 +120,7 @@ namespace arquitectSoft.Dto
             {
                 con.Open(out fail);
                 MySqlDataReader row;
-                string[] param = { codigo, descripcion };
+                string[] param = { codigo, descripcion, acabado };
                 row = con.ExecuteReader(Generals.Constantes.QUERY_EXITS_COMPONENTES, out fail, param);
                 while (row.Read())
                 {

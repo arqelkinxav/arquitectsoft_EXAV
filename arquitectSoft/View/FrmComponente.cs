@@ -123,7 +123,7 @@ namespace arquitectSoft.View
             {
 
                 Dto.ComponenteDto dto = new Dto.ComponenteDto();
-                string resul = dto.ExistComponent(txtCodigo.Text, txtDescripcion.Text);
+                string resul = dto.ExistComponent(txtCodigo.Text, txtDescripcion.Text,CmbAcabado.SelectedValue.ToString());
 
                 resul = dto.DeleteComponent(Int32.Parse(resul));
 
@@ -190,7 +190,7 @@ namespace arquitectSoft.View
         private void BtnCheck_Click(object sender, EventArgs e)
         {
             Dto.ComponenteDto dto = new Dto.ComponenteDto();
-            string resul = dto.ExistComponent(txtCodigo.Text, txtDescripcion.Text);
+            string resul = dto.ExistComponent(txtCodigo.Text, txtDescripcion.Text, CmbAcabado.SelectedValue.ToString());
             resul = (resul != "0") ? "Componente ya Existe" : "Componente Disponible para Guardar";
             MessageBox.Show(resul, "Mensaje Alerta", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
@@ -414,7 +414,7 @@ namespace arquitectSoft.View
         {
             string resul = "0";
 
-            resul = dto.ExistComponent(txtCodigo.Text, txtDescripcion.Text);
+            resul = dto.ExistComponent(txtCodigo.Text, txtDescripcion.Text, CmbAcabado.SelectedValue.ToString());
 
             if (resul == "0" || Opc == "Editar")
             {

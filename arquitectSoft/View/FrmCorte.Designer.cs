@@ -255,6 +255,7 @@ namespace arquitectSoft.View
             // 
             // txtDescripcion
             // 
+            this.txtDescripcion.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
             this.txtDescripcion.Location = new System.Drawing.Point(237, 142);
             this.txtDescripcion.Name = "txtDescripcion";
             this.txtDescripcion.Size = new System.Drawing.Size(418, 20);
@@ -273,6 +274,7 @@ namespace arquitectSoft.View
             // 
             // txtCodigo
             // 
+            this.txtCodigo.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
             this.txtCodigo.Location = new System.Drawing.Point(24, 142);
             this.txtCodigo.Name = "txtCodigo";
             this.txtCodigo.Size = new System.Drawing.Size(176, 20);
@@ -350,7 +352,7 @@ namespace arquitectSoft.View
             this.Controls.Add(this.BtnGuardar);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "FrmCorte";
-            this.Text = "FrmSubComponente";
+            this.Text = "Cortes";
             this.Load += new System.EventHandler(this.FrmCorte_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();

@@ -126,5 +126,17 @@ namespace arquitectSoft
         {
             this.WindowState = FormWindowState.Minimized;
         }
+
+        private void FrmMDIPrincipal_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            foreach (Form childForm in MdiChildren)
+            {
+                childForm.Close();
+            }
+
+            
+            FrmLogin fl = new FrmLogin();
+            fl.Show();
+        }
     }
 }
