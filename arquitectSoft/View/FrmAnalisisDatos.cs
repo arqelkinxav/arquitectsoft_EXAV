@@ -24,7 +24,7 @@ namespace arquitectSoft.View
             InitializeComponent();
         }
 
-     
+
 
         private void BtnCargar_Click(object sender, EventArgs e)
         {
@@ -74,7 +74,7 @@ namespace arquitectSoft.View
                         dataGridViewPMCalculate.Columns[6].Visible = false;
                     }
 
-                    
+
 
                     dtcalculate = dto.CalculateTab(idDocumento, dtResul, dtPuertas, perfilandvidrios);
 
@@ -127,7 +127,7 @@ namespace arquitectSoft.View
         private void FrmAnalisisDatos_Load(object sender, EventArgs e)
         {
             InitializeOpenFileDialog();
-           
+
         }
 
         private void InitializeOpenFileDialog()
@@ -238,13 +238,16 @@ namespace arquitectSoft.View
             if (dataGridViewPMCalculate.RowCount > 0)
             {
                 swexport = true;
-            }else if (dataGridViewVPCalculate.RowCount > 0)
+            }
+            else if (dataGridViewVPCalculate.RowCount > 0)
             {
                 swexport = true;
-            }else if (dataGridViewPCalculate.RowCount > 0)
+            }
+            else if (dataGridViewPCalculate.RowCount > 0)
             {
                 swexport = true;
-            }else if (dataGridViewTMCalculate.RowCount > 0)
+            }
+            else if (dataGridViewTMCalculate.RowCount > 0)
             {
                 swexport = true;
             }
@@ -265,7 +268,7 @@ namespace arquitectSoft.View
             {
                 MessageBox.Show("No Existen Datos Analizados para Exportar!!", "Mensaje Alerta", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
-            
+
         }
 
 
@@ -280,7 +283,7 @@ namespace arquitectSoft.View
             {
                 folderPath = profilePath.SelectedPath;
             }
-           
+
             if (folderPath != "")
             {
                 //Exporting to Excel.
@@ -291,62 +294,64 @@ namespace arquitectSoft.View
                 }
                 using (XLWorkbook wb = new XLWorkbook())
                 {
-                    
 
-                    string Range = "A1:G1";
+                    int valueinitial = 8;
+                    string Range = string.Format("A{0}:G{0}", valueinitial);
+                    string Rangeheader = "A2:G4";
+                    string RangeSubheader = "A5:G6";
                     string rangetwo = "A{0}:G{0}";
                     string sheets = "";
                     int sheetscount = 1;
 
-                    wb.Worksheets.Add("PRINCIPAL");
-                    wb.Worksheet(1).ShowGridLines = new BooleanValue(false);
-                    wb.Worksheet(1).Cell("B7").Value = "DATOS";
-                    var range = wb.Worksheet(1).Range("B7:C7");
-                    range.Merge().Style.Font.SetBold().Font.FontSize = 16;
-                    range.Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+                    //wb.Worksheets.Add("PRINCIPAL");
+                    //wb.Worksheet(1).ShowGridLines = new BooleanValue(false);
+                    //wb.Worksheet(1).Cell("B7").Value = "DATOS";
+                    //var range = wb.Worksheet(1).Range("B7:C7");
+                    //range.Merge().Style.Font.SetBold().Font.FontSize = 16;
+                    //range.Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
 
-                    //var rangelogo = wb.Worksheet(1).Range("B2:C6");
-                    //rangelogo.Merge().Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+                    ////var rangelogo = wb.Worksheet(1).Range("B2:C6");
+                    ////rangelogo.Merge().Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
 
                     string path = Directory.GetCurrentDirectory();
                     var imagePath = @"\LOGO.jpg";
-                    var image = wb.Worksheet(1).AddPicture(path+imagePath)
-                        .MoveTo(wb.Worksheet(1).Cell("B2"))
-                        .Scale(.5); // optional: resize picture
+                    //wb.Worksheet(1).AddPicture(path + imagePath)
+                    //    .MoveTo(wb.Worksheet(1).Cell("B2"))
+                    //    .Scale(.5); // optional: resize picture
 
-                    wb.Worksheet(1).Cell("C4").Value = "INFORMACION DEL PROYECTO";
-                    wb.Worksheet(1).Cell("C4").Style.Font.SetBold().Font.SetFontColor(XLColor.DarkCoral);
-                    string rangeboder = "B7:C13";
-                    wb.Worksheet(1).Range(rangeboder).Style.Border.TopBorder = XLBorderStyleValues.Thin;
-                    wb.Worksheet(1).Range(rangeboder).Style.Border.InsideBorder = XLBorderStyleValues.Dotted;
-                    wb.Worksheet(1).Range(rangeboder).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-                    wb.Worksheet(1).Range(rangeboder).Style.Border.LeftBorder = XLBorderStyleValues.Thin;
-                    wb.Worksheet(1).Range(rangeboder).Style.Border.RightBorder = XLBorderStyleValues.Thin;
-                    wb.Worksheet(1).Range(rangeboder).Style.Border.TopBorder = XLBorderStyleValues.Thin;
+                    //wb.Worksheet(1).Cell("C4").Value = "INFORMACION DEL PROYECTO";
+                    //wb.Worksheet(1).Cell("C4").Style.Font.SetBold().Font.SetFontColor(XLColor.DarkCoral);
+                    //string rangeboder = "B7:C13";
+                    //wb.Worksheet(1).Range(rangeboder).Style.Border.TopBorder = XLBorderStyleValues.Thin;
+                    //wb.Worksheet(1).Range(rangeboder).Style.Border.InsideBorder = XLBorderStyleValues.Dotted;
+                    //wb.Worksheet(1).Range(rangeboder).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                    //wb.Worksheet(1).Range(rangeboder).Style.Border.LeftBorder = XLBorderStyleValues.Thin;
+                    //wb.Worksheet(1).Range(rangeboder).Style.Border.RightBorder = XLBorderStyleValues.Thin;
+                    //wb.Worksheet(1).Range(rangeboder).Style.Border.TopBorder = XLBorderStyleValues.Thin;
 
                     //Style Cell
-                    for (int x = 8; x <= 13; x++)
-                    {
-                        wb.Worksheet(1).Cell(string.Format("B{0}", x)).Style.Font.SetBold();
-                        wb.Worksheet(1).Cell(string.Format("C{0}", x)).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Right);
-                    }
-                       
-                   
+                    //for (int x = 8; x <= 13; x++)
+                    //{
+                    //    wb.Worksheet(1).Cell(string.Format("B{0}", x)).Style.Font.SetBold();
+                    //    wb.Worksheet(1).Cell(string.Format("C{0}", x)).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Right);
+                    //}
 
-                    wb.Worksheet(1).Cell(string.Format("B{0}", 8)).Value = "Numero del proyecto:"; 
-                    wb.Worksheet(1).Cell(string.Format("B{0}", 9)).Value = "Nombre del proyecto:";
-                    wb.Worksheet(1).Cell(string.Format("B{0}", 10)).Value = "Tecnico a Cargo:";
-                    wb.Worksheet(1).Cell(string.Format("B{0}", 11)).Value = "Fecha:";
-                    wb.Worksheet(1).Cell(string.Format("B{0}", 12)).Value = "Acabado de Perfileria:";
-                    wb.Worksheet(1).Cell(string.Format("B{0}", 13)).Value = "Acabado de Melamina:";
 
-                    wb.Worksheet(1).Cell(string.Format("C{0}", 8)).Value = param[0];
-                    wb.Worksheet(1).Cell(string.Format("C{0}", 9)).Value = param[1];
-                    wb.Worksheet(1).Cell(string.Format("C{0}", 10)).Value = param[2];
-                    wb.Worksheet(1).Cell(string.Format("C{0}", 11)).Value = param[3];
-                    wb.Worksheet(1).Cell(string.Format("C{0}", 12)).Value = param[4];
-                    wb.Worksheet(1).Cell(string.Format("C{0}", 13)).Value = param[5];
-                    wb.Worksheet(1).Columns().AdjustToContents();
+
+                    //wb.Worksheet(1).Cell(string.Format("B{0}", 8)).Value = "Numero del proyecto:";
+                    //wb.Worksheet(1).Cell(string.Format("B{0}", 9)).Value = "Nombre del proyecto:";
+                    //wb.Worksheet(1).Cell(string.Format("B{0}", 10)).Value = "Tecnico a Cargo:";
+                    //wb.Worksheet(1).Cell(string.Format("B{0}", 11)).Value = "Fecha:";
+                    //wb.Worksheet(1).Cell(string.Format("B{0}", 12)).Value = "Acabado de Perfileria:";
+                    //wb.Worksheet(1).Cell(string.Format("B{0}", 13)).Value = "Acabado de Melamina:";
+
+                    //wb.Worksheet(1).Cell(string.Format("C{0}", 8)).Value = param[0];
+                    //wb.Worksheet(1).Cell(string.Format("C{0}", 9)).Value = param[1];
+                    //wb.Worksheet(1).Cell(string.Format("C{0}", 10)).Value = param[2];
+                    //wb.Worksheet(1).Cell(string.Format("C{0}", 11)).Value = param[3];
+                    //wb.Worksheet(1).Cell(string.Format("C{0}", 12)).Value = param[4];
+                    //wb.Worksheet(1).Cell(string.Format("C{0}", 13)).Value = param[5];
+                    //wb.Worksheet(1).Columns().AdjustToContents();
                     
                     DataGridView table = new DataGridView();
                     for (int Datagrid = 1; Datagrid <= 6; Datagrid++)
@@ -370,13 +375,13 @@ namespace arquitectSoft.View
                                 table = dataGridViewTMCalculate;
                                 break;
                             case 5:
-                                Range = "A1:E1";
+                                Range = string.Format("A{0}:E{0}", valueinitial);
                                 rangetwo = "A{0}:E{0}";
                                 sheets = "MAMPARAS";
                                 table = dataGridViewMCalculate;
                                 break;
                             case 6:
-                                Range = "A1:E1";
+                                Range = string.Format("A{0}:E{0}", valueinitial);
                                 rangetwo = "A{0}:E{0}";
                                 sheets = "PUERTAS CANTIDAD";
                                 table = dataGridViewP2Calculate;
@@ -385,7 +390,7 @@ namespace arquitectSoft.View
 
                         if (table.Rows.Count > 0)
                         {
-                            sheetscount += 1;
+                            //sheetscount += 1;
                             //Creating DataTable.
                             DataTable dt = new DataTable();
 
@@ -394,6 +399,7 @@ namespace arquitectSoft.View
                             {
                                 dt.Columns.Add(column.HeaderText, column.ValueType);
                             }
+
 
                             //Adding the Rows.
                             foreach (DataGridViewRow row in table.Rows)
@@ -404,19 +410,74 @@ namespace arquitectSoft.View
                                     dt.Rows[dt.Rows.Count - 1][cell.ColumnIndex] = cell.Value.ToString();
                                 }
                             }
-                            
 
-                            wb.Worksheets.Add(dt,sheets);
+
+
+                            var ws = wb.Worksheets.Add(dt, sheets);
+                            ws.Row(1).InsertRowsAbove(7);
+
                             
+                            wb.Worksheet(sheets).AddPicture(path + imagePath)
+                           .MoveTo(150,25)
+                           .Scale(.3); // optional: resize picture
+
+
+                            //Diseño Header
+                            wb.Worksheet(sheets).ShowGridLines = new BooleanValue(false);
+
+                            var range = wb.Worksheet(sheets).Range(Rangeheader);
+                            range.Merge().Style.Font.SetBold().Font.FontSize = 16;
+                            range.Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center).Alignment.SetVertical(XLAlignmentVerticalValues.Center);
+                            range.Value = sheets;
+
+                            wb.Worksheet(sheets).Range(Rangeheader).Style.Border.TopBorder = XLBorderStyleValues.Thin;
+                            wb.Worksheet(sheets).Range(Rangeheader).Style.Border.InsideBorder = XLBorderStyleValues.Dotted;
+                            wb.Worksheet(sheets).Range(Rangeheader).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                            wb.Worksheet(sheets).Range(Rangeheader).Style.Border.BottomBorder = XLBorderStyleValues.Thin;
+
+                            //Diseño SubHeader
+                            wb.Worksheet(sheets).Cell(string.Format("A{0}", 5)).Value = "Numero del proyecto:";
+                            wb.Worksheet(sheets).Cell(string.Format("A{0}", 5)).Style.Font.SetBold();
+                            wb.Worksheet(sheets).Cell(string.Format("A{0}", 6)).Value = "Nombre del proyecto:";
+                            wb.Worksheet(sheets).Cell(string.Format("A{0}", 6)).Style.Font.SetBold();
+                            wb.Worksheet(sheets).Cell(string.Format("C{0}", 5)).Value = "Tecnico a Cargo:";
+                            wb.Worksheet(sheets).Cell(string.Format("C{0}", 5)).Style.Font.SetBold();
+                            wb.Worksheet(sheets).Cell(string.Format("C{0}", 6)).Value = "Fecha:";
+                            wb.Worksheet(sheets).Cell(string.Format("C{0}", 6)).Style.Font.SetBold();
+                            wb.Worksheet(sheets).Cell(string.Format("E{0}", 5)).Value = "Acabado de Perfileria:";
+                            wb.Worksheet(sheets).Cell(string.Format("E{0}", 5)).Style.Font.SetBold();
+                            wb.Worksheet(sheets).Cell(string.Format("E{0}", 6)).Value = "Acabado de Melamina:";
+                            wb.Worksheet(sheets).Cell(string.Format("E{0}", 6)).Style.Font.SetBold();
+           
+       
+
+                            wb.Worksheet(sheets).Cell(string.Format("B{0}", 5)).Value = param[0];
+                            wb.Worksheet(sheets).Cell(string.Format("B{0}", 6)).Value = param[1];
+                            wb.Worksheet(sheets).Cell(string.Format("D{0}", 5)).Value = param[2];
+                            wb.Worksheet(sheets).Cell(string.Format("D{0}", 6)).Value = param[3];
+                            wb.Worksheet(sheets).Cell(string.Format("F{0}", 5)).Value = param[4];
+                            wb.Worksheet(sheets).Cell(string.Format("F{0}", 6)).Value = param[5];
+                            wb.Worksheet(sheets).Range("F5:G5").Merge();
+                            wb.Worksheet(sheets).Range("F6:G6").Merge();
+
+                            wb.Worksheet(sheets).Range(RangeSubheader).Style.Border.TopBorder = XLBorderStyleValues.Thin;
+                            wb.Worksheet(sheets).Range(RangeSubheader).Style.Border.InsideBorder = XLBorderStyleValues.Dotted;
+                            wb.Worksheet(sheets).Range(RangeSubheader).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                            wb.Worksheet(sheets).Range(RangeSubheader).Style.Border.LeftBorder = XLBorderStyleValues.Thin;
+                            wb.Worksheet(sheets).Range(RangeSubheader).Style.Border.RightBorder = XLBorderStyleValues.Thin;
+                            wb.Worksheet(sheets).Range(RangeSubheader).Style.Border.TopBorder = XLBorderStyleValues.Thin;
+
+
                             //Set the color of Header Row.
                             //A resembles First Column while C resembles Third column.
+
                             wb.Worksheet(sheetscount).Cells(Range).Style.Fill.BackgroundColor = XLColor.DarkCoral;
                             for (int i = 1; i <= dt.Rows.Count; i++)
                             {
                                 //A resembles First Column while C resembles Third column.
                                 //Header row is at Position 1 and hence First row starts from Index 2.
-                                string cellRange = string.Format(rangetwo, i + 1);
-                                string cellIniPuertas = string.Format("A{0}", i + 1);
+                                string cellRange = string.Format(rangetwo, i + valueinitial);
+                                string cellIniPuertas = string.Format("A{0}", i + valueinitial);
                                 string valueP = wb.Worksheet(sheetscount).Cell(cellIniPuertas).Value.ToString();
                                 if (valueP.Contains("Puerta"))
                                 {
@@ -446,17 +507,17 @@ namespace arquitectSoft.View
                     try
                     {
                         wb.SaveAs(filefinish);
-                        
+
                     }
-                    catch(Exception ex)
+                    catch (Exception ex)
                     {
                         swend = false;
                         MessageBox.Show("Un Archivo se encontraba abierto por favor cerrarlo e intentalo nuevamente", "Mensaje Alerta", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
-                  
+
                 }
             }
-       
+
             if (swend)
             {
                 DialogResult result = MessageBox.Show("Se ha Exportado Correctamente los datos!!, Desea Abrirlo En este Momento?", "Mensaje Alerta", MessageBoxButtons.YesNo);
@@ -469,11 +530,11 @@ namespace arquitectSoft.View
                     MessageBox.Show("Recuerda que encontraras el archivo en la siguiente ruta: " + filefinish, "Mensaje Alerta", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
-            
-            
+
+
 
         }
 
-    
+
     }
 }
