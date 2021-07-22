@@ -301,7 +301,8 @@ namespace arquitectSoft.View
                     string RangeSubheader = "A5:G6";
                     string rangetwo = "A{0}:G{0}";
                     string sheets = "";
-                    int sheetscount = 1;
+
+                    //int sheetscount = 1;
 
                     //wb.Worksheets.Add("PRINCIPAL");
                     //wb.Worksheet(1).ShowGridLines = new BooleanValue(false);
@@ -352,10 +353,11 @@ namespace arquitectSoft.View
                     //wb.Worksheet(1).Cell(string.Format("C{0}", 12)).Value = param[4];
                     //wb.Worksheet(1).Cell(string.Format("C{0}", 13)).Value = param[5];
                     //wb.Worksheet(1).Columns().AdjustToContents();
-                    
+
                     DataGridView table = new DataGridView();
                     for (int Datagrid = 1; Datagrid <= 6; Datagrid++)
                     {
+                        bool wrapTextDefault = true;
                         switch (Datagrid)
                         {
                             case 1:
@@ -379,12 +381,14 @@ namespace arquitectSoft.View
                                 rangetwo = "A{0}:E{0}";
                                 sheets = "MAMPARAS";
                                 table = dataGridViewMCalculate;
+                                wrapTextDefault = false;
                                 break;
                             case 6:
                                 Range = string.Format("A{0}:E{0}", valueinitial);
                                 rangetwo = "A{0}:E{0}";
                                 sheets = "PUERTAS CANTIDAD";
                                 table = dataGridViewP2Calculate;
+                                wrapTextDefault = false;
                                 break;
                         }
 
@@ -416,9 +420,9 @@ namespace arquitectSoft.View
                             var ws = wb.Worksheets.Add(dt, sheets);
                             ws.Row(1).InsertRowsAbove(7);
 
-                            
+
                             wb.Worksheet(sheets).AddPicture(path + imagePath)
-                           .MoveTo(150,25)
+                           .MoveTo(150, 25)
                            .Scale(.3); // optional: resize picture
 
 
@@ -448,8 +452,8 @@ namespace arquitectSoft.View
                             wb.Worksheet(sheets).Cell(string.Format("E{0}", 5)).Style.Font.SetBold();
                             wb.Worksheet(sheets).Cell(string.Format("E{0}", 6)).Value = "Acabado de Melamina:";
                             wb.Worksheet(sheets).Cell(string.Format("E{0}", 6)).Style.Font.SetBold();
-           
-       
+
+
 
                             wb.Worksheet(sheets).Cell(string.Format("B{0}", 5)).Value = param[0];
                             wb.Worksheet(sheets).Cell(string.Format("B{0}", 6)).Value = param[1];
@@ -471,32 +475,44 @@ namespace arquitectSoft.View
                             //Set the color of Header Row.
                             //A resembles First Column while C resembles Third column.
 
-                            wb.Worksheet(sheetscount).Cells(Range).Style.Fill.BackgroundColor = XLColor.DarkCoral;
+                            wb.Worksheet(sheets).Cells(Range).Style.Fill.BackgroundColor = XLColor.DarkCoral;
                             for (int i = 1; i <= dt.Rows.Count; i++)
                             {
                                 //A resembles First Column while C resembles Third column.
                                 //Header row is at Position 1 and hence First row starts from Index 2.
                                 string cellRange = string.Format(rangetwo, i + valueinitial);
                                 string cellIniPuertas = string.Format("A{0}", i + valueinitial);
-                                string valueP = wb.Worksheet(sheetscount).Cell(cellIniPuertas).Value.ToString();
+                                string valueP = wb.Worksheet(sheets).Cell(cellIniPuertas).Value.ToString();
                                 if (valueP.Contains("Puerta"))
                                 {
-                                    wb.Worksheet(sheetscount).Cells(cellRange).Style.Fill.BackgroundColor = XLColor.LightGreen;
+                                    wb.Worksheet(sheets).Cells(cellRange).Style.Fill.BackgroundColor = XLColor.LightGreen;
                                 }
                                 else
                                 {
                                     if (i % 2 != 0)
                                     {
-                                        wb.Worksheet(sheetscount).Cells(cellRange).Style.Fill.BackgroundColor = XLColor.White;
+                                        wb.Worksheet(sheets).Cells(cellRange).Style.Fill.BackgroundColor = XLColor.White;
                                     }
                                     else
                                     {
-                                        wb.Worksheet(sheetscount).Cells(cellRange).Style.Fill.BackgroundColor = XLColor.LightGray;
+                                        wb.Worksheet(sheets).Cells(cellRange).Style.Fill.BackgroundColor = XLColor.LightGray;
                                     }
                                 }
+
+                                if (wrapTextDefault)
+                                {
+                                    wb.Worksheet(sheets).Cell(string.Format("C{0}", i + valueinitial)).Style.Alignment.WrapText = true;
+                                }
+                                else
+                                {
+                                    wb.Worksheet(sheets).Cell(string.Format("B{0}", i + valueinitial)).Style.Alignment.WrapText = true;
+                                }
+
+
                             }
                             //Adjust widths of Columns.
-                            wb.Worksheet(sheetscount).Columns().AdjustToContents();
+                            wb.Worksheet(sheets).Columns().AdjustToContents();
+                            wb.Worksheet(sheets).Column(wrapTextDefault ? 3 : 2).Width = 57;
                         }
 
 
