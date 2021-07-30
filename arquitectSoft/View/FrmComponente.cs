@@ -64,12 +64,12 @@ namespace arquitectSoft.View
                     SwSave = false;
                     break;
                 }
-                else if (row.Cells["Cortes"].Value == null)
-                {
-                    fail = "El corte en uno de los Sub Componentes se encuentra Vacia!!";
-                    SwSave = false;
-                    break;
-                }
+                //else if (row.Cells["Cortes"].Value == null)
+                //{
+                //    fail = "El corte en uno de los Sub Componentes se encuentra Vacia!!";
+                //    SwSave = false;
+                //    break;
+                //}
             }
 
             if (!chkEspecial.Checked)
@@ -165,6 +165,13 @@ namespace arquitectSoft.View
             }
 
             CmbAcabado.SelectedValue = bsc.ReturnItem4 == ""? "0": bsc.ReturnItem4;
+
+            if (bsc.ReturnItem4 != "" && CmbAcabado.SelectedValue == null)
+            {
+                MessageBox.Show("El Codigo del componente tiene Asociado un acabado que ya no esta entre los subcomponente, por favor Actualizarlo", "Mensaje Alerta", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+
+            CmbAcabado.SelectedValue = CmbAcabado.SelectedValue == null ? 0 : CmbAcabado.SelectedValue;
             txtCodigo.Enabled = false;
             txtDescripcion.Enabled = false;
             chkEspecial.Enabled = false;
@@ -339,6 +346,7 @@ namespace arquitectSoft.View
             GridViewComponente.Columns[0].ReadOnly = true;
             GridViewComponente.Columns[1].ReadOnly = true;
             GridViewComponente.Columns[2].ReadOnly = true;
+            GridViewComponente.Columns[7].Visible = false; //Se oculta para posterior validar en que se puede usar
 
             GridViewComponenteEsp.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             GridViewComponenteEsp.Columns[0].ReadOnly = true;
@@ -430,7 +438,9 @@ namespace arquitectSoft.View
                     int CAdicional = (int)row.Cells["CAdicional"].Value;
                     bool ADecremento = (bool)row.Cells["ADecremento"].Value;
                     int Elevado = (int)row.Cells["Elevado"].Value;
-                    int Corte = (int)row.Cells["Cortes"].Value;
+
+
+                    int Corte = (row.Cells["Cortes"].Value != null) ? (int)row.Cells["Cortes"].Value : 5;
                     bool Extra = (bool)row.Cells["Extra"].Value;
 
                     Sub_Component sub = new Sub_Component(codigo, descripcion, Cxdefecto, CAdicional, unidadcalculada, ADecremento, id, Elevado, Corte, Extra);

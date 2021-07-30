@@ -48,7 +48,10 @@ namespace arquitectSoft.View
             this.label2 = new System.Windows.Forms.Label();
             this.CmbAcabado = new System.Windows.Forms.ComboBox();
             this.chkVidriospanles = new System.Windows.Forms.CheckBox();
+            this.dataGridViewRC = new System.Windows.Forms.DataGridView();
+            this.label3 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewRC)).BeginInit();
             this.SuspendLayout();
             // 
             // ImgLista
@@ -319,13 +322,38 @@ namespace arquitectSoft.View
             this.chkVidriospanles.Text = "Vidrios/Paneles";
             this.chkVidriospanles.UseVisualStyleBackColor = true;
             // 
+            // dataGridViewRC
+            // 
+            this.dataGridViewRC.AllowUserToAddRows = false;
+            this.dataGridViewRC.AllowUserToDeleteRows = false;
+            this.dataGridViewRC.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridViewRC.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewRC.Location = new System.Drawing.Point(14, 265);
+            this.dataGridViewRC.Name = "dataGridViewRC";
+            this.dataGridViewRC.ReadOnly = true;
+            this.dataGridViewRC.Size = new System.Drawing.Size(764, 192);
+            this.dataGridViewRC.TabIndex = 44;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.ForeColor = System.Drawing.SystemColors.Control;
+            this.label3.Location = new System.Drawing.Point(12, 246);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(171, 16);
+            this.label3.TabIndex = 45;
+            this.label3.Text = "Relacion de Componentes:";
+            // 
             // FrmSubComponente
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(70)))), ((int)(((byte)(86)))));
-            this.ClientSize = new System.Drawing.Size(788, 255);
+            this.ClientSize = new System.Drawing.Size(788, 467);
             this.ControlBox = false;
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.dataGridViewRC);
             this.Controls.Add(this.chkVidriospanles);
             this.Controls.Add(this.CmbAcabado);
             this.Controls.Add(this.label2);
@@ -347,6 +375,7 @@ namespace arquitectSoft.View
             this.Load += new System.EventHandler(this.FrmSubComponente_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewRC)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -370,5 +399,7 @@ namespace arquitectSoft.View
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ComboBox CmbAcabado;
         private System.Windows.Forms.CheckBox chkVidriospanles;
+        private System.Windows.Forms.DataGridView dataGridViewRC;
+        private System.Windows.Forms.Label label3;
     }
 }

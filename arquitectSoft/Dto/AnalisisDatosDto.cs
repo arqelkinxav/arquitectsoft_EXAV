@@ -95,6 +95,7 @@ namespace arquitectSoft.Dto
                     listColumns.Add("Id_Unidad_Medida");
                     listColumns.Add("codigo");
                     listColumns.Add("descripcion");
+                    listColumns.Add("acabado");
                     listColumns.Add("cantidad");
                     listColumns.Add("medida");
                     listColumns.Add("Medidida Calculada");
@@ -106,6 +107,7 @@ namespace arquitectSoft.Dto
                     listColumns.Add("id_subcomponente");
                     listColumns.Add("codigo");
                     listColumns.Add("descripcion");
+                    listColumns.Add("acabado");
                     listColumns.Add("altura");
                     listColumns.Add("anchura");
                     listColumns.Add("cantidad");
@@ -116,6 +118,7 @@ namespace arquitectSoft.Dto
                     //-----------------Mamparas
                     listColumns.Add("Codigo");
                     listColumns.Add("Descripción");
+                    listColumns.Add("acabado");
                     listColumns.Add("Medida Calculada");
                     listColumns.Add("Cantidad Puertas");
                     listColumns.Add("Area Puertas");
@@ -358,7 +361,7 @@ namespace arquitectSoft.Dto
                 dtresulPuertaF.Columns.Add(s);
             });
 
-            
+
 
             List<object[]> listDta = new List<object[]>();
 
@@ -401,7 +404,7 @@ namespace arquitectSoft.Dto
                                   Count = grp.Count()
                               };
 
-    
+
 
             foreach (var row in groupedData)
             {
@@ -465,14 +468,15 @@ namespace arquitectSoft.Dto
 
                 foreach (DataRow rowResult in dtResult.Rows)
                 {
-                    object[] data = new object[7];
+                    object[] data = new object[8];
                     data[0] = rowResult[0].ToString();
                     data[1] = rowResult[1].ToString();
                     data[2] = rowResult[2].ToString();
-                    data[3] = rowResult[3].ToString();
-                    data[4] = rowResult[4].ToString();
-                    data[5] = rowResult[5].ToString();
-                    data[6] = rowResult[6].ToString();
+                    data[3] = "";
+                    data[4] = rowResult[3].ToString();
+                    data[5] = rowResult[4].ToString();
+                    data[6] = rowResult[5].ToString();
+                    data[7] = rowResult[6].ToString();
                     listDta.Add(data);
                 }
 
@@ -508,14 +512,15 @@ namespace arquitectSoft.Dto
 
             foreach (DataRow rowResult in dtResult.Rows)
             {
-                object[] data = new object[7];
+                object[] data = new object[8];
                 data[0] = Int32.Parse(rowResult[0].ToString());
                 data[1] = rowResult[1].ToString();
                 data[2] = rowResult[2].ToString();
-                data[3] = Int32.Parse(rowResult[3].ToString());
+                data[3] = rowResult[3].ToString();
                 data[4] = Int32.Parse(rowResult[4].ToString());
-                data[5] = float.Parse(rowResult[5].ToString());
-                data[6] = rowResult[6].ToString();
+                data[5] = Int32.Parse(rowResult[5].ToString());
+                data[6] = float.Parse(rowResult[6].ToString());
+                data[7] = rowResult[7].ToString();
 
                 list.Add(data);
             }
@@ -531,7 +536,7 @@ namespace arquitectSoft.Dto
             DataTable dtModelPerfiles = new DataTable();
             listColumnsComp.ForEach(delegate (string s)
             {
-                dtModelPerfiles.Columns.Add(s);
+                dtModelPerfiles.Columns.Add(s, s == "cantidad"? typeof(Int32): typeof(string));
             });
 
             listComp.ForEach(delegate (List<object[]> list1)
@@ -567,7 +572,7 @@ namespace arquitectSoft.Dto
 
             foreach (DataRow row in dtmodel.Rows)
             {
-                codigo = row["Codigo"].ToString().Replace("\"", "").Trim();
+                codigo = row["Codigo"].ToString().Replace("\"", "").Split('-')[0].Trim();
                 auxAltura = row["Altura"].ToString().Replace("\"", "").Trim();
                 Ubicacion = row["Ubicacion"].ToString().Replace("\"", "").Trim();
 
@@ -582,14 +587,15 @@ namespace arquitectSoft.Dto
 
                 foreach (DataRow rowResult in dtResult.Rows)
                 {
-                    object[] data = new object[7];
+                    object[] data = new object[8];
                     data[0] = rowResult[0].ToString();
                     data[1] = "";
                     data[2] = "";
-                    data[3] = rowResult[1].ToString();
-                    data[4] = rowResult[2].ToString();
-                    data[5] = rowResult[3].ToString(); ;
-                    data[6] = rowResult[4].ToString();
+                    data[3] = "";
+                    data[4] = rowResult[1].ToString();
+                    data[5] = rowResult[2].ToString();
+                    data[6] = rowResult[3].ToString(); ;
+                    data[7] = rowResult[4].ToString();
 
                     listDta.Add(data);
                 }
@@ -628,14 +634,15 @@ namespace arquitectSoft.Dto
 
             foreach (DataRow rowResult in dtResult.Rows)
             {
-                object[] data = new object[7];
+                object[] data = new object[8];
                 data[0] = Int32.Parse(rowResult[0].ToString());
                 data[1] = rowResult[1].ToString();
                 data[2] = rowResult[2].ToString();
-                data[3] = Int32.Parse(rowResult[3].ToString());
+                data[3] = rowResult[3].ToString();
                 data[4] = Int32.Parse(rowResult[4].ToString());
                 data[5] = Int32.Parse(rowResult[5].ToString());
-                data[6] = rowResult[6].ToString();
+                data[6] = Int32.Parse(rowResult[6].ToString());
+                data[7] = rowResult[7].ToString();
                 list.Add(data);
             }
             return list;
@@ -659,7 +666,7 @@ namespace arquitectSoft.Dto
                 string Anchura5 = row["Anchura5"].ToString().Trim().Replace("\"", "") == "" ? "0" : row["Anchura5"].ToString().Trim().Replace("\"", "");
                 string ubicacion = row["ubicación"].ToString().Trim().Replace("\"", "");
 
-                string[] param = { row["Codigo"].ToString().Trim().Replace("\"",""),row["Altura"].ToString().Trim().Replace("\"",""), row["Anchura"].ToString().Trim().Replace("\"",""),
+                string[] param = { row["Codigo"].ToString().Trim().Replace("\"","").Split('-')[0],row["Altura"].ToString().Trim().Replace("\"",""), row["Anchura"].ToString().Trim().Replace("\"",""),
                                     Anchura2,Anchura3,Anchura4,Anchura5 ,ubicacion        };
 
                 con.Open(out fail);
@@ -697,13 +704,14 @@ namespace arquitectSoft.Dto
                     areaMampara = float.Parse(rowM["area"].ToString().Replace("\"", "").Trim());
                     if (puertasCount == 0)
                     {
-                        listMamp = new Object[6];
+                        listMamp = new Object[7];
                         listMamp[0] = rowM["Codigo"].ToString();
                         listMamp[1] = rowM["Tipo"].ToString();
-                        listMamp[2] = areaMampara;
-                        listMamp[3] = UbicacionMampara;
-                        listMamp[4] = puertasCount;
-                        listMamp[5] = 0;
+                        listMamp[2] = "";
+                        listMamp[3] = areaMampara;
+                        listMamp[4] = UbicacionMampara;
+                        listMamp[5] = puertasCount;
+                        listMamp[6] = 0;
                         listDta.Add(listMamp);
                     }
                     else
@@ -726,24 +734,26 @@ namespace arquitectSoft.Dto
                                 }
                             }
 
-                            listMamp = new Object[6];
+                            listMamp = new Object[7];
                             listMamp[0] = rowM["Codigo"].ToString();
                             listMamp[1] = rowM["Tipo"].ToString();
-                            listMamp[2] = areaMampara - areaPuerta;
-                            listMamp[3] = UbicacionMampara;
-                            listMamp[4] = 1;
-                            listMamp[5] = areaPuerta;
+                            listMamp[2] = "";
+                            listMamp[3] = areaMampara - areaPuerta;
+                            listMamp[4] = UbicacionMampara;
+                            listMamp[5] = 1;
+                            listMamp[6] = areaPuerta;
                             listDta.Add(listMamp);
                         }
                         else
                         {
-                            listMamp = new Object[6];
+                            listMamp = new Object[7];
                             listMamp[0] = rowM["Codigo"].ToString();
                             listMamp[1] = rowM["Tipo"].ToString();
-                            listMamp[2] = areaMampara;
-                            listMamp[3] = UbicacionMampara;
-                            listMamp[4] = 0;
+                            listMamp[2] = "";
+                            listMamp[3] = areaMampara;
+                            listMamp[4] = UbicacionMampara;
                             listMamp[5] = 0;
+                            listMamp[6] = 0;
                             listDta.Add(listMamp);
                         }
 
@@ -771,9 +781,9 @@ namespace arquitectSoft.Dto
                 fail = "";
                 string codigo = data[0].ToString().Replace("\"", "").Trim();
                 string descripcion = data[1].ToString().Replace("\"", "").Trim();
-                string cantidad = data[2].ToString();
-                string puertas = data[4].ToString();
-                string areaPuertas = data[5].ToString();
+                string cantidad = data[3].ToString();
+                string puertas = data[5].ToString();
+                string areaPuertas = data[6].ToString();
 
                 string[] param = { codigo, descripcion, cantidad, puertas, areaPuertas };
                 con.Open(out fail);
@@ -791,12 +801,13 @@ namespace arquitectSoft.Dto
 
             foreach (DataRow rowResult in dtResult.Rows)
             {
-                object[] data = new object[5];
+                object[] data = new object[6];
                 data[0] = rowResult[0].ToString();
                 data[1] = rowResult[1].ToString();
-                data[2] = decimal.Parse(rowResult[2].ToString());
-                data[3] = Int32.Parse(rowResult[3].ToString());
-                data[4] = decimal.Parse(rowResult[4].ToString());
+                data[2] = rowResult[2].ToString();
+                data[3] = decimal.Parse(rowResult[3].ToString());
+                data[4] = Int32.Parse(rowResult[4].ToString());
+                data[5] = decimal.Parse(rowResult[5].ToString());
                 list.Add(data);
             }
 

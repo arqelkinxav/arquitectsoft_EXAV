@@ -33,7 +33,7 @@ namespace arquitectSoft.Dto
                         param[0] = descripcion;
                         param[1] = check.ToString();
                         param[2] = acabado.ToString();
-                        param[3] = codigo;
+                        param[3] = codigo.Split('-')[0].Trim();
                         MsgResul = "Registro Editado Correctamente";
                         break;
                     default:

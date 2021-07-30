@@ -18,22 +18,22 @@ namespace arquitectSoft.Dto
             string resul = "";
             Generals.Conexion con = new Generals.Conexion();
             string fail = "";
-            
+
 
             try
             {
                 con.Open(out fail);
                 int check = checkVidriosPaneles == true ? 1 : 0;
-                string[] param = { acabado,codigo, descripcion, check.ToString(),"0" };
+                string[] param = { acabado, codigo, descripcion, check.ToString(), "0" };
                 string MsgResul = "Guardado Exitosamente";
                 string sqlquery = "";
                 switch (opcion)
                 {
                     case "Editar":
                         sqlquery = Generals.Constantes.QUERY_UPDATE_SUBCOMPONENTES;
-                        
+
                         param[0] = acabado;
-                        param[1] = codigo;
+                        param[1] = codigo.Split('-')[0].Trim();
                         param[2] = descripcion;
                         param[3] = IdComponenteExist;
                         param[4] = check.ToString();
@@ -45,12 +45,12 @@ namespace arquitectSoft.Dto
                         break;
                 }
 
-                int idComponente = con.ExecuteNonQuery(sqlquery, out fail, param,1);
+                int idComponente = con.ExecuteNonQuery(sqlquery, out fail, param, 1);
                 con.Close();
 
                 resul = fail == "" ? MsgResul : fail;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 resul = ex.Message.ToString();
                 con.Close();
@@ -73,12 +73,12 @@ namespace arquitectSoft.Dto
             {
                 fail = "Debe Digitar un Descripcion";
                 SwSave = false;
-            }            
+            }
 
             return SwSave;
         }
 
-        public string ExistSubComponent(string codigo, string descripcion,string acabado)
+        public string ExistSubComponent(string codigo, string descripcion, string acabado, string opcion)
         {
             string resul = "0";
             Generals.Conexion con = new Generals.Conexion();
@@ -88,7 +88,11 @@ namespace arquitectSoft.Dto
                 con.Open(out fail);
                 MySqlDataReader row;
                 string[] param = { codigo, descripcion, acabado };
-                row = con.ExecuteReader(Generals.Constantes.QUERY_EXITS_SUBCOMPONENTES, out fail, param);
+
+                string query = opcion != "Editar" ? " and Id_Acabado = ?;" : ";";
+
+
+                row = con.ExecuteReader(Generals.Constantes.QUERY_EXITS_SUBCOMPONENTES + query, out fail, param);
                 while (row.Read())
                 {
                     resul = row.GetString(0);
@@ -124,6 +128,20 @@ namespace arquitectSoft.Dto
                 con.Close();
             }
             return resul;
+        }
+
+
+        public DataTable GetComponentRelation(string IdComponente)
+        {
+
+            Generals.Conexion con = new Generals.Conexion();
+            string fail = "";
+
+            con.Open(out fail);
+            DataTable row;
+            row = con.ExecuteDataSetSP(Generals.Constantes.QUERY_GET_SUBCOMPONENTE_RELACION, out fail, IdComponente);
+            con.Close();
+            return row;
         }
     }
 }

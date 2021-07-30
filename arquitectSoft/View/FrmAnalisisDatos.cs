@@ -17,6 +17,7 @@ namespace arquitectSoft.View
     {
         DataTable dtPuertas = new DataTable();
         DataTable dtPerfil = new DataTable();
+        DataTable dtPerfilR = new DataTable();
         DataTable dtPerfilOfVidrioPanel = new DataTable();
 
         public FrmAnalisisDatos()
@@ -64,6 +65,7 @@ namespace arquitectSoft.View
                     if (idDocumento == 2)
                     {
 
+
                         DataTable dtresulVP = new DataTable();
                         dtPerfilOfVidrioPanel = dto.CalculateTab(1, dtResul, dtPuertas, true);
                         dtresulVP = dtPerfilOfVidrioPanel.Copy();
@@ -81,7 +83,7 @@ namespace arquitectSoft.View
                     if (idDocumento == 1)
                     {
                         dtPerfil = dtcalculate;
-
+                        dtPerfilR = dtResul;
                         DataTable dtresulPM = new DataTable();
                         dtresulPM = dtPerfilOfVidrioPanel.Copy();
                         dtresulPM.Merge(dtPerfil);
@@ -414,7 +416,28 @@ namespace arquitectSoft.View
                                     dt.Rows[dt.Rows.Count - 1][cell.ColumnIndex] = cell.Value.ToString();
                                 }
                             }
+                        
+                            if (Datagrid == 1)
+                            {
+                                dt = dt.AsEnumerable()
+                                        .GroupBy(r => new { Cod = r["Codigo"], med = r["medida"], cal = r["Se_Calcula_Por"] })
+                                        .Select(g =>
+                                        {
+                                            var row = dt.NewRow();
 
+                                            row["id_Subcomponente"] = g.Min(r => r.Field<string>("id_Subcomponente"));
+                                            row["Codigo"] = g.Key.Cod;
+                                            row["descripcion"] = g.Min(r => r.Field<string>("descripcion"));
+                                            row["acabado"] = g.Min(r => r.Field<string>("acabado"));
+                                            row["cantidad"] = g.Sum(r => r.Field<int>("cantidad"));
+                                            row["medida"] = g.Key.med;
+                                            row["Medidida Calculada"] = g.Min(r => r.Field<string>("Medidida Calculada"));
+                                            row["Se_Calcula_Por"] = g.Key.cal;
+                                            return row;
+
+                                        })
+                                        .CopyToDataTable();
+                            }
 
 
                             var ws = wb.Worksheets.Add(dt, sheets);
@@ -550,7 +573,6 @@ namespace arquitectSoft.View
 
 
         }
-
 
     }
 }

@@ -34,7 +34,7 @@ namespace arquitectSoft.View
         }
         private void BtnBuscar_Click(object sender, EventArgs e)
         {
-            Dto.ComponenteDto dto = new Dto.ComponenteDto();
+            
             FrmBuscar bsc = new FrmBuscar();
             bsc.Consulta = "SubComp";
             bsc.ShowDialog();
@@ -43,8 +43,8 @@ namespace arquitectSoft.View
                 return;
             }
 
-            txtCodigo.Text = bsc.ReturnItem1;
-            txtDescripcion.Text = bsc.ReturnItem2;
+            txtCodigo.Text = bsc.ReturnItem1.Split('-')[0].Trim();
+            txtDescripcion.Text = bsc.ReturnItem2.Split('(')[0].Trim();
             CmbAcabado.SelectedValue = bsc.ReturnItem3;
             chkVidriospanles.Checked = bsc.ReturnItem4 == "1" ? true : false;
 
@@ -55,6 +55,8 @@ namespace arquitectSoft.View
             BtnCancelar.Enabled = true;
             BtnEditar.Enabled = true;
             BtnEliminar.Enabled = true;
+            dataGridViewRC.DataSource = null;
+            dataGridViewRC.DataSource = GetDataRelationComponent(bsc.ReturnItem1.Split('-')[0].Trim());
         }
         private void BtnSalir_Click(object sender, EventArgs e)
         {
@@ -103,7 +105,7 @@ namespace arquitectSoft.View
                 Dto.SubComponenteDto dto = new Dto.SubComponenteDto();
                 var codSplit = txtCodigo.Text.Split('-')[0].Trim();
                 var desSplit = txtDescripcion.Text.Split('(')[0].Trim();
-                string resul = dto.ExistSubComponent(codSplit, desSplit,CmbAcabado.SelectedValue.ToString());
+                string resul = dto.ExistSubComponent(codSplit, desSplit,CmbAcabado.SelectedValue.ToString(), Opc);
 
                 resul = dto.DeleteComponent(Int32.Parse(resul));
 
@@ -160,6 +162,7 @@ namespace arquitectSoft.View
             txtDescripcion.Text = "";
             chkVidriospanles.Checked = false;
             CmbAcabado.SelectedIndex = 0;
+            dataGridViewRC.DataSource = null;
         }
         private void BloquearCancelar()
         {
@@ -179,7 +182,7 @@ namespace arquitectSoft.View
         {
             string resul = "0";
 
-            resul = dto.ExistSubComponent(txtCodigo.Text, txtDescripcion.Text, CmbAcabado.SelectedValue.ToString());
+            resul = dto.ExistSubComponent(txtCodigo.Text, txtDescripcion.Text, CmbAcabado.SelectedValue.ToString(), Opc);
 
             if (resul == "0" || Opc == "Editar")
             {
@@ -192,6 +195,12 @@ namespace arquitectSoft.View
             {
                 MessageBox.Show("El codigo ya se encuentra registrado en el sistema", "Mensaje Alerta", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
+        }
+
+        private DataTable GetDataRelationComponent(string codigo)
+        {
+            Dto.SubComponenteDto dto = new Dto.SubComponenteDto();
+            return dto.GetComponentRelation(codigo); ;
         }
 
         #endregion

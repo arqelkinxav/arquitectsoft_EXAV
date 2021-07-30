@@ -37,13 +37,14 @@ namespace arquitectSoft.Generals
         public static String QUERY_DELETE_COMPONENTE_ESPECIAL_DETALLE = "DELETE FROM arquitectdb.componentes_especial_detalle WHERE Id_Componente_especial = ?;";
 
         //Sub Componente
-        public static String QUERY_EXITS_SUBCOMPONENTES = "SELECT Id_SubComponente FROM arquitectdb.subcomponentes where (Codigo_Homologacion = ? or Descripcion = ?) and Id_Acabado = ?;";
+        public static String QUERY_EXITS_SUBCOMPONENTES = "SELECT Id_SubComponente FROM arquitectdb.subcomponentes where (Codigo_Homologacion = ? or Descripcion = ?)";
         public static String QUERY_SUBCOMPONENTES = "SELECT Id_SubComponente,CONCAT(subcomponentes.Codigo_Homologacion , '-' , acabados.Codigo_Homologacion) Codigo_Homologacion" +
                                                     ", CONCAT(subcomponentes.Descripcion , '(' , acabados.Descripcion,') ') Descripcion,subcomponentes.Id_Acabado,Especial " +
                                                     "FROM arquitectdb.subcomponentes JOIN arquitectdb.acabados ON subcomponentes.Id_Acabado = acabados.Id_Acabado ";
         public static String QUERY_INSERT_SUBCOMPONENTES = "CALL spSubComponenteRegistrar(?,?,?,?,?);";
         public static String QUERY_UPDATE_SUBCOMPONENTES = "CALL spSubcomponenteUpdate(?,?,?,?,?);";
         public static String QUERY_DELETE_SUBCOMPONENTES = "DELETE FROM arquitectdb.subcomponentes WHERE Id_subcomponente = ?";
+        public static String QUERY_GET_SUBCOMPONENTE_RELACION = "componenteRelationSub";
 
         //Unidad Calculada
         public static String QUERY_UNIDADCALCULADA = "SELECT Id_Unidad_Calculada,Concat(Id_Unidad_Calculada, ' - ', Descripcion) Descripcion FROM arquitectdb.unidades_calculadas";
@@ -57,7 +58,7 @@ namespace arquitectSoft.Generals
         public static String QUERY_EXITS_ACABADO = "SELECT Id_Acabado FROM arquitectdb.acabados where Codigo_Homologacion = ? or Descripcion = ?;";
 
         //Corte
-        public static String QUERY_CORTE = "SELECT Id_Corte,Descripcion,Corte_Derecho,Corte_Izquierdo FROM arquitectdb.cortes";
+        public static String QUERY_CORTE = "SELECT Id_Corte,Descripcion,Corte_Derecho,Corte_Izquierdo FROM arquitectdb.cortes order by Id_Corte ";
         public static String QUERY_INSERT_CORTE = "INSERT arquitectdb.cortes (descripcion,Corte_Derecho,Corte_Izquierdo) VALUES(?,?,?)";
         public static String QUERY_DELETE_CORTE = "DELETE FROM arquitectdb.cortes WHERE Id_Corte = ?";
         public static String QUERY_UPDATE_CORTE = "UPDATE arquitectdb.cortes SET descripcion = ?,Corte_Derecho = ?, Corte_Izquierdo = ? WHERE Id_Corte = ?";
