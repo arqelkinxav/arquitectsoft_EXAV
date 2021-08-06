@@ -50,8 +50,13 @@ namespace arquitectSoft.View
             this.chkVidriospanles = new System.Windows.Forms.CheckBox();
             this.dataGridViewRC = new System.Windows.Forms.DataGridView();
             this.label3 = new System.Windows.Forms.Label();
+            this.BtnMultiAcabado = new System.Windows.Forms.Button();
+            this.dataGridViewMA = new System.Windows.Forms.DataGridView();
+            this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewRC)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMA)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).BeginInit();
             this.SuspendLayout();
             // 
             // ImgLista
@@ -331,7 +336,7 @@ namespace arquitectSoft.View
             this.dataGridViewRC.Location = new System.Drawing.Point(14, 265);
             this.dataGridViewRC.Name = "dataGridViewRC";
             this.dataGridViewRC.ReadOnly = true;
-            this.dataGridViewRC.Size = new System.Drawing.Size(764, 192);
+            this.dataGridViewRC.Size = new System.Drawing.Size(391, 192);
             this.dataGridViewRC.TabIndex = 44;
             // 
             // label3
@@ -345,6 +350,29 @@ namespace arquitectSoft.View
             this.label3.TabIndex = 45;
             this.label3.Text = "Relacion de Componentes:";
             // 
+            // BtnMultiAcabado
+            // 
+            this.BtnMultiAcabado.Location = new System.Drawing.Point(526, 200);
+            this.BtnMultiAcabado.Name = "BtnMultiAcabado";
+            this.BtnMultiAcabado.Size = new System.Drawing.Size(129, 23);
+            this.BtnMultiAcabado.TabIndex = 46;
+            this.BtnMultiAcabado.Text = "Multi-Acabado";
+            this.BtnMultiAcabado.UseVisualStyleBackColor = true;
+            this.BtnMultiAcabado.Click += new System.EventHandler(this.BtnMultiAcabado_Click);
+            // 
+            // dataGridViewMA
+            // 
+            this.dataGridViewMA.AllowUserToAddRows = false;
+            this.dataGridViewMA.AllowUserToDeleteRows = false;
+            this.dataGridViewMA.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewMA.Location = new System.Drawing.Point(411, 265);
+            this.dataGridViewMA.Name = "dataGridViewMA";
+            this.dataGridViewMA.ReadOnly = true;
+            this.dataGridViewMA.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dataGridViewMA.Size = new System.Drawing.Size(365, 192);
+            this.dataGridViewMA.TabIndex = 47;
+            this.dataGridViewMA.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridViewMA_CellMouseDoubleClick);
+            // 
             // FrmSubComponente
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -352,6 +380,8 @@ namespace arquitectSoft.View
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(70)))), ((int)(((byte)(86)))));
             this.ClientSize = new System.Drawing.Size(788, 467);
             this.ControlBox = false;
+            this.Controls.Add(this.dataGridViewMA);
+            this.Controls.Add(this.BtnMultiAcabado);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.dataGridViewRC);
             this.Controls.Add(this.chkVidriospanles);
@@ -376,6 +406,8 @@ namespace arquitectSoft.View
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewRC)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMA)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -401,5 +433,8 @@ namespace arquitectSoft.View
         private System.Windows.Forms.CheckBox chkVidriospanles;
         private System.Windows.Forms.DataGridView dataGridViewRC;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Button BtnMultiAcabado;
+        private System.Windows.Forms.DataGridView dataGridViewMA;
+        private System.Windows.Forms.BindingSource bindingSource1;
     }
 }

@@ -60,7 +60,7 @@ namespace arquitectSoft.Dto
             return resul;
         }
 
-        public bool ValilidationSaveSubComponenet(string codigo, string descripcion, out string fail)
+        public bool ValilidationSaveSubComponenet(string codigo, string descripcion, int acabado, out string fail)
         {
             bool SwSave = true;
             fail = null;
@@ -72,6 +72,11 @@ namespace arquitectSoft.Dto
             else if (descripcion == "")
             {
                 fail = "Debe Digitar un Descripcion";
+                SwSave = false;
+            }
+            else if (acabado == 0)
+            {
+                fail = "Debe Seleccionar un Acabado!!!";
                 SwSave = false;
             }
 

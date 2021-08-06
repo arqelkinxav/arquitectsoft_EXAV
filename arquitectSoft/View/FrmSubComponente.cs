@@ -1,4 +1,5 @@
-﻿using System;
+﻿using arquitectSoft.Class;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -79,8 +80,8 @@ namespace arquitectSoft.View
         {
             Dto.SubComponenteDto dto = new Dto.SubComponenteDto();
             string fail = "";
-
-            bool SwSave = dto.ValilidationSaveSubComponenet(txtCodigo.Text, txtDescripcion.Text, out fail);
+            int acabado = Int32.Parse(CmbAcabado.SelectedValue.ToString());
+            bool SwSave = dto.ValilidationSaveSubComponenet(txtCodigo.Text, txtDescripcion.Text, acabado, out fail);
 
             if (SwSave == true)
             {
@@ -126,7 +127,9 @@ namespace arquitectSoft.View
             txtDescripcion.Enabled = false;
             chkVidriospanles.Enabled = false;
             CmbAcabado.Enabled = false;
-
+            BtnMultiAcabado.Enabled = false;
+            BtnMultiAcabado.Visible = false;
+            dataGridViewMA.Visible = false;
 
             Dto.AcabadoDto Acb = new Dto.AcabadoDto();
             CmbAcabado.DataSource = Acb.GetAcabado();
@@ -155,6 +158,10 @@ namespace arquitectSoft.View
             BtnEditar.Enabled = false;
             BtnEliminar.Enabled = false;
             BtnBuscar.Enabled = false;
+
+            BtnMultiAcabado.Enabled = true;
+            BtnMultiAcabado.Visible = true;
+            dataGridViewMA.Visible = true;
         }
         private void ClearComponent()
         {
@@ -163,6 +170,8 @@ namespace arquitectSoft.View
             chkVidriospanles.Checked = false;
             CmbAcabado.SelectedIndex = 0;
             dataGridViewRC.DataSource = null;
+            dataGridViewMA.DataSource = null;
+            bindingSource1.Clear();
         }
         private void BloquearCancelar()
         {
@@ -177,6 +186,10 @@ namespace arquitectSoft.View
             BtnEditar.Enabled = false;
             BtnEliminar.Enabled = false;
             BtnBuscar.Enabled = true;
+
+            BtnMultiAcabado.Enabled = false;
+            BtnMultiAcabado.Visible = false;
+            dataGridViewMA.Visible = false;
         }
         private void SaveComponent(Dto.SubComponenteDto dto)
         {
@@ -187,7 +200,17 @@ namespace arquitectSoft.View
             if (resul == "0" || Opc == "Editar")
             {
 
-                resul = dto.SaveSubComponent(txtCodigo.Text, txtDescripcion.Text, CmbAcabado.SelectedValue.ToString(), chkVidriospanles.Checked, Opc, resul);
+                resul = dto.SaveSubComponent(txtCodigo.Text, txtDescripcion.Text, CmbAcabado.SelectedValue.ToString(), chkVidriospanles.Checked, Opc, resul);               
+
+                if (dataGridViewMA.Rows.Count > 0)
+                {
+                    foreach (DataGridViewRow r in dataGridViewMA.Rows)
+                    {
+                       string CodigoAcabado = r.Cells[0].Value.ToString();
+                       resul = dto.SaveSubComponent(txtCodigo.Text, txtDescripcion.Text, CodigoAcabado, chkVidriospanles.Checked, Opc, resul);
+                    }
+                }
+
                 ClearComponent();
                 MessageBox.Show(resul, "Mensaje Alerta", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -196,7 +219,6 @@ namespace arquitectSoft.View
                 MessageBox.Show("El codigo ya se encuentra registrado en el sistema", "Mensaje Alerta", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
-
         private DataTable GetDataRelationComponent(string codigo)
         {
             Dto.SubComponenteDto dto = new Dto.SubComponenteDto();
@@ -205,13 +227,34 @@ namespace arquitectSoft.View
 
         #endregion
 
+        private void BtnMultiAcabado_Click(object sender, EventArgs e)
+        {
+            
+            Dto.ComponenteDto dto = new Dto.ComponenteDto();
+            FrmBuscar bsc = new FrmBuscar();
+            bsc.Consulta = "Acaba";
+            bsc.ShowDialog();
+            if (bsc.ReturnItem1 == null)
+            {
+                return;
+            }
+
+          
+            bindingSource1.Add(new MultiAcabado(bsc.ReturnItem0, bsc.ReturnItem2.ToString()));
+            dataGridViewMA.DataSource = bindingSource1;
 
 
+            dataGridViewMA.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+        }
 
-
-
-
-
-
+        private void dataGridViewMA_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            DialogResult result = MessageBox.Show("Esta seguro de eliminar el registro?", "Mensaje Alerta", MessageBoxButtons.YesNo);
+            if (result == DialogResult.Yes)
+            {
+                dataGridViewMA.Rows.RemoveAt(e.RowIndex);
+            }
+                
+        }
     }
 }
