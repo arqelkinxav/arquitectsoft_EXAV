@@ -31,14 +31,10 @@ namespace arquitectSoft.View
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmComponente));
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.label1 = new System.Windows.Forms.Label();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             this.ImgLista = new System.Windows.Forms.ImageList(this.components);
-            this.lblEtiquetaCodigo = new System.Windows.Forms.Label();
-            this.txtCodigo = new System.Windows.Forms.TextBox();
-            this.txtDescripcion = new System.Windows.Forms.TextBox();
-            this.lbletiquetaDescripcion = new System.Windows.Forms.Label();
-            this.chkEspecial = new System.Windows.Forms.CheckBox();
             this.GridViewComponente = new System.Windows.Forms.DataGridView();
             this.codigoDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.descripcionDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -50,21 +46,11 @@ namespace arquitectSoft.View
             this.elevadoDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cortesDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.subComponentBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.BtnCheck = new System.Windows.Forms.Button();
-            this.BtnAgregar = new System.Windows.Forms.Button();
-            this.BtnBorrar = new System.Windows.Forms.Button();
             this.arquitectdbDataSet = new arquitectSoft.arquitectdbDataSet();
             this.unidadescalculadasBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.unidades_calculadasTableAdapter = new arquitectSoft.arquitectdbDataSetTableAdapters.unidades_calculadasTableAdapter();
-            this.BtnCancelar = new System.Windows.Forms.Button();
             this.BtnSalir = new System.Windows.Forms.Button();
-            this.BtnBuscar = new System.Windows.Forms.Button();
-            this.BtnNuevo = new System.Windows.Forms.Button();
-            this.BtnEliminar = new System.Windows.Forms.Button();
-            this.BtnEditar = new System.Windows.Forms.Button();
-            this.BtnGuardar = new System.Windows.Forms.Button();
             this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
-            this.BtnDuplicar = new System.Windows.Forms.Button();
             this.GridViewComponenteEsp = new System.Windows.Forms.DataGridView();
             this.codigoDataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.descripcionDataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -77,9 +63,27 @@ namespace arquitectSoft.View
             this.cortesDataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.subComponentBindingSource1 = new System.Windows.Forms.BindingSource(this.components);
             this.bindingSource2 = new System.Windows.Forms.BindingSource(this.components);
+            this.label1 = new System.Windows.Forms.Label();
+            this.chkEspecial = new System.Windows.Forms.CheckBox();
+            this.BtnCheck = new System.Windows.Forms.Button();
             this.CmbAcabado = new System.Windows.Forms.ComboBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.panel1.SuspendLayout();
+            this.BtnDuplicar = new arquitectSoft.Generals.RJButton();
+            this.ImgListFinal = new System.Windows.Forms.ImageList(this.components);
+            this.BtnCancelar = new arquitectSoft.Generals.RJButton();
+            this.BtnBuscar = new arquitectSoft.Generals.RJButton();
+            this.BtnEliminar = new arquitectSoft.Generals.RJButton();
+            this.BtnEditar = new arquitectSoft.Generals.RJButton();
+            this.BtnGuardar = new arquitectSoft.Generals.RJButton();
+            this.BtnNuevo = new arquitectSoft.Generals.RJButton();
+            this.txtDescripcion = new arquitectSoft.Generals.TextBoxPlaceHolder();
+            this.BtnBorrar = new arquitectSoft.Generals.RJButton();
+            this.BtnAgregar = new arquitectSoft.Generals.RJButton();
+            this.txtCodigo = new arquitectSoft.Generals.TextBoxPlaceHolder();
+            this.elipseControl1 = new arquitectSoft.Generals.ElipseControl();
+            this.EliCtrlButtons = new arquitectSoft.Generals.ElipseControl();
+            this.elipseControl2 = new arquitectSoft.Generals.ElipseControl();
+            this.elipseControl3 = new arquitectSoft.Generals.ElipseControl();
+            this.elipseComponent1 = new arquitectSoft.Generals.ElipseComponent();
             ((System.ComponentModel.ISupportInitialize)(this.GridViewComponente)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.subComponentBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.arquitectdbDataSet)).BeginInit();
@@ -89,27 +93,6 @@ namespace arquitectSoft.View
             ((System.ComponentModel.ISupportInitialize)(this.subComponentBindingSource1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource2)).BeginInit();
             this.SuspendLayout();
-            // 
-            // panel1
-            // 
-            this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(158)))), ((int)(((byte)(158)))), ((int)(((byte)(158)))));
-            this.panel1.Controls.Add(this.label1);
-            this.panel1.Location = new System.Drawing.Point(1, 75);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(919, 32);
-            this.panel1.TabIndex = 6;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F);
-            this.label1.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.label1.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.label1.Location = new System.Drawing.Point(389, 2);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(120, 24);
-            this.label1.TabIndex = 6;
-            this.label1.Text = "Componente";
             // 
             // ImgLista
             // 
@@ -166,59 +149,7 @@ namespace arquitectSoft.View
             this.ImgLista.Images.SetKeyName(48, "049-tool.png");
             this.ImgLista.Images.SetKeyName(49, "050-view.png");
             this.ImgLista.Images.SetKeyName(50, "051-Close.png");
-            // 
-            // lblEtiquetaCodigo
-            // 
-            this.lblEtiquetaCodigo.AutoSize = true;
-            this.lblEtiquetaCodigo.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F);
-            this.lblEtiquetaCodigo.ForeColor = System.Drawing.SystemColors.Control;
-            this.lblEtiquetaCodigo.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.lblEtiquetaCodigo.Location = new System.Drawing.Point(20, 124);
-            this.lblEtiquetaCodigo.Name = "lblEtiquetaCodigo";
-            this.lblEtiquetaCodigo.Size = new System.Drawing.Size(55, 16);
-            this.lblEtiquetaCodigo.TabIndex = 18;
-            this.lblEtiquetaCodigo.Text = "Codigo:";
-            // 
-            // txtCodigo
-            // 
-            this.txtCodigo.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
-            this.txtCodigo.Location = new System.Drawing.Point(23, 143);
-            this.txtCodigo.Name = "txtCodigo";
-            this.txtCodigo.Size = new System.Drawing.Size(122, 20);
-            this.txtCodigo.TabIndex = 19;
-            // 
-            // txtDescripcion
-            // 
-            this.txtDescripcion.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
-            this.txtDescripcion.Location = new System.Drawing.Point(167, 143);
-            this.txtDescripcion.Name = "txtDescripcion";
-            this.txtDescripcion.Size = new System.Drawing.Size(417, 20);
-            this.txtDescripcion.TabIndex = 21;
-            // 
-            // lbletiquetaDescripcion
-            // 
-            this.lbletiquetaDescripcion.AutoSize = true;
-            this.lbletiquetaDescripcion.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F);
-            this.lbletiquetaDescripcion.ForeColor = System.Drawing.SystemColors.Control;
-            this.lbletiquetaDescripcion.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.lbletiquetaDescripcion.Location = new System.Drawing.Point(164, 124);
-            this.lbletiquetaDescripcion.Name = "lbletiquetaDescripcion";
-            this.lbletiquetaDescripcion.Size = new System.Drawing.Size(83, 16);
-            this.lbletiquetaDescripcion.TabIndex = 20;
-            this.lbletiquetaDescripcion.Text = "Descripcion:";
-            // 
-            // chkEspecial
-            // 
-            this.chkEspecial.AutoSize = true;
-            this.chkEspecial.ForeColor = System.Drawing.SystemColors.Control;
-            this.chkEspecial.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.chkEspecial.Location = new System.Drawing.Point(820, 113);
-            this.chkEspecial.Name = "chkEspecial";
-            this.chkEspecial.Size = new System.Drawing.Size(100, 17);
-            this.chkEspecial.TabIndex = 22;
-            this.chkEspecial.Text = "Vidrios/Paneles";
-            this.chkEspecial.UseVisualStyleBackColor = true;
-            this.chkEspecial.CheckedChanged += new System.EventHandler(this.chkEspecial_CheckedChanged);
+            this.ImgLista.Images.SetKeyName(51, "10.png");
             // 
             // GridViewComponente
             // 
@@ -228,6 +159,15 @@ namespace arquitectSoft.View
             this.GridViewComponente.AllowUserToResizeRows = false;
             this.GridViewComponente.AutoGenerateColumns = false;
             this.GridViewComponente.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
+            this.GridViewComponente.BackgroundColor = System.Drawing.SystemColors.ButtonHighlight;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Desktop;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle4.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.GridViewComponente.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
             this.GridViewComponente.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.GridViewComponente.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.codigoDataGridViewTextBoxColumn,
@@ -241,8 +181,18 @@ namespace arquitectSoft.View
             this.cortesDataGridViewTextBoxColumn});
             this.GridViewComponente.DataSource = this.subComponentBindingSource;
             this.GridViewComponente.Enabled = false;
-            this.GridViewComponente.Location = new System.Drawing.Point(1, 179);
+            this.GridViewComponente.EnableHeadersVisualStyles = false;
+            this.GridViewComponente.GridColor = System.Drawing.SystemColors.Control;
+            this.GridViewComponente.Location = new System.Drawing.Point(1, 143);
             this.GridViewComponente.Name = "GridViewComponente";
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle5.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.GridViewComponente.RowHeadersDefaultCellStyle = dataGridViewCellStyle5;
             this.GridViewComponente.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.GridViewComponente.Size = new System.Drawing.Size(919, 300);
             this.GridViewComponente.TabIndex = 23;
@@ -315,42 +265,6 @@ namespace arquitectSoft.View
             // 
             this.subComponentBindingSource.DataSource = typeof(arquitectSoft.Class.Sub_Component);
             // 
-            // BtnCheck
-            // 
-            this.BtnCheck.ImageList = this.ImgLista;
-            this.BtnCheck.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.BtnCheck.Location = new System.Drawing.Point(81, 121);
-            this.BtnCheck.Name = "BtnCheck";
-            this.BtnCheck.Size = new System.Drawing.Size(64, 23);
-            this.BtnCheck.TabIndex = 24;
-            this.BtnCheck.Text = "Validar";
-            this.BtnCheck.UseVisualStyleBackColor = true;
-            this.BtnCheck.Click += new System.EventHandler(this.BtnCheck_Click);
-            // 
-            // BtnAgregar
-            // 
-            this.BtnAgregar.ImageList = this.ImgLista;
-            this.BtnAgregar.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.BtnAgregar.Location = new System.Drawing.Point(3, 491);
-            this.BtnAgregar.Name = "BtnAgregar";
-            this.BtnAgregar.Size = new System.Drawing.Size(58, 23);
-            this.BtnAgregar.TabIndex = 25;
-            this.BtnAgregar.Text = "Agregar";
-            this.BtnAgregar.UseVisualStyleBackColor = true;
-            this.BtnAgregar.Click += new System.EventHandler(this.BtnAgregar_Click);
-            // 
-            // BtnBorrar
-            // 
-            this.BtnBorrar.ImageList = this.ImgLista;
-            this.BtnBorrar.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.BtnBorrar.Location = new System.Drawing.Point(66, 491);
-            this.BtnBorrar.Name = "BtnBorrar";
-            this.BtnBorrar.Size = new System.Drawing.Size(58, 23);
-            this.BtnBorrar.TabIndex = 26;
-            this.BtnBorrar.Text = "Borrar";
-            this.BtnBorrar.UseVisualStyleBackColor = true;
-            this.BtnBorrar.Click += new System.EventHandler(this.BtnBorrar_Click);
-            // 
             // arquitectdbDataSet
             // 
             this.arquitectdbDataSet.DataSetName = "arquitectdbDataSet";
@@ -365,154 +279,26 @@ namespace arquitectSoft.View
             // 
             this.unidades_calculadasTableAdapter.ClearBeforeFill = true;
             // 
-            // BtnCancelar
-            // 
-            this.BtnCancelar.BackColor = System.Drawing.SystemColors.Control;
-            this.BtnCancelar.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.BtnCancelar.Enabled = false;
-            this.BtnCancelar.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.BtnCancelar.ImageIndex = 3;
-            this.BtnCancelar.ImageList = this.ImgLista;
-            this.BtnCancelar.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.BtnCancelar.Location = new System.Drawing.Point(332, 9);
-            this.BtnCancelar.Name = "BtnCancelar";
-            this.BtnCancelar.Size = new System.Drawing.Size(58, 60);
-            this.BtnCancelar.TabIndex = 27;
-            this.BtnCancelar.Text = "Cancelar";
-            this.BtnCancelar.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.BtnCancelar.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.BtnCancelar.UseVisualStyleBackColor = false;
-            this.BtnCancelar.Click += new System.EventHandler(this.BtnCancelar_Click);
-            // 
             // BtnSalir
             // 
-            this.BtnSalir.BackColor = System.Drawing.SystemColors.Control;
+            this.BtnSalir.BackColor = System.Drawing.Color.Black;
             this.BtnSalir.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.BtnSalir.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.BtnSalir.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnSalir.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.BtnSalir.ForeColor = System.Drawing.Color.White;
             this.BtnSalir.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.BtnSalir.ImageIndex = 50;
+            this.BtnSalir.ImageIndex = 51;
             this.BtnSalir.ImageList = this.ImgLista;
             this.BtnSalir.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.BtnSalir.Location = new System.Drawing.Point(850, 9);
+            this.BtnSalir.Location = new System.Drawing.Point(845, 14);
             this.BtnSalir.Name = "BtnSalir";
-            this.BtnSalir.Size = new System.Drawing.Size(58, 60);
+            this.BtnSalir.Size = new System.Drawing.Size(72, 35);
             this.BtnSalir.TabIndex = 17;
             this.BtnSalir.Text = "Salir";
-            this.BtnSalir.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.BtnSalir.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.BtnSalir.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
             this.BtnSalir.UseVisualStyleBackColor = false;
             this.BtnSalir.Click += new System.EventHandler(this.BtnSalir_Click);
-            // 
-            // BtnBuscar
-            // 
-            this.BtnBuscar.BackColor = System.Drawing.SystemColors.Control;
-            this.BtnBuscar.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.BtnBuscar.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.BtnBuscar.ImageIndex = 49;
-            this.BtnBuscar.ImageList = this.ImgLista;
-            this.BtnBuscar.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.BtnBuscar.Location = new System.Drawing.Point(268, 9);
-            this.BtnBuscar.Name = "BtnBuscar";
-            this.BtnBuscar.Size = new System.Drawing.Size(58, 60);
-            this.BtnBuscar.TabIndex = 16;
-            this.BtnBuscar.Text = "Buscar";
-            this.BtnBuscar.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.BtnBuscar.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.BtnBuscar.UseVisualStyleBackColor = false;
-            this.BtnBuscar.Click += new System.EventHandler(this.BtnBuscar_Click);
-            // 
-            // BtnNuevo
-            // 
-            this.BtnNuevo.BackColor = System.Drawing.SystemColors.Control;
-            this.BtnNuevo.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.BtnNuevo.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.BtnNuevo.ImageIndex = 4;
-            this.BtnNuevo.ImageList = this.ImgLista;
-            this.BtnNuevo.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.BtnNuevo.Location = new System.Drawing.Point(12, 9);
-            this.BtnNuevo.Name = "BtnNuevo";
-            this.BtnNuevo.Size = new System.Drawing.Size(58, 60);
-            this.BtnNuevo.TabIndex = 15;
-            this.BtnNuevo.Text = "Nuevo";
-            this.BtnNuevo.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.BtnNuevo.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.BtnNuevo.UseVisualStyleBackColor = false;
-            this.BtnNuevo.Click += new System.EventHandler(this.BtnNuevo_Click);
-            // 
-            // BtnEliminar
-            // 
-            this.BtnEliminar.BackColor = System.Drawing.SystemColors.Control;
-            this.BtnEliminar.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.BtnEliminar.Enabled = false;
-            this.BtnEliminar.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.BtnEliminar.ImageIndex = 39;
-            this.BtnEliminar.ImageList = this.ImgLista;
-            this.BtnEliminar.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.BtnEliminar.Location = new System.Drawing.Point(204, 9);
-            this.BtnEliminar.Name = "BtnEliminar";
-            this.BtnEliminar.Size = new System.Drawing.Size(58, 60);
-            this.BtnEliminar.TabIndex = 14;
-            this.BtnEliminar.Text = "Eliminar";
-            this.BtnEliminar.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.BtnEliminar.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.BtnEliminar.UseVisualStyleBackColor = false;
-            this.BtnEliminar.Click += new System.EventHandler(this.BtnEliminar_Click);
-            // 
-            // BtnEditar
-            // 
-            this.BtnEditar.BackColor = System.Drawing.SystemColors.Control;
-            this.BtnEditar.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.BtnEditar.Enabled = false;
-            this.BtnEditar.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.BtnEditar.ImageIndex = 35;
-            this.BtnEditar.ImageList = this.ImgLista;
-            this.BtnEditar.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.BtnEditar.Location = new System.Drawing.Point(140, 9);
-            this.BtnEditar.Name = "BtnEditar";
-            this.BtnEditar.Size = new System.Drawing.Size(58, 60);
-            this.BtnEditar.TabIndex = 13;
-            this.BtnEditar.Text = "Editar";
-            this.BtnEditar.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.BtnEditar.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.BtnEditar.UseVisualStyleBackColor = false;
-            this.BtnEditar.Click += new System.EventHandler(this.BtnEditar_Click);
-            // 
-            // BtnGuardar
-            // 
-            this.BtnGuardar.BackColor = System.Drawing.SystemColors.Control;
-            this.BtnGuardar.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.BtnGuardar.Enabled = false;
-            this.BtnGuardar.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.BtnGuardar.ImageIndex = 19;
-            this.BtnGuardar.ImageList = this.ImgLista;
-            this.BtnGuardar.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.BtnGuardar.Location = new System.Drawing.Point(76, 9);
-            this.BtnGuardar.Name = "BtnGuardar";
-            this.BtnGuardar.Size = new System.Drawing.Size(58, 60);
-            this.BtnGuardar.TabIndex = 12;
-            this.BtnGuardar.Text = "Guardar";
-            this.BtnGuardar.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.BtnGuardar.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.BtnGuardar.UseVisualStyleBackColor = false;
-            this.BtnGuardar.Click += new System.EventHandler(this.BtnGuardar_Click);
-            // 
-            // BtnDuplicar
-            // 
-            this.BtnDuplicar.BackColor = System.Drawing.SystemColors.Control;
-            this.BtnDuplicar.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.BtnDuplicar.Enabled = false;
-            this.BtnDuplicar.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.BtnDuplicar.ImageIndex = 6;
-            this.BtnDuplicar.ImageList = this.ImgLista;
-            this.BtnDuplicar.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.BtnDuplicar.Location = new System.Drawing.Point(396, 9);
-            this.BtnDuplicar.Name = "BtnDuplicar";
-            this.BtnDuplicar.Size = new System.Drawing.Size(58, 60);
-            this.BtnDuplicar.TabIndex = 28;
-            this.BtnDuplicar.Text = "Duplicar";
-            this.BtnDuplicar.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.BtnDuplicar.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.BtnDuplicar.UseVisualStyleBackColor = false;
-            this.BtnDuplicar.Click += new System.EventHandler(this.BtnDuplicar_Click);
             // 
             // GridViewComponenteEsp
             // 
@@ -522,6 +308,15 @@ namespace arquitectSoft.View
             this.GridViewComponenteEsp.AllowUserToResizeRows = false;
             this.GridViewComponenteEsp.AutoGenerateColumns = false;
             this.GridViewComponenteEsp.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
+            this.GridViewComponenteEsp.BackgroundColor = System.Drawing.SystemColors.ButtonHighlight;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle6.BackColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle6.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.GridViewComponenteEsp.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle6;
             this.GridViewComponenteEsp.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.GridViewComponenteEsp.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.codigoDataGridViewTextBoxColumn1,
@@ -535,7 +330,8 @@ namespace arquitectSoft.View
             this.cortesDataGridViewTextBoxColumn1});
             this.GridViewComponenteEsp.DataSource = this.subComponentBindingSource1;
             this.GridViewComponenteEsp.Enabled = false;
-            this.GridViewComponenteEsp.Location = new System.Drawing.Point(1, 328);
+            this.GridViewComponenteEsp.EnableHeadersVisualStyles = false;
+            this.GridViewComponenteEsp.Location = new System.Drawing.Point(1, 292);
             this.GridViewComponenteEsp.Name = "GridViewComponenteEsp";
             this.GridViewComponenteEsp.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.GridViewComponenteEsp.Size = new System.Drawing.Size(919, 151);
@@ -609,63 +405,352 @@ namespace arquitectSoft.View
             // 
             this.subComponentBindingSource1.DataSource = typeof(arquitectSoft.Class.Sub_Component);
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.BackColor = System.Drawing.Color.Black;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F);
+            this.label1.ForeColor = System.Drawing.Color.White;
+            this.label1.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.label1.Location = new System.Drawing.Point(33, 52);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(120, 24);
+            this.label1.TabIndex = 49;
+            this.label1.Text = "Componente";
+            // 
+            // chkEspecial
+            // 
+            this.chkEspecial.AutoSize = true;
+            this.chkEspecial.BackColor = System.Drawing.Color.White;
+            this.chkEspecial.ForeColor = System.Drawing.Color.Black;
+            this.chkEspecial.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.chkEspecial.Location = new System.Drawing.Point(817, 89);
+            this.chkEspecial.Name = "chkEspecial";
+            this.chkEspecial.Size = new System.Drawing.Size(100, 17);
+            this.chkEspecial.TabIndex = 22;
+            this.chkEspecial.Text = "Vidrios/Paneles";
+            this.chkEspecial.UseVisualStyleBackColor = false;
+            this.chkEspecial.CheckedChanged += new System.EventHandler(this.chkEspecial_CheckedChanged);
+            // 
+            // BtnCheck
+            // 
+            this.BtnCheck.ImageList = this.ImgLista;
+            this.BtnCheck.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.BtnCheck.Location = new System.Drawing.Point(138, 108);
+            this.BtnCheck.Name = "BtnCheck";
+            this.BtnCheck.Size = new System.Drawing.Size(64, 23);
+            this.BtnCheck.TabIndex = 24;
+            this.BtnCheck.Text = "Validar";
+            this.BtnCheck.UseVisualStyleBackColor = true;
+            this.BtnCheck.Click += new System.EventHandler(this.BtnCheck_Click);
+            // 
             // CmbAcabado
             // 
             this.CmbAcabado.FormattingEnabled = true;
-            this.CmbAcabado.Location = new System.Drawing.Point(591, 142);
+            this.CmbAcabado.Location = new System.Drawing.Point(631, 107);
             this.CmbAcabado.Name = "CmbAcabado";
-            this.CmbAcabado.Size = new System.Drawing.Size(317, 21);
+            this.CmbAcabado.Size = new System.Drawing.Size(277, 21);
             this.CmbAcabado.TabIndex = 44;
             // 
-            // label2
+            // BtnDuplicar
             // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F);
-            this.label2.ForeColor = System.Drawing.SystemColors.Control;
-            this.label2.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.label2.Location = new System.Drawing.Point(588, 123);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(67, 16);
-            this.label2.TabIndex = 43;
-            this.label2.Text = "Acabado:";
+            this.BtnDuplicar.BackColor = System.Drawing.Color.DimGray;
+            this.BtnDuplicar.BackgroundColor = System.Drawing.Color.DimGray;
+            this.BtnDuplicar.BorderColor = System.Drawing.Color.Black;
+            this.BtnDuplicar.BorderRadius = 20;
+            this.BtnDuplicar.BorderSize = 0;
+            this.BtnDuplicar.FlatAppearance.BorderSize = 0;
+            this.BtnDuplicar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnDuplicar.ForeColor = System.Drawing.Color.White;
+            this.BtnDuplicar.ImageIndex = 5;
+            this.BtnDuplicar.ImageList = this.ImgListFinal;
+            this.BtnDuplicar.Location = new System.Drawing.Point(299, 13);
+            this.BtnDuplicar.Name = "BtnDuplicar";
+            this.BtnDuplicar.Size = new System.Drawing.Size(42, 36);
+            this.BtnDuplicar.TabIndex = 62;
+            this.BtnDuplicar.TextColor = System.Drawing.Color.White;
+            this.BtnDuplicar.UseVisualStyleBackColor = false;
+            this.BtnDuplicar.Click += new System.EventHandler(this.BtnDuplicar_Click);
+            // 
+            // ImgListFinal
+            // 
+            this.ImgListFinal.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("ImgListFinal.ImageStream")));
+            this.ImgListFinal.TransparentColor = System.Drawing.Color.Transparent;
+            this.ImgListFinal.Images.SetKeyName(0, "01.png");
+            this.ImgListFinal.Images.SetKeyName(1, "02.png");
+            this.ImgListFinal.Images.SetKeyName(2, "03.png");
+            this.ImgListFinal.Images.SetKeyName(3, "05.png");
+            this.ImgListFinal.Images.SetKeyName(4, "06.png");
+            this.ImgListFinal.Images.SetKeyName(5, "07.png");
+            this.ImgListFinal.Images.SetKeyName(6, "09.png");
+            this.ImgListFinal.Images.SetKeyName(7, "10.png");
+            this.ImgListFinal.Images.SetKeyName(8, "04.png");
+            // 
+            // BtnCancelar
+            // 
+            this.BtnCancelar.BackColor = System.Drawing.Color.DimGray;
+            this.BtnCancelar.BackgroundColor = System.Drawing.Color.DimGray;
+            this.BtnCancelar.BorderColor = System.Drawing.Color.Black;
+            this.BtnCancelar.BorderRadius = 20;
+            this.BtnCancelar.BorderSize = 0;
+            this.BtnCancelar.FlatAppearance.BorderSize = 0;
+            this.BtnCancelar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnCancelar.ForeColor = System.Drawing.Color.White;
+            this.BtnCancelar.ImageIndex = 4;
+            this.BtnCancelar.ImageList = this.ImgListFinal;
+            this.BtnCancelar.Location = new System.Drawing.Point(251, 13);
+            this.BtnCancelar.Name = "BtnCancelar";
+            this.BtnCancelar.Size = new System.Drawing.Size(42, 36);
+            this.BtnCancelar.TabIndex = 61;
+            this.BtnCancelar.TextColor = System.Drawing.Color.White;
+            this.BtnCancelar.UseVisualStyleBackColor = false;
+            this.BtnCancelar.Click += new System.EventHandler(this.BtnCancelar_Click);
+            // 
+            // BtnBuscar
+            // 
+            this.BtnBuscar.BackColor = System.Drawing.Color.DimGray;
+            this.BtnBuscar.BackgroundColor = System.Drawing.Color.DimGray;
+            this.BtnBuscar.BorderColor = System.Drawing.Color.Black;
+            this.BtnBuscar.BorderRadius = 20;
+            this.BtnBuscar.BorderSize = 0;
+            this.BtnBuscar.FlatAppearance.BorderSize = 0;
+            this.BtnBuscar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnBuscar.ForeColor = System.Drawing.Color.White;
+            this.BtnBuscar.ImageIndex = 3;
+            this.BtnBuscar.ImageList = this.ImgListFinal;
+            this.BtnBuscar.Location = new System.Drawing.Point(203, 12);
+            this.BtnBuscar.Name = "BtnBuscar";
+            this.BtnBuscar.Size = new System.Drawing.Size(42, 36);
+            this.BtnBuscar.TabIndex = 60;
+            this.BtnBuscar.TextColor = System.Drawing.Color.White;
+            this.BtnBuscar.UseVisualStyleBackColor = false;
+            this.BtnBuscar.Click += new System.EventHandler(this.BtnBuscar_Click);
+            // 
+            // BtnEliminar
+            // 
+            this.BtnEliminar.BackColor = System.Drawing.Color.DimGray;
+            this.BtnEliminar.BackgroundColor = System.Drawing.Color.DimGray;
+            this.BtnEliminar.BorderColor = System.Drawing.Color.Black;
+            this.BtnEliminar.BorderRadius = 20;
+            this.BtnEliminar.BorderSize = 0;
+            this.BtnEliminar.FlatAppearance.BorderSize = 0;
+            this.BtnEliminar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnEliminar.ForeColor = System.Drawing.Color.White;
+            this.BtnEliminar.ImageIndex = 8;
+            this.BtnEliminar.ImageList = this.ImgListFinal;
+            this.BtnEliminar.Location = new System.Drawing.Point(156, 13);
+            this.BtnEliminar.Name = "BtnEliminar";
+            this.BtnEliminar.Size = new System.Drawing.Size(42, 36);
+            this.BtnEliminar.TabIndex = 59;
+            this.BtnEliminar.TextColor = System.Drawing.Color.White;
+            this.BtnEliminar.UseVisualStyleBackColor = false;
+            this.BtnEliminar.Click += new System.EventHandler(this.BtnEliminar_Click);
+            // 
+            // BtnEditar
+            // 
+            this.BtnEditar.BackColor = System.Drawing.Color.DimGray;
+            this.BtnEditar.BackgroundColor = System.Drawing.Color.DimGray;
+            this.BtnEditar.BorderColor = System.Drawing.Color.Black;
+            this.BtnEditar.BorderRadius = 20;
+            this.BtnEditar.BorderSize = 0;
+            this.BtnEditar.FlatAppearance.BorderSize = 0;
+            this.BtnEditar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnEditar.ForeColor = System.Drawing.Color.White;
+            this.BtnEditar.ImageIndex = 2;
+            this.BtnEditar.ImageList = this.ImgListFinal;
+            this.BtnEditar.Location = new System.Drawing.Point(108, 13);
+            this.BtnEditar.Name = "BtnEditar";
+            this.BtnEditar.Size = new System.Drawing.Size(42, 36);
+            this.BtnEditar.TabIndex = 58;
+            this.BtnEditar.TextColor = System.Drawing.Color.White;
+            this.BtnEditar.UseVisualStyleBackColor = false;
+            this.BtnEditar.Click += new System.EventHandler(this.BtnEditar_Click);
+            // 
+            // BtnGuardar
+            // 
+            this.BtnGuardar.BackColor = System.Drawing.Color.DimGray;
+            this.BtnGuardar.BackgroundColor = System.Drawing.Color.DimGray;
+            this.BtnGuardar.BorderColor = System.Drawing.Color.Black;
+            this.BtnGuardar.BorderRadius = 20;
+            this.BtnGuardar.BorderSize = 0;
+            this.BtnGuardar.FlatAppearance.BorderSize = 0;
+            this.BtnGuardar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnGuardar.ForeColor = System.Drawing.Color.White;
+            this.BtnGuardar.ImageIndex = 1;
+            this.BtnGuardar.ImageList = this.ImgListFinal;
+            this.BtnGuardar.Location = new System.Drawing.Point(60, 12);
+            this.BtnGuardar.Name = "BtnGuardar";
+            this.BtnGuardar.Size = new System.Drawing.Size(42, 36);
+            this.BtnGuardar.TabIndex = 57;
+            this.BtnGuardar.TextColor = System.Drawing.Color.White;
+            this.BtnGuardar.UseVisualStyleBackColor = false;
+            this.BtnGuardar.Click += new System.EventHandler(this.BtnGuardar_Click);
+            // 
+            // BtnNuevo
+            // 
+            this.BtnNuevo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(102)))), ((int)(((byte)(102)))), ((int)(((byte)(102)))));
+            this.BtnNuevo.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(102)))), ((int)(((byte)(102)))), ((int)(((byte)(102)))));
+            this.BtnNuevo.BorderColor = System.Drawing.Color.Black;
+            this.BtnNuevo.BorderRadius = 20;
+            this.BtnNuevo.BorderSize = 0;
+            this.BtnNuevo.FlatAppearance.BorderSize = 0;
+            this.BtnNuevo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnNuevo.ForeColor = System.Drawing.Color.White;
+            this.BtnNuevo.ImageIndex = 0;
+            this.BtnNuevo.ImageList = this.ImgListFinal;
+            this.BtnNuevo.Location = new System.Drawing.Point(12, 13);
+            this.BtnNuevo.Name = "BtnNuevo";
+            this.BtnNuevo.Size = new System.Drawing.Size(42, 36);
+            this.BtnNuevo.TabIndex = 56;
+            this.BtnNuevo.TextColor = System.Drawing.Color.White;
+            this.BtnNuevo.UseVisualStyleBackColor = false;
+            this.BtnNuevo.Click += new System.EventHandler(this.BtnNuevo_Click);
+            // 
+            // txtDescripcion
+            // 
+            this.txtDescripcion.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic);
+            this.txtDescripcion.ForeColor = System.Drawing.Color.Gray;
+            this.txtDescripcion.Location = new System.Drawing.Point(208, 108);
+            this.txtDescripcion.Name = "txtDescripcion";
+            this.txtDescripcion.PlaceHolderText = "Descripción";
+            this.txtDescripcion.Size = new System.Drawing.Size(417, 20);
+            this.txtDescripcion.TabIndex = 55;
+            this.txtDescripcion.Text = "Descripción";
+            // 
+            // BtnBorrar
+            // 
+            this.BtnBorrar.BackColor = System.Drawing.SystemColors.Control;
+            this.BtnBorrar.BackgroundColor = System.Drawing.SystemColors.Control;
+            this.BtnBorrar.BorderColor = System.Drawing.Color.Black;
+            this.BtnBorrar.BorderRadius = 10;
+            this.BtnBorrar.BorderSize = 0;
+            this.BtnBorrar.FlatAppearance.BorderSize = 0;
+            this.BtnBorrar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnBorrar.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.BtnBorrar.ForeColor = System.Drawing.Color.DimGray;
+            this.BtnBorrar.Location = new System.Drawing.Point(109, 482);
+            this.BtnBorrar.Name = "BtnBorrar";
+            this.BtnBorrar.Size = new System.Drawing.Size(91, 22);
+            this.BtnBorrar.TabIndex = 53;
+            this.BtnBorrar.Text = "Borrar";
+            this.BtnBorrar.TextColor = System.Drawing.Color.DimGray;
+            this.BtnBorrar.UseVisualStyleBackColor = false;
+            this.BtnBorrar.Click += new System.EventHandler(this.BtnBorrar_Click);
+            // 
+            // BtnAgregar
+            // 
+            this.BtnAgregar.BackColor = System.Drawing.Color.DimGray;
+            this.BtnAgregar.BackgroundColor = System.Drawing.Color.DimGray;
+            this.BtnAgregar.BorderColor = System.Drawing.Color.Black;
+            this.BtnAgregar.BorderRadius = 10;
+            this.BtnAgregar.BorderSize = 0;
+            this.BtnAgregar.FlatAppearance.BorderSize = 0;
+            this.BtnAgregar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnAgregar.ForeColor = System.Drawing.Color.White;
+            this.BtnAgregar.Location = new System.Drawing.Point(12, 482);
+            this.BtnAgregar.Name = "BtnAgregar";
+            this.BtnAgregar.Size = new System.Drawing.Size(91, 22);
+            this.BtnAgregar.TabIndex = 52;
+            this.BtnAgregar.Text = "Agregar";
+            this.BtnAgregar.TextColor = System.Drawing.Color.White;
+            this.BtnAgregar.UseCompatibleTextRendering = true;
+            this.BtnAgregar.UseVisualStyleBackColor = false;
+            this.BtnAgregar.Click += new System.EventHandler(this.BtnAgregar_Click);
+            // 
+            // txtCodigo
+            // 
+            this.txtCodigo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtCodigo.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic);
+            this.txtCodigo.ForeColor = System.Drawing.Color.Gray;
+            this.txtCodigo.Location = new System.Drawing.Point(12, 108);
+            this.txtCodigo.Name = "txtCodigo";
+            this.txtCodigo.PlaceHolderText = "Código";
+            this.txtCodigo.Size = new System.Drawing.Size(120, 20);
+            this.txtCodigo.TabIndex = 51;
+            this.txtCodigo.Text = "Código";
+            // 
+            // elipseControl1
+            // 
+            this.elipseControl1.BackColor = System.Drawing.Color.Black;
+            this.elipseControl1.CornerRadius = 15;
+            this.elipseControl1.Location = new System.Drawing.Point(23, 50);
+            this.elipseControl1.Name = "elipseControl1";
+            this.elipseControl1.Size = new System.Drawing.Size(871, 32);
+            this.elipseControl1.TabIndex = 48;
+            this.elipseControl1.Text = "elipseControl1";
+            // 
+            // EliCtrlButtons
+            // 
+            this.EliCtrlButtons.BackColor = System.Drawing.Color.Black;
+            this.EliCtrlButtons.CornerRadius = 15;
+            this.EliCtrlButtons.Location = new System.Drawing.Point(0, -1);
+            this.EliCtrlButtons.Name = "EliCtrlButtons";
+            this.EliCtrlButtons.Size = new System.Drawing.Size(921, 61);
+            this.EliCtrlButtons.TabIndex = 47;
+            this.EliCtrlButtons.Text = "elipseControl1";
+            this.EliCtrlButtons.MouseDown += new System.Windows.Forms.MouseEventHandler(this.EliCtrlButtons_MouseDown);
+            // 
+            // elipseControl2
+            // 
+            this.elipseControl2.BackColor = System.Drawing.Color.White;
+            this.elipseControl2.CornerRadius = 15;
+            this.elipseControl2.Location = new System.Drawing.Point(-1, 67);
+            this.elipseControl2.Name = "elipseControl2";
+            this.elipseControl2.Size = new System.Drawing.Size(921, 70);
+            this.elipseControl2.TabIndex = 50;
+            this.elipseControl2.Text = "elipseControl1";
+            // 
+            // elipseControl3
+            // 
+            this.elipseControl3.BackColor = System.Drawing.Color.Black;
+            this.elipseControl3.CornerRadius = 15;
+            this.elipseControl3.Location = new System.Drawing.Point(-1, 465);
+            this.elipseControl3.Name = "elipseControl3";
+            this.elipseControl3.Size = new System.Drawing.Size(921, 61);
+            this.elipseControl3.TabIndex = 54;
+            this.elipseControl3.Text = "elipseControl1";
+            // 
+            // elipseComponent1
+            // 
+            this.elipseComponent1.CornerRadius = 15;
+            this.elipseComponent1.TargetControl = this;
             // 
             // FrmComponente
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(70)))), ((int)(((byte)(86)))));
+            this.BackColor = System.Drawing.Color.DarkGray;
             this.ClientSize = new System.Drawing.Size(920, 526);
             this.ControlBox = false;
-            this.Controls.Add(this.CmbAcabado);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.GridViewComponenteEsp);
-            this.Controls.Add(this.panel1);
-            this.Controls.Add(this.chkEspecial);
             this.Controls.Add(this.BtnDuplicar);
             this.Controls.Add(this.BtnCancelar);
-            this.Controls.Add(this.BtnBorrar);
-            this.Controls.Add(this.BtnAgregar);
-            this.Controls.Add(this.BtnCheck);
-            this.Controls.Add(this.GridViewComponente);
-            this.Controls.Add(this.txtDescripcion);
-            this.Controls.Add(this.lbletiquetaDescripcion);
-            this.Controls.Add(this.txtCodigo);
-            this.Controls.Add(this.lblEtiquetaCodigo);
-            this.Controls.Add(this.BtnSalir);
             this.Controls.Add(this.BtnBuscar);
-            this.Controls.Add(this.BtnNuevo);
             this.Controls.Add(this.BtnEliminar);
             this.Controls.Add(this.BtnEditar);
             this.Controls.Add(this.BtnGuardar);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Controls.Add(this.BtnNuevo);
+            this.Controls.Add(this.txtDescripcion);
+            this.Controls.Add(this.BtnBorrar);
+            this.Controls.Add(this.BtnAgregar);
+            this.Controls.Add(this.txtCodigo);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.CmbAcabado);
+            this.Controls.Add(this.BtnCheck);
+            this.Controls.Add(this.elipseControl1);
+            this.Controls.Add(this.chkEspecial);
+            this.Controls.Add(this.GridViewComponenteEsp);
+            this.Controls.Add(this.GridViewComponente);
+            this.Controls.Add(this.BtnSalir);
+            this.Controls.Add(this.EliCtrlButtons);
+            this.Controls.Add(this.elipseControl2);
+            this.Controls.Add(this.elipseControl3);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FrmComponente";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Componentes";
             this.Load += new System.EventHandler(this.FrmComponente_Load);
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.GridViewComponente)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.subComponentBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.arquitectdbDataSet)).EndInit();
@@ -680,32 +765,15 @@ namespace arquitectSoft.View
         }
 
         #endregion
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button BtnGuardar;
         private System.Windows.Forms.ImageList ImgLista;
-        private System.Windows.Forms.Button BtnEditar;
-        private System.Windows.Forms.Button BtnEliminar;
-        private System.Windows.Forms.Button BtnNuevo;
-        private System.Windows.Forms.Button BtnBuscar;
         private System.Windows.Forms.Button BtnSalir;
-        private System.Windows.Forms.Label lblEtiquetaCodigo;
-        private System.Windows.Forms.TextBox txtCodigo;
-        private System.Windows.Forms.TextBox txtDescripcion;
-        private System.Windows.Forms.Label lbletiquetaDescripcion;
-        private System.Windows.Forms.CheckBox chkEspecial;
         private System.Windows.Forms.DataGridView GridViewComponente;
-        private System.Windows.Forms.Button BtnCheck;
-        private System.Windows.Forms.Button BtnAgregar;
-        private System.Windows.Forms.Button BtnBorrar;
-        private System.Windows.Forms.Button BtnCancelar;
         private arquitectdbDataSet arquitectdbDataSet;
         private System.Windows.Forms.BindingSource unidadescalculadasBindingSource;
         private arquitectdbDataSetTableAdapters.unidades_calculadasTableAdapter unidades_calculadasTableAdapter;
         private System.Windows.Forms.BindingSource bindingSource1;
         private System.Windows.Forms.BindingSource subComponentBindingSource;
         private System.Windows.Forms.BindingSource subComponentBindingSource1;
-        private System.Windows.Forms.Button BtnDuplicar;
         private System.Windows.Forms.DataGridViewTextBoxColumn codigoDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn descripcionDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn cxdefectoDataGridViewTextBoxColumn;
@@ -726,7 +794,26 @@ namespace arquitectSoft.View
         private System.Windows.Forms.DataGridViewTextBoxColumn idSubcomponenteDataGridViewTextBoxColumn1;
         private System.Windows.Forms.DataGridViewTextBoxColumn elevadoDataGridViewTextBoxColumn1;
         private System.Windows.Forms.DataGridViewTextBoxColumn cortesDataGridViewTextBoxColumn1;
+        private Generals.ElipseControl EliCtrlButtons;
+        private Generals.ElipseComponent elipseComponent1;
+        private Generals.ElipseControl elipseControl1;
+        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ComboBox CmbAcabado;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Button BtnCheck;
+        private System.Windows.Forms.CheckBox chkEspecial;
+        private Generals.ElipseControl elipseControl2;
+        private Generals.TextBoxPlaceHolder txtCodigo;
+        private Generals.RJButton BtnAgregar;
+        private Generals.ElipseControl elipseControl3;
+        private Generals.RJButton BtnBorrar;
+        private Generals.TextBoxPlaceHolder txtDescripcion;
+        private Generals.RJButton BtnNuevo;
+        private Generals.RJButton BtnDuplicar;
+        private Generals.RJButton BtnCancelar;
+        private Generals.RJButton BtnBuscar;
+        private Generals.RJButton BtnEliminar;
+        private Generals.RJButton BtnEditar;
+        private Generals.RJButton BtnGuardar;
+        private System.Windows.Forms.ImageList ImgListFinal;
     }
 }

@@ -5,7 +5,9 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -15,6 +17,13 @@ namespace arquitectSoft.View
 {
     public partial class FrmComponente : Form
     {
+        [DllImport("user32.DLL", EntryPoint = "ReleaseCapture")]
+        private extern static void ReleaseCapture();
+
+        [DllImport("user32.DLL", EntryPoint = "SendMessage")]
+        private extern static void SendMessage(System.IntPtr hwnd, int wMsg, int wParam, int lParam);
+
+
         public FrmComponente()
         {
             InitializeComponent();
@@ -84,7 +93,7 @@ namespace arquitectSoft.View
                     }
                 }
             }
-           
+
 
             if (SwSave == true)
             {
@@ -96,7 +105,7 @@ namespace arquitectSoft.View
                 MessageBox.Show(fail, "Mensaje Alerta", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
 
-          
+
 
         }
         private void BtnEditar_Click(object sender, EventArgs e)
@@ -123,7 +132,7 @@ namespace arquitectSoft.View
             {
 
                 Dto.ComponenteDto dto = new Dto.ComponenteDto();
-                string resul = dto.ExistComponent(txtCodigo.Text, txtDescripcion.Text,CmbAcabado.SelectedValue.ToString());
+                string resul = dto.ExistComponent(txtCodigo.Text, txtDescripcion.Text, CmbAcabado.SelectedValue.ToString());
 
                 resul = dto.DeleteComponent(Int32.Parse(resul));
 
@@ -149,7 +158,7 @@ namespace arquitectSoft.View
             txtCodigo.Text = bsc.ReturnItem1;
             txtDescripcion.Text = bsc.ReturnItem2;
             chkEspecial.Checked = bsc.ReturnItem3 == "1" ? true : false;
-            
+
 
             //Obtener detalle componente generico
             DataTable dt = dto.GetComponentDetalle(bsc.ReturnItem0);
@@ -164,7 +173,7 @@ namespace arquitectSoft.View
                 CargarDataDetalleEspecial(dtespecial);
             }
 
-            CmbAcabado.SelectedValue = bsc.ReturnItem4 == ""? "0": bsc.ReturnItem4;
+            CmbAcabado.SelectedValue = bsc.ReturnItem4 == "" ? "0" : bsc.ReturnItem4;
 
             if (bsc.ReturnItem4 != "" && CmbAcabado.SelectedValue == null)
             {
@@ -180,7 +189,7 @@ namespace arquitectSoft.View
             BtnEditar.Enabled = true;
             BtnEliminar.Enabled = true;
             BtnDuplicar.Enabled = true;
-            
+
 
 
         }
@@ -201,52 +210,7 @@ namespace arquitectSoft.View
             resul = (resul != "0") ? "Componente ya Existe" : "Componente Disponible para Guardar";
             MessageBox.Show(resul, "Mensaje Alerta", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
-        private void BtnAgregar_Click(object sender, EventArgs e)
-        {
 
-            FrmBuscar bsc = new FrmBuscar();
-            bsc.Consulta = "SubComp";
-            bsc.ShowDialog();
-
-
-            if (bsc.ReturnItem0 == null && bsc.ReturnItem4 == null)
-            {
-                return;
-            }
-            
-
-            if (bsc.ReturnItem0 != null && bsc.ReturnItem4 == "0")
-            {
-                bindingSource1.Add(new Sub_Component(bsc.ReturnItem1, bsc.ReturnItem2, 1, 30, "", false, Int32.Parse(bsc.ReturnItem0), 0, 0, false));
-
-                GridViewComponente.DataSource = bindingSource1;
-
-                string valorinicial = condicionAcabado == "" ? "'" : ",'";
-                condicionAcabado += valorinicial + bsc.ReturnItem1.ToString().Split('-')[1].Trim() + "'";
-      
-                GetAcabadoSelect(condicionAcabado);
-            }
-            else
-            {
-                if (bsc.ReturnItem0 != null &&  chkEspecial.Checked)
-                {
-                    bindingSource2.Add(new Sub_ComponentEspecial(bsc.ReturnItem1, bsc.ReturnItem2, "",1,1, Int32.Parse(bsc.ReturnItem0)));
-
-                    GridViewComponenteEsp.DataSource = bindingSource2;
-
-                    string valorinicial = condicionAcabado == "" ? "'" : ",'";
-                    condicionAcabado += valorinicial + bsc.ReturnItem1.ToString().Split('-')[1].Trim() + "'";
-
-                    GetAcabadoSelect(condicionAcabado);
-
-                }
-                else
-                {
-                    MessageBox.Show("Debe Primero Identificar que es un Componente Especial!!", "Mensaje Alerta", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-               
-            }
-        }
         private void BtnBorrar_Click(object sender, EventArgs e)
         {
             if (GridViewComponente.Rows.Count == 0 && GridViewComponenteEsp.Rows.Count == 0)
@@ -340,7 +304,7 @@ namespace arquitectSoft.View
             GridViewComponenteEsp.Columns.Add(DGV_Handler.CreateColumnasComboBox());
             GridViewComponenteEsp.Columns.Add(DGV_Handler.CreateTextBox("Cxdefecto", "Cx. efecto", "Cxdefecto", true));
             GridViewComponenteEsp.Columns.Add(DGV_Handler.CreateTextBox("CAdicional", "C. Adicional", "CAdicional", true));
-            
+
 
             GridViewComponente.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             GridViewComponente.Columns[0].ReadOnly = true;
@@ -390,7 +354,7 @@ namespace arquitectSoft.View
             BtnEliminar.Enabled = false;
             BtnBuscar.Enabled = false;
             BtnDuplicar.Enabled = false;
-     
+
         }
         private void BloquearCancelar()
         {
@@ -451,7 +415,7 @@ namespace arquitectSoft.View
                 Sub_ComponentEspecial[] SbarrayEsp = new Sub_ComponentEspecial[GridViewComponenteEsp.RowCount];
                 if (chkEspecial.Checked)
                 {
-                   
+
                     foreach (DataGridViewRow row in GridViewComponenteEsp.Rows)
                     {
                         int id = (int)row.Cells["IdSubcomponente"].Value;
@@ -461,7 +425,7 @@ namespace arquitectSoft.View
                         int Cxdefecto = (int)row.Cells["Cxdefecto"].Value;
                         int CAdicional = (int)row.Cells["CAdicional"].Value;
 
-                        Sub_ComponentEspecial subEsp = new Sub_ComponentEspecial(codigo, descripcion, columna, Cxdefecto, CAdicional,  id);
+                        Sub_ComponentEspecial subEsp = new Sub_ComponentEspecial(codigo, descripcion, columna, Cxdefecto, CAdicional, id);
 
                         SbarrayEsp[row.Index] = subEsp;
                     }
@@ -480,8 +444,10 @@ namespace arquitectSoft.View
         }
         private void ClearComponent()
         {
-            txtCodigo.Text = "";
-            txtDescripcion.Text = "";
+            txtCodigo.Text = String.Empty;
+            txtCodigo.PlaceHolderText = "Código";
+            txtDescripcion.Text = String.Empty;
+            txtDescripcion.PlaceHolderText = "Descripción";
             chkEspecial.Checked = false;
             GridViewComponente.DataSource = "";
 
@@ -498,7 +464,7 @@ namespace arquitectSoft.View
                 bool extracomp = extra == 1 ? true : false;
                 bindingSource1.Add(new Sub_Component(row["Codigo"].ToString(), row["Descripcion"].ToString(), (int)row["Cantidad_Default"], (int)row["Cantidad_Adicional"], row["Id_Unidad_Calculada"].ToString(), adrecre, (int)row["Id_Subcomponente"], (int)row["elevado"], cort, extracomp));
 
-             
+
                 string valorinicial = condicionAcabado == "" ? "'" : ",'";
                 condicionAcabado += valorinicial + row["Codigo"].ToString().Split('-')[1] + "'";
             }
@@ -554,7 +520,7 @@ namespace arquitectSoft.View
                     {
                         DataGridViewComboBoxCell comboBoxCell = (DataGridViewComboBoxCell)(row.Cells[3]);
                         comboBoxCell.Value = uni;
-                    }                   
+                    }
                 }
             }
 
@@ -615,7 +581,56 @@ namespace arquitectSoft.View
             HabilitarEspecial(this.chkEspecial.Checked);
         }
 
+        private void BtnAgregar_Click(object sender, EventArgs e)
+        {
+            FrmBuscar bsc = new FrmBuscar();
+            bsc.Consulta = "SubComp";
+            bsc.ShowDialog();
 
 
+            if (bsc.ReturnItem0 == null && bsc.ReturnItem4 == null)
+            {
+                return;
+            }
+
+
+            if (bsc.ReturnItem0 != null && bsc.ReturnItem4 == "0")
+            {
+                bindingSource1.Add(new Sub_Component(bsc.ReturnItem1, bsc.ReturnItem2, 1, 30, "", false, Int32.Parse(bsc.ReturnItem0), 0, 0, false));
+
+                GridViewComponente.DataSource = bindingSource1;
+
+                string valorinicial = condicionAcabado == "" ? "'" : ",'";
+                condicionAcabado += valorinicial + bsc.ReturnItem1.ToString().Split('-')[1].Trim() + "'";
+
+                GetAcabadoSelect(condicionAcabado);
+            }
+            else
+            {
+                if (bsc.ReturnItem0 != null && chkEspecial.Checked)
+                {
+                    bindingSource2.Add(new Sub_ComponentEspecial(bsc.ReturnItem1, bsc.ReturnItem2, "", 1, 1, Int32.Parse(bsc.ReturnItem0)));
+
+                    GridViewComponenteEsp.DataSource = bindingSource2;
+
+                    string valorinicial = condicionAcabado == "" ? "'" : ",'";
+                    condicionAcabado += valorinicial + bsc.ReturnItem1.ToString().Split('-')[1].Trim() + "'";
+
+                    GetAcabadoSelect(condicionAcabado);
+
+                }
+                else
+                {
+                    MessageBox.Show("Debe Primero Identificar que es un Componente Especial!!", "Mensaje Alerta", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+
+            }
+        }
+
+        private void EliCtrlButtons_MouseDown(object sender, MouseEventArgs e)
+        {
+            ReleaseCapture();
+            SendMessage(this.Handle, 0x112, 0xf012, 0);
+        }
     }
 }

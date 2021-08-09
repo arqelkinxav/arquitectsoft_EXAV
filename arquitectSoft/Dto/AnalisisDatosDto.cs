@@ -517,7 +517,7 @@ namespace arquitectSoft.Dto
                 data[1] = rowResult[1].ToString();
                 data[2] = rowResult[2].ToString();
                 data[3] = rowResult[3].ToString();
-                data[4] = Int32.Parse(rowResult[4].ToString());
+                data[4] = float.Parse(rowResult[4].ToString());
                 data[5] = Int32.Parse(rowResult[5].ToString());
                 data[6] = float.Parse(rowResult[6].ToString());
                 data[7] = rowResult[7].ToString();
@@ -536,7 +536,7 @@ namespace arquitectSoft.Dto
             DataTable dtModelPerfiles = new DataTable();
             listColumnsComp.ForEach(delegate (string s)
             {
-                dtModelPerfiles.Columns.Add(s, s == "cantidad"? typeof(Int32): typeof(string));
+                dtModelPerfiles.Columns.Add(s, s == "cantidad"? typeof(float): typeof(string));
             });
 
             listComp.ForEach(delegate (List<object[]> list1)

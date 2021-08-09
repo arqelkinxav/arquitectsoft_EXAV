@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -13,11 +14,25 @@ namespace arquitectSoft
 {
     public partial class FrmMDIPrincipal : Form
     {
+
         private int childFormNumber = 0;
 
         public FrmMDIPrincipal()
         {
             InitializeComponent();
+        }
+
+        private class MyRenderer : ToolStripProfessionalRenderer
+        {
+            protected override void OnRenderMenuItemBackground(ToolStripItemRenderEventArgs e)
+            {
+                Rectangle rc = new Rectangle(Point.Empty, e.Item.Size);
+                Color c = e.Item.Selected ? Color.White : Color.Black;
+                
+                using (SolidBrush brush = new SolidBrush(c))                    
+                    e.Graphics.FillRectangle(brush, rc);
+
+            }
         }
 
         private void ShowNewForm(object sender, EventArgs e)
@@ -42,6 +57,8 @@ namespace arquitectSoft
 
             Controls.OfType<MdiClient>().FirstOrDefault().BackColor = Color.FromArgb(176, 196, 222);
             Mdi_nameConnect.Text = Mdi_nameConnect.Text + " " + Generals.Global.NameConnect.ToUpper();
+            this.BackgroundImage = Properties.Resources.Wallpaper_sin_logo;
+            
         }
 
         private void salirToolStripMenuItem_Click(object sender, EventArgs e)
@@ -138,5 +155,134 @@ namespace arquitectSoft
             FrmLogin fl = new FrmLogin();
             fl.Show();
         }
+
+        #region Administracion
+            private void TMSItem_Administracion_MouseEnter(object sender, EventArgs e)
+            {
+                ((ToolStripMenuItem)sender).ForeColor = Color.Black; //new color
+            }
+
+            private void TMSItem_Administracion_MouseLeave(object sender, EventArgs e)
+            {
+                ((ToolStripMenuItem)sender).ForeColor = Color.White; //new color
+            }
+
+            private void TMSItem_componente_MouseEnter(object sender, EventArgs e)
+            {
+                ((ToolStripMenuItem)sender).ForeColor = Color.Black; //new color
+            }
+
+            private void TMSItem_componente_MouseLeave(object sender, EventArgs e)
+            {
+                ((ToolStripMenuItem)sender).ForeColor = Color.White; //new color
+            }
+            private void TMSItem_subComponente_MouseEnter(object sender, EventArgs e)
+            {
+                ((ToolStripMenuItem)sender).ForeColor = Color.Black; //new color
+            }
+
+            private void TMSItem_subComponente_MouseLeave(object sender, EventArgs e)
+            {
+                ((ToolStripMenuItem)sender).ForeColor = Color.White; //new color
+            }
+
+            private void TMSItem_configuracion_MouseEnter(object sender, EventArgs e)
+            {
+                ((ToolStripMenuItem)sender).ForeColor = Color.Black; //new color
+            }
+
+            private void TMSItem_configuracion_MouseLeave(object sender, EventArgs e)
+            {
+
+                ((ToolStripMenuItem)sender).ForeColor = Color.White; //new color
+
+            }
+
+            private void TMSItem_acabados_MouseEnter(object sender, EventArgs e)
+            {
+                ToolStripMenuItem MyMenuItem = (ToolStripMenuItem)sender;
+                ToolStripMenuItem parent = (ToolStripMenuItem)MyMenuItem.OwnerItem;
+
+                parent.ForeColor = Color.Black; //new color
+                ((ToolStripMenuItem)sender).ForeColor = Color.Black; //new color
+            }
+
+            private void TMSItem_acabados_MouseLeave(object sender, EventArgs e)
+            {
+                ((ToolStripMenuItem)sender).ForeColor = Color.White; //new color
+            }
+            private void TMSItem_cortes_MouseEnter(object sender, EventArgs e)
+            {
+                ToolStripMenuItem MyMenuItem = (ToolStripMenuItem)sender;
+                ToolStripMenuItem parent = (ToolStripMenuItem)MyMenuItem.OwnerItem;
+
+                parent.ForeColor = Color.Black; //new color
+                ((ToolStripMenuItem)sender).ForeColor = Color.Black; //new color
+            }
+
+            private void TMSItem_cortes_MouseLeave(object sender, EventArgs e)
+            {
+                ((ToolStripMenuItem)sender).ForeColor = Color.White; //new color
+            }
+
+            private void unidadDeMedidaToolStripMenuItem_MouseEnter(object sender, EventArgs e)
+            {
+                ToolStripMenuItem MyMenuItem = (ToolStripMenuItem)sender;
+                ToolStripMenuItem parent = (ToolStripMenuItem)MyMenuItem.OwnerItem;
+
+                parent.ForeColor = Color.Black; //new color
+                ((ToolStripMenuItem)sender).ForeColor = Color.Black; //new color
+            }
+
+            private void unidadDeMedidaToolStripMenuItem_MouseLeave(object sender, EventArgs e)
+            {
+                ((ToolStripMenuItem)sender).ForeColor = Color.White; //new color
+            }
+
+
+
+
+
+        #endregion
+
+        #region Procesos
+            private void TMSItem_procesos_MouseEnter(object sender, EventArgs e)
+            {
+                ((ToolStripMenuItem)sender).ForeColor = Color.Black; //new color
+            }
+
+            private void TMSItem_procesos_MouseLeave(object sender, EventArgs e)
+            {
+                ((ToolStripMenuItem)sender).ForeColor = Color.White; //new color
+            }
+
+            private void calcularCantidadesToolStripMenuItem_MouseEnter(object sender, EventArgs e)
+            {
+                ((ToolStripMenuItem)sender).ForeColor = Color.Black; //new color
+            }
+
+            private void calcularCantidadesToolStripMenuItem_MouseLeave(object sender, EventArgs e)
+            {
+                ((ToolStripMenuItem)sender).ForeColor = Color.White; //new color
+            }
+
+        #endregion
+
+        #region Acercade
+            private void acercaDeToolStripMenuItem_MouseEnter(object sender, EventArgs e)
+            {
+                ((ToolStripMenuItem)sender).ForeColor = Color.Black; //new color
+            }
+
+            private void acercaDeToolStripMenuItem_MouseLeave(object sender, EventArgs e)
+            {
+                ((ToolStripMenuItem)sender).ForeColor = Color.White; //new color
+            }
+
+        #endregion
+
+    
+
+      
     }
 }
