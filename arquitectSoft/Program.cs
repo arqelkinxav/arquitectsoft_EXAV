@@ -16,7 +16,7 @@ namespace arquitectSoft
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FrmMDIPrincipal());
+            Application.Run(new FrmLogin());
         }
     }
 }

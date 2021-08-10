@@ -22,18 +22,7 @@ namespace arquitectSoft
             InitializeComponent();
         }
 
-        private class MyRenderer : ToolStripProfessionalRenderer
-        {
-            protected override void OnRenderMenuItemBackground(ToolStripItemRenderEventArgs e)
-            {
-                Rectangle rc = new Rectangle(Point.Empty, e.Item.Size);
-                Color c = e.Item.Selected ? Color.White : Color.Black;
-                
-                using (SolidBrush brush = new SolidBrush(c))                    
-                    e.Graphics.FillRectangle(brush, rc);
 
-            }
-        }
 
         private void ShowNewForm(object sender, EventArgs e)
         {
@@ -56,8 +45,10 @@ namespace arquitectSoft
         {
 
             Controls.OfType<MdiClient>().FirstOrDefault().BackColor = Color.FromArgb(176, 196, 222);
-            Mdi_nameConnect.Text = Mdi_nameConnect.Text + " " + Generals.Global.NameConnect.ToUpper();
+            Mdi_nameConnect2.Text = Mdi_nameConnect2.Text + " " + Generals.Global.NameConnect.ToUpper();
+            Mdi_nameConnect2.ForeColor = Color.White;
             this.BackgroundImage = Properties.Resources.Wallpaper_sin_logo;
+            this.DoubleBuffered = true;
             
         }
 
@@ -279,10 +270,11 @@ namespace arquitectSoft
                 ((ToolStripMenuItem)sender).ForeColor = Color.White; //new color
             }
 
+
+
+
         #endregion
 
-    
-
-      
+ 
     }
 }

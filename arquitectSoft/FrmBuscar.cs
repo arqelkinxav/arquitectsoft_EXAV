@@ -138,7 +138,7 @@ namespace arquitectSoft
                         sqlquery = Generals.Constantes.QUERY_SUBCOMPONENTES + " where CONCAT(subcomponentes.Codigo_Homologacion,' - ',subcomponentes.Descripcion) lIKE '%" + txtBuscar.Text + "%' and Especial = " + Fil;
                         break;
                     default:
-                        sqlquery = Generals.Constantes.QUERY_COMPONENTES + " where CONCAT(CONCAT(Codigo , IFNULL(concat('-',acabados.Codigo_Homologacion),'')),' - ',arquitectdb.componentes.Descripcion) lIKE '%" + txtBuscar.Text + "%' and Especial = " + Fil;
+                        sqlquery = Generals.Constantes.QUERY_COMPONENTES + " where CONCAT(CONCAT(Codigo , IFNULL(concat('-',acabados.Codigo_Homologacion),'')),' - ',componentes.Descripcion) lIKE '%" + txtBuscar.Text + "%' and Especial = " + Fil;
                         break;
                 }
 
