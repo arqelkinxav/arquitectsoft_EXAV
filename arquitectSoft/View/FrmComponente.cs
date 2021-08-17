@@ -445,9 +445,7 @@ namespace arquitectSoft.View
         private void ClearComponent()
         {
             txtCodigo.Text = String.Empty;
-            txtCodigo.PlaceHolderText = "Código";
             txtDescripcion.Text = String.Empty;
-            txtDescripcion.PlaceHolderText = "Descripción";
             chkEspecial.Checked = false;
             GridViewComponente.DataSource = "";
 
@@ -632,5 +630,7 @@ namespace arquitectSoft.View
             ReleaseCapture();
             SendMessage(this.Handle, 0x112, 0xf012, 0);
         }
+
+
     }
 }

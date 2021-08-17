@@ -75,15 +75,18 @@ namespace arquitectSoft.View
             this.BtnEditar = new arquitectSoft.Generals.RJButton();
             this.BtnGuardar = new arquitectSoft.Generals.RJButton();
             this.BtnNuevo = new arquitectSoft.Generals.RJButton();
-            this.txtDescripcion = new arquitectSoft.Generals.TextBoxPlaceHolder();
             this.BtnBorrar = new arquitectSoft.Generals.RJButton();
             this.BtnAgregar = new arquitectSoft.Generals.RJButton();
-            this.txtCodigo = new arquitectSoft.Generals.TextBoxPlaceHolder();
             this.elipseControl1 = new arquitectSoft.Generals.ElipseControl();
             this.EliCtrlButtons = new arquitectSoft.Generals.ElipseControl();
             this.elipseControl2 = new arquitectSoft.Generals.ElipseControl();
             this.elipseControl3 = new arquitectSoft.Generals.ElipseControl();
             this.elipseComponent1 = new arquitectSoft.Generals.ElipseComponent();
+            this.txtDescripcion = new System.Windows.Forms.TextBox();
+            this.txtCodigo = new System.Windows.Forms.TextBox();
+            this.lblEtiquetaCodigo = new System.Windows.Forms.Label();
+            this.lbletiquetaDescripcion = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.GridViewComponente)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.subComponentBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.arquitectdbDataSet)).BeginInit();
@@ -447,9 +450,9 @@ namespace arquitectSoft.View
             // CmbAcabado
             // 
             this.CmbAcabado.FormattingEnabled = true;
-            this.CmbAcabado.Location = new System.Drawing.Point(631, 107);
+            this.CmbAcabado.Location = new System.Drawing.Point(626, 107);
             this.CmbAcabado.Name = "CmbAcabado";
-            this.CmbAcabado.Size = new System.Drawing.Size(277, 21);
+            this.CmbAcabado.Size = new System.Drawing.Size(291, 21);
             this.CmbAcabado.TabIndex = 44;
             // 
             // BtnDuplicar
@@ -606,17 +609,6 @@ namespace arquitectSoft.View
             this.BtnNuevo.UseVisualStyleBackColor = false;
             this.BtnNuevo.Click += new System.EventHandler(this.BtnNuevo_Click);
             // 
-            // txtDescripcion
-            // 
-            this.txtDescripcion.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic);
-            this.txtDescripcion.ForeColor = System.Drawing.Color.Gray;
-            this.txtDescripcion.Location = new System.Drawing.Point(208, 108);
-            this.txtDescripcion.Name = "txtDescripcion";
-            this.txtDescripcion.PlaceHolderText = "Descripción";
-            this.txtDescripcion.Size = new System.Drawing.Size(417, 20);
-            this.txtDescripcion.TabIndex = 55;
-            this.txtDescripcion.Text = "Descripción";
-            // 
             // BtnBorrar
             // 
             this.BtnBorrar.BackColor = System.Drawing.SystemColors.Control;
@@ -656,18 +648,6 @@ namespace arquitectSoft.View
             this.BtnAgregar.UseCompatibleTextRendering = true;
             this.BtnAgregar.UseVisualStyleBackColor = false;
             this.BtnAgregar.Click += new System.EventHandler(this.BtnAgregar_Click);
-            // 
-            // txtCodigo
-            // 
-            this.txtCodigo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtCodigo.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic);
-            this.txtCodigo.ForeColor = System.Drawing.Color.Gray;
-            this.txtCodigo.Location = new System.Drawing.Point(12, 108);
-            this.txtCodigo.Name = "txtCodigo";
-            this.txtCodigo.PlaceHolderText = "Código";
-            this.txtCodigo.Size = new System.Drawing.Size(120, 20);
-            this.txtCodigo.TabIndex = 51;
-            this.txtCodigo.Text = "Código";
             // 
             // elipseControl1
             // 
@@ -715,6 +695,56 @@ namespace arquitectSoft.View
             this.elipseComponent1.CornerRadius = 15;
             this.elipseComponent1.TargetControl = this;
             // 
+            // txtDescripcion
+            // 
+            this.txtDescripcion.Location = new System.Drawing.Point(219, 107);
+            this.txtDescripcion.Name = "txtDescripcion";
+            this.txtDescripcion.Size = new System.Drawing.Size(392, 20);
+            this.txtDescripcion.TabIndex = 63;
+            // 
+            // txtCodigo
+            // 
+            this.txtCodigo.Location = new System.Drawing.Point(12, 107);
+            this.txtCodigo.Name = "txtCodigo";
+            this.txtCodigo.Size = new System.Drawing.Size(120, 20);
+            this.txtCodigo.TabIndex = 64;
+            // 
+            // lblEtiquetaCodigo
+            // 
+            this.lblEtiquetaCodigo.AutoSize = true;
+            this.lblEtiquetaCodigo.BackColor = System.Drawing.Color.White;
+            this.lblEtiquetaCodigo.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblEtiquetaCodigo.ForeColor = System.Drawing.Color.Black;
+            this.lblEtiquetaCodigo.Location = new System.Drawing.Point(-1, 90);
+            this.lblEtiquetaCodigo.Name = "lblEtiquetaCodigo";
+            this.lblEtiquetaCodigo.Size = new System.Drawing.Size(55, 16);
+            this.lblEtiquetaCodigo.TabIndex = 97;
+            this.lblEtiquetaCodigo.Text = "Codigo:";
+            // 
+            // lbletiquetaDescripcion
+            // 
+            this.lbletiquetaDescripcion.AutoSize = true;
+            this.lbletiquetaDescripcion.BackColor = System.Drawing.Color.White;
+            this.lbletiquetaDescripcion.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbletiquetaDescripcion.ForeColor = System.Drawing.Color.Black;
+            this.lbletiquetaDescripcion.Location = new System.Drawing.Point(211, 90);
+            this.lbletiquetaDescripcion.Name = "lbletiquetaDescripcion";
+            this.lbletiquetaDescripcion.Size = new System.Drawing.Size(83, 16);
+            this.lbletiquetaDescripcion.TabIndex = 98;
+            this.lbletiquetaDescripcion.Text = "Descripcion:";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.BackColor = System.Drawing.Color.White;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.ForeColor = System.Drawing.Color.Black;
+            this.label2.Location = new System.Drawing.Point(614, 88);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(67, 16);
+            this.label2.TabIndex = 99;
+            this.label2.Text = "Acabado:";
+            // 
             // FrmComponente
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -722,6 +752,11 @@ namespace arquitectSoft.View
             this.BackColor = System.Drawing.Color.DarkGray;
             this.ClientSize = new System.Drawing.Size(920, 526);
             this.ControlBox = false;
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.lbletiquetaDescripcion);
+            this.Controls.Add(this.lblEtiquetaCodigo);
+            this.Controls.Add(this.txtCodigo);
+            this.Controls.Add(this.txtDescripcion);
             this.Controls.Add(this.BtnDuplicar);
             this.Controls.Add(this.BtnCancelar);
             this.Controls.Add(this.BtnBuscar);
@@ -729,10 +764,8 @@ namespace arquitectSoft.View
             this.Controls.Add(this.BtnEditar);
             this.Controls.Add(this.BtnGuardar);
             this.Controls.Add(this.BtnNuevo);
-            this.Controls.Add(this.txtDescripcion);
             this.Controls.Add(this.BtnBorrar);
             this.Controls.Add(this.BtnAgregar);
-            this.Controls.Add(this.txtCodigo);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.CmbAcabado);
             this.Controls.Add(this.BtnCheck);
@@ -802,11 +835,9 @@ namespace arquitectSoft.View
         private System.Windows.Forms.Button BtnCheck;
         private System.Windows.Forms.CheckBox chkEspecial;
         private Generals.ElipseControl elipseControl2;
-        private Generals.TextBoxPlaceHolder txtCodigo;
         private Generals.RJButton BtnAgregar;
         private Generals.ElipseControl elipseControl3;
         private Generals.RJButton BtnBorrar;
-        private Generals.TextBoxPlaceHolder txtDescripcion;
         private Generals.RJButton BtnNuevo;
         private Generals.RJButton BtnDuplicar;
         private Generals.RJButton BtnCancelar;
@@ -815,5 +846,10 @@ namespace arquitectSoft.View
         private Generals.RJButton BtnEditar;
         private Generals.RJButton BtnGuardar;
         private System.Windows.Forms.ImageList ImgListFinal;
+        private System.Windows.Forms.TextBox txtDescripcion;
+        private System.Windows.Forms.TextBox txtCodigo;
+        private System.Windows.Forms.Label lblEtiquetaCodigo;
+        private System.Windows.Forms.Label lbletiquetaDescripcion;
+        private System.Windows.Forms.Label label2;
     }
 }

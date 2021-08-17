@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -12,6 +13,13 @@ namespace arquitectSoft
 {
     public partial class FrmBuscar : Form
     {
+
+        [DllImport("user32.DLL", EntryPoint = "ReleaseCapture")]
+        private extern static void ReleaseCapture();
+
+        [DllImport("user32.DLL", EntryPoint = "SendMessage")]
+        private extern static void SendMessage(System.IntPtr hwnd, int wMsg, int wParam, int lParam);
+
         public string Consulta { get; set; }
         public string ReturnItem0 { get; set; }
         public string ReturnItem1{ get; set; }
@@ -21,6 +29,7 @@ namespace arquitectSoft
         public FrmBuscar()
         {
             InitializeComponent();
+
         }
 
         private void FrmBuscar_Load(object sender, EventArgs e)
@@ -34,7 +43,8 @@ namespace arquitectSoft
                     break;
                 case "Corte":
                     break;
-                case "Acaba":
+                case "Acaba" :
+                case "Acaba-Multi":
                     break;
                 case "SubComp":
                     GridViewBusqueda.Columns[3].Visible = false;
@@ -48,13 +58,7 @@ namespace arquitectSoft
 
         private void BtnBuscar_Click(object sender, EventArgs e)
         {
-            bool filter = chkVidriospanles.Checked;
-            Buscar(filter);
-        }
-
-        private void BtnSalir_Click(object sender, EventArgs e)
-        {
-            this.Close();
+          
         }
 
         private void GridViewBusqueda_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
@@ -74,9 +78,11 @@ namespace arquitectSoft
                     ReturnItem3 = GridViewBusqueda.SelectedCells[3].Value.ToString();
                     break;
                 case "Acaba":
+                case "Acaba-Multi":
                     ReturnItem0 = GridViewBusqueda.SelectedCells[0].Value.ToString();
                     ReturnItem1 = GridViewBusqueda.SelectedCells[1].Value.ToString();
-                    ReturnItem2 = GridViewBusqueda.SelectedCells[2].Value.ToString();
+                    ReturnItem2 = GridViewBusqueda.SelectedCells[2].Value.ToString();  
+
                     break;
                 case "SubComp":
                     ReturnItem0 = GridViewBusqueda.SelectedCells[0].Value.ToString();
@@ -106,8 +112,6 @@ namespace arquitectSoft
             {
                 Buscar(filter);//Refactoring
             }
-
-   
         }
 
         private void Buscar(bool filter)
@@ -159,6 +163,23 @@ namespace arquitectSoft
         {
             bool filter = chkVidriospanles.Checked;
             Buscar(filter);//Refactoring
+        }
+
+        private void BtnSalir_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void BtnBuscar_Click_1(object sender, EventArgs e)
+        {
+            bool filter = chkVidriospanles.Checked;
+            Buscar(filter);
+        }
+
+        private void EliCtrlButtons_MouseDown(object sender, MouseEventArgs e)
+        {
+            ReleaseCapture();
+            SendMessage(this.Handle, 0x112, 0xf012, 0);
         }
     }
 }

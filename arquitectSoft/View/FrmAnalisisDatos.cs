@@ -7,6 +7,7 @@ using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -15,6 +16,13 @@ namespace arquitectSoft.View
 {
     public partial class FrmAnalisisDatos : Form
     {
+
+        [DllImport("user32.DLL", EntryPoint = "ReleaseCapture")]
+        private extern static void ReleaseCapture();
+
+        [DllImport("user32.DLL", EntryPoint = "SendMessage")]
+        private extern static void SendMessage(System.IntPtr hwnd, int wMsg, int wParam, int lParam);
+
         DataTable dtPuertas = new DataTable();
         DataTable dtPerfil = new DataTable();
         DataTable dtPerfilR = new DataTable();
@@ -129,6 +137,7 @@ namespace arquitectSoft.View
         private void FrmAnalisisDatos_Load(object sender, EventArgs e)
         {
             InitializeOpenFileDialog();
+            
 
         }
 
@@ -429,7 +438,7 @@ namespace arquitectSoft.View
                                             row["Codigo"] = g.Key.Cod;
                                             row["descripcion"] = g.Min(r => r.Field<string>("descripcion"));
                                             row["acabado"] = g.Min(r => r.Field<string>("acabado"));
-                                            row["cantidad"] = g.Sum(r => r.Field<int>("cantidad"));
+                                            row["cantidad"] = g.Sum(r => r.Field<float>("cantidad"));
                                             row["medida"] = g.Key.med;
                                             row["Medidida Calculada"] = g.Min(r => r.Field<string>("Medidida Calculada"));
                                             row["Se_Calcula_Por"] = g.Key.cal;
@@ -542,7 +551,8 @@ namespace arquitectSoft.View
                     }
 
                     //Save the Excel file.
-                    filefinish = folderPath + "\\DataExport.xlsx";
+                    string FileNameStr = param[0] + " " + param[1];
+                    filefinish = folderPath + "\\" + FileNameStr + ".xlsx";
                     try
                     {
                         wb.SaveAs(filefinish);
@@ -574,5 +584,16 @@ namespace arquitectSoft.View
 
         }
 
+        private void BtnSalir_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+
+        private void EliCtrlButtons_MouseDown(object sender, MouseEventArgs e)
+        {
+            ReleaseCapture();
+            SendMessage(this.Handle, 0x112, 0xf012, 0);
+        }
     }
 }

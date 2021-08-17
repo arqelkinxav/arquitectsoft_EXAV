@@ -78,7 +78,7 @@ namespace arquitectSoft
         private void acercaDeToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
-            FrmAbout formAbout = new FrmAbout();
+            FrmAcercade formAbout = new FrmAcercade();
             formAbout.MdiParent = this;
             formAbout.StartPosition = FormStartPosition.CenterScreen;
             formAbout.Show();
@@ -151,7 +151,8 @@ namespace arquitectSoft
             private void TMSItem_Administracion_MouseEnter(object sender, EventArgs e)
             {
                 ((ToolStripMenuItem)sender).ForeColor = Color.Black; //new color
-            }
+                TMSItem_configuracion.ForeColor = Color.White; //new color
+        }
 
             private void TMSItem_Administracion_MouseLeave(object sender, EventArgs e)
             {
@@ -273,8 +274,9 @@ namespace arquitectSoft
 
 
 
+
         #endregion
 
- 
+
     }
 }

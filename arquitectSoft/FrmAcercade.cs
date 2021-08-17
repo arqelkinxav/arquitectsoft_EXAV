@@ -9,20 +9,17 @@ using System.Windows.Forms;
 
 namespace arquitectSoft
 {
-    partial class FrmLoading : Form
+    public partial class FrmAcercade : Form
     {
-        public string Fecha { get; set; }
-        public string Numero { get; set; }
-        public string Nombre { get; set; }
-        public string Tecnico { get; set; }
-        public string Acabado1 { get; set; }
-        public string Acabado2 { get; set; }
-
-        public FrmLoading()
+        public FrmAcercade()
         {
             InitializeComponent();
-            
-            
+            this.Text = String.Format("Acerca de {0}", AssemblyTitle);
+            this.labelProductName.Text = String.Format("Nombre del Producto: {0}", AssemblyProduct);
+            this.labelVersion.Text = String.Format("Versión {0}", AssemblyVersion);
+            this.labelCopyright.Text = AssemblyCopyright;
+            this.labelCompanyName.Text = AssemblyCompany;
+            this.textBoxDescription.Text = AssemblyDescription;
         }
 
         #region Descriptores de acceso de atributos de ensamblado
@@ -105,70 +102,10 @@ namespace arquitectSoft
         }
 
 
-
-
         #endregion
 
-        private void FrmLoading_Load(object sender, EventArgs e)
+        private void BtnCancelar_Click(object sender, EventArgs e)
         {
-            Dto.AcabadoDto Acb = new Dto.AcabadoDto();
-            CmbAcabado1.DataSource = Acb.GetAcabado();
-            CmbAcabado1.DisplayMember = "Descripcion";
-            CmbAcabado1.ValueMember = "Id_Acabado";
-
-            CmbAcabado2.DataSource = Acb.GetAcabado();
-            CmbAcabado2.DisplayMember = "Descripcion";
-            CmbAcabado2.ValueMember = "Id_Acabado";
-        }
-
-        private void BtnAceptar_Click(object sender, EventArgs e)
-        {
-            Fecha = datetimePFecha.Value.ToString("yyyy-MM-dd");
-
-            string fail = "";
-            if (txtnumero.Text == "")
-            {
-                fail = "Debe Digitar un Numero de Proyecto";
-            }
-            else
-            {
-                Numero = txtnumero.Text;
-            }
-
-            if (txtNombre.Text == "")
-            {
-                fail = "Debe Digitar un Nombre de Proyecto";
-            }
-            else
-            {
-                Nombre = txtNombre.Text;
-            }
-
-            
-            Tecnico = txtTecnico.Text;
-            Acabado1 = CmbAcabado1.Text;
-            Acabado2 = CmbAcabado2.Text;
-
-            if (fail != "")
-            {
-                MessageBox.Show(fail, "Mensaje Alerta", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            else
-            {
-                this.Close();
-            }
-            
-            
-        }
-
-        private void btncancelar_Click(object sender, EventArgs e)
-        {
-            Fecha = null;
-            Numero = null;
-            Nombre = null;
-            Tecnico = null;
-            Acabado1 = null;
-            Acabado2 = null;
             this.Close();
         }
     }

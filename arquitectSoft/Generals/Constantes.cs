@@ -58,7 +58,7 @@ namespace arquitectSoft.Generals
         public static String QUERY_EXITS_ACABADO = "SELECT Id_Acabado FROM acabados where Codigo_Homologacion = ? or Descripcion = ?;";
 
         //Corte
-        public static String QUERY_CORTE = "SELECT Id_Corte,Descripcion,Corte_Derecho,Corte_Izquierdo FROM cortes order by Id_Corte ";
+        public static String QUERY_CORTE = "SELECT Id_Corte,Descripcion,Corte_Derecho,Corte_Izquierdo FROM cortes";
         public static String QUERY_INSERT_CORTE = "INSERT cortes (descripcion,Corte_Derecho,Corte_Izquierdo) VALUES(?,?,?)";
         public static String QUERY_DELETE_CORTE = "DELETE FROM cortes WHERE Id_Corte = ?";
         public static String QUERY_UPDATE_CORTE = "UPDATE cortes SET descripcion = ?,Corte_Derecho = ?, Corte_Izquierdo = ? WHERE Id_Corte = ?";

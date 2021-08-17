@@ -31,32 +31,40 @@ namespace arquitectSoft.View
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmSubComponente));
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
             this.ImgLista = new System.Windows.Forms.ImageList(this.components);
-            this.BtnCancelar = new System.Windows.Forms.Button();
-            this.BtnSalir = new System.Windows.Forms.Button();
-            this.BtnBuscar = new System.Windows.Forms.Button();
-            this.BtnNuevo = new System.Windows.Forms.Button();
-            this.BtnEliminar = new System.Windows.Forms.Button();
-            this.BtnEditar = new System.Windows.Forms.Button();
-            this.BtnGuardar = new System.Windows.Forms.Button();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.label1 = new System.Windows.Forms.Label();
-            this.txtDescripcion = new System.Windows.Forms.TextBox();
-            this.lbletiquetaDescripcion = new System.Windows.Forms.Label();
-            this.txtCodigo = new System.Windows.Forms.TextBox();
-            this.lblEtiquetaCodigo = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
             this.CmbAcabado = new System.Windows.Forms.ComboBox();
             this.chkVidriospanles = new System.Windows.Forms.CheckBox();
             this.dataGridViewRC = new System.Windows.Forms.DataGridView();
             this.label3 = new System.Windows.Forms.Label();
-            this.BtnMultiAcabado = new System.Windows.Forms.Button();
             this.dataGridViewMA = new System.Windows.Forms.DataGridView();
             this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
-            this.panel1.SuspendLayout();
+            this.ImgListFinal = new System.Windows.Forms.ImageList(this.components);
+            this.BtnSalir = new System.Windows.Forms.Button();
+            this.BtnCancelar = new arquitectSoft.Generals.RJButton();
+            this.BtnBuscar = new arquitectSoft.Generals.RJButton();
+            this.BtnEliminar = new arquitectSoft.Generals.RJButton();
+            this.BtnEditar = new arquitectSoft.Generals.RJButton();
+            this.BtnGuardar = new arquitectSoft.Generals.RJButton();
+            this.BtnNuevo = new arquitectSoft.Generals.RJButton();
+            this.EliCtrlButtons = new arquitectSoft.Generals.ElipseControl();
+            this.elipseComponent1 = new arquitectSoft.Generals.ElipseComponent();
+            this.elipseControl1 = new arquitectSoft.Generals.ElipseControl();
+            this.label1 = new System.Windows.Forms.Label();
+            this.elipseControl2 = new arquitectSoft.Generals.ElipseControl();
+            this.BtnMultiAcabado = new arquitectSoft.Generals.RJButton();
+            this.elipseControl3 = new arquitectSoft.Generals.ElipseControl();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.txtCodigo = new System.Windows.Forms.TextBox();
+            this.txtDescripcion = new System.Windows.Forms.TextBox();
+            this.lblEtiquetaCodigo = new System.Windows.Forms.Label();
+            this.lbletiquetaDescripcion = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewRC)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMA)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).BeginInit();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // ImgLista
@@ -114,226 +122,46 @@ namespace arquitectSoft.View
             this.ImgLista.Images.SetKeyName(48, "049-tool.png");
             this.ImgLista.Images.SetKeyName(49, "050-view.png");
             this.ImgLista.Images.SetKeyName(50, "051-Close.png");
-            // 
-            // BtnCancelar
-            // 
-            this.BtnCancelar.BackColor = System.Drawing.SystemColors.Control;
-            this.BtnCancelar.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.BtnCancelar.Enabled = false;
-            this.BtnCancelar.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.BtnCancelar.ImageIndex = 3;
-            this.BtnCancelar.ImageList = this.ImgLista;
-            this.BtnCancelar.Location = new System.Drawing.Point(334, 12);
-            this.BtnCancelar.Name = "BtnCancelar";
-            this.BtnCancelar.Size = new System.Drawing.Size(58, 60);
-            this.BtnCancelar.TabIndex = 34;
-            this.BtnCancelar.Text = "Cancelar";
-            this.BtnCancelar.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.BtnCancelar.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.BtnCancelar.UseVisualStyleBackColor = false;
-            this.BtnCancelar.Click += new System.EventHandler(this.BtnCancelar_Click);
-            // 
-            // BtnSalir
-            // 
-            this.BtnSalir.BackColor = System.Drawing.SystemColors.Control;
-            this.BtnSalir.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.BtnSalir.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.BtnSalir.ImageIndex = 50;
-            this.BtnSalir.ImageList = this.ImgLista;
-            this.BtnSalir.Location = new System.Drawing.Point(718, 12);
-            this.BtnSalir.Name = "BtnSalir";
-            this.BtnSalir.Size = new System.Drawing.Size(58, 60);
-            this.BtnSalir.TabIndex = 33;
-            this.BtnSalir.Text = "Salir";
-            this.BtnSalir.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.BtnSalir.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.BtnSalir.UseVisualStyleBackColor = false;
-            this.BtnSalir.Click += new System.EventHandler(this.BtnSalir_Click);
-            // 
-            // BtnBuscar
-            // 
-            this.BtnBuscar.BackColor = System.Drawing.SystemColors.Control;
-            this.BtnBuscar.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.BtnBuscar.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.BtnBuscar.ImageIndex = 49;
-            this.BtnBuscar.ImageList = this.ImgLista;
-            this.BtnBuscar.Location = new System.Drawing.Point(270, 12);
-            this.BtnBuscar.Name = "BtnBuscar";
-            this.BtnBuscar.Size = new System.Drawing.Size(58, 60);
-            this.BtnBuscar.TabIndex = 32;
-            this.BtnBuscar.Text = "Buscar";
-            this.BtnBuscar.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.BtnBuscar.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.BtnBuscar.UseVisualStyleBackColor = false;
-            this.BtnBuscar.Click += new System.EventHandler(this.BtnBuscar_Click);
-            // 
-            // BtnNuevo
-            // 
-            this.BtnNuevo.BackColor = System.Drawing.SystemColors.Control;
-            this.BtnNuevo.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.BtnNuevo.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.BtnNuevo.ImageIndex = 4;
-            this.BtnNuevo.ImageList = this.ImgLista;
-            this.BtnNuevo.Location = new System.Drawing.Point(14, 12);
-            this.BtnNuevo.Name = "BtnNuevo";
-            this.BtnNuevo.Size = new System.Drawing.Size(58, 60);
-            this.BtnNuevo.TabIndex = 31;
-            this.BtnNuevo.Text = "Nuevo";
-            this.BtnNuevo.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.BtnNuevo.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.BtnNuevo.UseVisualStyleBackColor = false;
-            this.BtnNuevo.Click += new System.EventHandler(this.BtnNuevo_Click);
-            // 
-            // BtnEliminar
-            // 
-            this.BtnEliminar.BackColor = System.Drawing.SystemColors.Control;
-            this.BtnEliminar.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.BtnEliminar.Enabled = false;
-            this.BtnEliminar.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.BtnEliminar.ImageIndex = 39;
-            this.BtnEliminar.ImageList = this.ImgLista;
-            this.BtnEliminar.Location = new System.Drawing.Point(206, 12);
-            this.BtnEliminar.Name = "BtnEliminar";
-            this.BtnEliminar.Size = new System.Drawing.Size(58, 60);
-            this.BtnEliminar.TabIndex = 30;
-            this.BtnEliminar.Text = "Eliminar";
-            this.BtnEliminar.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.BtnEliminar.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.BtnEliminar.UseVisualStyleBackColor = false;
-            this.BtnEliminar.Click += new System.EventHandler(this.BtnEliminar_Click);
-            // 
-            // BtnEditar
-            // 
-            this.BtnEditar.BackColor = System.Drawing.SystemColors.Control;
-            this.BtnEditar.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.BtnEditar.Enabled = false;
-            this.BtnEditar.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.BtnEditar.ImageIndex = 35;
-            this.BtnEditar.ImageList = this.ImgLista;
-            this.BtnEditar.Location = new System.Drawing.Point(142, 12);
-            this.BtnEditar.Name = "BtnEditar";
-            this.BtnEditar.Size = new System.Drawing.Size(58, 60);
-            this.BtnEditar.TabIndex = 29;
-            this.BtnEditar.Text = "Editar";
-            this.BtnEditar.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.BtnEditar.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.BtnEditar.UseVisualStyleBackColor = false;
-            this.BtnEditar.Click += new System.EventHandler(this.BtnEditar_Click);
-            // 
-            // BtnGuardar
-            // 
-            this.BtnGuardar.BackColor = System.Drawing.SystemColors.Control;
-            this.BtnGuardar.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.BtnGuardar.Enabled = false;
-            this.BtnGuardar.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.BtnGuardar.ImageIndex = 19;
-            this.BtnGuardar.ImageList = this.ImgLista;
-            this.BtnGuardar.Location = new System.Drawing.Point(78, 12);
-            this.BtnGuardar.Name = "BtnGuardar";
-            this.BtnGuardar.Size = new System.Drawing.Size(58, 60);
-            this.BtnGuardar.TabIndex = 28;
-            this.BtnGuardar.Text = "Guardar";
-            this.BtnGuardar.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.BtnGuardar.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.BtnGuardar.UseVisualStyleBackColor = false;
-            this.BtnGuardar.Click += new System.EventHandler(this.BtnGuardar_Click);
-            // 
-            // panel1
-            // 
-            this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(158)))), ((int)(((byte)(158)))), ((int)(((byte)(158)))));
-            this.panel1.Controls.Add(this.label1);
-            this.panel1.Location = new System.Drawing.Point(1, 78);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(787, 32);
-            this.panel1.TabIndex = 35;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.label1.Location = new System.Drawing.Point(318, 4);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(159, 24);
-            this.label1.TabIndex = 6;
-            this.label1.Text = "Sub Componente";
-            // 
-            // txtDescripcion
-            // 
-            this.txtDescripcion.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
-            this.txtDescripcion.Location = new System.Drawing.Point(237, 142);
-            this.txtDescripcion.Name = "txtDescripcion";
-            this.txtDescripcion.Size = new System.Drawing.Size(418, 20);
-            this.txtDescripcion.TabIndex = 39;
-            // 
-            // lbletiquetaDescripcion
-            // 
-            this.lbletiquetaDescripcion.AutoSize = true;
-            this.lbletiquetaDescripcion.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbletiquetaDescripcion.ForeColor = System.Drawing.SystemColors.Control;
-            this.lbletiquetaDescripcion.Location = new System.Drawing.Point(234, 123);
-            this.lbletiquetaDescripcion.Name = "lbletiquetaDescripcion";
-            this.lbletiquetaDescripcion.Size = new System.Drawing.Size(83, 16);
-            this.lbletiquetaDescripcion.TabIndex = 38;
-            this.lbletiquetaDescripcion.Text = "Descripcion:";
-            // 
-            // txtCodigo
-            // 
-            this.txtCodigo.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
-            this.txtCodigo.Location = new System.Drawing.Point(24, 142);
-            this.txtCodigo.Name = "txtCodigo";
-            this.txtCodigo.Size = new System.Drawing.Size(176, 20);
-            this.txtCodigo.TabIndex = 37;
-            // 
-            // lblEtiquetaCodigo
-            // 
-            this.lblEtiquetaCodigo.AutoSize = true;
-            this.lblEtiquetaCodigo.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblEtiquetaCodigo.ForeColor = System.Drawing.SystemColors.Control;
-            this.lblEtiquetaCodigo.Location = new System.Drawing.Point(21, 123);
-            this.lblEtiquetaCodigo.Name = "lblEtiquetaCodigo";
-            this.lblEtiquetaCodigo.Size = new System.Drawing.Size(55, 16);
-            this.lblEtiquetaCodigo.TabIndex = 36;
-            this.lblEtiquetaCodigo.Text = "Codigo:";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.ForeColor = System.Drawing.SystemColors.Control;
-            this.label2.Location = new System.Drawing.Point(21, 181);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(67, 16);
-            this.label2.TabIndex = 41;
-            this.label2.Text = "Acabado:";
+            this.ImgLista.Images.SetKeyName(51, "10.png");
             // 
             // CmbAcabado
             // 
             this.CmbAcabado.FormattingEnabled = true;
-            this.CmbAcabado.Location = new System.Drawing.Point(24, 200);
+            this.CmbAcabado.Location = new System.Drawing.Point(492, 119);
             this.CmbAcabado.Name = "CmbAcabado";
-            this.CmbAcabado.Size = new System.Drawing.Size(317, 21);
+            this.CmbAcabado.Size = new System.Drawing.Size(281, 21);
             this.CmbAcabado.TabIndex = 42;
             // 
             // chkVidriospanles
             // 
             this.chkVidriospanles.AutoSize = true;
-            this.chkVidriospanles.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.chkVidriospanles.ForeColor = System.Drawing.SystemColors.Control;
-            this.chkVidriospanles.Location = new System.Drawing.Point(378, 202);
+            this.chkVidriospanles.BackColor = System.Drawing.Color.White;
+            this.chkVidriospanles.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chkVidriospanles.ForeColor = System.Drawing.Color.Black;
+            this.chkVidriospanles.Location = new System.Drawing.Point(673, 96);
             this.chkVidriospanles.Name = "chkVidriospanles";
-            this.chkVidriospanles.Size = new System.Drawing.Size(123, 20);
+            this.chkVidriospanles.Size = new System.Drawing.Size(100, 17);
             this.chkVidriospanles.TabIndex = 43;
             this.chkVidriospanles.Text = "Vidrios/Paneles";
-            this.chkVidriospanles.UseVisualStyleBackColor = true;
+            this.chkVidriospanles.UseVisualStyleBackColor = false;
             // 
             // dataGridViewRC
             // 
             this.dataGridViewRC.AllowUserToAddRows = false;
             this.dataGridViewRC.AllowUserToDeleteRows = false;
             this.dataGridViewRC.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridViewRC.BackgroundColor = System.Drawing.SystemColors.ButtonHighlight;
+            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle11.BackColor = System.Drawing.SystemColors.Desktop;
+            dataGridViewCellStyle11.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle11.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            dataGridViewCellStyle11.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle11.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle11.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewRC.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle11;
             this.dataGridViewRC.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewRC.Location = new System.Drawing.Point(14, 265);
+            this.dataGridViewRC.EnableHeadersVisualStyles = false;
+            this.dataGridViewRC.Location = new System.Drawing.Point(14, 190);
             this.dataGridViewRC.Name = "dataGridViewRC";
             this.dataGridViewRC.ReadOnly = true;
             this.dataGridViewRC.Size = new System.Drawing.Size(391, 192);
@@ -342,36 +170,330 @@ namespace arquitectSoft.View
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.ForeColor = System.Drawing.SystemColors.Control;
-            this.label3.Location = new System.Drawing.Point(12, 246);
+            this.label3.BackColor = System.Drawing.Color.White;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.ForeColor = System.Drawing.Color.Black;
+            this.label3.Location = new System.Drawing.Point(3, 13);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(171, 16);
+            this.label3.Size = new System.Drawing.Size(135, 13);
             this.label3.TabIndex = 45;
             this.label3.Text = "Relacion de Componentes:";
-            // 
-            // BtnMultiAcabado
-            // 
-            this.BtnMultiAcabado.Location = new System.Drawing.Point(526, 200);
-            this.BtnMultiAcabado.Name = "BtnMultiAcabado";
-            this.BtnMultiAcabado.Size = new System.Drawing.Size(129, 23);
-            this.BtnMultiAcabado.TabIndex = 46;
-            this.BtnMultiAcabado.Text = "Multi-Acabado";
-            this.BtnMultiAcabado.UseVisualStyleBackColor = true;
-            this.BtnMultiAcabado.Click += new System.EventHandler(this.BtnMultiAcabado_Click);
             // 
             // dataGridViewMA
             // 
             this.dataGridViewMA.AllowUserToAddRows = false;
             this.dataGridViewMA.AllowUserToDeleteRows = false;
+            this.dataGridViewMA.BackgroundColor = System.Drawing.SystemColors.ButtonHighlight;
+            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle12.BackColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle12.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle12.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle12.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle12.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewMA.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle12;
             this.dataGridViewMA.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewMA.Location = new System.Drawing.Point(411, 265);
+            this.dataGridViewMA.EnableHeadersVisualStyles = false;
+            this.dataGridViewMA.Location = new System.Drawing.Point(411, 190);
             this.dataGridViewMA.Name = "dataGridViewMA";
             this.dataGridViewMA.ReadOnly = true;
             this.dataGridViewMA.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridViewMA.Size = new System.Drawing.Size(365, 192);
             this.dataGridViewMA.TabIndex = 47;
             this.dataGridViewMA.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridViewMA_CellMouseDoubleClick);
+            // 
+            // ImgListFinal
+            // 
+            this.ImgListFinal.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("ImgListFinal.ImageStream")));
+            this.ImgListFinal.TransparentColor = System.Drawing.Color.Transparent;
+            this.ImgListFinal.Images.SetKeyName(0, "01.png");
+            this.ImgListFinal.Images.SetKeyName(1, "02.png");
+            this.ImgListFinal.Images.SetKeyName(2, "03.png");
+            this.ImgListFinal.Images.SetKeyName(3, "05.png");
+            this.ImgListFinal.Images.SetKeyName(4, "06.png");
+            this.ImgListFinal.Images.SetKeyName(5, "07.png");
+            this.ImgListFinal.Images.SetKeyName(6, "09.png");
+            this.ImgListFinal.Images.SetKeyName(7, "10.png");
+            this.ImgListFinal.Images.SetKeyName(8, "04.png");
+            // 
+            // BtnSalir
+            // 
+            this.BtnSalir.BackColor = System.Drawing.Color.Black;
+            this.BtnSalir.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.BtnSalir.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.BtnSalir.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnSalir.Font = new System.Drawing.Font("Calibri Light", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.BtnSalir.ForeColor = System.Drawing.Color.White;
+            this.BtnSalir.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.BtnSalir.ImageIndex = 51;
+            this.BtnSalir.ImageList = this.ImgLista;
+            this.BtnSalir.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.BtnSalir.Location = new System.Drawing.Point(704, 12);
+            this.BtnSalir.Name = "BtnSalir";
+            this.BtnSalir.Size = new System.Drawing.Size(72, 35);
+            this.BtnSalir.TabIndex = 48;
+            this.BtnSalir.Text = "Salir";
+            this.BtnSalir.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
+            this.BtnSalir.UseVisualStyleBackColor = false;
+            this.BtnSalir.Click += new System.EventHandler(this.BtnSalir_Click);
+            // 
+            // BtnCancelar
+            // 
+            this.BtnCancelar.BackColor = System.Drawing.Color.DimGray;
+            this.BtnCancelar.BackgroundColor = System.Drawing.Color.DimGray;
+            this.BtnCancelar.BorderColor = System.Drawing.Color.Black;
+            this.BtnCancelar.BorderRadius = 20;
+            this.BtnCancelar.BorderSize = 0;
+            this.BtnCancelar.FlatAppearance.BorderSize = 0;
+            this.BtnCancelar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnCancelar.ForeColor = System.Drawing.Color.White;
+            this.BtnCancelar.ImageIndex = 4;
+            this.BtnCancelar.ImageList = this.ImgListFinal;
+            this.BtnCancelar.Location = new System.Drawing.Point(249, 11);
+            this.BtnCancelar.Name = "BtnCancelar";
+            this.BtnCancelar.Size = new System.Drawing.Size(42, 36);
+            this.BtnCancelar.TabIndex = 67;
+            this.BtnCancelar.TextColor = System.Drawing.Color.White;
+            this.BtnCancelar.UseVisualStyleBackColor = false;
+            this.BtnCancelar.Click += new System.EventHandler(this.BtnCancelar_Click);
+            // 
+            // BtnBuscar
+            // 
+            this.BtnBuscar.BackColor = System.Drawing.Color.DimGray;
+            this.BtnBuscar.BackgroundColor = System.Drawing.Color.DimGray;
+            this.BtnBuscar.BorderColor = System.Drawing.Color.Black;
+            this.BtnBuscar.BorderRadius = 20;
+            this.BtnBuscar.BorderSize = 0;
+            this.BtnBuscar.FlatAppearance.BorderSize = 0;
+            this.BtnBuscar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnBuscar.ForeColor = System.Drawing.Color.White;
+            this.BtnBuscar.ImageIndex = 3;
+            this.BtnBuscar.ImageList = this.ImgListFinal;
+            this.BtnBuscar.Location = new System.Drawing.Point(201, 10);
+            this.BtnBuscar.Name = "BtnBuscar";
+            this.BtnBuscar.Size = new System.Drawing.Size(42, 36);
+            this.BtnBuscar.TabIndex = 66;
+            this.BtnBuscar.TextColor = System.Drawing.Color.White;
+            this.BtnBuscar.UseVisualStyleBackColor = false;
+            this.BtnBuscar.Click += new System.EventHandler(this.BtnBuscar_Click);
+            // 
+            // BtnEliminar
+            // 
+            this.BtnEliminar.BackColor = System.Drawing.Color.DimGray;
+            this.BtnEliminar.BackgroundColor = System.Drawing.Color.DimGray;
+            this.BtnEliminar.BorderColor = System.Drawing.Color.Black;
+            this.BtnEliminar.BorderRadius = 20;
+            this.BtnEliminar.BorderSize = 0;
+            this.BtnEliminar.FlatAppearance.BorderSize = 0;
+            this.BtnEliminar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnEliminar.ForeColor = System.Drawing.Color.White;
+            this.BtnEliminar.ImageIndex = 8;
+            this.BtnEliminar.ImageList = this.ImgListFinal;
+            this.BtnEliminar.Location = new System.Drawing.Point(154, 11);
+            this.BtnEliminar.Name = "BtnEliminar";
+            this.BtnEliminar.Size = new System.Drawing.Size(42, 36);
+            this.BtnEliminar.TabIndex = 65;
+            this.BtnEliminar.TextColor = System.Drawing.Color.White;
+            this.BtnEliminar.UseVisualStyleBackColor = false;
+            this.BtnEliminar.Click += new System.EventHandler(this.BtnEliminar_Click);
+            // 
+            // BtnEditar
+            // 
+            this.BtnEditar.BackColor = System.Drawing.Color.DimGray;
+            this.BtnEditar.BackgroundColor = System.Drawing.Color.DimGray;
+            this.BtnEditar.BorderColor = System.Drawing.Color.Black;
+            this.BtnEditar.BorderRadius = 20;
+            this.BtnEditar.BorderSize = 0;
+            this.BtnEditar.FlatAppearance.BorderSize = 0;
+            this.BtnEditar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnEditar.ForeColor = System.Drawing.Color.White;
+            this.BtnEditar.ImageIndex = 2;
+            this.BtnEditar.ImageList = this.ImgListFinal;
+            this.BtnEditar.Location = new System.Drawing.Point(106, 11);
+            this.BtnEditar.Name = "BtnEditar";
+            this.BtnEditar.Size = new System.Drawing.Size(42, 36);
+            this.BtnEditar.TabIndex = 64;
+            this.BtnEditar.TextColor = System.Drawing.Color.White;
+            this.BtnEditar.UseVisualStyleBackColor = false;
+            this.BtnEditar.Click += new System.EventHandler(this.BtnEditar_Click);
+            // 
+            // BtnGuardar
+            // 
+            this.BtnGuardar.BackColor = System.Drawing.Color.DimGray;
+            this.BtnGuardar.BackgroundColor = System.Drawing.Color.DimGray;
+            this.BtnGuardar.BorderColor = System.Drawing.Color.Black;
+            this.BtnGuardar.BorderRadius = 20;
+            this.BtnGuardar.BorderSize = 0;
+            this.BtnGuardar.FlatAppearance.BorderSize = 0;
+            this.BtnGuardar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnGuardar.ForeColor = System.Drawing.Color.White;
+            this.BtnGuardar.ImageIndex = 1;
+            this.BtnGuardar.ImageList = this.ImgListFinal;
+            this.BtnGuardar.Location = new System.Drawing.Point(58, 10);
+            this.BtnGuardar.Name = "BtnGuardar";
+            this.BtnGuardar.Size = new System.Drawing.Size(42, 36);
+            this.BtnGuardar.TabIndex = 63;
+            this.BtnGuardar.TextColor = System.Drawing.Color.White;
+            this.BtnGuardar.UseVisualStyleBackColor = false;
+            this.BtnGuardar.Click += new System.EventHandler(this.BtnGuardar_Click);
+            // 
+            // BtnNuevo
+            // 
+            this.BtnNuevo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(102)))), ((int)(((byte)(102)))), ((int)(((byte)(102)))));
+            this.BtnNuevo.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(102)))), ((int)(((byte)(102)))), ((int)(((byte)(102)))));
+            this.BtnNuevo.BorderColor = System.Drawing.Color.Black;
+            this.BtnNuevo.BorderRadius = 20;
+            this.BtnNuevo.BorderSize = 0;
+            this.BtnNuevo.FlatAppearance.BorderSize = 0;
+            this.BtnNuevo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnNuevo.ForeColor = System.Drawing.Color.White;
+            this.BtnNuevo.ImageIndex = 0;
+            this.BtnNuevo.ImageList = this.ImgListFinal;
+            this.BtnNuevo.Location = new System.Drawing.Point(10, 11);
+            this.BtnNuevo.Name = "BtnNuevo";
+            this.BtnNuevo.Size = new System.Drawing.Size(42, 36);
+            this.BtnNuevo.TabIndex = 62;
+            this.BtnNuevo.TextColor = System.Drawing.Color.White;
+            this.BtnNuevo.UseVisualStyleBackColor = false;
+            this.BtnNuevo.Click += new System.EventHandler(this.BtnNuevo_Click);
+            // 
+            // EliCtrlButtons
+            // 
+            this.EliCtrlButtons.BackColor = System.Drawing.Color.Black;
+            this.EliCtrlButtons.CornerRadius = 15;
+            this.EliCtrlButtons.Location = new System.Drawing.Point(0, 0);
+            this.EliCtrlButtons.Name = "EliCtrlButtons";
+            this.EliCtrlButtons.Size = new System.Drawing.Size(789, 61);
+            this.EliCtrlButtons.TabIndex = 49;
+            this.EliCtrlButtons.Text = "elipseControl1";
+            this.EliCtrlButtons.MouseDown += new System.Windows.Forms.MouseEventHandler(this.EliCtrlButtons_MouseDown);
+            // 
+            // elipseComponent1
+            // 
+            this.elipseComponent1.CornerRadius = 15;
+            this.elipseComponent1.TargetControl = this;
+            // 
+            // elipseControl1
+            // 
+            this.elipseControl1.BackColor = System.Drawing.Color.Black;
+            this.elipseControl1.CornerRadius = 15;
+            this.elipseControl1.Location = new System.Drawing.Point(14, 54);
+            this.elipseControl1.Name = "elipseControl1";
+            this.elipseControl1.Size = new System.Drawing.Size(759, 32);
+            this.elipseControl1.TabIndex = 68;
+            this.elipseControl1.Text = "elipseControl1";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.BackColor = System.Drawing.Color.Black;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F);
+            this.label1.ForeColor = System.Drawing.Color.White;
+            this.label1.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.label1.Location = new System.Drawing.Point(26, 58);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(156, 24);
+            this.label1.TabIndex = 69;
+            this.label1.Text = "Sub componente";
+            // 
+            // elipseControl2
+            // 
+            this.elipseControl2.BackColor = System.Drawing.Color.White;
+            this.elipseControl2.CornerRadius = 15;
+            this.elipseControl2.Location = new System.Drawing.Point(0, 69);
+            this.elipseControl2.Name = "elipseControl2";
+            this.elipseControl2.Size = new System.Drawing.Size(788, 361);
+            this.elipseControl2.TabIndex = 70;
+            this.elipseControl2.Text = "elipseControl1";
+            // 
+            // BtnMultiAcabado
+            // 
+            this.BtnMultiAcabado.BackColor = System.Drawing.Color.DimGray;
+            this.BtnMultiAcabado.BackgroundColor = System.Drawing.Color.DimGray;
+            this.BtnMultiAcabado.BorderColor = System.Drawing.Color.Black;
+            this.BtnMultiAcabado.BorderRadius = 10;
+            this.BtnMultiAcabado.BorderSize = 0;
+            this.BtnMultiAcabado.FlatAppearance.BorderSize = 0;
+            this.BtnMultiAcabado.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnMultiAcabado.ForeColor = System.Drawing.Color.White;
+            this.BtnMultiAcabado.Location = new System.Drawing.Point(15, 436);
+            this.BtnMultiAcabado.Name = "BtnMultiAcabado";
+            this.BtnMultiAcabado.Size = new System.Drawing.Size(104, 22);
+            this.BtnMultiAcabado.TabIndex = 73;
+            this.BtnMultiAcabado.Text = "Multi-Acabado";
+            this.BtnMultiAcabado.TextColor = System.Drawing.Color.White;
+            this.BtnMultiAcabado.UseVisualStyleBackColor = false;
+            this.BtnMultiAcabado.Click += new System.EventHandler(this.BtnMultiAcabado_Click);
+            // 
+            // elipseControl3
+            // 
+            this.elipseControl3.BackColor = System.Drawing.Color.Black;
+            this.elipseControl3.CornerRadius = 15;
+            this.elipseControl3.Location = new System.Drawing.Point(0, 431);
+            this.elipseControl3.Name = "elipseControl3";
+            this.elipseControl3.Size = new System.Drawing.Size(788, 36);
+            this.elipseControl3.TabIndex = 74;
+            this.elipseControl3.Text = "elipseControl1";
+            // 
+            // panel1
+            // 
+            this.panel1.BackColor = System.Drawing.Color.White;
+            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.Controls.Add(this.label3);
+            this.panel1.Location = new System.Drawing.Point(10, 161);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(770, 239);
+            this.panel1.TabIndex = 75;
+            // 
+            // txtCodigo
+            // 
+            this.txtCodigo.Location = new System.Drawing.Point(17, 119);
+            this.txtCodigo.Name = "txtCodigo";
+            this.txtCodigo.Size = new System.Drawing.Size(120, 20);
+            this.txtCodigo.TabIndex = 76;
+            // 
+            // txtDescripcion
+            // 
+            this.txtDescripcion.Location = new System.Drawing.Point(154, 119);
+            this.txtDescripcion.Name = "txtDescripcion";
+            this.txtDescripcion.Size = new System.Drawing.Size(318, 20);
+            this.txtDescripcion.TabIndex = 77;
+            // 
+            // lblEtiquetaCodigo
+            // 
+            this.lblEtiquetaCodigo.AutoSize = true;
+            this.lblEtiquetaCodigo.BackColor = System.Drawing.Color.White;
+            this.lblEtiquetaCodigo.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblEtiquetaCodigo.ForeColor = System.Drawing.Color.Black;
+            this.lblEtiquetaCodigo.Location = new System.Drawing.Point(7, 100);
+            this.lblEtiquetaCodigo.Name = "lblEtiquetaCodigo";
+            this.lblEtiquetaCodigo.Size = new System.Drawing.Size(55, 16);
+            this.lblEtiquetaCodigo.TabIndex = 98;
+            this.lblEtiquetaCodigo.Text = "Codigo:";
+            // 
+            // lbletiquetaDescripcion
+            // 
+            this.lbletiquetaDescripcion.AutoSize = true;
+            this.lbletiquetaDescripcion.BackColor = System.Drawing.Color.White;
+            this.lbletiquetaDescripcion.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbletiquetaDescripcion.ForeColor = System.Drawing.Color.Black;
+            this.lbletiquetaDescripcion.Location = new System.Drawing.Point(140, 100);
+            this.lbletiquetaDescripcion.Name = "lbletiquetaDescripcion";
+            this.lbletiquetaDescripcion.Size = new System.Drawing.Size(83, 16);
+            this.lbletiquetaDescripcion.TabIndex = 99;
+            this.lbletiquetaDescripcion.Text = "Descripcion:";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.BackColor = System.Drawing.Color.White;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.ForeColor = System.Drawing.Color.Black;
+            this.label2.Location = new System.Drawing.Point(479, 100);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(67, 16);
+            this.label2.TabIndex = 100;
+            this.label2.Text = "Acabado:";
             // 
             // FrmSubComponente
             // 
@@ -380,34 +502,38 @@ namespace arquitectSoft.View
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(70)))), ((int)(((byte)(86)))));
             this.ClientSize = new System.Drawing.Size(788, 467);
             this.ControlBox = false;
-            this.Controls.Add(this.dataGridViewMA);
-            this.Controls.Add(this.BtnMultiAcabado);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.dataGridViewRC);
-            this.Controls.Add(this.chkVidriospanles);
-            this.Controls.Add(this.CmbAcabado);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.txtDescripcion);
             this.Controls.Add(this.lbletiquetaDescripcion);
-            this.Controls.Add(this.txtCodigo);
             this.Controls.Add(this.lblEtiquetaCodigo);
-            this.Controls.Add(this.panel1);
+            this.Controls.Add(this.txtDescripcion);
+            this.Controls.Add(this.txtCodigo);
+            this.Controls.Add(this.BtnMultiAcabado);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.elipseControl1);
             this.Controls.Add(this.BtnCancelar);
-            this.Controls.Add(this.BtnSalir);
             this.Controls.Add(this.BtnBuscar);
-            this.Controls.Add(this.BtnNuevo);
             this.Controls.Add(this.BtnEliminar);
             this.Controls.Add(this.BtnEditar);
             this.Controls.Add(this.BtnGuardar);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Controls.Add(this.BtnNuevo);
+            this.Controls.Add(this.BtnSalir);
+            this.Controls.Add(this.dataGridViewMA);
+            this.Controls.Add(this.dataGridViewRC);
+            this.Controls.Add(this.chkVidriospanles);
+            this.Controls.Add(this.CmbAcabado);
+            this.Controls.Add(this.EliCtrlButtons);
+            this.Controls.Add(this.elipseControl3);
+            this.Controls.Add(this.panel1);
+            this.Controls.Add(this.elipseControl2);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "FrmSubComponente";
             this.Text = "Sub Componente";
             this.Load += new System.EventHandler(this.FrmSubComponente_Load);
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewRC)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMA)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).EndInit();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -415,26 +541,32 @@ namespace arquitectSoft.View
 
         #endregion
         private System.Windows.Forms.ImageList ImgLista;
-        private System.Windows.Forms.Button BtnCancelar;
-        private System.Windows.Forms.Button BtnSalir;
-        private System.Windows.Forms.Button BtnBuscar;
-        private System.Windows.Forms.Button BtnNuevo;
-        private System.Windows.Forms.Button BtnEliminar;
-        private System.Windows.Forms.Button BtnEditar;
-        private System.Windows.Forms.Button BtnGuardar;
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox txtDescripcion;
-        private System.Windows.Forms.Label lbletiquetaDescripcion;
-        private System.Windows.Forms.TextBox txtCodigo;
-        private System.Windows.Forms.Label lblEtiquetaCodigo;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ComboBox CmbAcabado;
         private System.Windows.Forms.CheckBox chkVidriospanles;
         private System.Windows.Forms.DataGridView dataGridViewRC;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Button BtnMultiAcabado;
         private System.Windows.Forms.DataGridView dataGridViewMA;
         private System.Windows.Forms.BindingSource bindingSource1;
+        private System.Windows.Forms.ImageList ImgListFinal;
+        private System.Windows.Forms.Button BtnSalir;
+        private Generals.ElipseControl EliCtrlButtons;
+        private Generals.RJButton BtnBuscar;
+        private Generals.RJButton BtnEliminar;
+        private Generals.RJButton BtnEditar;
+        private Generals.RJButton BtnGuardar;
+        private Generals.RJButton BtnNuevo;
+        private Generals.RJButton BtnCancelar;
+        private Generals.ElipseComponent elipseComponent1;
+        private Generals.ElipseControl elipseControl1;
+        private System.Windows.Forms.Label label1;
+        private Generals.ElipseControl elipseControl2;
+        private Generals.RJButton BtnMultiAcabado;
+        private Generals.ElipseControl elipseControl3;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.TextBox txtCodigo;
+        private System.Windows.Forms.TextBox txtDescripcion;
+        private System.Windows.Forms.Label lblEtiquetaCodigo;
+        private System.Windows.Forms.Label lbletiquetaDescripcion;
+        private System.Windows.Forms.Label label2;
     }
 }

@@ -70,7 +70,7 @@ namespace arquitectSoft
             this.TMSItem_configuracion});
             this.TMSItem_Administracion.ForeColor = System.Drawing.SystemColors.Control;
             resources.ApplyResources(this.TMSItem_Administracion, "TMSItem_Administracion");
-            this.TMSItem_Administracion.Name = "TMSItem_Administracion";
+            this.TMSItem_Administracion.Name = "TMSItem_Administracion";         
             this.TMSItem_Administracion.MouseEnter += new System.EventHandler(this.TMSItem_Administracion_MouseEnter);
             this.TMSItem_Administracion.MouseLeave += new System.EventHandler(this.TMSItem_Administracion_MouseLeave);
             // 

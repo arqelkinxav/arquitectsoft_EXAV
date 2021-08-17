@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -12,6 +13,12 @@ namespace arquitectSoft.View
 {
     public partial class FrmAcabados : Form
     {
+        [DllImport("user32.DLL", EntryPoint = "ReleaseCapture")]
+        private extern static void ReleaseCapture();
+
+        [DllImport("user32.DLL", EntryPoint = "SendMessage")]
+        private extern static void SendMessage(System.IntPtr hwnd, int wMsg, int wParam, int lParam);
+
         public string Opc;
         public FrmAcabados()
         {
@@ -138,9 +145,10 @@ namespace arquitectSoft.View
         }
         private void ClearComponent()
         {
-            txtCodigo.Text = "";
-            txtDescripcion.Text = "";
-           
+            txtCodigo.Text = String.Empty;
+            txtCodigo.PlaceHolderText = "Código";
+            txtDescripcion.Text = String.Empty;
+
         }
         private void BloquearCancelar()
         {
@@ -174,8 +182,40 @@ namespace arquitectSoft.View
             }
         }
 
+
         #endregion
 
+        private void PlaceHolderTextBox(string Texto, TextBox Tb,int valor)
+        {
 
+            switch (valor)
+            {
+                case 1:
+                    if (Tb.Text == string.Empty)
+                    {
+                        Tb.Text = Texto;
+                        Tb.ForeColor = Color.Gray;
+                    }
+                    break;
+                case 2:
+                    if (Tb.Text != Texto)
+                    {
+                        Tb.Text.Replace(Texto,"");
+                        Tb.ForeColor = Color.Black;
+                    }
+                    break;
+            }
+             
+          
+            
+   
+
+        }
+
+        private void EliCtrlButtons_MouseDown(object sender, MouseEventArgs e)
+        {
+            ReleaseCapture();
+            SendMessage(this.Handle, 0x112, 0xf012, 0);
+        }
     }
 }
