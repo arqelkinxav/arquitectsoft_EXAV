@@ -177,6 +177,11 @@ namespace arquitectSoft.View
                     dataGridViewPCalculate.Refresh();
                     dataGridViewPCalculate.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
 
+                    foreach (DataGridViewColumn col in dataGridViewPCalculate.Columns)
+                    {
+                        col.SortMode = DataGridViewColumnSortMode.NotSortable;
+                    }
+
                     break;
                 case 4:
                     dataGridViewTM.DataSource = dt;

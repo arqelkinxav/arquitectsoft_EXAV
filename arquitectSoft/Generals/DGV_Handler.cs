@@ -40,6 +40,33 @@ namespace arquitectSoft.Generals
             return combo;
         }
 
+        public static DataGridViewComboBoxColumn CreateSeleccionMedidaComboBox()
+        {
+
+            DataTable dtSelectMedidad = new DataTable();
+            dtSelectMedidad.Columns.Add("Codigo", System.Type.GetType("System.Int32"));
+            dtSelectMedidad.Columns.Add("Descripcion");
+
+            dtSelectMedidad.Rows.Add(0, "");
+            dtSelectMedidad.Rows.Add(1, "Altura");
+            dtSelectMedidad.Rows.Add(2, "Anchura");
+
+            DataGridViewComboBoxColumn combo = new DataGridViewComboBoxColumn();
+
+            combo.DataSource = dtSelectMedidad;
+            combo.DisplayMember = "Descripcion";
+            combo.ValueMember = "Codigo";
+            combo.Name = "MedidaHA";
+            combo.HeaderText = "Seleccion Medida";
+            combo.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            return combo;
+        }
+
+        private static DataTable DataTable()
+        {
+            throw new NotImplementedException();
+        }
+
         public static DataGridViewComboBoxColumn CreateColumnasComboBox()
         {
 

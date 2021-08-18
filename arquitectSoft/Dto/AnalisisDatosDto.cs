@@ -205,6 +205,7 @@ namespace arquitectSoft.Dto
                 case 1:
                 case 4:
                     string StrCant = index == 1 && !VidrioPanel ? "Longitud" : "Altura";
+
                     dt = GetDataFinal(dtmodel, StrCant);
                     break;
                 case 2:
@@ -315,7 +316,7 @@ namespace arquitectSoft.Dto
                     {
                         string descripcionGeneral = dtResultG.Rows[0]["Descripcion"].ToString() + "Altura: (" + altura + ") Anchura: (" + anchura + ")";
 
-                        string[] param = { "pCodigo|" + Codigo, "plogitud|" + altura };
+                        string[] param = { "pCodigo|" + Codigo, "plogitud|" + altura, "pAnchura|" + anchura };
                         con.Open(out fail);
                         DataTable dtResult = con.ExecuteDataSetSPparam(Generals.Constantes.QUERY_GET_CALCULATE_PUERTAS, out fail, param);
                         con.Close();

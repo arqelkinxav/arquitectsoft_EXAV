@@ -24,7 +24,7 @@ namespace arquitectSoft.Generals
             + " Cantidad_Adicional,"
             + " Aplica_Decremento,"
             + " elevado,"
-            + " idCorte, extra ) VALUES (?,?,?,?,?,?,?,?,?);";
+            + " idCorte, extra,Medida ) VALUES (?,?,?,?,?,?,?,?,?,?);";
         public static String QUERY_INSERT_COMPONENTE_ESPECIAL_DETALLE = "INSERT componentes_especial_detalle (Id_Componente_especial,"
             + " Id_Subcomponente,"
             + " select_Columna,"

@@ -45,9 +45,10 @@ namespace arquitectSoft.View
             BtnBorrar.Enabled = false;
 
 
-            GetAcabadoSelect("");
+      
 
             initialize_datagrid();
+            BloquearCancelar();
         }
 
         #region Botones
@@ -73,12 +74,12 @@ namespace arquitectSoft.View
                     SwSave = false;
                     break;
                 }
-                //else if (row.Cells["Cortes"].Value == null)
-                //{
-                //    fail = "El corte en uno de los Sub Componentes se encuentra Vacia!!";
-                //    SwSave = false;
-                //    break;
-                //}
+                else if (row.Cells["MedidaHA"].Value == null && (int)row.Cells["UnidadCalculada"].Value != 6)
+                {
+                    fail = "La Seleccion de medida en uno de los Sub Componentes se encuentra Vacia!!";
+                    SwSave = false;
+                    break;
+                }
             }
 
             if (!chkEspecial.Checked)
@@ -297,6 +298,9 @@ namespace arquitectSoft.View
             GridViewComponente.Columns.Add(DGV_Handler.CreateTextBox("Elevado", "Elevado", "Elevado", true));
             GridViewComponente.Columns.Add(DGV_Handler.CreateCorteComboBox());
             GridViewComponente.Columns.Add(DGV_Handler.CreateCheckBox("Extra", "Extra", "Extra"));
+            GridViewComponente.Columns.Add(DGV_Handler.CreateSeleccionMedidaComboBox());
+
+
 
             GridViewComponenteEsp.Columns.Add(DGV_Handler.CreateTextBox("IdSubcomponente", "Id", "IdSubcomponente", false));
             GridViewComponenteEsp.Columns.Add(DGV_Handler.CreateTextBox("Codigo", "Codigo", "Codigo", false));
@@ -407,7 +411,12 @@ namespace arquitectSoft.View
                     int Corte = (row.Cells["Cortes"].Value != null) ? (int)row.Cells["Cortes"].Value : 5;
                     bool Extra = (bool)row.Cells["Extra"].Value;
 
-                    Sub_Component sub = new Sub_Component(codigo, descripcion, Cxdefecto, CAdicional, unidadcalculada, ADecremento, id, Elevado, Corte, Extra);
+                    int medida = (row.Cells["MedidaHA"].Value != null) ? (int)row.Cells["MedidaHA"].Value : 1;
+                    
+
+                    if (unidadcalculada == "6") { medida = 0; }
+
+                    Sub_Component sub = new Sub_Component(codigo, descripcion, Cxdefecto, CAdicional, unidadcalculada, ADecremento, id, Elevado, Corte, Extra, medida);
 
                     Sbarray[row.Index] = sub;
                 }
@@ -460,7 +469,7 @@ namespace arquitectSoft.View
                 int cort = Int32.Parse(row["corte"].ToString());
                 bool adrecre = decre == 1 ? true : false;
                 bool extracomp = extra == 1 ? true : false;
-                bindingSource1.Add(new Sub_Component(row["Codigo"].ToString(), row["Descripcion"].ToString(), (int)row["Cantidad_Default"], (int)row["Cantidad_Adicional"], row["Id_Unidad_Calculada"].ToString(), adrecre, (int)row["Id_Subcomponente"], (int)row["elevado"], cort, extracomp));
+                bindingSource1.Add(new Sub_Component(row["Codigo"].ToString(), row["Descripcion"].ToString(), (int)row["Cantidad_Default"], (int)row["Cantidad_Adicional"], row["Id_Unidad_Calculada"].ToString(), adrecre, (int)row["Id_Subcomponente"], (int)row["elevado"], cort, extracomp, (int)row["Medida"]));
 
 
                 string valorinicial = condicionAcabado == "" ? "'" : ",'";
@@ -488,6 +497,13 @@ namespace arquitectSoft.View
                     {
                         DataGridViewComboBoxCell comboBoxCell = (DataGridViewComboBoxCell)(row.Cells[8]);
                         comboBoxCell.Value = Cort;
+                    }
+
+                    int Medida = Int32.Parse(dt.Rows[row.Index]["Medida"].ToString());
+                    if (Medida > 0)
+                    {
+                        DataGridViewComboBoxCell comboBoxCell = (DataGridViewComboBoxCell)(row.Cells[10]);
+                        comboBoxCell.Value = Medida;
                     }
                 }
             }
@@ -594,7 +610,7 @@ namespace arquitectSoft.View
 
             if (bsc.ReturnItem0 != null && bsc.ReturnItem4 == "0")
             {
-                bindingSource1.Add(new Sub_Component(bsc.ReturnItem1, bsc.ReturnItem2, 1, 30, "", false, Int32.Parse(bsc.ReturnItem0), 0, 0, false));
+                bindingSource1.Add(new Sub_Component(bsc.ReturnItem1, bsc.ReturnItem2, 1, 30, "", false, Int32.Parse(bsc.ReturnItem0), 0, 0, false,1));
 
                 GridViewComponente.DataSource = bindingSource1;
 
@@ -631,6 +647,6 @@ namespace arquitectSoft.View
             SendMessage(this.Handle, 0x112, 0xf012, 0);
         }
 
-
+ 
     }
 }
