@@ -28,9 +28,6 @@ namespace arquitectSoft
         /// </summary>
         private void InitializeComponent()
         {
-            this.label2 = new System.Windows.Forms.Label();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.panel2 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
@@ -43,42 +40,20 @@ namespace arquitectSoft
             this.txtTecnico = new System.Windows.Forms.TextBox();
             this.CmbAcabado1 = new System.Windows.Forms.ComboBox();
             this.CmbAcabado2 = new System.Windows.Forms.ComboBox();
-            this.BtnAceptar = new System.Windows.Forms.Button();
-            this.btncancelar = new System.Windows.Forms.Button();
-            this.panel1.SuspendLayout();
+            this.EliCtrlButtons = new arquitectSoft.Generals.ElipseControl();
+            this.elipseComponent1 = new arquitectSoft.Generals.ElipseComponent();
+            this.label2 = new System.Windows.Forms.Label();
+            this.elipseControl1 = new arquitectSoft.Generals.ElipseControl();
+            this.elipseControl2 = new arquitectSoft.Generals.ElipseControl();
+            this.BtnCancelar = new arquitectSoft.Generals.RJButton();
+            this.BtnAceptar = new arquitectSoft.Generals.RJButton();
+            this.elipseControl3 = new arquitectSoft.Generals.ElipseControl();
             this.SuspendLayout();
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.label2.Location = new System.Drawing.Point(164, 4);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(159, 24);
-            this.label2.TabIndex = 6;
-            this.label2.Text = "Datos Importantes";
-            // 
-            // panel1
-            // 
-            this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(158)))), ((int)(((byte)(158)))), ((int)(((byte)(158)))));
-            this.panel1.Controls.Add(this.label2);
-            this.panel1.Location = new System.Drawing.Point(5, 17);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(487, 32);
-            this.panel1.TabIndex = 48;
-            // 
-            // panel2
-            // 
-            this.panel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(70)))), ((int)(((byte)(82)))));
-            this.panel2.Location = new System.Drawing.Point(-1, -1);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(501, 71);
-            this.panel2.TabIndex = 50;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
+            this.label1.BackColor = System.Drawing.Color.White;
             this.label1.Location = new System.Drawing.Point(26, 84);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(109, 13);
@@ -88,6 +63,7 @@ namespace arquitectSoft
             // label3
             // 
             this.label3.AutoSize = true;
+            this.label3.BackColor = System.Drawing.Color.White;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.Location = new System.Drawing.Point(2, 127);
             this.label3.Name = "label3";
@@ -98,6 +74,7 @@ namespace arquitectSoft
             // label4
             // 
             this.label4.AutoSize = true;
+            this.label4.BackColor = System.Drawing.Color.White;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label4.Location = new System.Drawing.Point(2, 154);
             this.label4.Name = "label4";
@@ -108,6 +85,7 @@ namespace arquitectSoft
             // label5
             // 
             this.label5.AutoSize = true;
+            this.label5.BackColor = System.Drawing.Color.White;
             this.label5.Location = new System.Drawing.Point(330, 84);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(40, 13);
@@ -117,6 +95,7 @@ namespace arquitectSoft
             // label6
             // 
             this.label6.AutoSize = true;
+            this.label6.BackColor = System.Drawing.Color.White;
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label6.Location = new System.Drawing.Point(5, 180);
             this.label6.Name = "label6";
@@ -127,6 +106,7 @@ namespace arquitectSoft
             // label7
             // 
             this.label7.AutoSize = true;
+            this.label7.BackColor = System.Drawing.Color.White;
             this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label7.Location = new System.Drawing.Point(5, 208);
             this.label7.Name = "label7";
@@ -179,34 +159,116 @@ namespace arquitectSoft
             this.CmbAcabado2.Size = new System.Drawing.Size(346, 21);
             this.CmbAcabado2.TabIndex = 62;
             // 
+            // EliCtrlButtons
+            // 
+            this.EliCtrlButtons.BackColor = System.Drawing.Color.Black;
+            this.EliCtrlButtons.CornerRadius = 15;
+            this.EliCtrlButtons.Location = new System.Drawing.Point(-1, 0);
+            this.EliCtrlButtons.Name = "EliCtrlButtons";
+            this.EliCtrlButtons.Size = new System.Drawing.Size(501, 48);
+            this.EliCtrlButtons.TabIndex = 91;
+            this.EliCtrlButtons.Text = "elipseControl1";
+            // 
+            // elipseComponent1
+            // 
+            this.elipseComponent1.CornerRadius = 15;
+            this.elipseComponent1.TargetControl = this;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.BackColor = System.Drawing.Color.Black;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.ForeColor = System.Drawing.Color.White;
+            this.label2.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.label2.Location = new System.Drawing.Point(33, 45);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(175, 18);
+            this.label2.TabIndex = 93;
+            this.label2.Text = "Datos Encabezado Excel";
+            // 
+            // elipseControl1
+            // 
+            this.elipseControl1.BackColor = System.Drawing.Color.Black;
+            this.elipseControl1.CornerRadius = 15;
+            this.elipseControl1.Location = new System.Drawing.Point(15, 43);
+            this.elipseControl1.Name = "elipseControl1";
+            this.elipseControl1.Size = new System.Drawing.Size(467, 32);
+            this.elipseControl1.TabIndex = 92;
+            this.elipseControl1.Text = "elipseControl1";
+            // 
+            // elipseControl2
+            // 
+            this.elipseControl2.BackColor = System.Drawing.Color.White;
+            this.elipseControl2.CornerRadius = 15;
+            this.elipseControl2.Location = new System.Drawing.Point(1, 63);
+            this.elipseControl2.Name = "elipseControl2";
+            this.elipseControl2.Size = new System.Drawing.Size(498, 197);
+            this.elipseControl2.TabIndex = 94;
+            this.elipseControl2.Text = "elipseControl1";
+            // 
+            // BtnCancelar
+            // 
+            this.BtnCancelar.BackColor = System.Drawing.SystemColors.Control;
+            this.BtnCancelar.BackgroundColor = System.Drawing.SystemColors.Control;
+            this.BtnCancelar.BorderColor = System.Drawing.Color.Black;
+            this.BtnCancelar.BorderRadius = 10;
+            this.BtnCancelar.BorderSize = 0;
+            this.BtnCancelar.FlatAppearance.BorderSize = 0;
+            this.BtnCancelar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnCancelar.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.BtnCancelar.ForeColor = System.Drawing.Color.DimGray;
+            this.BtnCancelar.Location = new System.Drawing.Point(114, 269);
+            this.BtnCancelar.Name = "BtnCancelar";
+            this.BtnCancelar.Size = new System.Drawing.Size(84, 22);
+            this.BtnCancelar.TabIndex = 96;
+            this.BtnCancelar.Text = "Cancelar";
+            this.BtnCancelar.TextColor = System.Drawing.Color.DimGray;
+            this.BtnCancelar.UseVisualStyleBackColor = false;
+            this.BtnCancelar.Click += new System.EventHandler(this.BtnCancelar_Click);
+            // 
             // BtnAceptar
             // 
-            this.BtnAceptar.Location = new System.Drawing.Point(319, 262);
+            this.BtnAceptar.BackColor = System.Drawing.Color.DimGray;
+            this.BtnAceptar.BackgroundColor = System.Drawing.Color.DimGray;
+            this.BtnAceptar.BorderColor = System.Drawing.Color.Black;
+            this.BtnAceptar.BorderRadius = 10;
+            this.BtnAceptar.BorderSize = 0;
+            this.BtnAceptar.FlatAppearance.BorderSize = 0;
+            this.BtnAceptar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnAceptar.ForeColor = System.Drawing.Color.White;
+            this.BtnAceptar.Location = new System.Drawing.Point(17, 269);
             this.BtnAceptar.Name = "BtnAceptar";
-            this.BtnAceptar.Size = new System.Drawing.Size(75, 23);
-            this.BtnAceptar.TabIndex = 63;
-            this.BtnAceptar.Text = "&Aceptar";
-            this.BtnAceptar.UseVisualStyleBackColor = true;
+            this.BtnAceptar.Size = new System.Drawing.Size(84, 22);
+            this.BtnAceptar.TabIndex = 95;
+            this.BtnAceptar.Text = "Aceptar";
+            this.BtnAceptar.TextColor = System.Drawing.Color.White;
+            this.BtnAceptar.UseCompatibleTextRendering = true;
+            this.BtnAceptar.UseVisualStyleBackColor = false;
             this.BtnAceptar.Click += new System.EventHandler(this.BtnAceptar_Click);
             // 
-            // btncancelar
+            // elipseControl3
             // 
-            this.btncancelar.Location = new System.Drawing.Point(400, 262);
-            this.btncancelar.Name = "btncancelar";
-            this.btncancelar.Size = new System.Drawing.Size(75, 23);
-            this.btncancelar.TabIndex = 64;
-            this.btncancelar.Text = "&Cancelar";
-            this.btncancelar.UseVisualStyleBackColor = true;
-            this.btncancelar.Click += new System.EventHandler(this.btncancelar_Click);
+            this.elipseControl3.BackColor = System.Drawing.Color.Black;
+            this.elipseControl3.CornerRadius = 15;
+            this.elipseControl3.Location = new System.Drawing.Point(-1, 262);
+            this.elipseControl3.Name = "elipseControl3";
+            this.elipseControl3.Size = new System.Drawing.Size(500, 40);
+            this.elipseControl3.TabIndex = 97;
+            this.elipseControl3.Text = "elipseControl1";
             // 
             // FrmLoading
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.BackColor = System.Drawing.Color.DimGray;
             this.ClientSize = new System.Drawing.Size(499, 297);
-            this.Controls.Add(this.btncancelar);
+            this.Controls.Add(this.BtnCancelar);
             this.Controls.Add(this.BtnAceptar);
+            this.Controls.Add(this.elipseControl3);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.elipseControl1);
+            this.Controls.Add(this.EliCtrlButtons);
             this.Controls.Add(this.CmbAcabado2);
             this.Controls.Add(this.CmbAcabado1);
             this.Controls.Add(this.txtTecnico);
@@ -219,8 +281,7 @@ namespace arquitectSoft
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.panel1);
-            this.Controls.Add(this.panel2);
+            this.Controls.Add(this.elipseControl2);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
@@ -231,18 +292,12 @@ namespace arquitectSoft
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Acerca de";
             this.Load += new System.EventHandler(this.FrmLoading_Load);
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
@@ -255,7 +310,13 @@ namespace arquitectSoft
         private System.Windows.Forms.TextBox txtTecnico;
         private System.Windows.Forms.ComboBox CmbAcabado1;
         private System.Windows.Forms.ComboBox CmbAcabado2;
-        private System.Windows.Forms.Button BtnAceptar;
-        private System.Windows.Forms.Button btncancelar;
+        private Generals.ElipseControl EliCtrlButtons;
+        private Generals.ElipseComponent elipseComponent1;
+        private System.Windows.Forms.Label label2;
+        private Generals.ElipseControl elipseControl1;
+        private Generals.ElipseControl elipseControl2;
+        private Generals.RJButton BtnCancelar;
+        private Generals.RJButton BtnAceptar;
+        private Generals.ElipseControl elipseControl3;
     }
 }

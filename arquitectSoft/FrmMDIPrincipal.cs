@@ -152,7 +152,7 @@ namespace arquitectSoft
             {
                 ((ToolStripMenuItem)sender).ForeColor = Color.Black; //new color
                 TMSItem_configuracion.ForeColor = Color.White; //new color
-        }
+            }
 
             private void TMSItem_Administracion_MouseLeave(object sender, EventArgs e)
             {
@@ -162,6 +162,7 @@ namespace arquitectSoft
             private void TMSItem_componente_MouseEnter(object sender, EventArgs e)
             {
                 ((ToolStripMenuItem)sender).ForeColor = Color.Black; //new color
+                 
             }
 
             private void TMSItem_componente_MouseLeave(object sender, EventArgs e)
@@ -231,14 +232,26 @@ namespace arquitectSoft
                 ((ToolStripMenuItem)sender).ForeColor = Color.White; //new color
             }
 
+        private void mecanizadoToolStripMenuItem_MouseEnter(object sender, EventArgs e)
+        {
+            ToolStripMenuItem MyMenuItem = (ToolStripMenuItem)sender;
+            ToolStripMenuItem parent = (ToolStripMenuItem)MyMenuItem.OwnerItem;
 
+            parent.ForeColor = Color.Black; //new color
+            ((ToolStripMenuItem)sender).ForeColor = Color.Black; //new color
+        }
+
+        private void mecanizadoToolStripMenuItem_MouseLeave(object sender, EventArgs e)
+        {
+            ((ToolStripMenuItem)sender).ForeColor = Color.White; //new color
+        }
 
 
 
         #endregion
 
         #region Procesos
-            private void TMSItem_procesos_MouseEnter(object sender, EventArgs e)
+        private void TMSItem_procesos_MouseEnter(object sender, EventArgs e)
             {
                 ((ToolStripMenuItem)sender).ForeColor = Color.Black; //new color
             }
@@ -275,8 +288,17 @@ namespace arquitectSoft
 
 
 
+
         #endregion
 
 
+
+        private void mecanizadoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            View.FrmMecanizado formMecanizado = new View.FrmMecanizado();
+            formMecanizado.MdiParent = this;
+            formMecanizado.StartPosition = FormStartPosition.CenterScreen;
+            formMecanizado.Show();
+        }
     }
 }

@@ -13,7 +13,7 @@ namespace arquitectSoft.Dto
     {
         public string SaveComponent(string codigo, string descripcion, bool checkSubComponente, string acabado, string opcion, Sub_Component[] Sbarray, Sub_ComponentEspecial[] SbarrayEsp, string IdComponenteExist)
         {
-            
+
             string resul = "";
             Generals.Conexion con = new Generals.Conexion();
             string fail = "";
@@ -37,28 +37,28 @@ namespace arquitectSoft.Dto
                         MsgResul = "Registro Editado Correctamente";
                         break;
                     default:
-                        sqlquery = Generals.Constantes.QUERY_INSERT_COMPONENTES;                        
+                        sqlquery = Generals.Constantes.QUERY_INSERT_COMPONENTES;
                         break;
                 }
 
-             
-               int idComponente = con.ExecuteNonQuery(sqlquery, out fail, param,0);
 
-               idComponente = opcion == "Editar" ? Int32.Parse(IdComponenteExist) : idComponente;
+                int idComponente = con.ExecuteNonQuery(sqlquery, out fail, param, 0);
 
-               string[] paramdelete = { idComponente.ToString() };
-               con.ExecuteNonQuery(Generals.Constantes.QUERY_DELETE_COMPONENTE_DETALLE, out fail, paramdelete,0);
-               con.ExecuteNonQuery(Generals.Constantes.QUERY_DELETE_COMPONENTE_ESPECIAL_DETALLE, out fail, paramdelete, 0);
+                idComponente = opcion == "Editar" ? Int32.Parse(IdComponenteExist) : idComponente;
+
+                string[] paramdelete = { idComponente.ToString() };
+                con.ExecuteNonQuery(Generals.Constantes.QUERY_DELETE_COMPONENTE_DETALLE, out fail, paramdelete, 0);
+                con.ExecuteNonQuery(Generals.Constantes.QUERY_DELETE_COMPONENTE_ESPECIAL_DETALLE, out fail, paramdelete, 0);
 
 
-               con.Close();
+                con.Close();
 
-               SaveSubComponentDetalle(idComponente, Sbarray);
+                SaveSubComponentDetalle(idComponente, Sbarray);
 
-               SaveSubComponentEspecialDetalle(idComponente, SbarrayEsp);
+                SaveSubComponentEspecialDetalle(idComponente, SbarrayEsp);
 
                 resul = fail == "" ? MsgResul : fail;
-               
+
             }
             catch (Exception ex)
             {
@@ -72,7 +72,7 @@ namespace arquitectSoft.Dto
         private void SaveSubComponentDetalle(int idComponente, Sub_Component[] Sbarray)
         {
             Generals.Conexion con = new Generals.Conexion();
-            
+
             string fail = "";
             con.Open(out fail);
 
@@ -80,14 +80,23 @@ namespace arquitectSoft.Dto
             foreach (Sub_Component row in Sbarray)
             {
 
-                int adecre = (row.ADecremento)? 1:0;
+                int adecre = (row.ADecremento) ? 1 : 0;
                 int extra = (row.Extra) ? 1 : 0;
+                string cantAnch = "0";
+                string adecreAnch = "0";
+
+                if (row.Elevado.ToString() != "0" && row.Elevado.ToString() != "")
+                {
+                    cantAnch = decimal.Parse(row.Elevado.ToString().Split(';')[0].Split('|')[1]).ToString();
+                    adecreAnch = bool.Parse(row.Elevado.ToString().Split(';')[1].Split('|')[1]) == true ? "1" : "0";
+                }
 
 
                 string[] param = { idComponente.ToString(), row.IdSubcomponente.ToString(), row.UnidadCalculada
-                        ,row.Cxdefecto.ToString(),row.CAdicional.ToString(),adecre.ToString(),row.Elevado.ToString(),row.Cortes.ToString(),extra.ToString(),row.Medida.ToString() };
+                        ,row.Cxdefecto.ToString(),row.CAdicional.ToString(),adecre.ToString(),row.Elevado.ToString()
+                        ,row.Cortes.ToString(),extra.ToString(),row.Medida.ToString(),cantAnch,adecreAnch,row.Mecanizado.ToString() };
 
-                int var = con.ExecuteNonQuery(Generals.Constantes.QUERY_INSERT_COMPONENTE_DETALLE, out fail, param,0);
+                int var = con.ExecuteNonQuery(Generals.Constantes.QUERY_INSERT_COMPONENTE_DETALLE, out fail, param, 0);
             }
             con.Close();
 
@@ -127,7 +136,7 @@ namespace arquitectSoft.Dto
                 {
                     resul = row.GetString(0);
                 }
-               
+
             }
             catch (Exception ex)
             {
@@ -140,7 +149,7 @@ namespace arquitectSoft.Dto
 
         public DataTable GetComponentDetalle(string IdComponente)
         {
-           
+
             Generals.Conexion con = new Generals.Conexion();
             string fail = "";
 
@@ -164,7 +173,7 @@ namespace arquitectSoft.Dto
             return row;
         }
 
-        public bool ValilidationSaveComponenet(string codigo,string descripcion,bool chkespecial,int acabado, int RowCountGrid, int RowCountGridEsp, out string fail)
+        public bool ValilidationSaveComponenet(string codigo, string descripcion, bool chkespecial, int acabado, int RowCountGrid, int RowCountGridEsp, out string fail)
         {
             bool SwSave = true;
             fail = null;
@@ -183,7 +192,8 @@ namespace arquitectSoft.Dto
                 fail = "Debe Agregar un Sub Componente al menos!!!";
                 SwSave = false;
 
-            }else if (chkespecial == true && RowCountGridEsp == 0)
+            }
+            else if (chkespecial == true && RowCountGridEsp == 0)
             {
                 fail = "Debe Agregar un Sub Componente Especial al menos!!!";
                 SwSave = false;
@@ -204,13 +214,14 @@ namespace arquitectSoft.Dto
             string resul = "";
             con.Open(out fail);
             string[] param = { idComponente.ToString() };
-            try { 
+            try
+            {
 
-                con.ExecuteNonQuery(Generals.Constantes.QUERY_DELETE_COMPONENTE, out fail, param,0);
-                con.ExecuteNonQuery(Generals.Constantes.QUERY_DELETE_COMPONENTE_DETALLE, out fail, param,0);
+                con.ExecuteNonQuery(Generals.Constantes.QUERY_DELETE_COMPONENTE, out fail, param, 0);
+                con.ExecuteNonQuery(Generals.Constantes.QUERY_DELETE_COMPONENTE_DETALLE, out fail, param, 0);
 
                 resul = "Registro Eliminado Correctamente";
-            
+
             }
             catch (Exception ex)
             {
@@ -224,6 +235,6 @@ namespace arquitectSoft.Dto
 
 
 
-     
+
     }
 }

@@ -122,6 +122,7 @@ namespace arquitectSoft.View
         {
             txtCodigo.Enabled = false;
             txtDescripcion.Enabled = false;
+            txtConvencion.Enabled = false;
         }
         private void habilitarNuevo(string opcion)
         {

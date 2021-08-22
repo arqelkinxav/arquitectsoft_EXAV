@@ -161,7 +161,7 @@ namespace arquitectSoft
             
         }
 
-        private void btncancelar_Click(object sender, EventArgs e)
+        private void BtnCancelar_Click(object sender, EventArgs e)
         {
             Fecha = null;
             Numero = null;

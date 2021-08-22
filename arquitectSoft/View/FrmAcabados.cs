@@ -121,6 +121,7 @@ namespace arquitectSoft.View
         {
             txtCodigo.Enabled = false;
             txtDescripcion.Enabled = false;
+            BloquearCancelar();
         }
         private void habilitarNuevo(string opcion)
         {
@@ -146,7 +147,6 @@ namespace arquitectSoft.View
         private void ClearComponent()
         {
             txtCodigo.Text = String.Empty;
-            txtCodigo.PlaceHolderText = "Código";
             txtDescripcion.Text = String.Empty;
 
         }

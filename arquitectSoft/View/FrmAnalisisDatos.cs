@@ -385,6 +385,8 @@ namespace arquitectSoft.View
                                 table = dataGridViewVPCalculate;
                                 break;
                             case 3:
+                                Range = string.Format("A{0}:H{0}", valueinitial);
+                                rangetwo = "A{0}:H{0}";
                                 sheets = "PUERTAS";
                                 table = dataGridViewPCalculate;
                                 break;

@@ -62,6 +62,21 @@ namespace arquitectSoft.Generals
             return combo;
         }
 
+        public static DataGridViewComboBoxColumn CreateMecanizadoComboBox()
+        {
+
+            Dto.MecanizadoDto dto = new Dto.MecanizadoDto();
+            DataGridViewComboBoxColumn combo = new DataGridViewComboBoxColumn();
+
+            combo.DataSource = dto.GetMecanizado();
+            combo.DisplayMember = "Descripcion";
+            combo.ValueMember = "Id_mecanizado";
+            combo.Name = "Mecanizado";
+            combo.HeaderText = "Mecanizado";
+            combo.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            return combo;
+        }
+
         private static DataTable DataTable()
         {
             throw new NotImplementedException();

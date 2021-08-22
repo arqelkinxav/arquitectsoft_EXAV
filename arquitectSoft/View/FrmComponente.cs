@@ -23,11 +23,13 @@ namespace arquitectSoft.View
         [DllImport("user32.DLL", EntryPoint = "SendMessage")]
         private extern static void SendMessage(System.IntPtr hwnd, int wMsg, int wParam, int lParam);
 
-
         public FrmComponente()
         {
             InitializeComponent();
         }
+
+        public decimal CantiAdiAnch = 30;
+        public bool AplDecreAnch;
 
         public string Opc;
         public string condicionAcabado = "";
@@ -45,7 +47,7 @@ namespace arquitectSoft.View
             BtnBorrar.Enabled = false;
 
 
-      
+
 
             initialize_datagrid();
             BloquearCancelar();
@@ -68,6 +70,9 @@ namespace arquitectSoft.View
 
             foreach (DataGridViewRow row in GridViewComponente.Rows)
             {
+
+                string dataanchura = row.Cells["elevado"].Value.ToString();
+
                 if (row.Cells["UnidadCalculada"].Value == null)
                 {
                     fail = "La unidad calculada en uno de los Sub Componentes se encuentra Vacia!!";
@@ -77,6 +82,12 @@ namespace arquitectSoft.View
                 else if (row.Cells["MedidaHA"].Value == null && (int)row.Cells["UnidadCalculada"].Value != 6)
                 {
                     fail = "La Seleccion de medida en uno de los Sub Componentes se encuentra Vacia!!";
+                    SwSave = false;
+                    break;
+                }
+                else if (row.Cells["elevado"].Value.ToString() == "0" && (int)row.Cells["UnidadCalculada"].Value == 6)
+                {
+                    fail = "No se ha seleccionado datos para la anchura!!";
                     SwSave = false;
                     break;
                 }
@@ -295,11 +306,11 @@ namespace arquitectSoft.View
             GridViewComponente.Columns.Add(DGV_Handler.CreateTextBox("Cxdefecto", "Cx. efecto", "Cxdefecto", true));
             GridViewComponente.Columns.Add(DGV_Handler.CreateTextBox("CAdicional", "C. Adicional", "CAdicional", true));
             GridViewComponente.Columns.Add(DGV_Handler.CreateCheckBox("ADecremento", "A. Decremento", "ADecremento"));
-            GridViewComponente.Columns.Add(DGV_Handler.CreateTextBox("Elevado", "Elevado", "Elevado", true));
+            GridViewComponente.Columns.Add(DGV_Handler.CreateTextBox("Elevado", "Data Anchura", "Elevado", true)); //Se reutiliza campo elevado para guardar data de anchura
             GridViewComponente.Columns.Add(DGV_Handler.CreateCorteComboBox());
             GridViewComponente.Columns.Add(DGV_Handler.CreateCheckBox("Extra", "Extra", "Extra"));
             GridViewComponente.Columns.Add(DGV_Handler.CreateSeleccionMedidaComboBox());
-
+            GridViewComponente.Columns.Add(DGV_Handler.CreateMecanizadoComboBox());
 
 
             GridViewComponenteEsp.Columns.Add(DGV_Handler.CreateTextBox("IdSubcomponente", "Id", "IdSubcomponente", false));
@@ -314,7 +325,8 @@ namespace arquitectSoft.View
             GridViewComponente.Columns[0].ReadOnly = true;
             GridViewComponente.Columns[1].ReadOnly = true;
             GridViewComponente.Columns[2].ReadOnly = true;
-            GridViewComponente.Columns[7].Visible = false; //Se oculta para posterior validar en que se puede usar
+            GridViewComponente.Columns[7].Visible = false; //Se reutiliza campo elevado para guardar data de anchura
+            GridViewComponente.Columns[11].Visible = true; //Se reutiliza campo elevado para guardar data de anchura
 
             GridViewComponenteEsp.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             GridViewComponenteEsp.Columns[0].ReadOnly = true;
@@ -405,18 +417,20 @@ namespace arquitectSoft.View
                     int Cxdefecto = (int)row.Cells["Cxdefecto"].Value;
                     int CAdicional = (int)row.Cells["CAdicional"].Value;
                     bool ADecremento = (bool)row.Cells["ADecremento"].Value;
-                    int Elevado = (int)row.Cells["Elevado"].Value;
+                    string Elevado = row.Cells["Elevado"].Value.ToString();
 
 
                     int Corte = (row.Cells["Cortes"].Value != null) ? (int)row.Cells["Cortes"].Value : 5;
                     bool Extra = (bool)row.Cells["Extra"].Value;
 
                     int medida = (row.Cells["MedidaHA"].Value != null) ? (int)row.Cells["MedidaHA"].Value : 1;
-                    
+
+                    string Mecanizado = (row.Cells["Mecanizado"].Value != null) ? row.Cells["Mecanizado"].Value.ToString() : "0";
+
 
                     if (unidadcalculada == "6") { medida = 0; }
 
-                    Sub_Component sub = new Sub_Component(codigo, descripcion, Cxdefecto, CAdicional, unidadcalculada, ADecremento, id, Elevado, Corte, Extra, medida);
+                    Sub_Component sub = new Sub_Component(codigo, descripcion, Cxdefecto, CAdicional, unidadcalculada, ADecremento, id, Elevado, Corte, Extra, medida, int.Parse(Mecanizado));
 
                     Sbarray[row.Index] = sub;
                 }
@@ -467,9 +481,10 @@ namespace arquitectSoft.View
                 int decre = Int32.Parse(row["Aplica_Decremento"].ToString());
                 int extra = Int32.Parse(row["extra"].ToString());
                 int cort = Int32.Parse(row["corte"].ToString());
+                int mecanizado = row["mecanizado"].ToString() != "" ? Int32.Parse(row["mecanizado"].ToString()) : 0;
                 bool adrecre = decre == 1 ? true : false;
                 bool extracomp = extra == 1 ? true : false;
-                bindingSource1.Add(new Sub_Component(row["Codigo"].ToString(), row["Descripcion"].ToString(), (int)row["Cantidad_Default"], (int)row["Cantidad_Adicional"], row["Id_Unidad_Calculada"].ToString(), adrecre, (int)row["Id_Subcomponente"], (int)row["elevado"], cort, extracomp, (int)row["Medida"]));
+                bindingSource1.Add(new Sub_Component(row["Codigo"].ToString(), row["Descripcion"].ToString(), (int)row["Cantidad_Default"], (int)row["Cantidad_Adicional"], row["Id_Unidad_Calculada"].ToString(), adrecre, (int)row["Id_Subcomponente"], row["elevado"].ToString(), cort, extracomp, (int)row["Medida"], mecanizado));
 
 
                 string valorinicial = condicionAcabado == "" ? "'" : ",'";
@@ -504,6 +519,13 @@ namespace arquitectSoft.View
                     {
                         DataGridViewComboBoxCell comboBoxCell = (DataGridViewComboBoxCell)(row.Cells[10]);
                         comboBoxCell.Value = Medida;
+                    }
+
+                    long Mecanizado = dt.Rows[row.Index]["Mecanizado"].ToString() == "" ? 0 : Int64.Parse(dt.Rows[row.Index]["Mecanizado"].ToString());
+                    if (Mecanizado > 0)
+                    {
+                        DataGridViewComboBoxCell comboBoxCell = (DataGridViewComboBoxCell)(row.Cells[11]);
+                        comboBoxCell.Value = Mecanizado;
                     }
                 }
             }
@@ -610,7 +632,7 @@ namespace arquitectSoft.View
 
             if (bsc.ReturnItem0 != null && bsc.ReturnItem4 == "0")
             {
-                bindingSource1.Add(new Sub_Component(bsc.ReturnItem1, bsc.ReturnItem2, 1, 30, "", false, Int32.Parse(bsc.ReturnItem0), 0, 0, false,1));
+                bindingSource1.Add(new Sub_Component(bsc.ReturnItem1, bsc.ReturnItem2, 1, 30, "", false, Int32.Parse(bsc.ReturnItem0), "", 0, false, 1,0));
 
                 GridViewComponente.DataSource = bindingSource1;
 
@@ -647,6 +669,36 @@ namespace arquitectSoft.View
             SendMessage(this.Handle, 0x112, 0xf012, 0);
         }
 
- 
+        private void GridViewComponente_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (GridViewComponente.Rows[e.RowIndex].Cells[3].Value.ToString() == "6") {
+
+                FrmDataAmbas bsc = new FrmDataAmbas();
+                string datavalue = GridViewComponente.Rows[e.RowIndex].Cells[7].Value.ToString();
+                if (datavalue == "0" || datavalue == "")
+                {
+                    bsc.ReturnItem0 = CantiAdiAnch;
+                    bsc.ReturnItem1 = AplDecreAnch;
+                }
+                else
+                {
+                    bsc.ReturnItem0 = decimal.Parse(GridViewComponente.Rows[e.RowIndex].Cells[7].Value.ToString().Split(';')[0].Split('|')[1]);
+                    bsc.ReturnItem1 = bool.Parse(GridViewComponente.Rows[e.RowIndex].Cells[7].Value.ToString().Split(';')[1].Split('|')[1]);
+                }
+                
+               
+                bsc.ShowDialog();
+                GridViewComponente.Rows[e.RowIndex].Cells[7].Value = "Cant-Adi|" + bsc.ReturnItem0 + ";Apli-Decr|" + bsc.ReturnItem1;
+                CantiAdiAnch = bsc.ReturnItem0;
+                AplDecreAnch = bsc.ReturnItem1;
+            }
+
+                
+           
+
+
+            
+        
     }
+}
 }

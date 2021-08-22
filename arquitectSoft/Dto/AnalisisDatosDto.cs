@@ -130,9 +130,10 @@ namespace arquitectSoft.Dto
                     listColumns.Add("Codigo");
                     listColumns.Add("Descripción");
                     listColumns.Add("cantidad");
-                    listColumns.Add("medida");
-                    listColumns.Add("Medidida Calculada");
+                    listColumns.Add("Longitud (Altura)");
+                    listColumns.Add("Anchura");
                     listColumns.Add("Corte");
+                    listColumns.Add("Mecanizado");
                     //-----------------
                     break;
                 case 10:
@@ -311,6 +312,7 @@ namespace arquitectSoft.Dto
                     con.Open(out fail);
                     DataTable dtResultG = con.ExecuteDataSetSPparam(Generals.Constantes.QUERY_GET_CALCULATE_PUERTAS_GENERAL, out fail, paramGeneral);
                     con.Close();
+ 
 
                     if (dtResultG.Rows.Count > 0)
                     {
@@ -319,7 +321,7 @@ namespace arquitectSoft.Dto
                         string[] param = { "pCodigo|" + Codigo, "plogitud|" + altura, "pAnchura|" + anchura };
                         con.Open(out fail);
                         DataTable dtResult = con.ExecuteDataSetSPparam(Generals.Constantes.QUERY_GET_CALCULATE_PUERTAS, out fail, param);
-                        con.Close();
+                        con.Close();           
 
                         if (dtResult.Rows.Count > 0)
                         {
@@ -331,15 +333,15 @@ namespace arquitectSoft.Dto
 
                             foreach (DataRow rowP in dtResult.Rows)
                             {
+                                string uniDes = rowP["id_unidad_Calculada"].ToString();
                                 if (rowaddExtra & Int32.Parse(rowP["Extra"].ToString()) == 1)
                                 {
-                                    dtresulPuerta.Rows.Add("Item-Extra", rowP["codigo"].ToString(), rowP["Descripcion"].ToString(), Int32.Parse(rowP["cantidad"].ToString()) * rowaddExtraCant, rowP["medidabase"].ToString(), rowP["medida"].ToString(), rowP["corte"].ToString());
+                                    dtresulPuerta.Rows.Add("Item-Extra (" + uniDes+")", rowP["codigo"].ToString(), rowP["Descripcion"].ToString(), Int32.Parse(rowP["cantidad"].ToString()) * rowaddExtraCant, rowP["medidabase"].ToString(), rowP["medida"].ToString(), rowP["corte"].ToString(), rowP["mecanizado"].ToString());
                                 }
                                 else if (Int32.Parse(rowP["Extra"].ToString()) == 0)
                                 {
-                                    dtresulPuerta.Rows.Add("Item", rowP["codigo"].ToString(), rowP["Descripcion"].ToString(), rowP["cantidad"].ToString(), rowP["medidabase"].ToString(), rowP["medida"].ToString(), rowP["corte"].ToString());
+                                    dtresulPuerta.Rows.Add("Item (" + uniDes + ")", rowP["codigo"].ToString(), rowP["Descripcion"].ToString(), rowP["cantidad"].ToString(), rowP["medidabase"].ToString(), rowP["medida"].ToString(), rowP["corte"].ToString(), rowP["mecanizado"].ToString());
                                 }
-
                             }
                         }
 

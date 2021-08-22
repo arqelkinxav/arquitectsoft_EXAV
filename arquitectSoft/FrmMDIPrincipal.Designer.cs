@@ -44,6 +44,7 @@ namespace arquitectSoft
             this.acercaDeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.Mdi_nameConnect2 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.mecanizadoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -70,7 +71,7 @@ namespace arquitectSoft
             this.TMSItem_configuracion});
             this.TMSItem_Administracion.ForeColor = System.Drawing.SystemColors.Control;
             resources.ApplyResources(this.TMSItem_Administracion, "TMSItem_Administracion");
-            this.TMSItem_Administracion.Name = "TMSItem_Administracion";         
+            this.TMSItem_Administracion.Name = "TMSItem_Administracion";
             this.TMSItem_Administracion.MouseEnter += new System.EventHandler(this.TMSItem_Administracion_MouseEnter);
             this.TMSItem_Administracion.MouseLeave += new System.EventHandler(this.TMSItem_Administracion_MouseLeave);
             // 
@@ -100,7 +101,8 @@ namespace arquitectSoft
             this.TMSItem_configuracion.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.TMSItem_acabados,
             this.TMSItem_cortes,
-            this.unidadDeMedidaToolStripMenuItem});
+            this.unidadDeMedidaToolStripMenuItem,
+            this.mecanizadoToolStripMenuItem});
             this.TMSItem_configuracion.ForeColor = System.Drawing.SystemColors.Control;
             this.TMSItem_configuracion.Name = "TMSItem_configuracion";
             resources.ApplyResources(this.TMSItem_configuracion, "TMSItem_configuracion");
@@ -189,6 +191,16 @@ namespace arquitectSoft
             this.Mdi_nameConnect2.Name = "Mdi_nameConnect2";
             resources.ApplyResources(this.Mdi_nameConnect2, "Mdi_nameConnect2");
             // 
+            // mecanizadoToolStripMenuItem
+            // 
+            this.mecanizadoToolStripMenuItem.BackColor = System.Drawing.SystemColors.Desktop;
+            this.mecanizadoToolStripMenuItem.ForeColor = System.Drawing.SystemColors.Control;
+            this.mecanizadoToolStripMenuItem.Name = "mecanizadoToolStripMenuItem";
+            resources.ApplyResources(this.mecanizadoToolStripMenuItem, "mecanizadoToolStripMenuItem");
+            this.mecanizadoToolStripMenuItem.Click += new System.EventHandler(this.mecanizadoToolStripMenuItem_Click);
+            this.mecanizadoToolStripMenuItem.MouseEnter += new System.EventHandler(this.mecanizadoToolStripMenuItem_MouseEnter);
+            this.mecanizadoToolStripMenuItem.MouseLeave += new System.EventHandler(this.mecanizadoToolStripMenuItem_MouseLeave);
+            // 
             // FrmMDIPrincipal
             // 
             resources.ApplyResources(this, "$this");
@@ -227,6 +239,7 @@ namespace arquitectSoft
         private System.Windows.Forms.ToolStripMenuItem acercaDeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem unidadDeMedidaToolStripMenuItem;
         private System.Windows.Forms.ToolStripStatusLabel Mdi_nameConnect2;
+        private System.Windows.Forms.ToolStripMenuItem mecanizadoToolStripMenuItem;
     }
 }
 

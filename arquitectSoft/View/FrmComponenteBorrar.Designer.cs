@@ -54,12 +54,13 @@ namespace arquitectSoft.View
             // 
             // GroupComp
             // 
+            this.GroupComp.BackColor = System.Drawing.Color.White;
             this.GroupComp.Controls.Add(this.ChkCompOriginal);
             this.GroupComp.Controls.Add(this.label2);
             this.GroupComp.Controls.Add(this.TxtDescripcion);
             this.GroupComp.Controls.Add(this.label1);
             this.GroupComp.Controls.Add(this.TxtIndexComp);
-            this.GroupComp.ForeColor = System.Drawing.SystemColors.Control;
+            this.GroupComp.ForeColor = System.Drawing.Color.Black;
             this.GroupComp.Location = new System.Drawing.Point(12, 77);
             this.GroupComp.Name = "GroupComp";
             this.GroupComp.Size = new System.Drawing.Size(427, 71);
@@ -110,12 +111,13 @@ namespace arquitectSoft.View
             // 
             // GroupEspecial
             // 
+            this.GroupEspecial.BackColor = System.Drawing.Color.White;
             this.GroupEspecial.Controls.Add(this.ChkCompEspecial);
             this.GroupEspecial.Controls.Add(this.label3);
             this.GroupEspecial.Controls.Add(this.TxtDescripcionEsp);
             this.GroupEspecial.Controls.Add(this.label4);
             this.GroupEspecial.Controls.Add(this.TxtIndexCompEsp);
-            this.GroupEspecial.ForeColor = System.Drawing.SystemColors.Control;
+            this.GroupEspecial.ForeColor = System.Drawing.Color.Black;
             this.GroupEspecial.Location = new System.Drawing.Point(12, 154);
             this.GroupEspecial.Name = "GroupEspecial";
             this.GroupEspecial.Size = new System.Drawing.Size(427, 71);

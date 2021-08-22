@@ -45,6 +45,7 @@ namespace arquitectSoft
                     break;
                 case "Acaba" :
                 case "Acaba-Multi":
+                case "Mecan":
                     break;
                 case "SubComp":
                     GridViewBusqueda.Columns[3].Visible = false;
@@ -79,6 +80,7 @@ namespace arquitectSoft
                     break;
                 case "Acaba":
                 case "Acaba-Multi":
+                case "Mecan":
                     ReturnItem0 = GridViewBusqueda.SelectedCells[0].Value.ToString();
                     ReturnItem1 = GridViewBusqueda.SelectedCells[1].Value.ToString();
                     ReturnItem2 = GridViewBusqueda.SelectedCells[2].Value.ToString();  
@@ -137,6 +139,9 @@ namespace arquitectSoft
                         break;
                     case "Acaba":
                         sqlquery = Generals.Constantes.QUERY_ACABADO + " where CONCAT(Codigo_Homologacion,' - ',Descripcion) lIKE '%" + txtBuscar.Text +"%'";
+                        break;
+                    case "Mecan":
+                        sqlquery = Generals.Constantes.QUERY_MECANIZADO + " where CONCAT(Codigo_Homologacion,' - ',Descripcion) lIKE '%" + txtBuscar.Text + "%'";
                         break;
                     case "SubComp":
                         sqlquery = Generals.Constantes.QUERY_SUBCOMPONENTES + " where CONCAT(subcomponentes.Codigo_Homologacion,' - ',subcomponentes.Descripcion) lIKE '%" + txtBuscar.Text + "%' and Especial = " + Fil;

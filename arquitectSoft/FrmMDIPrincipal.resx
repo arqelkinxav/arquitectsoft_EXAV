@@ -134,22 +134,28 @@
     <value>SubComponente</value>
   </data>
   <data name="TMSItem_acabados.Size" type="System.Drawing.Size, System.Drawing">
-    <value>171, 22</value>
+    <value>180, 22</value>
   </data>
   <data name="TMSItem_acabados.Text" xml:space="preserve">
     <value>Acabados</value>
   </data>
   <data name="TMSItem_cortes.Size" type="System.Drawing.Size, System.Drawing">
-    <value>171, 22</value>
+    <value>180, 22</value>
   </data>
   <data name="TMSItem_cortes.Text" xml:space="preserve">
     <value>Cortes</value>
   </data>
   <data name="unidadDeMedidaToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>171, 22</value>
+    <value>180, 22</value>
   </data>
   <data name="unidadDeMedidaToolStripMenuItem.Text" xml:space="preserve">
     <value>Unidad de Medida</value>
+  </data>
+  <data name="mecanizadoToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>180, 22</value>
+  </data>
+  <data name="mecanizadoToolStripMenuItem.Text" xml:space="preserve">
+    <value>Mecanizados</value>
   </data>
   <data name="TMSItem_configuracion.Size" type="System.Drawing.Size, System.Drawing">
     <value>180, 22</value>
@@ -169,12 +175,6 @@
   </data>
   <data name="TMSItem_Administracion.Text" xml:space="preserve">
     <value>&amp;Administracion</value>
-  </data>
-  <data name="calcularCantidadesToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
-  </data>
-  <data name="calcularCantidadesToolStripMenuItem.Text" xml:space="preserve">
-    <value>Analisis de Datos</value>
   </data>
   <data name="TMSItem_procesos.ShortcutKeys" type="System.Windows.Forms.Keys, System.Windows.Forms">
     <value>Alt+P</value>
@@ -225,15 +225,15 @@
   <data name="&gt;&gt;menuStrip.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
+  <data name="calcularCantidadesToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>163, 22</value>
+  </data>
+  <data name="calcularCantidadesToolStripMenuItem.Text" xml:space="preserve">
+    <value>Analisis de Datos</value>
+  </data>
   <metadata name="statusStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>125, 17</value>
   </metadata>
-  <data name="Mdi_nameConnect2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>111, 17</value>
-  </data>
-  <data name="Mdi_nameConnect2.Text" xml:space="preserve">
-    <value>Usuario Conectado:</value>
-  </data>
   <data name="statusStrip1.Location" type="System.Drawing.Point, System.Drawing">
     <value>0, 431</value>
   </data>
@@ -257,6 +257,12 @@
   </data>
   <data name="&gt;&gt;statusStrip1.ZOrder" xml:space="preserve">
     <value>0</value>
+  </data>
+  <data name="Mdi_nameConnect2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>111, 17</value>
+  </data>
+  <data name="Mdi_nameConnect2.Text" xml:space="preserve">
+    <value>Usuario Conectado:</value>
   </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
@@ -3049,6 +3055,12 @@
   </data>
   <data name="&gt;&gt;Mdi_nameConnect2.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;mecanizadoToolStripMenuItem.Name" xml:space="preserve">
+    <value>mecanizadoToolStripMenuItem</value>
+  </data>
+  <data name="&gt;&gt;mecanizadoToolStripMenuItem.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
     <value>FrmMDIPrincipal</value>

@@ -24,7 +24,7 @@ namespace arquitectSoft.Generals
             + " Cantidad_Adicional,"
             + " Aplica_Decremento,"
             + " elevado,"
-            + " idCorte, extra,Medida ) VALUES (?,?,?,?,?,?,?,?,?,?);";
+            + " idCorte, extra,Medida,Cantidad_Adicional_Anch,Aplica_Decremento_Anch,Mecanizado ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?);";
         public static String QUERY_INSERT_COMPONENTE_ESPECIAL_DETALLE = "INSERT componentes_especial_detalle (Id_Componente_especial,"
             + " Id_Subcomponente,"
             + " select_Columna,"
@@ -48,6 +48,14 @@ namespace arquitectSoft.Generals
 
         //Unidad Calculada
         public static String QUERY_UNIDADCALCULADA = "SELECT Id_Unidad_Calculada,Concat(Id_Unidad_Calculada, ' - ', Descripcion) Descripcion FROM unidades_calculadas";
+        
+        //Acabado
+        public static String QUERY_MECANIZADO = "SELECT Id_mecanizado,Codigo_Homologacion,Descripcion FROM mecanizados";
+
+        public static String QUERY_INSERT_MECANIZADO = "INSERT mecanizados (Codigo_Homologacion, descripcion)VALUES(?,?)";
+        public static String QUERY_DELETE_MECANIZADO = "DELETE FROM mecanizados WHERE Id_Acabado = ?";
+        public static String QUERY_UPDATE_MECANIZADO = "UPDATE mecanizados SET descripcion = ? WHERE Id_mecanizado = ?";
+        public static String QUERY_EXITS_MECANIZADO = "SELECT Id_mecanizado FROM mecanizados where Codigo_Homologacion = ? or Descripcion = ?;";
 
         //Acabado
         public static String QUERY_ACABADO = "SELECT Id_Acabado,Codigo_Homologacion,CONCAT(Codigo_Homologacion , ' - ' ,Descripcion) Descripcion FROM acabados";
