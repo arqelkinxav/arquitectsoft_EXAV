@@ -159,7 +159,7 @@ namespace arquitectSoft.View
             // 
             // txtDescripcion
             // 
-            this.txtDescripcion.Location = new System.Drawing.Point(161, 106);
+            this.txtDescripcion.Location = new System.Drawing.Point(30, 106);
             this.txtDescripcion.Name = "txtDescripcion";
             this.txtDescripcion.Size = new System.Drawing.Size(499, 20);
             this.txtDescripcion.TabIndex = 91;
@@ -170,6 +170,7 @@ namespace arquitectSoft.View
             this.txtCodigo.Name = "txtCodigo";
             this.txtCodigo.Size = new System.Drawing.Size(113, 20);
             this.txtCodigo.TabIndex = 92;
+            this.txtCodigo.Visible = false;
             // 
             // lbletiquetaDescripcion
             // 
@@ -177,7 +178,7 @@ namespace arquitectSoft.View
             this.lbletiquetaDescripcion.BackColor = System.Drawing.Color.White;
             this.lbletiquetaDescripcion.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbletiquetaDescripcion.ForeColor = System.Drawing.Color.Black;
-            this.lbletiquetaDescripcion.Location = new System.Drawing.Point(158, 87);
+            this.lbletiquetaDescripcion.Location = new System.Drawing.Point(29, 87);
             this.lbletiquetaDescripcion.Name = "lbletiquetaDescripcion";
             this.lbletiquetaDescripcion.Size = new System.Drawing.Size(83, 16);
             this.lbletiquetaDescripcion.TabIndex = 100;
@@ -194,6 +195,7 @@ namespace arquitectSoft.View
             this.lblEtiquetaCodigo.Size = new System.Drawing.Size(55, 16);
             this.lblEtiquetaCodigo.TabIndex = 99;
             this.lblEtiquetaCodigo.Text = "Codigo:";
+            this.lblEtiquetaCodigo.Visible = false;
             // 
             // elipseControl3
             // 

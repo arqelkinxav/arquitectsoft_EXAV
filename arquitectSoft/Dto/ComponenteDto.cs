@@ -50,7 +50,6 @@ namespace arquitectSoft.Dto
                 con.ExecuteNonQuery(Generals.Constantes.QUERY_DELETE_COMPONENTE_DETALLE, out fail, paramdelete, 0);
                 con.ExecuteNonQuery(Generals.Constantes.QUERY_DELETE_COMPONENTE_ESPECIAL_DETALLE, out fail, paramdelete, 0);
 
-
                 con.Close();
 
                 SaveSubComponentDetalle(idComponente, Sbarray);

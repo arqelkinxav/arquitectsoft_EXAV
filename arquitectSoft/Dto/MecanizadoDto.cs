@@ -17,7 +17,7 @@ namespace arquitectSoft.Dto
             con.Open(out fail);
 
 
-            DataTable dt = con.ExecuteDataSet("Select 0 Id_mecanizado,00 Codigo_Homologacion, '(Seleccione)' Descripcion union all " + Generals.Constantes.QUERY_MECANIZADO, out fail).Tables[0];
+            DataTable dt = con.ExecuteDataSet("Select 0 Id_mecanizado,00 Codigo_Homologacion, ' ' Descripcion union all " + Generals.Constantes.QUERY_MECANIZADO, out fail).Tables[0];
             con.Close();
 
             return dt;
@@ -42,7 +42,7 @@ namespace arquitectSoft.Dto
             return dt;
         }
 
-        public string ExistMecanizado(string codigo, string descripcion)
+        public string ExistMecanizado(string codigo)
         {
             string resul = "0";
             Generals.Conexion con = new Generals.Conexion();
@@ -51,7 +51,7 @@ namespace arquitectSoft.Dto
             {
                 con.Open(out fail);
                 MySqlDataReader row;
-                string[] param = { codigo, descripcion };
+                string[] param = { codigo };
                 row = con.ExecuteReader(Generals.Constantes.QUERY_EXITS_MECANIZADO, out fail, param);
                 while (row.Read())
                 {
@@ -151,6 +151,32 @@ namespace arquitectSoft.Dto
             }
 
             return SwSave;
+        }
+
+        public string MaximoMecanizado()
+        {
+            string resul = "0";
+            Generals.Conexion con = new Generals.Conexion();
+            string fail = "";
+            try
+            {
+                con.Open(out fail);
+                MySqlDataReader row;
+                string[] param = { };
+                row = con.ExecuteReader(Generals.Constantes.QUERY_MECANIZADO_MAX, out fail, param);
+                while (row.Read())
+                {
+                    resul = row.GetString(0);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                resul = ex.Message.ToString();
+                con.Close();
+            }
+
+            return resul;
         }
     }
 }

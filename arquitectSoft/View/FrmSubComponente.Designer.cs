@@ -31,8 +31,8 @@ namespace arquitectSoft.View
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmSubComponente));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.ImgLista = new System.Windows.Forms.ImageList(this.components);
             this.CmbAcabado = new System.Windows.Forms.ComboBox();
             this.chkVidriospanles = new System.Windows.Forms.CheckBox();
@@ -61,6 +61,7 @@ namespace arquitectSoft.View
             this.lblEtiquetaCodigo = new System.Windows.Forms.Label();
             this.lbletiquetaDescripcion = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
+            this.btnclearmultiSel = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewRC)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMA)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).BeginInit();
@@ -151,14 +152,14 @@ namespace arquitectSoft.View
             this.dataGridViewRC.AllowUserToDeleteRows = false;
             this.dataGridViewRC.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewRC.BackgroundColor = System.Drawing.SystemColors.ButtonHighlight;
-            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle11.BackColor = System.Drawing.SystemColors.Desktop;
-            dataGridViewCellStyle11.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle11.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            dataGridViewCellStyle11.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle11.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle11.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridViewRC.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle11;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Desktop;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewRC.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.dataGridViewRC.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewRC.EnableHeadersVisualStyles = false;
             this.dataGridViewRC.Location = new System.Drawing.Point(14, 190);
@@ -184,14 +185,14 @@ namespace arquitectSoft.View
             this.dataGridViewMA.AllowUserToAddRows = false;
             this.dataGridViewMA.AllowUserToDeleteRows = false;
             this.dataGridViewMA.BackgroundColor = System.Drawing.SystemColors.ButtonHighlight;
-            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle12.BackColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle12.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle12.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle12.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle12.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridViewMA.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle12;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle4.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewMA.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
             this.dataGridViewMA.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewMA.EnableHeadersVisualStyles = false;
             this.dataGridViewMA.Location = new System.Drawing.Point(411, 190);
@@ -439,6 +440,7 @@ namespace arquitectSoft.View
             // 
             this.panel1.BackColor = System.Drawing.Color.White;
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.Controls.Add(this.btnclearmultiSel);
             this.panel1.Controls.Add(this.label3);
             this.panel1.Location = new System.Drawing.Point(10, 161);
             this.panel1.Name = "panel1";
@@ -494,6 +496,17 @@ namespace arquitectSoft.View
             this.label2.Size = new System.Drawing.Size(67, 16);
             this.label2.TabIndex = 100;
             this.label2.Text = "Acabado:";
+            // 
+            // btnclearmultiSel
+            // 
+            this.btnclearmultiSel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnclearmultiSel.Location = new System.Drawing.Point(630, 4);
+            this.btnclearmultiSel.Name = "btnclearmultiSel";
+            this.btnclearmultiSel.Size = new System.Drawing.Size(135, 23);
+            this.btnclearmultiSel.TabIndex = 46;
+            this.btnclearmultiSel.Text = "Borrar Multi Acabado";
+            this.btnclearmultiSel.UseVisualStyleBackColor = true;
+            this.btnclearmultiSel.Click += new System.EventHandler(this.btnclearmultiSel_Click);
             // 
             // FrmSubComponente
             // 
@@ -568,5 +581,6 @@ namespace arquitectSoft.View
         private System.Windows.Forms.Label lblEtiquetaCodigo;
         private System.Windows.Forms.Label lbletiquetaDescripcion;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Button btnclearmultiSel;
     }
 }

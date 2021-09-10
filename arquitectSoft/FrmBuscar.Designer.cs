@@ -44,6 +44,7 @@ namespace arquitectSoft
             this.EliCtrlButtons = new arquitectSoft.Generals.ElipseControl();
             this.elipseControl2 = new arquitectSoft.Generals.ElipseControl();
             this.elipseComponent1 = new arquitectSoft.Generals.ElipseComponent();
+            this.btnMultiSelect = new arquitectSoft.Generals.RJButton();
             ((System.ComponentModel.ISupportInitialize)(this.GridViewBusqueda)).BeginInit();
             this.SuspendLayout();
             // 
@@ -260,12 +261,34 @@ namespace arquitectSoft
             this.elipseComponent1.CornerRadius = 15;
             this.elipseComponent1.TargetControl = this;
             // 
+            // btnMultiSelect
+            // 
+            this.btnMultiSelect.BackColor = System.Drawing.Color.DimGray;
+            this.btnMultiSelect.BackgroundColor = System.Drawing.Color.DimGray;
+            this.btnMultiSelect.BorderColor = System.Drawing.Color.Black;
+            this.btnMultiSelect.BorderRadius = 20;
+            this.btnMultiSelect.BorderSize = 0;
+            this.btnMultiSelect.FlatAppearance.BorderSize = 0;
+            this.btnMultiSelect.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnMultiSelect.ForeColor = System.Drawing.Color.White;
+            this.btnMultiSelect.ImageIndex = 6;
+            this.btnMultiSelect.ImageList = this.ImgListFinal;
+            this.btnMultiSelect.Location = new System.Drawing.Point(60, 13);
+            this.btnMultiSelect.Name = "btnMultiSelect";
+            this.btnMultiSelect.Size = new System.Drawing.Size(42, 36);
+            this.btnMultiSelect.TabIndex = 66;
+            this.btnMultiSelect.TextColor = System.Drawing.Color.White;
+            this.btnMultiSelect.UseVisualStyleBackColor = false;
+            this.btnMultiSelect.Visible = false;
+            this.btnMultiSelect.Click += new System.EventHandler(this.btnMultiSelect_Click);
+            // 
             // FrmBuscar
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.DarkGray;
             this.ClientSize = new System.Drawing.Size(594, 450);
+            this.Controls.Add(this.btnMultiSelect);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.elipseControl1);
             this.Controls.Add(this.BtnSalir);
@@ -301,5 +324,6 @@ namespace arquitectSoft
         private System.Windows.Forms.Label label1;
         private Generals.ElipseControl elipseControl2;
         private Generals.ElipseComponent elipseComponent1;
+        private Generals.RJButton btnMultiSelect;
     }
 }

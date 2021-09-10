@@ -42,7 +42,7 @@ namespace arquitectSoft.View
         }
         private void BtnBuscar_Click(object sender, EventArgs e)
         {
-            
+
             FrmBuscar bsc = new FrmBuscar();
             bsc.Consulta = "SubComp";
             bsc.ShowDialog();
@@ -113,7 +113,7 @@ namespace arquitectSoft.View
                 Dto.SubComponenteDto dto = new Dto.SubComponenteDto();
                 var codSplit = txtCodigo.Text.Split('-')[0].Trim();
                 var desSplit = txtDescripcion.Text.Split('(')[0].Trim();
-                string resul = dto.ExistSubComponent(codSplit, desSplit,CmbAcabado.SelectedValue.ToString(), Opc);
+                string resul = dto.ExistSubComponent(codSplit, desSplit, CmbAcabado.SelectedValue.ToString(), Opc);
 
                 resul = dto.DeleteComponent(Int32.Parse(resul));
 
@@ -168,6 +168,7 @@ namespace arquitectSoft.View
 
             BtnMultiAcabado.Enabled = true;
             BtnMultiAcabado.Visible = true;
+            btnclearmultiSel.Visible = true;
             dataGridViewMA.Visible = true;
         }
         private void ClearComponent()
@@ -196,25 +197,28 @@ namespace arquitectSoft.View
 
             BtnMultiAcabado.Enabled = false;
             BtnMultiAcabado.Visible = false;
+            btnclearmultiSel.Visible = false;
             dataGridViewMA.Visible = false;
         }
         private void SaveComponent(Dto.SubComponenteDto dto)
         {
             string resul = "0";
-
+            Dto.AcabadoDto dtoAcabado = new Dto.AcabadoDto();
             resul = dto.ExistSubComponent(txtCodigo.Text, txtDescripcion.Text, CmbAcabado.SelectedValue.ToString(), Opc);
 
             if (resul == "0" || Opc == "Editar")
             {
 
-                resul = dto.SaveSubComponent(txtCodigo.Text, txtDescripcion.Text, CmbAcabado.SelectedValue.ToString(), chkVidriospanles.Checked, Opc, resul);               
+                resul = dto.SaveSubComponent(txtCodigo.Text, txtDescripcion.Text, CmbAcabado.SelectedValue.ToString(), chkVidriospanles.Checked, Opc, resul);
 
                 if (dataGridViewMA.Rows.Count > 0)
                 {
                     foreach (DataGridViewRow r in dataGridViewMA.Rows)
                     {
-                       string CodigoAcabado = r.Cells[0].Value.ToString();
-                       resul = dto.SaveSubComponent(txtCodigo.Text, txtDescripcion.Text, CodigoAcabado, chkVidriospanles.Checked, Opc, resul);
+                       
+                      string  CodigoAcabado = dtoAcabado.ExistAcabado(r.Cells[0].Value.ToString(), r.Cells[1].Value.ToString());
+
+                        resul = dto.SaveSubComponent(txtCodigo.Text, txtDescripcion.Text, CodigoAcabado, chkVidriospanles.Checked, Opc, resul);
                     }
                 }
 
@@ -236,18 +240,29 @@ namespace arquitectSoft.View
 
         private void BtnMultiAcabado_Click(object sender, EventArgs e)
         {
-            
+
             Dto.ComponenteDto dto = new Dto.ComponenteDto();
             FrmBuscar bsc = new FrmBuscar();
             bsc.Consulta = "Acaba-Multi";
             bsc.ShowDialog();
-            if (bsc.ReturnItem1 == null)
+            if (bsc.ReturnItem1 == null && bsc.ArrayMultiSelect.Rows.Count == 0)
             {
                 return;
             }
 
-          
-            bindingSource1.Add(new MultiAcabado(bsc.ReturnItem0, bsc.ReturnItem2.ToString()));
+            if (bsc.ArrayMultiSelect.Rows.Count > 0)
+            {
+                foreach(DataRow r in bsc.ArrayMultiSelect.Rows)
+                {
+                    bindingSource1.Add(new MultiAcabado(r.ItemArray[1].ToString(), r.ItemArray[2].ToString()));
+                }
+            }
+            else
+            {
+                bindingSource1.Add(new MultiAcabado(bsc.ReturnItem1, bsc.ReturnItem2.ToString()));
+            }
+
+           
             dataGridViewMA.DataSource = bindingSource1;
 
 
@@ -261,13 +276,18 @@ namespace arquitectSoft.View
             {
                 dataGridViewMA.Rows.RemoveAt(e.RowIndex);
             }
-                
+
         }
 
         private void EliCtrlButtons_MouseDown(object sender, MouseEventArgs e)
         {
             ReleaseCapture();
             SendMessage(this.Handle, 0x112, 0xf012, 0);
+        }
+
+        private void btnclearmultiSel_Click(object sender, EventArgs e)
+        {
+            dataGridViewMA.Rows.Clear();
         }
     }
 }

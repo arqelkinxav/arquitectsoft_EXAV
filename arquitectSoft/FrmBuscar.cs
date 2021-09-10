@@ -26,6 +26,9 @@ namespace arquitectSoft
         public string ReturnItem2 { get; set; }
         public string ReturnItem3 { get; set; }
         public string ReturnItem4 { get; set; }
+
+        public DataTable ArrayMultiSelect;
+        
         public FrmBuscar()
         {
             InitializeComponent();
@@ -43,8 +46,10 @@ namespace arquitectSoft
                     break;
                 case "Corte":
                     break;
-                case "Acaba" :
                 case "Acaba-Multi":
+                    btnMultiSelect.Visible = true;
+                    break;
+                case "Acaba" :               
                 case "Mecan":
                     break;
                 case "SubComp":
@@ -57,10 +62,7 @@ namespace arquitectSoft
             }
         }
 
-        private void BtnBuscar_Click(object sender, EventArgs e)
-        {
-          
-        }
+     
 
         private void GridViewBusqueda_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
         {
@@ -83,8 +85,12 @@ namespace arquitectSoft
                 case "Mecan":
                     ReturnItem0 = GridViewBusqueda.SelectedCells[0].Value.ToString();
                     ReturnItem1 = GridViewBusqueda.SelectedCells[1].Value.ToString();
-                    ReturnItem2 = GridViewBusqueda.SelectedCells[2].Value.ToString();  
-
+                    ReturnItem2 = GridViewBusqueda.SelectedCells[2].Value.ToString();
+                    DataTable dt = new DataTable();
+                    dt.Columns.Add("Item1");
+                    dt.Columns.Add("Item2");
+                    dt.Columns.Add("Item3");
+                    ArrayMultiSelect = dt;
                     break;
                 case "SubComp":
                     ReturnItem0 = GridViewBusqueda.SelectedCells[0].Value.ToString();
@@ -137,6 +143,7 @@ namespace arquitectSoft
                     case "Corte":
                         sqlquery = Generals.Constantes.QUERY_CORTE + " where Descripcion lIKE '%" + txtBuscar.Text + "%'";
                         break;
+                    case "Acaba-Multi":
                     case "Acaba":
                         sqlquery = Generals.Constantes.QUERY_ACABADO + " where CONCAT(Codigo_Homologacion,' - ',Descripcion) lIKE '%" + txtBuscar.Text +"%'";
                         break;
@@ -185,6 +192,25 @@ namespace arquitectSoft
         {
             ReleaseCapture();
             SendMessage(this.Handle, 0x112, 0xf012, 0);
+        }
+
+        private void btnMultiSelect_Click(object sender, EventArgs e)
+        {
+
+            DataTable dt = new DataTable();
+
+            dt.Columns.Add("Item1");
+            dt.Columns.Add("Item2");
+            dt.Columns.Add("Item3");
+
+            foreach (DataGridViewRow row in GridViewBusqueda.SelectedRows)
+            {
+                //MessageBox.Show(row.Cells[0].Value.ToString());
+                dt.Rows.Add(row.Cells[0].Value.ToString(), row.Cells[1].Value.ToString(), row.Cells[2].Value.ToString());
+            }
+
+            ArrayMultiSelect = dt;
+            this.Close();
         }
     }
 }

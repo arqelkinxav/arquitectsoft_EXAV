@@ -31,12 +31,12 @@ namespace arquitectSoft
         {
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.textBoxDescription = new System.Windows.Forms.TextBox();
-            this.elipseComponent1 = new arquitectSoft.Generals.ElipseComponent();
             this.labelProductName = new System.Windows.Forms.Label();
             this.labelVersion = new System.Windows.Forms.Label();
             this.labelCopyright = new System.Windows.Forms.Label();
             this.labelCompanyName = new System.Windows.Forms.Label();
             this.BtnCancelar = new arquitectSoft.Generals.RJButton();
+            this.elipseComponent1 = new arquitectSoft.Generals.ElipseComponent();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -46,10 +46,9 @@ namespace arquitectSoft
             this.pictureBox1.BackgroundImage = global::arquitectSoft.Properties.Resources.logo2;
             this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.pictureBox1.Location = new System.Drawing.Point(324, 0);
+            this.pictureBox1.Location = new System.Drawing.Point(277, 0);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(120, 226);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.pictureBox1.Size = new System.Drawing.Size(174, 226);
             this.pictureBox1.TabIndex = 1;
             this.pictureBox1.TabStop = false;
             // 
@@ -58,21 +57,16 @@ namespace arquitectSoft
             this.textBoxDescription.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.textBoxDescription.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(70)))), ((int)(((byte)(82)))));
             this.textBoxDescription.ForeColor = System.Drawing.SystemColors.Control;
-            this.textBoxDescription.Location = new System.Drawing.Point(15, 94);
+            this.textBoxDescription.Location = new System.Drawing.Point(18, 94);
             this.textBoxDescription.Margin = new System.Windows.Forms.Padding(6, 3, 3, 3);
             this.textBoxDescription.Multiline = true;
             this.textBoxDescription.Name = "textBoxDescription";
             this.textBoxDescription.ReadOnly = true;
             this.textBoxDescription.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textBoxDescription.Size = new System.Drawing.Size(285, 82);
+            this.textBoxDescription.Size = new System.Drawing.Size(238, 82);
             this.textBoxDescription.TabIndex = 24;
             this.textBoxDescription.TabStop = false;
             this.textBoxDescription.Text = "Descripción";
-            // 
-            // elipseComponent1
-            // 
-            this.elipseComponent1.CornerRadius = 40;
-            this.elipseComponent1.TargetControl = this;
             // 
             // labelProductName
             // 
@@ -125,7 +119,7 @@ namespace arquitectSoft
             this.BtnCancelar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.BtnCancelar.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.BtnCancelar.ForeColor = System.Drawing.Color.DimGray;
-            this.BtnCancelar.Location = new System.Drawing.Point(210, 192);
+            this.BtnCancelar.Location = new System.Drawing.Point(142, 192);
             this.BtnCancelar.Name = "BtnCancelar";
             this.BtnCancelar.Size = new System.Drawing.Size(104, 22);
             this.BtnCancelar.TabIndex = 29;
@@ -134,12 +128,17 @@ namespace arquitectSoft
             this.BtnCancelar.UseVisualStyleBackColor = false;
             this.BtnCancelar.Click += new System.EventHandler(this.BtnCancelar_Click);
             // 
+            // elipseComponent1
+            // 
+            this.elipseComponent1.CornerRadius = 40;
+            this.elipseComponent1.TargetControl = this;
+            // 
             // FrmAcercade
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
-            this.ClientSize = new System.Drawing.Size(444, 226);
+            this.ClientSize = new System.Drawing.Size(451, 226);
             this.Controls.Add(this.BtnCancelar);
             this.Controls.Add(this.labelCompanyName);
             this.Controls.Add(this.labelCopyright);

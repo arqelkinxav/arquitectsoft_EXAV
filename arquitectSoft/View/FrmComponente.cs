@@ -158,7 +158,9 @@ namespace arquitectSoft.View
         private void BtnBuscar_Click(object sender, EventArgs e)
         {
             GridViewComponente.DataSource = null;
+            GridViewComponenteEsp.DataSource = null;
             bindingSource1.Clear();
+            bindingSource2.Clear();
             Dto.ComponenteDto dto = new Dto.ComponenteDto();
             FrmBuscar bsc = new FrmBuscar();
             bsc.ShowDialog();
@@ -420,7 +422,7 @@ namespace arquitectSoft.View
                     string Elevado = row.Cells["Elevado"].Value.ToString();
 
 
-                    int Corte = (row.Cells["Cortes"].Value != null) ? (int)row.Cells["Cortes"].Value : 5;
+                    int Corte = (row.Cells["Cortes"].Value != null) ? Int32.Parse(row.Cells["Cortes"].Value.ToString()) : 5;
                     bool Extra = (bool)row.Cells["Extra"].Value;
 
                     int medida = (row.Cells["MedidaHA"].Value != null) ? (int)row.Cells["MedidaHA"].Value : 1;
@@ -507,7 +509,7 @@ namespace arquitectSoft.View
                         comboBoxCell.Value = uni;
                     }
 
-                    int Cort = Int32.Parse(dt.Rows[row.Index]["Corte"].ToString());
+                    long Cort = Int64.Parse(dt.Rows[row.Index]["Corte"].ToString());
                     if (Cort > 0)
                     {
                         DataGridViewComboBoxCell comboBoxCell = (DataGridViewComboBoxCell)(row.Cells[8]);

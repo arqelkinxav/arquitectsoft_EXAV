@@ -118,7 +118,7 @@ namespace arquitectSoft.View
             // txtDescripcion
             // 
             this.txtDescripcion.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
-            this.txtDescripcion.Location = new System.Drawing.Point(282, 109);
+            this.txtDescripcion.Location = new System.Drawing.Point(164, 108);
             this.txtDescripcion.Name = "txtDescripcion";
             this.txtDescripcion.Size = new System.Drawing.Size(418, 20);
             this.txtDescripcion.TabIndex = 39;
@@ -355,10 +355,11 @@ namespace arquitectSoft.View
             // txtCodigo
             // 
             this.txtCodigo.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
-            this.txtCodigo.Location = new System.Drawing.Point(113, 109);
+            this.txtCodigo.Location = new System.Drawing.Point(15, 159);
             this.txtCodigo.Name = "txtCodigo";
             this.txtCodigo.Size = new System.Drawing.Size(137, 20);
             this.txtCodigo.TabIndex = 95;
+            this.txtCodigo.Visible = false;
             // 
             // lblEtiquetaCodigo
             // 
@@ -366,11 +367,12 @@ namespace arquitectSoft.View
             this.lblEtiquetaCodigo.BackColor = System.Drawing.Color.White;
             this.lblEtiquetaCodigo.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblEtiquetaCodigo.ForeColor = System.Drawing.Color.Black;
-            this.lblEtiquetaCodigo.Location = new System.Drawing.Point(94, 89);
+            this.lblEtiquetaCodigo.Location = new System.Drawing.Point(12, 140);
             this.lblEtiquetaCodigo.Name = "lblEtiquetaCodigo";
             this.lblEtiquetaCodigo.Size = new System.Drawing.Size(55, 16);
             this.lblEtiquetaCodigo.TabIndex = 96;
             this.lblEtiquetaCodigo.Text = "Codigo:";
+            this.lblEtiquetaCodigo.Visible = false;
             // 
             // lbletiquetaDescripcion
             // 
@@ -378,7 +380,7 @@ namespace arquitectSoft.View
             this.lbletiquetaDescripcion.BackColor = System.Drawing.Color.White;
             this.lbletiquetaDescripcion.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbletiquetaDescripcion.ForeColor = System.Drawing.Color.Black;
-            this.lbletiquetaDescripcion.Location = new System.Drawing.Point(264, 90);
+            this.lbletiquetaDescripcion.Location = new System.Drawing.Point(146, 89);
             this.lbletiquetaDescripcion.Name = "lbletiquetaDescripcion";
             this.lbletiquetaDescripcion.Size = new System.Drawing.Size(83, 16);
             this.lbletiquetaDescripcion.TabIndex = 97;

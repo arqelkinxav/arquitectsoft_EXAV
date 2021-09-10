@@ -47,9 +47,14 @@ namespace arquitectSoft
             Controls.OfType<MdiClient>().FirstOrDefault().BackColor = Color.FromArgb(176, 196, 222);
             Mdi_nameConnect2.Text = Mdi_nameConnect2.Text + " " + Generals.Global.NameConnect.ToUpper();
             Mdi_nameConnect2.ForeColor = Color.White;
-            this.BackgroundImage = Properties.Resources.Wallpaper_sin_logo;
+            this.BackgroundImage = Properties.Resources.Wallpaper_final;
             this.DoubleBuffered = true;
-            
+
+
+
+
+
+
         }
 
         private void salirToolStripMenuItem_Click(object sender, EventArgs e)
@@ -60,7 +65,7 @@ namespace arquitectSoft
             }
 
             this.Close();
-            FrmLogin fl = new FrmLogin();
+            FrmLogin fl = new FrmLogin();            
             fl.Show();
         }
 
@@ -70,6 +75,9 @@ namespace arquitectSoft
             View.FrmComponente formComp = new View.FrmComponente();
             formComp.MdiParent = this;
             formComp.StartPosition = FormStartPosition.CenterScreen;
+            
+    
+            
             formComp.Show();
 
 

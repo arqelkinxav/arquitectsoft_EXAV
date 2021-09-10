@@ -16,8 +16,8 @@ namespace arquitectSoft.Dto
             string fail = "";
             con.Open(out fail);
 
-
-            DataTable dt = con.ExecuteDataSet(Generals.Constantes.QUERY_CORTE, out fail).Tables[0];
+            //Id_Corte,Descripcion,Corte_Derecho,Corte_Izquierdo
+            DataTable dt = con.ExecuteDataSet("Select 0 Id_Corte, ' ' Descripcion, 0 Corte_Derecho, 0 Corte_Izquierdo  union all " + Generals.Constantes.QUERY_CORTE, out fail).Tables[0];
             con.Close();
 
             return dt;

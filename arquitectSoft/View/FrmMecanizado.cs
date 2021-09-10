@@ -79,7 +79,7 @@ namespace arquitectSoft.View
             {
 
                 Dto.MecanizadoDto dto = new Dto.MecanizadoDto();
-                string resul = dto.ExistMecanizado(txtCodigo.Text, txtDescripcion.Text);
+                string resul = dto.ExistMecanizado(txtCodigo.Text);
 
                 resul = dto.DeleteMecanizado(Int32.Parse(resul));
 
@@ -117,7 +117,7 @@ namespace arquitectSoft.View
         {
             string resul = "0";
 
-            resul = dto.ExistMecanizado(txtCodigo.Text, txtDescripcion.Text);
+            resul = dto.ExistMecanizado(txtCodigo.Text);
 
             if (resul == "0" || Opc == "Editar")
             {
@@ -152,6 +152,7 @@ namespace arquitectSoft.View
         }
         private void habilitarNuevo(string opcion)
         {
+            Dto.MecanizadoDto dto = new Dto.MecanizadoDto();
             BtnGuardar.Enabled = true;
             BtnCancelar.Enabled = true;
             switch (opcion)
@@ -160,9 +161,12 @@ namespace arquitectSoft.View
                     txtCodigo.Enabled = false;
                     break;
                 default:
-                    txtCodigo.Enabled = true;
+                    txtCodigo.Enabled = false;
+                    txtCodigo.Text = dto.MaximoMecanizado();
                     break;
             }
+        
+
 
             txtDescripcion.Enabled = true;
 

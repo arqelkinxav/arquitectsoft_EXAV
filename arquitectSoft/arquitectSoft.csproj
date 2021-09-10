@@ -147,6 +147,12 @@
     <Compile Include="FrmAcercade.Designer.cs">
       <DependentUpon>FrmAcercade.cs</DependentUpon>
     </Compile>
+    <Compile Include="FrmHome.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmHome.Designer.cs">
+      <DependentUpon>FrmHome.cs</DependentUpon>
+    </Compile>
     <Compile Include="FrmLoading.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -187,6 +193,9 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Generals\Global.cs" />
+    <Compile Include="Generals\PanelMdi.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Generals\RJButton.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -256,6 +265,9 @@
     </Compile>
     <EmbeddedResource Include="FrmAcercade.resx">
       <DependentUpon>FrmAcercade.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FrmHome.resx">
+      <DependentUpon>FrmHome.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FrmLoading.resx">
       <DependentUpon>FrmLoading.cs</DependentUpon>
@@ -380,6 +392,18 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Wallpaper sin logo.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\11.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Wallpaper_final.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Logo_final.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Logo %281%29.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
