@@ -42,6 +42,8 @@ namespace arquitectSoft.View
             DialogResult dr = this.openFileDialog1.ShowDialog();
             if (dr == System.Windows.Forms.DialogResult.OK)
             {
+                int medidabase = Int32.Parse(NUpDownMedidaBase.Value.ToString());
+                decimal Desperdicio = (decimal.Parse(NUpDownDesperdicio.Value.ToString())/100) + 1;
 
                 int pageinitial = 0;
                 bool perfilandvidrios = false;
@@ -75,7 +77,7 @@ namespace arquitectSoft.View
 
 
                         DataTable dtresulVP = new DataTable();
-                        dtPerfilOfVidrioPanel = dto.CalculateTab(1, dtResul, dtPuertas, true);
+                        dtPerfilOfVidrioPanel = dto.CalculateTab(1, dtResul, dtPuertas, true, medidabase, Desperdicio);
                         dtresulVP = dtPerfilOfVidrioPanel.Copy();
                         dtresulVP.Merge(dtPerfil);
 
@@ -86,7 +88,7 @@ namespace arquitectSoft.View
 
 
 
-                    dtcalculate = dto.CalculateTab(idDocumento, dtResul, dtPuertas, perfilandvidrios);
+                    dtcalculate = dto.CalculateTab(idDocumento, dtResul, dtPuertas, perfilandvidrios, medidabase, Desperdicio);
 
                     if (idDocumento == 1)
                     {
@@ -96,14 +98,26 @@ namespace arquitectSoft.View
                         dtresulPM = dtPerfilOfVidrioPanel.Copy();
                         dtresulPM.Merge(dtPerfil);
                         dtcalculate = dtresulPM;
+
+                        DataTable dtresulPMHerraje = new DataTable();
+                        dtresulPMHerraje = dto.CalculateTab(8, dtResul, dtPuertas, perfilandvidrios, medidabase, Desperdicio);
+                        dataGridViewPMHerrajeCalculate.DataSource = dtresulPMHerraje;
+                        dataGridViewPMHerrajeCalculate.Columns[0].Visible = false;
+                        dataGridViewPMHerrajeCalculate.Columns[6].Visible = false;
+
                     }
                     if (idDocumento == 3)
                     {
 
                         DataTable dtresulPC = new DataTable();
-                        dtresulPC = dto.CalculateTab(6, dtResul, dtPuertas, true);
+                        dtresulPC = dto.CalculateTab(6, dtResul, dtPuertas, true, medidabase, Desperdicio);
                         dataGridViewP2Calculate.DataSource = dtresulPC;
                         dataGridViewP2Calculate.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+
+                        DataTable dtresulPHerraje = new DataTable();
+                        dtresulPHerraje = dto.CalculateTab(7, dtResul, dtPuertas, true, medidabase, Desperdicio);
+                        dataGridViewPHerrajeCalculate.DataSource = dtresulPHerraje;
+                        dataGridViewPHerrajeCalculate.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
                     }
 
                     SetDataView(dtResul, dtcalculate, idDocumento);
@@ -137,8 +151,8 @@ namespace arquitectSoft.View
         private void FrmAnalisisDatos_Load(object sender, EventArgs e)
         {
             InitializeOpenFileDialog();
-            
 
+            NUpDownMedidaBase.Value = 2960;
         }
 
         private void InitializeOpenFileDialog()
@@ -161,6 +175,7 @@ namespace arquitectSoft.View
 
                 case 1:
                     dataGridViewPM.DataSource = dt;
+                    dataGridViewPMHerraje.DataSource = dt;
                     dataGridViewPMCalculate.DataSource = dtcalculate;
                     dataGridViewPMCalculate.Columns[0].Visible = false;
                     dataGridViewPMCalculate.Columns[6].Visible = false;
@@ -173,6 +188,7 @@ namespace arquitectSoft.View
                 case 3:
                     dataGridViewP.DataSource = dt;
                     dataGridViewP2.DataSource = dt;
+                    dataGridViewPHerraje.DataSource = dt;
                     dataGridViewPCalculate.DataSource = dtcalculate;
                     dataGridViewPCalculate.Refresh();
                     dataGridViewPCalculate.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
@@ -601,6 +617,42 @@ namespace arquitectSoft.View
         {
             ReleaseCapture();
             SendMessage(this.Handle, 0x112, 0xf012, 0);
+        }
+
+        private void dataGridViewPHerrajeCalculate_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            foreach (DataGridViewRow r in this.dataGridViewPHerrajeCalculate.Rows)
+            {
+                if (r.Cells[0].Value.ToString() == "")
+                {
+                    r.DefaultCellStyle.BackColor = Color.Gray;
+                }
+                else if (r.Cells[0].Value.ToString().Contains("Puerta"))
+                {
+                    r.DefaultCellStyle.BackColor = Color.Orange;
+                }
+            }
+        }
+
+        private void textBox2_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void NUpDownMedidaBase_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar < 48 || e.KeyChar > 57)
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void NUpDownDesperdicio_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar < 48 || e.KeyChar > 57)
+            {
+                e.Handled = true;
+            }
         }
     }
 }

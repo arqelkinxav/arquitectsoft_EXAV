@@ -198,16 +198,18 @@ namespace arquitectSoft.Dto
         }
 
 
-        public DataTable CalculateTab(int index, DataTable dtmodel, DataTable dtmodelPuerta, bool VidrioPanel)
+        public DataTable CalculateTab(int index, DataTable dtmodel, DataTable dtmodelPuerta, bool VidrioPanel, Int32 MedidaBase, decimal Desperdicio)
         {
             DataTable dt = new DataTable();
             switch (index)
             {
                 case 1:
                 case 4:
-                    string StrCant = index == 1 && !VidrioPanel ? "Longitud" : "Altura";
+                case 8:
+                    string StrCant = (index == 1 || index == 8) && !VidrioPanel ? "Longitud" : "Altura";
+                    int herraje = index == 8 ? 1 : 0;
 
-                    dt = GetDataFinal(dtmodel, StrCant);
+                    dt = GetDataFinal(dtmodel, StrCant, herraje, MedidaBase, Desperdicio);
                     break;
                 case 2:
                     DataTable dtmodelDistinct = SetAuxAnchura(dtmodel);
@@ -238,7 +240,7 @@ namespace arquitectSoft.Dto
                     dt = dtModelVidriosPaneles;
                     break;
                 case 3:
-                    getComponentePuertasAgrupar(dtmodel);
+                    getComponentePuertasAgrupar(dtmodel,0);
                     dt = getComponentePuertas(dtmodel);
 
                     break;
@@ -262,8 +264,12 @@ namespace arquitectSoft.Dto
                     break;
                 case 6:
                     dt = getComponentePuertasCantidad(dtmodel);
-
                     break;
+                case 7:
+                    getComponentePuertasAgrupar(dtmodel, 1);
+                    dt = getComponentePuertas(dtmodel);
+                    break;
+                
             }
 
             return dt;
@@ -378,7 +384,7 @@ namespace arquitectSoft.Dto
             return dtresulPuerta;
         }
 
-        public int getComponentePuertasAgrupar(DataTable dtmodelDoor)
+        public int getComponentePuertasAgrupar(DataTable dtmodelDoor, int SwHerraje)
         {
             DataTable dtresulPuerta = new DataTable();
 
@@ -410,7 +416,7 @@ namespace arquitectSoft.Dto
                     {
                         string descripcionGeneral = dtResultG.Rows[0]["Descripcion"].ToString() + "Altura: (" + altura + ") Anchura: (" + anchura + ")";
 
-                        string[] param = { "pCodigo|" + Codigo, "plogitud|" + altura, "pAnchura|" + anchura, "pPuerta|" + Nomenclatura };
+                        string[] param = { "pCodigo|" + Codigo, "plogitud|" + altura, "pAnchura|" + anchura, "pPuerta|" + Nomenclatura, "pSwHerraje|" + SwHerraje };
                         con.Open(out fail);
                         //con.ExecuteNonQuery(Generals.Constantes.QUERY_GET_CALCULATE_PUERTAS, out fail, param, 1);
                         DataTable dtResult = con.ExecuteDataSetSPparam(Generals.Constantes.QUERY_GET_CALCULATE_PUERTAS, out fail, param);
@@ -492,10 +498,18 @@ namespace arquitectSoft.Dto
             return dtresulPuertaF;
         }
 
-        #endregion
+        public DataTable getComponentePuertasHerraje(DataTable dtmodelDoor)
+        {
+            DataTable dtresulPuerta = new DataTable();
 
-        #region Perfiles
-        private string getComponenteCodigoAcabado(string pcodigo)
+
+            return dtresulPuerta;
+        }
+
+         #endregion
+
+            #region Perfiles
+            private string getComponenteCodigoAcabado(string pcodigo)
         {
             Generals.Conexion con = new Generals.Conexion();
             string fail = "";
@@ -509,7 +523,7 @@ namespace arquitectSoft.Dto
             return codigo;
         }
 
-        private List<List<object[]>> getSubComponenteCalc(DataTable dtmodel, string StrCantidad)
+        private List<List<object[]>> getSubComponenteCalc(DataTable dtmodel, string StrCantidad, int pSwHerraje,Int32 MedidaBase)
         {
             DataTable dt = new DataTable();
             List<List<object[]>> list = new List<List<object[]>>();
@@ -531,7 +545,7 @@ namespace arquitectSoft.Dto
 
                 Generals.Conexion con = new Generals.Conexion();
                 string fail = "";
-                string[] param = { "pCodigo|" + codigo, "plogitud|" + pLongitud.ToString() };
+                string[] param = { "pCodigo|" + codigo, "plogitud|" + pLongitud.ToString(), "pSwHerraje|" + pSwHerraje.ToString(), "pMedidaBase|" + MedidaBase.ToString() };
                 con.Open(out fail);
                 DataTable dtResult = con.ExecuteDataSetSPparam(Generals.Constantes.QUERY_GET_CALCULATE_PERFILES, out fail, param);
                 con.Close();
@@ -560,7 +574,7 @@ namespace arquitectSoft.Dto
             return list;
         }
 
-        public List<object[]> getComponenteCalc(DataTable dtmodel)
+        public List<object[]> getComponenteCalc(DataTable dtmodel, decimal Desperdicio)
         {
             List<object[]> list = new List<object[]>();
             Generals.Conexion con = new Generals.Conexion();
@@ -577,7 +591,7 @@ namespace arquitectSoft.Dto
             }
 
             fail = "";
-            string[] paramGet = { };
+            string[] paramGet = { "pDesperdicio|" + Desperdicio };
             con.Open(out fail);
             DataTable dtResult = con.ExecuteDataSetSPparam(Generals.Constantes.QUERY_GET_PROYECTO, out fail, paramGet);
             con.Close();
@@ -600,9 +614,9 @@ namespace arquitectSoft.Dto
             return list;
         }
 
-        public DataTable GetDataFinal(DataTable dtmodel, string Strcantidad)
+        public DataTable GetDataFinal(DataTable dtmodel, string Strcantidad, int pSwHerraje, Int32 MedidaBase, decimal Desperdicio)
         {
-            List<List<object[]>> listComp = getSubComponenteCalc(dtmodel, Strcantidad);
+            List<List<object[]>> listComp = getSubComponenteCalc(dtmodel, Strcantidad, pSwHerraje, MedidaBase);
 
             List<string> listColumnsComp = setCreateColumns(6);
             DataTable dtModelPerfiles = new DataTable();
@@ -619,7 +633,7 @@ namespace arquitectSoft.Dto
                 });
             });
 
-            List<object[]> listEndComp = getComponenteCalc(dtModelPerfiles);
+            List<object[]> listEndComp = getComponenteCalc(dtModelPerfiles, Desperdicio);
 
             dtModelPerfiles.Rows.Clear();
             dtModelPerfiles.Columns.RemoveAt(1);

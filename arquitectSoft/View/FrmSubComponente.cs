@@ -213,11 +213,12 @@ namespace arquitectSoft.View
 
                 if (dataGridViewMA.Rows.Count > 0)
                 {
+                    Opc = "Nuevo";
                     foreach (DataGridViewRow r in dataGridViewMA.Rows)
                     {
                        
                       string  CodigoAcabado = dtoAcabado.ExistAcabado(r.Cells[0].Value.ToString(), r.Cells[1].Value.ToString());
-
+    
                         resul = dto.SaveSubComponent(txtCodigo.Text, txtDescripcion.Text, CodigoAcabado, chkVidriospanles.Checked, Opc, resul);
                     }
                 }
