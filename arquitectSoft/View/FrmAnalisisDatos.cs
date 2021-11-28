@@ -387,7 +387,7 @@ namespace arquitectSoft.View
                     //wb.Worksheet(1).Columns().AdjustToContents();
 
                     DataGridView table = new DataGridView();
-                    for (int Datagrid = 1; Datagrid <= 6; Datagrid++)
+                    for (int Datagrid = 1; Datagrid <= 8; Datagrid++)
                     {
                         bool wrapTextDefault = true;
                         switch (Datagrid)
@@ -397,25 +397,24 @@ namespace arquitectSoft.View
                                 table = dataGridViewPMCalculate;
                                 break;
                             case 2:
+                                sheets = "PERFIL METALICO HERRAJES";
+                                table = dataGridViewPMHerrajeCalculate;
+                                break;
+                            case 3:
                                 sheets = "VIDRIOS Y PANELES";
                                 table = dataGridViewVPCalculate;
                                 break;
-                            case 3:
+                            case 4:
                                 Range = string.Format("A{0}:H{0}", valueinitial);
                                 rangetwo = "A{0}:H{0}";
                                 sheets = "PUERTAS";
                                 table = dataGridViewPCalculate;
                                 break;
-                            case 4:
-                                sheets = "TUBO METALICOS";
-                                table = dataGridViewTMCalculate;
-                                break;
                             case 5:
-                                Range = string.Format("A{0}:E{0}", valueinitial);
-                                rangetwo = "A{0}:E{0}";
-                                sheets = "MAMPARAS";
-                                table = dataGridViewMCalculate;
-                                wrapTextDefault = false;
+                                Range = string.Format("A{0}:H{0}", valueinitial);
+                                rangetwo = "A{0}:H{0}";
+                                sheets = "PUERTAS HERRAJES";
+                                table = dataGridViewPHerrajeCalculate;
                                 break;
                             case 6:
                                 Range = string.Format("A{0}:E{0}", valueinitial);
@@ -424,6 +423,18 @@ namespace arquitectSoft.View
                                 table = dataGridViewP2Calculate;
                                 wrapTextDefault = false;
                                 break;
+                            case 7:
+                                sheets = "TUBO METALICOS";
+                                table = dataGridViewTMCalculate;
+                                break;
+                            case 8:
+                                Range = string.Format("A{0}:E{0}", valueinitial);
+                                rangetwo = "A{0}:E{0}";
+                                sheets = "MAMPARAS";
+                                table = dataGridViewMCalculate;
+                                wrapTextDefault = false;
+                                break;
+
                         }
 
                         if (table.Rows.Count > 0)
