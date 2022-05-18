@@ -198,7 +198,7 @@ namespace arquitectSoft.Dto
         }
 
 
-        public DataTable CalculateTab(int index, DataTable dtmodel, DataTable dtmodelPuerta, bool VidrioPanel, Int32 MedidaBase, decimal Desperdicio)
+        public DataTable CalculateTab(int index, DataTable dtmodel, DataTable dtmodelPuerta, bool VidrioPanel, Int32 MedidaBase, decimal Desperdicio, bool swmergePM)
         {
             DataTable dt = new DataTable();
             switch (index)
@@ -209,7 +209,7 @@ namespace arquitectSoft.Dto
                     string StrCant = (index == 1 || index == 8) && !VidrioPanel ? "Longitud" : "Altura";
                     int herraje = index == 8 ? 1 : 0;
 
-                    dt = GetDataFinal(dtmodel, StrCant, herraje, MedidaBase, Desperdicio);
+                    dt = GetDataFinal(dtmodel, StrCant, herraje, MedidaBase, Desperdicio, swmergePM);
                     break;
                 case 2:
                     DataTable dtmodelDistinct = SetAuxAnchura(dtmodel);
@@ -574,7 +574,7 @@ namespace arquitectSoft.Dto
             return list;
         }
 
-        public List<object[]> getComponenteCalc(DataTable dtmodel, decimal Desperdicio)
+        public List<object[]> getComponenteCalc(DataTable dtmodel, decimal Desperdicio, bool swmergePM)
         {
             List<object[]> list = new List<object[]>();
             Generals.Conexion con = new Generals.Conexion();
@@ -590,31 +590,35 @@ namespace arquitectSoft.Dto
                 con.Close();
             }
 
-            fail = "";
-            string[] paramGet = { "pDesperdicio|" + Desperdicio };
-            con.Open(out fail);
-            DataTable dtResult = con.ExecuteDataSetSPparam(Generals.Constantes.QUERY_GET_PROYECTO, out fail, paramGet);
-            con.Close();
-
-            foreach (DataRow rowResult in dtResult.Rows)
+            if (swmergePM)
             {
-                object[] data = new object[8];
-                data[0] = Int32.Parse(rowResult[0].ToString());
-                data[1] = rowResult[1].ToString();
-                data[2] = rowResult[2].ToString();
-                data[3] = rowResult[3].ToString();
-                data[4] = float.Parse(rowResult[4].ToString());
-                data[5] = Int32.Parse(rowResult[5].ToString());
-                data[6] = float.Parse(rowResult[6].ToString());
-                data[7] = rowResult[7].ToString();
+                fail = "";
+                string[] paramGet = { "pDesperdicio|" + Desperdicio };
+                con.Open(out fail);
+                DataTable dtResult = con.ExecuteDataSetSPparam(Generals.Constantes.QUERY_GET_PROYECTO, out fail, paramGet);
+                con.Close();
 
-                list.Add(data);
+                foreach (DataRow rowResult in dtResult.Rows)
+                {
+                    object[] data = new object[8];
+                    data[0] = Int32.Parse(rowResult[0].ToString());
+                    data[1] = rowResult[1].ToString();
+                    data[2] = rowResult[2].ToString();
+                    data[3] = rowResult[3].ToString();
+                    data[4] = float.Parse(rowResult[4].ToString());
+                    data[5] = Int32.Parse(rowResult[5].ToString());
+                    data[6] = float.Parse(rowResult[6].ToString());
+                    data[7] = rowResult[7].ToString();
+
+                    list.Add(data);
+                }
             }
+
 
             return list;
         }
 
-        public DataTable GetDataFinal(DataTable dtmodel, string Strcantidad, int pSwHerraje, Int32 MedidaBase, decimal Desperdicio)
+        public DataTable GetDataFinal(DataTable dtmodel, string Strcantidad, int pSwHerraje, Int32 MedidaBase, decimal Desperdicio, bool swmergePM)
         {
             List<List<object[]>> listComp = getSubComponenteCalc(dtmodel, Strcantidad, pSwHerraje, MedidaBase);
 
@@ -633,7 +637,7 @@ namespace arquitectSoft.Dto
                 });
             });
 
-            List<object[]> listEndComp = getComponenteCalc(dtModelPerfiles, Desperdicio);
+            List<object[]> listEndComp = getComponenteCalc(dtModelPerfiles, Desperdicio, swmergePM);
 
             dtModelPerfiles.Rows.Clear();
             dtModelPerfiles.Columns.RemoveAt(1);
