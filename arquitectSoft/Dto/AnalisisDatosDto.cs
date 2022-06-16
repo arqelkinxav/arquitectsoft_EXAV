@@ -330,46 +330,49 @@ namespace arquitectSoft.Dto
                     DataTable dtResultG = con.ExecuteDataSetSPparam(Generals.Constantes.QUERY_GET_CALCULATE_PUERTAS_GENERAL, out fail, paramGeneral);
                     con.Close();
 
-
-                    if (dtResultG.Rows.Count > 0)
+                    if (dtResultG != null)
                     {
-                        string descripcionGeneral = dtResultG.Rows[0]["Descripcion"].ToString() + "Altura: (" + altura + ") Anchura: (" + anchura + ")";
-
-                        string[] param = { };
-                        con.Open(out fail);
-                        DataTable dtResult = con.ExecuteDataSetSPparam(Generals.Constantes.QUERY_GET_CALCULATE_PUERTAS_AGRUPAR, out fail, param);
-                        con.Close();
-
-
-
-                        if (dtResult.Rows.Count > 0)
+                        if (dtResultG.Rows.Count > 0)
                         {
+                            string descripcionGeneral = dtResultG.Rows[0]["Descripcion"].ToString() + "Altura: (" + altura + ") Anchura: (" + anchura + ")";
 
-                            if (rowinitial > 0)
+                            string[] param = { };
+                            con.Open(out fail);
+                            DataTable dtResult = con.ExecuteDataSetSPparam(Generals.Constantes.QUERY_GET_CALCULATE_PUERTAS_AGRUPAR, out fail, param);
+                            con.Close();
+
+
+
+                            if (dtResult.Rows.Count > 0)
                             {
-                                dtresulPuerta.Rows.Add("", "", "", "", "", "");
-                            }
 
-                            dtresulPuerta.Rows.Add(Nomenclatura, Codigo, descripcionGeneral, "", "", "");
+                                if (rowinitial > 0)
+                                {
+                                    dtresulPuerta.Rows.Add("", "", "", "", "", "");
+                                }
 
-                            foreach (DataRow rowP in dtResult.Select("CodigoComponente = '" + Codigo + "' and puerta = '" + Nomenclatura2 + "'"))
-                            {
+                                dtresulPuerta.Rows.Add(Nomenclatura, Codigo, descripcionGeneral, "", "", "");
 
-                                string uniDes = rowP["unidaMedida"].ToString();
+                                foreach (DataRow rowP in dtResult.Select("CodigoComponente = '" + Codigo + "' and puerta = '" + Nomenclatura2 + "'"))
+                                {
+
+                                    string uniDes = rowP["unidaMedida"].ToString();
                                 
-                                if (rowaddExtra & Int32.Parse(rowP["Extra"].ToString()) == 1)
-                                {
-                                    dtresulPuerta.Rows.Add("Item-Extra (" + uniDes + ")", rowP["codigo"].ToString(), rowP["Descripcion"].ToString(), Int32.Parse(rowP["cantidad"].ToString()) * rowaddExtraCant, rowP["medidaC"].ToString().Replace(".00", ""), rowP["medidaCalculada"].ToString().Replace(".00", ""), rowP["corte"].ToString(), rowP["mecanizado"].ToString());
-                                }
-                                else if (Int32.Parse(rowP["Extra"].ToString()) == 0)
-                                {
-                                    dtresulPuerta.Rows.Add("Item (" + uniDes + ")", rowP["codigo"].ToString(), rowP["Descripcion"].ToString(), rowP["cantidad"].ToString(), rowP["medidaC"].ToString().Replace(".00",""), rowP["medidaCalculada"].ToString().Replace(".00", ""), rowP["corte"].ToString(), rowP["mecanizado"].ToString());
+                                    if (rowaddExtra & Int32.Parse(rowP["Extra"].ToString()) == 1)
+                                    {
+                                        dtresulPuerta.Rows.Add("Item-Extra (" + uniDes + ")", rowP["codigo"].ToString(), rowP["Descripcion"].ToString(), Int32.Parse(rowP["cantidad"].ToString()) * rowaddExtraCant, rowP["medidaC"].ToString().Replace(".00", ""), rowP["medidaCalculada"].ToString().Replace(".00", ""), rowP["corte"].ToString(), rowP["mecanizado"].ToString());
+                                    }
+                                    else if (Int32.Parse(rowP["Extra"].ToString()) == 0)
+                                    {
+                                        dtresulPuerta.Rows.Add("Item (" + uniDes + ")", rowP["codigo"].ToString(), rowP["Descripcion"].ToString(), rowP["cantidad"].ToString(), rowP["medidaC"].ToString().Replace(".00",""), rowP["medidaCalculada"].ToString().Replace(".00", ""), rowP["corte"].ToString(), rowP["mecanizado"].ToString());
+                                    }
                                 }
                             }
-                        }
 
-                        rowinitial += 1;
+                            rowinitial += 1;
+                        }
                     }
+                   
                 }
             }
 
@@ -411,17 +414,20 @@ namespace arquitectSoft.Dto
                     DataTable dtResultG = con.ExecuteDataSetSPparam(Generals.Constantes.QUERY_GET_CALCULATE_PUERTAS_GENERAL, out fail, paramGeneral);
                     con.Close();
 
-
-                    if (dtResultG.Rows.Count > 0)
+                    if (dtResultG != null)
                     {
-                        string descripcionGeneral = dtResultG.Rows[0]["Descripcion"].ToString() + "Altura: (" + altura + ") Anchura: (" + anchura + ")";
+                        if (dtResultG.Rows.Count > 0)
+                        {
+                            string descripcionGeneral = dtResultG.Rows[0]["Descripcion"].ToString() + "Altura: (" + altura + ") Anchura: (" + anchura + ")";
 
-                        string[] param = { "pCodigo|" + Codigo, "plogitud|" + altura, "pAnchura|" + anchura, "pPuerta|" + Nomenclatura, "pSwHerraje|" + SwHerraje };
-                        con.Open(out fail);
-                        //con.ExecuteNonQuery(Generals.Constantes.QUERY_GET_CALCULATE_PUERTAS, out fail, param, 1);
-                        DataTable dtResult = con.ExecuteDataSetSPparam(Generals.Constantes.QUERY_GET_CALCULATE_PUERTAS, out fail, param);
-                        con.Close();
+                            string[] param = { "pCodigo|" + Codigo, "plogitud|" + altura, "pAnchura|" + anchura, "pPuerta|" + Nomenclatura, "pSwHerraje|" + SwHerraje };
+                            con.Open(out fail);
+                            //con.ExecuteNonQuery(Generals.Constantes.QUERY_GET_CALCULATE_PUERTAS, out fail, param, 1);
+                            DataTable dtResult = con.ExecuteDataSetSPparam(Generals.Constantes.QUERY_GET_CALCULATE_PUERTAS, out fail, param);
+                            con.Close();
+                        }
                     }
+
                 }
             }
 
@@ -463,11 +469,15 @@ namespace arquitectSoft.Dto
                     DataTable dtResultG = con.ExecuteDataSetSPparam(Generals.Constantes.QUERY_GET_CALCULATE_PUERTAS_GENERAL, out fail, paramGeneral);
                     con.Close();
 
-                    if (dtResultG.Rows.Count > 0)
+                    if (dtResultG != null)
                     {
-                        string descripcionGeneral = dtResultG.Rows[0]["Descripcion"].ToString();
-                        dtresulPuerta.Rows.Add(Codigo, descripcionGeneral, altura, anchura);
+                        if (dtResultG.Rows.Count > 0)
+                        {
+                            string descripcionGeneral = dtResultG.Rows[0]["Descripcion"].ToString();
+                            dtresulPuerta.Rows.Add(Codigo, descripcionGeneral, altura, anchura);
+                        }
                     }
+
                 }
             }
 
@@ -508,17 +518,21 @@ namespace arquitectSoft.Dto
 
          #endregion
 
-            #region Perfiles
-            private string getComponenteCodigoAcabado(string pcodigo)
+        #region Perfiles
+        private string getComponenteCodigoAcabado(string pcodigo)
         {
             Generals.Conexion con = new Generals.Conexion();
             string fail = "";
+            string codigo = "";
             string[] param = { "pCodigo|" + pcodigo };
             con.Open(out fail);
             DataTable dtResult = con.ExecuteDataSetSPparam(Generals.Constantes.QUERY_GET_COMPONENTE_CODIGOACABADO, out fail, param);
             con.Close();
-            string codigo = dtResult.Rows.Count > 0 ? dtResult.Rows[0][0].ToString() : "";
-
+            if (dtResult != null)
+            {
+                codigo = dtResult.Rows.Count > 0 ? dtResult.Rows[0][0].ToString() : "";
+            }
+            
 
             return codigo;
         }
@@ -552,21 +566,25 @@ namespace arquitectSoft.Dto
 
                 List<object[]> listDta = new List<object[]>();
 
-                foreach (DataRow rowResult in dtResult.Rows)
+                if (dtResult != null)
                 {
-                    object[] data = new object[8];
-                    data[0] = rowResult[0].ToString();
-                    data[1] = rowResult[1].ToString();
-                    data[2] = rowResult[2].ToString();
-                    data[3] = "";
-                    data[4] = rowResult[3].ToString();
-                    data[5] = rowResult[4].ToString();
-                    data[6] = rowResult[5].ToString();
-                    data[7] = rowResult[6].ToString();
-                    listDta.Add(data);
-                }
+                    foreach (DataRow rowResult in dtResult.Rows)
+                    {
+                        object[] data = new object[8];
+                        data[0] = rowResult[0].ToString();
+                        data[1] = rowResult[1].ToString();
+                        data[2] = rowResult[2].ToString();
+                        data[3] = "";
+                        data[4] = rowResult[3].ToString();
+                        data[5] = rowResult[4].ToString();
+                        data[6] = rowResult[5].ToString();
+                        data[7] = rowResult[6].ToString();
+                        listDta.Add(data);
+                    }
 
-                list.Add(listDta);
+                    list.Add(listDta);
+                }
+                
 
             }
 
@@ -598,20 +616,24 @@ namespace arquitectSoft.Dto
                 DataTable dtResult = con.ExecuteDataSetSPparam(Generals.Constantes.QUERY_GET_PROYECTO, out fail, paramGet);
                 con.Close();
 
-                foreach (DataRow rowResult in dtResult.Rows)
+                if (dtResult != null)
                 {
-                    object[] data = new object[8];
-                    data[0] = Int32.Parse(rowResult[0].ToString());
-                    data[1] = rowResult[1].ToString();
-                    data[2] = rowResult[2].ToString();
-                    data[3] = rowResult[3].ToString();
-                    data[4] = float.Parse(rowResult[4].ToString());
-                    data[5] = Int32.Parse(rowResult[5].ToString());
-                    data[6] = float.Parse(rowResult[6].ToString());
-                    data[7] = rowResult[7].ToString();
+                    foreach (DataRow rowResult in dtResult.Rows)
+                    {
+                        object[] data = new object[8];
+                        data[0] = Int32.Parse(rowResult[0].ToString());
+                        data[1] = rowResult[1].ToString();
+                        data[2] = rowResult[2].ToString();
+                        data[3] = rowResult[3].ToString();
+                        data[4] = float.Parse(rowResult[4].ToString());
+                        data[5] = Int32.Parse(rowResult[5].ToString());
+                        data[6] = float.Parse(rowResult[6].ToString());
+                        data[7] = rowResult[7].ToString();
 
-                    list.Add(data);
+                        list.Add(data);
+                    }
                 }
+
             }
 
 
@@ -675,24 +697,28 @@ namespace arquitectSoft.Dto
 
                 List<object[]> listDta = new List<object[]>();
 
-                foreach (DataRow rowResult in dtResult.Rows)
+                if (dtResult != null)
                 {
-                    object[] data = new object[8];
-                    data[0] = rowResult[0].ToString();
-                    data[1] = "";
-                    data[2] = "";
-                    data[3] = "";
-                    data[4] = rowResult[1].ToString();
-                    data[5] = rowResult[2].ToString();
-                    data[6] = rowResult[3].ToString(); ;
-                    data[7] = rowResult[4].ToString();
+                    foreach (DataRow rowResult in dtResult.Rows)
+                    {
+                        object[] data = new object[8];
+                        data[0] = rowResult[0].ToString();
+                        data[1] = "";
+                        data[2] = "";
+                        data[3] = "";
+                        data[4] = rowResult[1].ToString();
+                        data[5] = rowResult[2].ToString();
+                        data[6] = rowResult[3].ToString();
+                        data[7] = rowResult[4].ToString();
 
-                    listDta.Add(data);
+                        listDta.Add(data);
+                    }
+                    if (listDta.Count > 0)
+                    {
+                        list.Add(listDta);
+                    }
                 }
-                if (listDta.Count > 0)
-                {
-                    list.Add(listDta);
-                }
+                
 
 
             }
@@ -722,19 +748,23 @@ namespace arquitectSoft.Dto
             DataTable dtResult = con.ExecuteDataSetSPparam(Generals.Constantes.QUERY_GET_PROYECTO_VIDRIO_PANEL, out fail, paramGet);
             con.Close();
 
-            foreach (DataRow rowResult in dtResult.Rows)
+            if (dtResult != null)
             {
-                object[] data = new object[8];
-                data[0] = Int32.Parse(rowResult[0].ToString());
-                data[1] = rowResult[1].ToString();
-                data[2] = rowResult[2].ToString();
-                data[3] = rowResult[3].ToString();
-                data[4] = Int32.Parse(rowResult[4].ToString());
-                data[5] = Int32.Parse(rowResult[5].ToString());
-                data[6] = Int32.Parse(rowResult[6].ToString());
-                data[7] = rowResult[7].ToString();
-                list.Add(data);
+                foreach (DataRow rowResult in dtResult.Rows)
+                {
+                    object[] data = new object[8];
+                    data[0] = Int32.Parse(rowResult[0].ToString());
+                    data[1] = rowResult[1].ToString();
+                    data[2] = rowResult[2].ToString();
+                    data[3] = rowResult[3].ToString();
+                    data[4] = Int32.Parse(rowResult[4].ToString());
+                    data[5] = Int32.Parse(rowResult[5].ToString());
+                    data[6] = Int32.Parse(rowResult[6].ToString());
+                    data[7] = rowResult[7].ToString();
+                    list.Add(data);
+                }
             }
+            
             return list;
         }
 
@@ -889,17 +919,22 @@ namespace arquitectSoft.Dto
             DataTable dtResult = con.ExecuteDataSetSPparam(Generals.Constantes.QUERY_GET_CALCULATE_MAMPARAS, out fail, paramGet);
             con.Close();
 
-            foreach (DataRow rowResult in dtResult.Rows)
+            if (dtResult != null)
             {
-                object[] data = new object[6];
-                data[0] = rowResult[0].ToString();
-                data[1] = rowResult[1].ToString();
-                data[2] = rowResult[2].ToString();
-                data[3] = decimal.Parse(rowResult[3].ToString());
-                data[4] = Int32.Parse(rowResult[4].ToString());
-                data[5] = decimal.Parse(rowResult[5].ToString());
-                list.Add(data);
+                foreach (DataRow rowResult in dtResult.Rows)
+                {
+                    object[] data = new object[6];
+                    data[0] = rowResult[0].ToString();
+                    data[1] = rowResult[1].ToString();
+                    data[2] = rowResult[2].ToString();
+                    data[3] = decimal.Parse(rowResult[3].ToString());
+                    data[4] = Int32.Parse(rowResult[4].ToString());
+                    data[5] = decimal.Parse(rowResult[5].ToString());
+                    list.Add(data);
+                }
             }
+
+
 
             return list;
         }

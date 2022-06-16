@@ -42,111 +42,151 @@ namespace arquitectSoft.View
             DialogResult dr = this.openFileDialog1.ShowDialog();
             if (dr == System.Windows.Forms.DialogResult.OK)
             {
-                int medidabase = Int32.Parse(NUpDownMedidaBase.Value.ToString());
-                decimal Desperdicio = (decimal.Parse(NUpDownDesperdicio.Value.ToString())/100) + 1;
+                int wantedFiles = 0;
+                int wantedFilesHerrajesPuertas = 0;
+                
+                List<string> File_124 = new List<string>();
+                List<string> File_35 = new List<string>();
 
-                int pageinitial = 0;
-                bool perfilandvidrios = false;
-                List<int> UseTab = new List<int>();
-
-                int wantedFiles = openFileDialog1.FileNames.ToList().Where(x => x.Contains("1") || x.Contains("2")).Count();
-               
-
-                foreach (String file in openFileDialog1.FileNames.Reverse())
-                {
-                    bool swmergePM = true;
+                foreach (String file in openFileDialog1.FileNames)
+                {                    
                     FileInfo Archivo = new FileInfo(file);
                     int idDocumento = int.Parse(Archivo.Name.ToString().Split('-')[0].Trim());
-
-                    UseTab.Add(idDocumento);
-
-                    pageinitial = idDocumento < pageinitial ? idDocumento : pageinitial;
-
-                    List<Object[]> listData = new List<Object[]>();
-                    List<String> listColumns = new List<String>();
-
-                    listColumns = dto.setCreateColumns(idDocumento);
-
-                    listData = dto.readFileTxt(file, dto.ValidationSplit(file));
-
-                    DataTable dtResul = new DataTable();
-                    DataTable dtcalculate = new DataTable();
-
-                    dtResul = dto.showTab(idDocumento, listColumns, listData);
-
-                    dtPuertas = idDocumento == 3 ? dtResul : dtPuertas;
-
-                    if (idDocumento == 2)
+                    if (idDocumento == 1 || idDocumento == 2 || idDocumento == 4)
                     {
-                        if (wantedFiles == 2) { swmergePM = false; }
+                        if (idDocumento != 4)
+                            wantedFiles++;
 
-                        DataTable dtresulVP = new DataTable();
-                        dtPerfilOfVidrioPanel = dto.CalculateTab(1, dtResul, dtPuertas, true, medidabase, Desperdicio,swmergePM);
-                        dtresulVP = dtPerfilOfVidrioPanel.Copy();
-                        dtresulVP.Merge(dtPerfil);
+                        File_124.Add(file);
 
-                        dataGridViewPMCalculate.DataSource = dtresulVP;
-                        dataGridViewPMCalculate.Columns[0].Visible = false;
-                        dataGridViewPMCalculate.Columns[6].Visible = false;
-                    }
-
-                    dtcalculate = dto.CalculateTab(idDocumento, dtResul, dtPuertas, perfilandvidrios, medidabase, Desperdicio, swmergePM);
-
-                    if (idDocumento == 1)
-                    {
-                        dtPerfil = dtcalculate;
-                        dtPerfilR = dtResul;
-                        DataTable dtresulPM = new DataTable();
-                        dtresulPM = dtPerfilOfVidrioPanel.Copy();
-                        dtresulPM.Merge(dtPerfil);
-                        dtcalculate = dtresulPM;
-
-                        DataTable dtresulPMHerraje = new DataTable();
-                        dtresulPMHerraje = dto.CalculateTab(8, dtResul, dtPuertas, perfilandvidrios, medidabase, Desperdicio, swmergePM);
-                        dataGridViewPMHerrajeCalculate.DataSource = dtresulPMHerraje;
-                        dataGridViewPMHerrajeCalculate.Columns[0].Visible = false;
-                        dataGridViewPMHerrajeCalculate.Columns[6].Visible = false;
 
                     }
-                    if (idDocumento == 3)
+                    else 
                     {
-
-                        DataTable dtresulPC = new DataTable();
-                        dtresulPC = dto.CalculateTab(6, dtResul, dtPuertas, true, medidabase, Desperdicio, swmergePM);
-                        dataGridViewP2Calculate.DataSource = dtresulPC;
-                        dataGridViewP2Calculate.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-
-                        DataTable dtresulPHerraje = new DataTable();
-                        dtresulPHerraje = dto.CalculateTab(7, dtResul, dtPuertas, true, medidabase, Desperdicio, swmergePM);
-                        dataGridViewPHerrajeCalculate.DataSource = dtresulPHerraje;
-                        dataGridViewPHerrajeCalculate.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                        wantedFilesHerrajesPuertas ++;
+                        File_35.Add(file);
                     }
-
-                    SetDataView(dtResul, dtcalculate, idDocumento);
-
                 }
 
-                switch (UseTab.First())
+
+                if (File_124.Count > 0)
                 {
-                    case 1:
-                        tabPrincipal.SelectTab(tabPerfilMetallico);
-                        break;
-                    case 2:
-                        tabPrincipal.SelectTab(tabVidrioPaneles);
-                        break;
-                    case 3:
-                        tabPrincipal.SelectTab(tabPuertas);
-                        break;
-                    case 4:
-                        tabPrincipal.SelectTab(tabTubosMetalicos);
-                        break;
-                    case 5:
-                        tabPrincipal.SelectTab(tabMamparas);
-                        break;
+                    SetDataAll(dto, wantedFiles, File_124.OrderByDescending(x => x).ToList());
                 }
+
+                if (File_35.Count > 0)
+                {
+                    SetDataAll(dto, wantedFiles, File_35);
+                }
+                
+          
+
+
 
                 lblestadosAnalitica.Text = "Analitica Aplicada Correctamente!";
 
+            }
+        }
+
+        private void SetDataAll(Dto.AnalisisDatosDto dto, int wantedFiles, List<string> Filenames)
+        {
+            int pageinitial = 0;
+            bool perfilandvidrios = false;
+            List<int> UseTab = new List<int>();
+            int medidabase = Int32.Parse(NUpDownMedidaBase.Value.ToString());
+            decimal Desperdicio = (decimal.Parse(NUpDownDesperdicio.Value.ToString()) / 100) + 1;
+
+            foreach (String file in Filenames)
+            {
+                bool swmergePM = true;
+                FileInfo Archivo = new FileInfo(file);
+                int idDocumento = int.Parse(Archivo.Name.ToString().Split('-')[0].Trim());
+
+                UseTab.Add(idDocumento);
+
+                pageinitial = idDocumento < pageinitial ? idDocumento : pageinitial;
+
+                List<Object[]> listData = new List<Object[]>();
+                List<String> listColumns = new List<String>();
+
+                listColumns = dto.setCreateColumns(idDocumento);
+
+                listData = dto.readFileTxt(file, dto.ValidationSplit(file));
+
+                DataTable dtResul = new DataTable();
+                DataTable dtcalculate = new DataTable();
+
+                dtResul = dto.showTab(idDocumento, listColumns, listData);
+
+                dtPuertas = idDocumento == 3 ? dtResul : dtPuertas;
+
+                if (idDocumento == 2)
+                {
+                    if (wantedFiles == 2) { swmergePM = false; }
+
+                    DataTable dtresulVP = new DataTable();
+                    dtPerfilOfVidrioPanel = dto.CalculateTab(1, dtResul, dtPuertas, true, medidabase, Desperdicio, swmergePM);
+                    dtresulVP = dtPerfilOfVidrioPanel.Copy();
+                    dtresulVP.Merge(dtPerfil);
+
+                    dataGridViewPMCalculate.DataSource = dtresulVP;
+                    dataGridViewPMCalculate.Columns[0].Visible = false;
+                    dataGridViewPMCalculate.Columns[6].Visible = false;
+                }
+
+                dtcalculate = dto.CalculateTab(idDocumento, dtResul, dtPuertas, perfilandvidrios, medidabase, Desperdicio, swmergePM);
+
+                if (idDocumento == 1)
+                {
+                    dtPerfil = dtcalculate;
+                    dtPerfilR = dtResul;
+                    DataTable dtresulPM = new DataTable();
+                    dtresulPM = dtPerfilOfVidrioPanel.Copy();
+                    dtresulPM.Merge(dtPerfil);
+                    dtcalculate = dtresulPM;
+
+                    DataTable dtresulPMHerraje = new DataTable();
+                    dtresulPMHerraje = dto.CalculateTab(8, dtResul, dtPuertas, perfilandvidrios, medidabase, Desperdicio, swmergePM);
+                    dataGridViewPMHerrajeCalculate.DataSource = dtresulPMHerraje;
+                    dataGridViewPMHerrajeCalculate.Columns[0].Visible = false;
+                    dataGridViewPMHerrajeCalculate.Columns[6].Visible = false;
+
+                }
+                if (idDocumento == 3)
+                {
+
+                    DataTable dtresulPC = new DataTable();
+                    dtresulPC = dto.CalculateTab(6, dtResul, dtPuertas, true, medidabase, Desperdicio, swmergePM);
+                    dataGridViewP2Calculate.DataSource = dtresulPC;
+                    dataGridViewP2Calculate.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+
+                    DataTable dtresulPHerraje = new DataTable();
+                    dtresulPHerraje = dto.CalculateTab(7, dtResul, dtPuertas, true, medidabase, Desperdicio, swmergePM);
+                    dataGridViewPHerrajeCalculate.DataSource = dtresulPHerraje;
+                    dataGridViewPHerrajeCalculate.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                }
+
+                SetDataView(dtResul, dtcalculate, idDocumento);
+
+            }
+
+            switch (UseTab.First())
+            {
+                case 1:
+                    tabPrincipal.SelectTab(tabPerfilMetallico);
+                    break;
+                case 2:
+                    tabPrincipal.SelectTab(tabVidrioPaneles);
+                    break;
+                case 3:
+                    tabPrincipal.SelectTab(tabPuertas);
+                    break;
+                case 4:
+                    tabPrincipal.SelectTab(tabTubosMetalicos);
+                    break;
+                case 5:
+                    tabPrincipal.SelectTab(tabMamparas);
+                    break;
             }
         }
 
