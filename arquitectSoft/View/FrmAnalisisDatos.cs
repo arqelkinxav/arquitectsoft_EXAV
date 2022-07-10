@@ -24,10 +24,12 @@ namespace arquitectSoft.View
         private extern static void SendMessage(System.IntPtr hwnd, int wMsg, int wParam, int lParam);
 
         DataTable dtPuertas = new DataTable();
+        DataTable dtVidrio = new DataTable();
         DataTable dtPerfil = new DataTable();
+        DataTable dtPerfilHR = new DataTable();
         DataTable dtPerfilR = new DataTable();
         DataTable dtPerfilOfVidrioPanel = new DataTable();
-
+        DataTable dtPerfilHROfVidrioPanel = new DataTable();
         public FrmAnalisisDatos()
         {
             InitializeComponent();
@@ -38,6 +40,7 @@ namespace arquitectSoft.View
         private void BtnCargar_Click(object sender, EventArgs e)
         {
             Dto.AnalisisDatosDto dto = new Dto.AnalisisDatosDto();
+            
 
             DialogResult dr = this.openFileDialog1.ShowDialog();
             if (dr == System.Windows.Forms.DialogResult.OK)
@@ -122,7 +125,7 @@ namespace arquitectSoft.View
 
                 if (idDocumento == 2)
                 {
-                    if (wantedFiles == 2) { swmergePM = false; }
+                    if (wantedFiles == 2) { swmergePM = false; dtVidrio = dtResul; }
 
                     DataTable dtresulVP = new DataTable();
                     dtPerfilOfVidrioPanel = dto.CalculateTab(1, dtResul, dtPuertas, true, medidabase, Desperdicio, swmergePM);
@@ -132,6 +135,18 @@ namespace arquitectSoft.View
                     dataGridViewPMCalculate.DataSource = dtresulVP;
                     dataGridViewPMCalculate.Columns[0].Visible = false;
                     dataGridViewPMCalculate.Columns[6].Visible = false;
+
+                    if (swmergePM)
+                    {
+                        DataTable dtresulPMHerraje = new DataTable();
+                        dtresulPMHerraje = dto.CalculateTab(8, dtResul, dtPuertas, true, medidabase, Desperdicio, swmergePM);                       
+
+                        dataGridViewPMHerrajeCalculate.DataSource = dtresulPMHerraje;
+                        dataGridViewPMHerrajeCalculate.Columns[0].Visible = false;
+                    }
+
+
+
                 }
 
                 dtcalculate = dto.CalculateTab(idDocumento, dtResul, dtPuertas, perfilandvidrios, medidabase, Desperdicio, swmergePM);
@@ -147,9 +162,13 @@ namespace arquitectSoft.View
 
                     DataTable dtresulPMHerraje = new DataTable();
                     dtresulPMHerraje = dto.CalculateTab(8, dtResul, dtPuertas, perfilandvidrios, medidabase, Desperdicio, swmergePM);
+                    if (wantedFiles == 2)
+                        dtresulPMHerraje.Merge(dto.CalculateTab(8, dtVidrio, dtPuertas, true, medidabase, Desperdicio, swmergePM));
+
+                    
+
                     dataGridViewPMHerrajeCalculate.DataSource = dtresulPMHerraje;
                     dataGridViewPMHerrajeCalculate.Columns[0].Visible = false;
-                    dataGridViewPMHerrajeCalculate.Columns[6].Visible = false;
 
                 }
                 if (idDocumento == 3)
@@ -289,9 +308,11 @@ namespace arquitectSoft.View
             }
             tabPrincipal.SelectTab(tabPerfilMetallico);
             dtPuertas.Rows.Clear();
+            dtVidrio.Rows.Clear();
             dtPerfil.Rows.Clear();
+            dtPerfilHR.Rows.Clear();
             dtPerfilOfVidrioPanel.Rows.Clear();
-
+            dtPerfilHROfVidrioPanel.Rows.Clear();
             lblestadosAnalitica.Text = "";
         }
 
@@ -370,7 +391,9 @@ namespace arquitectSoft.View
                 {
 
                     int valueinitial = 8;
+                    int ValueFinish = 0;
                     string Range = string.Format("A{0}:G{0}", valueinitial);
+                    string Descheader = "";
                     string Rangeheader = "A2:G4";
                     string RangeSubheader = "A5:G6";
                     string rangetwo = "A{0}:G{0}";
@@ -429,39 +452,61 @@ namespace arquitectSoft.View
                     //wb.Worksheet(1).Columns().AdjustToContents();
 
                     DataGridView table = new DataGridView();
-                    for (int Datagrid = 1; Datagrid <= 8; Datagrid++)
+                    for (int Datagrid = 1; Datagrid <= 2; Datagrid++)
                     {
+                        valueinitial = 8;
+
+                        int valuesubheaderDescr = 5;
+                        int valuesubheaderValue = 6;
                         bool wrapTextDefault = true;
                         switch (Datagrid)
                         {
                             case 1:
                                 sheets = "PERFIL METALICO";
                                 table = dataGridViewPMCalculate;
+                                ValueFinish = dataGridViewPMCalculate.RowCount ;
+                                Range = string.Format("A{0}:H{0}", valueinitial);
+                                Descheader = sheets;
                                 break;
                             case 2:
-                                sheets = "PERFIL METALICO HERRAJES";
-                                table = dataGridViewPMHerrajeCalculate;
-                                break;
-                            case 3:
-                                sheets = "VIDRIOS Y PANELES";
-                                table = dataGridViewVPCalculate;
-                                break;
-                            case 4:
-                                Range = string.Format("A{0}:H{0}", valueinitial);
+                                if (ValueFinish > 0)
+                                {
+                                    valueinitial = valueinitial + ValueFinish + 8;
+                                    Rangeheader = string.Format("A{0}:G{1}", valueinitial - 6, valueinitial - 4);
+                                    valuesubheaderDescr = valueinitial - 3;
+                                    valuesubheaderValue = valueinitial - 2;
+                                }
+
                                 rangetwo = "A{0}:H{0}";
-                                sheets = "PUERTAS";
+                                sheets = "PERFIL METALICO";
+                                Descheader = "PUERTAS";
+                                RangeSubheader = string.Format("A{0}:G{1}", valuesubheaderDescr, valuesubheaderValue);
+                                Range = string.Format("A{0}:H{0}", valueinitial);
                                 table = dataGridViewPCalculate;
                                 break;
+                            case 3:
+                                sheets = "PERFIL METALICO HERRAJES";
+                                table = dataGridViewPMHerrajeCalculate;
+                                Descheader = sheets;
+                                break;
+                            case 4:
+                                sheets = "VIDRIOS Y PANELES";
+                                table = dataGridViewVPCalculate;
+                                Descheader = sheets;
+                                break;
+                            
                             case 5:
                                 Range = string.Format("A{0}:H{0}", valueinitial);
                                 rangetwo = "A{0}:H{0}";
                                 sheets = "PUERTAS HERRAJES";
+                                Descheader = sheets;
                                 table = dataGridViewPHerrajeCalculate;
                                 break;
                             case 6:
                                 Range = string.Format("A{0}:E{0}", valueinitial);
                                 rangetwo = "A{0}:E{0}";
                                 sheets = "PUERTAS CANTIDAD";
+                                Descheader = sheets;
                                 table = dataGridViewP2Calculate;
                                 wrapTextDefault = false;
                                 break;
@@ -524,14 +569,41 @@ namespace arquitectSoft.View
                                         .CopyToDataTable();
                             }
 
+                           
+                            if (Datagrid == 2)
+                            {
+                                if (ValueFinish == 0)
+                                {
+                                    DataTable dtnew = new DataTable();
+                                    var wsDoorOutPm = wb.Worksheets.Add(dtnew, sheets);
+                                    wsDoorOutPm.Name = sheets;
+                                    wsDoorOutPm.Row(1).InsertRowsAbove(7);
+                                    wb.Worksheet(sheets).AddPicture(path + imagePath)
+                                      .MoveTo(150, 25)
+                                      .Scale(.3); // optional: resize picture
+                                }
+                                
+                                var ws = wb.Worksheets.Add(dt, sheets + "Puerta");
+                                string RangeSrcDoor = string.Format("A{0}:H{1}", 1, dt.Rows.Count);
+                                var rangeDoor = wb.Worksheet(sheets + "Puerta").Range(RangeSrcDoor);
 
-                            var ws = wb.Worksheets.Add(dt, sheets);
-                            ws.Row(1).InsertRowsAbove(7);
+                                var wsPM = wb.Worksheet(1);
+                                string RangeDstDoor = string.Format("A{0}:H{1}", valueinitial, valueinitial + dt.Rows.Count);
+                                rangeDoor.CopyTo(wb.Worksheet(sheets).Range(RangeDstDoor));
 
+                                wb.Worksheet(sheets + "Puerta").Delete();
 
-                            wb.Worksheet(sheets).AddPicture(path + imagePath)
-                           .MoveTo(150, 25)
-                           .Scale(.3); // optional: resize picture
+                            }
+                            else
+                            {
+                                var ws = wb.Worksheets.Add(dt, sheets);
+                                ws.Row(1).InsertRowsAbove(7);
+                                wb.Worksheet(sheets).AddPicture(path + imagePath)
+                                  .MoveTo(150, 25)
+                                  .Scale(.3); // optional: resize picture
+                            }
+
+                           
 
 
                             //Diseño Header
@@ -540,7 +612,7 @@ namespace arquitectSoft.View
                             var range = wb.Worksheet(sheets).Range(Rangeheader);
                             range.Merge().Style.Font.SetBold().Font.FontSize = 16;
                             range.Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center).Alignment.SetVertical(XLAlignmentVerticalValues.Center);
-                            range.Value = sheets;
+                            range.Value = Descheader;
 
                             wb.Worksheet(sheets).Range(Rangeheader).Style.Border.TopBorder = XLBorderStyleValues.Thin;
                             wb.Worksheet(sheets).Range(Rangeheader).Style.Border.InsideBorder = XLBorderStyleValues.Dotted;
@@ -548,29 +620,30 @@ namespace arquitectSoft.View
                             wb.Worksheet(sheets).Range(Rangeheader).Style.Border.BottomBorder = XLBorderStyleValues.Thin;
 
                             //Diseño SubHeader
-                            wb.Worksheet(sheets).Cell(string.Format("A{0}", 5)).Value = "Numero del proyecto:";
-                            wb.Worksheet(sheets).Cell(string.Format("A{0}", 5)).Style.Font.SetBold();
-                            wb.Worksheet(sheets).Cell(string.Format("A{0}", 6)).Value = "Nombre del proyecto:";
-                            wb.Worksheet(sheets).Cell(string.Format("A{0}", 6)).Style.Font.SetBold();
-                            wb.Worksheet(sheets).Cell(string.Format("C{0}", 5)).Value = "Tecnico a Cargo:";
-                            wb.Worksheet(sheets).Cell(string.Format("C{0}", 5)).Style.Font.SetBold();
-                            wb.Worksheet(sheets).Cell(string.Format("C{0}", 6)).Value = "Fecha:";
-                            wb.Worksheet(sheets).Cell(string.Format("C{0}", 6)).Style.Font.SetBold();
-                            wb.Worksheet(sheets).Cell(string.Format("E{0}", 5)).Value = "Acabado de Perfileria:";
-                            wb.Worksheet(sheets).Cell(string.Format("E{0}", 5)).Style.Font.SetBold();
-                            wb.Worksheet(sheets).Cell(string.Format("E{0}", 6)).Value = "Acabado de Melamina:";
-                            wb.Worksheet(sheets).Cell(string.Format("E{0}", 6)).Style.Font.SetBold();
+                            wb.Worksheet(sheets).Cell(string.Format("A{0}", valuesubheaderDescr)).Value = "Numero del proyecto:";
+                            wb.Worksheet(sheets).Cell(string.Format("A{0}", valuesubheaderDescr)).Style.Font.SetBold();
+                            wb.Worksheet(sheets).Cell(string.Format("A{0}", valuesubheaderValue)).Value = "Nombre del proyecto:";
+                            wb.Worksheet(sheets).Cell(string.Format("A{0}", valuesubheaderValue)).Style.Font.SetBold();
+                            wb.Worksheet(sheets).Cell(string.Format("C{0}", valuesubheaderDescr)).Value = "Tecnico a Cargo:";
+                            wb.Worksheet(sheets).Cell(string.Format("C{0}", valuesubheaderDescr)).Style.Font.SetBold();
+                            wb.Worksheet(sheets).Cell(string.Format("C{0}", valuesubheaderValue)).Value = "Fecha:";
+                            wb.Worksheet(sheets).Cell(string.Format("C{0}", valuesubheaderValue)).Style.Font.SetBold();
+                            wb.Worksheet(sheets).Cell(string.Format("E{0}", valuesubheaderDescr)).Value = "Acabado de Perfileria:";
+                            wb.Worksheet(sheets).Cell(string.Format("E{0}", valuesubheaderDescr)).Style.Font.SetBold();
+                            wb.Worksheet(sheets).Cell(string.Format("E{0}", valuesubheaderValue)).Value = "Acabado de Melamina:";
+                            wb.Worksheet(sheets).Cell(string.Format("E{0}", valuesubheaderValue)).Style.Font.SetBold();
 
 
 
-                            wb.Worksheet(sheets).Cell(string.Format("B{0}", 5)).Value = param[0];
-                            wb.Worksheet(sheets).Cell(string.Format("B{0}", 6)).Value = param[1];
-                            wb.Worksheet(sheets).Cell(string.Format("D{0}", 5)).Value = param[2];
-                            wb.Worksheet(sheets).Cell(string.Format("D{0}", 6)).Value = param[3];
-                            wb.Worksheet(sheets).Cell(string.Format("F{0}", 5)).Value = param[4];
-                            wb.Worksheet(sheets).Cell(string.Format("F{0}", 6)).Value = param[5];
-                            wb.Worksheet(sheets).Range("F5:G5").Merge();
-                            wb.Worksheet(sheets).Range("F6:G6").Merge();
+                            wb.Worksheet(sheets).Cell(string.Format("B{0}", valuesubheaderDescr)).Value = param[0];
+                            wb.Worksheet(sheets).Cell(string.Format("B{0}", valuesubheaderValue)).Value = param[1];
+                            wb.Worksheet(sheets).Cell(string.Format("D{0}", valuesubheaderDescr)).Value = param[2];
+                            wb.Worksheet(sheets).Cell(string.Format("D{0}", valuesubheaderValue)).Value = param[3];
+                            wb.Worksheet(sheets).Cell(string.Format("F{0}", valuesubheaderDescr)).Value = param[4];
+                            wb.Worksheet(sheets).Cell(string.Format("F{0}", valuesubheaderValue)).Value = param[5];
+                            wb.Worksheet(sheets).Range(string.Format("F{0}:G{0}", valuesubheaderDescr)).Merge();
+                            wb.Worksheet(sheets).Range(string.Format("F{0}:G{0}", valuesubheaderValue)).Merge();
+
 
                             wb.Worksheet(sheets).Range(RangeSubheader).Style.Border.TopBorder = XLBorderStyleValues.Thin;
                             wb.Worksheet(sheets).Range(RangeSubheader).Style.Border.InsideBorder = XLBorderStyleValues.Dotted;
@@ -618,6 +691,8 @@ namespace arquitectSoft.View
 
 
                             }
+
+                         
                             //Adjust widths of Columns.
                             wb.Worksheet(sheets).Columns().AdjustToContents();
                             wb.Worksheet(sheets).Column(wrapTextDefault ? 3 : 2).Width = 57;
