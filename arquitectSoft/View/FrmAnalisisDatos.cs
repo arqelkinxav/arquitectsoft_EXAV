@@ -391,7 +391,8 @@ namespace arquitectSoft.View
                 {
 
                     int valueinitial = 8;
-                    int ValueFinish = 0;
+                    int PMValueFinish = 0;
+                    int PMHValueFinish = 0;
                     string Range = string.Format("A{0}:G{0}", valueinitial);
                     string Descheader = "";
                     string Rangeheader = "A2:G4";
@@ -399,63 +400,17 @@ namespace arquitectSoft.View
                     string rangetwo = "A{0}:G{0}";
                     string sheets = "";
 
-                    //int sheetscount = 1;
-
-                    //wb.Worksheets.Add("PRINCIPAL");
-                    //wb.Worksheet(1).ShowGridLines = new BooleanValue(false);
-                    //wb.Worksheet(1).Cell("B7").Value = "DATOS";
-                    //var range = wb.Worksheet(1).Range("B7:C7");
-                    //range.Merge().Style.Font.SetBold().Font.FontSize = 16;
-                    //range.Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
-
-                    ////var rangelogo = wb.Worksheet(1).Range("B2:C6");
-                    ////rangelogo.Merge().Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
 
                     string path = Directory.GetCurrentDirectory();
                     var imagePath = @"\LOGO.jpg";
-                    //wb.Worksheet(1).AddPicture(path + imagePath)
-                    //    .MoveTo(wb.Worksheet(1).Cell("B2"))
-                    //    .Scale(.5); // optional: resize picture
 
-                    //wb.Worksheet(1).Cell("C4").Value = "INFORMACION DEL PROYECTO";
-                    //wb.Worksheet(1).Cell("C4").Style.Font.SetBold().Font.SetFontColor(XLColor.DarkCoral);
-                    //string rangeboder = "B7:C13";
-                    //wb.Worksheet(1).Range(rangeboder).Style.Border.TopBorder = XLBorderStyleValues.Thin;
-                    //wb.Worksheet(1).Range(rangeboder).Style.Border.InsideBorder = XLBorderStyleValues.Dotted;
-                    //wb.Worksheet(1).Range(rangeboder).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-                    //wb.Worksheet(1).Range(rangeboder).Style.Border.LeftBorder = XLBorderStyleValues.Thin;
-                    //wb.Worksheet(1).Range(rangeboder).Style.Border.RightBorder = XLBorderStyleValues.Thin;
-                    //wb.Worksheet(1).Range(rangeboder).Style.Border.TopBorder = XLBorderStyleValues.Thin;
-
-                    //Style Cell
-                    //for (int x = 8; x <= 13; x++)
-                    //{
-                    //    wb.Worksheet(1).Cell(string.Format("B{0}", x)).Style.Font.SetBold();
-                    //    wb.Worksheet(1).Cell(string.Format("C{0}", x)).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Right);
-                    //}
-
-
-
-                    //wb.Worksheet(1).Cell(string.Format("B{0}", 8)).Value = "Numero del proyecto:";
-                    //wb.Worksheet(1).Cell(string.Format("B{0}", 9)).Value = "Nombre del proyecto:";
-                    //wb.Worksheet(1).Cell(string.Format("B{0}", 10)).Value = "Tecnico a Cargo:";
-                    //wb.Worksheet(1).Cell(string.Format("B{0}", 11)).Value = "Fecha:";
-                    //wb.Worksheet(1).Cell(string.Format("B{0}", 12)).Value = "Acabado de Perfileria:";
-                    //wb.Worksheet(1).Cell(string.Format("B{0}", 13)).Value = "Acabado de Melamina:";
-
-                    //wb.Worksheet(1).Cell(string.Format("C{0}", 8)).Value = param[0];
-                    //wb.Worksheet(1).Cell(string.Format("C{0}", 9)).Value = param[1];
-                    //wb.Worksheet(1).Cell(string.Format("C{0}", 10)).Value = param[2];
-                    //wb.Worksheet(1).Cell(string.Format("C{0}", 11)).Value = param[3];
-                    //wb.Worksheet(1).Cell(string.Format("C{0}", 12)).Value = param[4];
-                    //wb.Worksheet(1).Cell(string.Format("C{0}", 13)).Value = param[5];
-                    //wb.Worksheet(1).Columns().AdjustToContents();
 
                     DataGridView table = new DataGridView();
-                    for (int Datagrid = 1; Datagrid <= 2; Datagrid++)
+                    for (int Datagrid = 1; Datagrid <= 8; Datagrid++)
                     {
                         valueinitial = 8;
-
+                        Rangeheader = "A2:G4";
+                        RangeSubheader = "A5:G6";
                         int valuesubheaderDescr = 5;
                         int valuesubheaderValue = 6;
                         bool wrapTextDefault = true;
@@ -464,14 +419,14 @@ namespace arquitectSoft.View
                             case 1:
                                 sheets = "PERFIL METALICO";
                                 table = dataGridViewPMCalculate;
-                                ValueFinish = dataGridViewPMCalculate.RowCount ;
+                                PMValueFinish = dataGridViewPMCalculate.RowCount ;
                                 Range = string.Format("A{0}:H{0}", valueinitial);
                                 Descheader = sheets;
                                 break;
                             case 2:
-                                if (ValueFinish > 0)
+                                if (PMValueFinish > 0)
                                 {
-                                    valueinitial = valueinitial + ValueFinish + 8;
+                                    valueinitial = valueinitial + PMValueFinish + 8;
                                     Rangeheader = string.Format("A{0}:G{1}", valueinitial - 6, valueinitial - 4);
                                     valuesubheaderDescr = valueinitial - 3;
                                     valuesubheaderValue = valueinitial - 2;
@@ -487,21 +442,34 @@ namespace arquitectSoft.View
                             case 3:
                                 sheets = "PERFIL METALICO HERRAJES";
                                 table = dataGridViewPMHerrajeCalculate;
+                                PMHValueFinish = dataGridViewPMCalculate.RowCount;
+                                Range = string.Format("A{0}:H{0}", valueinitial);
                                 Descheader = sheets;
                                 break;
                             case 4:
+                                if (PMHValueFinish > 0)
+                                {
+                                    valueinitial = valueinitial + PMHValueFinish + 8;
+                                    Rangeheader = string.Format("A{0}:G{1}", valueinitial - 6, valueinitial - 4);
+                                    valuesubheaderDescr = valueinitial - 3;
+                                    valuesubheaderValue = valueinitial - 2;
+                                }
+
+                                
+                                rangetwo = "A{0}:H{0}";
+                                sheets = "PERFIL METALICO HERRAJES";
+                                Descheader = "PUERTAS HERRAJES";
+                                Range = string.Format("A{0}:H{0}", valueinitial);
+                                RangeSubheader = string.Format("A{0}:G{1}", valuesubheaderDescr, valuesubheaderValue);
+                                table = dataGridViewPHerrajeCalculate;
+                                break;
+                            case 5:
+                                Range = string.Format("A{0}:H{0}", valueinitial);
                                 sheets = "VIDRIOS Y PANELES";
                                 table = dataGridViewVPCalculate;
                                 Descheader = sheets;
-                                break;
-                            
-                            case 5:
-                                Range = string.Format("A{0}:H{0}", valueinitial);
-                                rangetwo = "A{0}:H{0}";
-                                sheets = "PUERTAS HERRAJES";
-                                Descheader = sheets;
-                                table = dataGridViewPHerrajeCalculate;
-                                break;
+                                break;                           
+
                             case 6:
                                 Range = string.Format("A{0}:E{0}", valueinitial);
                                 rangetwo = "A{0}:E{0}";
@@ -511,13 +479,16 @@ namespace arquitectSoft.View
                                 wrapTextDefault = false;
                                 break;
                             case 7:
+                                Range = string.Format("A{0}:E{0}", valueinitial);
                                 sheets = "TUBO METALICOS";
+                                Descheader = sheets;
                                 table = dataGridViewTMCalculate;
                                 break;
                             case 8:
-                                Range = string.Format("A{0}:E{0}", valueinitial);
+                                Range = string.Format("A{0}:H{0}", valueinitial);
                                 rangetwo = "A{0}:E{0}";
                                 sheets = "MAMPARAS";
+                                Descheader = sheets;
                                 table = dataGridViewMCalculate;
                                 wrapTextDefault = false;
                                 break;
@@ -572,7 +543,7 @@ namespace arquitectSoft.View
                            
                             if (Datagrid == 2)
                             {
-                                if (ValueFinish == 0)
+                                if (PMValueFinish == 0)
                                 {
                                     DataTable dtnew = new DataTable();
                                     var wsDoorOutPm = wb.Worksheets.Add(dtnew, sheets);
@@ -594,6 +565,29 @@ namespace arquitectSoft.View
                                 wb.Worksheet(sheets + "Puerta").Delete();
 
                             }
+                            else if (Datagrid == 4)
+                            {
+                                if (PMHValueFinish == 0)
+                                {
+                                    DataTable dtnew = new DataTable();
+                                    var wsDoorOutPm = wb.Worksheets.Add(dtnew, sheets);
+                                    wsDoorOutPm.Name = sheets;
+                                    wsDoorOutPm.Row(1).InsertRowsAbove(7);
+                                    wb.Worksheet(sheets).AddPicture(path + imagePath)
+                                      .MoveTo(150, 25)
+                                      .Scale(.3); // optional: resize picture
+                                }
+
+                                var ws = wb.Worksheets.Add(dt, sheets + "PHer");
+                                string RangeSrcDoor = string.Format("A{0}:H{1}", 1, dt.Rows.Count);
+                                var rangeDoor = wb.Worksheet(sheets + "PHer").Range(RangeSrcDoor);
+
+                                var wsPM = wb.Worksheet(1);
+                                string RangeDstDoor = string.Format("A{0}:H{1}", valueinitial, valueinitial + dt.Rows.Count);
+                                rangeDoor.CopyTo(wb.Worksheet(sheets).Range(RangeDstDoor));
+
+                                wb.Worksheet(sheets + "PHer").Delete();
+                            }
                             else
                             {
                                 var ws = wb.Worksheets.Add(dt, sheets);
@@ -603,7 +597,6 @@ namespace arquitectSoft.View
                                   .Scale(.3); // optional: resize picture
                             }
 
-                           
 
 
                             //Diseño Header
@@ -782,5 +775,16 @@ namespace arquitectSoft.View
                 e.Handled = true;
             }
         }
+
+        private void dataGridViewPMCalculate_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            var dataIndexNo = dataGridViewPMCalculate.Rows[e.RowIndex].Index.ToString();
+            string cellValue = dataGridViewPMCalculate.Rows[e.RowIndex].Cells[1].Value.ToString();
+
+            FrmLoading bsc = new FrmLoading();
+            bsc.ShowDialog();
+        }
+
+    
     }
 }
