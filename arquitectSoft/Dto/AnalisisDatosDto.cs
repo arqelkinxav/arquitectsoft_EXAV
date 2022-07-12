@@ -100,6 +100,7 @@ namespace arquitectSoft.Dto
                     listColumns.Add("medida");
                     listColumns.Add("Medidida Calculada");
                     listColumns.Add("Se_Calcula_Por");
+                    listColumns.Add("Corte");
                     //-----------------
                     break;
                 case 7:
@@ -570,7 +571,7 @@ namespace arquitectSoft.Dto
                 {
                     foreach (DataRow rowResult in dtResult.Rows)
                     {
-                        object[] data = new object[8];
+                        object[] data = new object[10];
                         data[0] = rowResult[0].ToString();
                         data[1] = rowResult[1].ToString();
                         data[2] = rowResult[2].ToString();
@@ -579,6 +580,7 @@ namespace arquitectSoft.Dto
                         data[5] = rowResult[4].ToString();
                         data[6] = rowResult[5].ToString();
                         data[7] = rowResult[6].ToString();
+                        data[9] = rowResult[7].ToString();
                         listDta.Add(data);
                     }
 
@@ -602,7 +604,7 @@ namespace arquitectSoft.Dto
                 fail = "";
                 string[] param = { row["id_subcomponente"].ToString(), row["Id_Unidad_Medida"].ToString(),
                                     row["cantidad"].ToString(), row["medida"].ToString(),
-                                    row["Medidida Calculada"].ToString() };
+                                    row["Medidida Calculada"].ToString(),row["Corte"].ToString() };
                 con.Open(out fail);
                 MySqlDataReader drResult = con.ExecuteReader(Generals.Constantes.QUERY_INSERT_PROYECTO, out fail, param);
                 con.Close();
@@ -620,7 +622,7 @@ namespace arquitectSoft.Dto
                 {
                     foreach (DataRow rowResult in dtResult.Rows)
                     {
-                        object[] data = new object[8];
+                        object[] data = new object[9];
                         data[0] = Int32.Parse(rowResult[0].ToString());
                         data[1] = rowResult[1].ToString();
                         data[2] = rowResult[2].ToString();
@@ -629,6 +631,7 @@ namespace arquitectSoft.Dto
                         data[5] = Int32.Parse(rowResult[5].ToString());
                         data[6] = float.Parse(rowResult[6].ToString());
                         data[7] = rowResult[7].ToString();
+                        data[8] = rowResult[8].ToString();
 
                         list.Add(data);
                     }

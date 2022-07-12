@@ -81,15 +81,39 @@ namespace arquitectSoft.View
                 {
                     SetDataAll(dto, wantedFiles, File_35);
                 }
+
+
+
+                if (FnValidateData())
+                {
+                    BtnChange.Visible = true;
+                }
                 
-          
-
-
-
                 lblestadosAnalitica.Text = "Analitica Aplicada Correctamente!";
 
             }
         }
+
+        private bool FnValidateData()
+        {
+            bool resul = false;
+
+            if (dataGridViewPMCalculate.RowCount> 0 ||
+                dataGridViewPMHerrajeCalculate.RowCount > 0 ||
+                dataGridViewVPCalculate.RowCount > 0 ||
+                dataGridViewPCalculate.RowCount > 0 ||
+                dataGridViewPHerrajeCalculate.RowCount > 0 ||
+                dataGridViewP2Calculate.RowCount > 0 ||
+                dataGridViewTMCalculate.RowCount > 0 ||
+                dataGridViewMCalculate.RowCount > 0)
+            {
+                resul = true;
+
+            }
+
+            return resul;
+        }
+
 
         private void SetDataAll(Dto.AnalisisDatosDto dto, int wantedFiles, List<string> Filenames)
         {
@@ -314,6 +338,7 @@ namespace arquitectSoft.View
             dtPerfilOfVidrioPanel.Rows.Clear();
             dtPerfilHROfVidrioPanel.Rows.Clear();
             lblestadosAnalitica.Text = "";
+            BtnChange.Visible = false;
         }
 
         private void btnExportar_Click(object sender, EventArgs e)
@@ -776,15 +801,112 @@ namespace arquitectSoft.View
             }
         }
 
-        private void dataGridViewPMCalculate_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
+        private void FnChangeInfo(string[] param)
         {
-            var dataIndexNo = dataGridViewPMCalculate.Rows[e.RowIndex].Index.ToString();
-            string cellValue = dataGridViewPMCalculate.Rows[e.RowIndex].Cells[1].Value.ToString();
+            DataGridView table = new DataGridView();
+            for (int Datagrid = 1; Datagrid <= 8; Datagrid++)
+            {
+               
+                switch (Datagrid)
+                {
+                    case 1:                        
+                        table = dataGridViewPMCalculate;                        
+                        break;
+                    case 2:                        
+                        table = dataGridViewPCalculate;
+                        break;
+                    case 3:
+                        table = dataGridViewPMHerrajeCalculate;
+                        break;
+                    case 4:                       
+                        table = dataGridViewPHerrajeCalculate;
+                        break;
+                    case 5:
+                        table = dataGridViewVPCalculate;
+                        break;
+                    case 6:                        
+                        table = dataGridViewP2Calculate;
+                        break;
+                    case 7:
+                        table = dataGridViewTMCalculate;
+                        break;
+                    case 8:
+                        table = dataGridViewMCalculate;
+                        break;
 
-            FrmLoading bsc = new FrmLoading();
-            bsc.ShowDialog();
+                }
+
+                if(table.Rows.Count > 0)
+                {
+                    foreach (DataGridViewRow row in table.Rows)
+                    {
+                        int posini = 0;
+                        int posfin = 0;
+                        string AcabadoDesc = "";
+                        string valuezero = row.Cells[0].Value.ToString();
+                        string Acabado = row.Cells[3].Value.ToString();   
+                        
+                        if ((Datagrid == 2 || Datagrid == 4) && !valuezero.Contains("Puerta"))
+                        {
+                            continue;
+                        }
+
+                        if (Datagrid == 2 || Datagrid == 4 || Datagrid == 6)
+                        {
+                            AcabadoDesc = (Datagrid == 6) ? row.Cells[1].Value.ToString() : row.Cells[2].Value.ToString();
+                            posini = AcabadoDesc.IndexOf("(");
+                            posfin = AcabadoDesc.IndexOf(")");
+                            Acabado = AcabadoDesc.Substring(posini + 1, posfin - (posini +1));                                                  
+                        }
+
+                        if (Datagrid == 7 || Datagrid == 8)
+                        {
+                            Acabado = row.Cells[2].Value.ToString();
+                        }
+
+                        if (param[0].Contains(Acabado))
+                        {
+                            if (((Datagrid == 2 || Datagrid == 4) && valuezero.Contains("Puerta")) || Datagrid == 6)
+                            {
+                                AcabadoDesc = AcabadoDesc.Substring(0, posini + 1) + param[1].ToString().Split('-')[1].Trim() + AcabadoDesc.Substring(posfin, AcabadoDesc.Length - posfin);
+                                if (Datagrid == 6)
+                                {
+                                    row.Cells[1].Value = AcabadoDesc;
+                                }
+                                else
+                                {
+                                    row.Cells[2].Value = AcabadoDesc;
+                                }
+                                
+                            }
+                            else if (Datagrid == 7 || Datagrid == 8)
+                            {
+                                row.Cells[2].Value = param[1].ToString().Split('-')[1].Trim();
+                            }
+                            else
+                            {
+                                row.Cells[3].Value = param[1].ToString().Split('-')[1].Trim();
+                            }                            
+                        }
+                    }
+                }
+                
+            }
+
         }
 
-    
+        private void BtnChange_Click(object sender, EventArgs e)
+        {
+            FrmChange bsc = new FrmChange();
+            bsc.ShowDialog();
+            if (bsc.Acabado1 == null)
+            {
+                return;
+            }
+            string[] param = { bsc.Acabado1, bsc.Acabado2 };
+            FnChangeInfo(param);
+
+
+        }
     }
 }

@@ -94,6 +94,7 @@ namespace arquitectSoft.View
             this.EliCtrlButtons = new arquitectSoft.Generals.ElipseControl();
             this.elipseControl2 = new arquitectSoft.Generals.ElipseControl();
             this.elipseComponent1 = new arquitectSoft.Generals.ElipseComponent();
+            this.BtnChange = new arquitectSoft.Generals.RJButton();
             this.tabMamparas.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewM)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMCalculate)).BeginInit();
@@ -189,10 +190,9 @@ namespace arquitectSoft.View
             this.tabMamparas.BackColor = System.Drawing.Color.White;
             this.tabMamparas.Controls.Add(this.dataGridViewM);
             this.tabMamparas.Controls.Add(this.dataGridViewMCalculate);
-            this.tabMamparas.Location = new System.Drawing.Point(4, 25);
-            this.tabMamparas.Margin = new System.Windows.Forms.Padding(4);
+            this.tabMamparas.Location = new System.Drawing.Point(4, 22);
             this.tabMamparas.Name = "tabMamparas";
-            this.tabMamparas.Size = new System.Drawing.Size(1591, 513);
+            this.tabMamparas.Size = new System.Drawing.Size(1191, 414);
             this.tabMamparas.TabIndex = 6;
             this.tabMamparas.Text = "Mamparas";
             // 
@@ -210,11 +210,10 @@ namespace arquitectSoft.View
             this.dataGridViewM.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dataGridViewM.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewM.EnableHeadersVisualStyles = false;
-            this.dataGridViewM.Location = new System.Drawing.Point(4, 4);
-            this.dataGridViewM.Margin = new System.Windows.Forms.Padding(4);
+            this.dataGridViewM.Location = new System.Drawing.Point(3, 3);
             this.dataGridViewM.Name = "dataGridViewM";
             this.dataGridViewM.ReadOnly = true;
-            this.dataGridViewM.Size = new System.Drawing.Size(1580, 240);
+            this.dataGridViewM.Size = new System.Drawing.Size(1185, 195);
             this.dataGridViewM.TabIndex = 8;
             // 
             // dataGridViewMCalculate
@@ -231,11 +230,10 @@ namespace arquitectSoft.View
             this.dataGridViewMCalculate.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             this.dataGridViewMCalculate.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewMCalculate.EnableHeadersVisualStyles = false;
-            this.dataGridViewMCalculate.Location = new System.Drawing.Point(4, 251);
-            this.dataGridViewMCalculate.Margin = new System.Windows.Forms.Padding(4);
+            this.dataGridViewMCalculate.Location = new System.Drawing.Point(3, 204);
             this.dataGridViewMCalculate.Name = "dataGridViewMCalculate";
             this.dataGridViewMCalculate.ReadOnly = true;
-            this.dataGridViewMCalculate.Size = new System.Drawing.Size(1580, 255);
+            this.dataGridViewMCalculate.Size = new System.Drawing.Size(1185, 207);
             this.dataGridViewMCalculate.TabIndex = 7;
             // 
             // tabTubosMetalicos
@@ -243,10 +241,9 @@ namespace arquitectSoft.View
             this.tabTubosMetalicos.BackColor = System.Drawing.Color.White;
             this.tabTubosMetalicos.Controls.Add(this.dataGridViewTM);
             this.tabTubosMetalicos.Controls.Add(this.dataGridViewTMCalculate);
-            this.tabTubosMetalicos.Location = new System.Drawing.Point(4, 25);
-            this.tabTubosMetalicos.Margin = new System.Windows.Forms.Padding(4);
+            this.tabTubosMetalicos.Location = new System.Drawing.Point(4, 22);
             this.tabTubosMetalicos.Name = "tabTubosMetalicos";
-            this.tabTubosMetalicos.Size = new System.Drawing.Size(1591, 513);
+            this.tabTubosMetalicos.Size = new System.Drawing.Size(1191, 414);
             this.tabTubosMetalicos.TabIndex = 5;
             this.tabTubosMetalicos.Text = "Tubos Metalicos";
             // 
@@ -264,11 +261,10 @@ namespace arquitectSoft.View
             this.dataGridViewTM.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.dataGridViewTM.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewTM.EnableHeadersVisualStyles = false;
-            this.dataGridViewTM.Location = new System.Drawing.Point(4, 4);
-            this.dataGridViewTM.Margin = new System.Windows.Forms.Padding(4);
+            this.dataGridViewTM.Location = new System.Drawing.Point(3, 3);
             this.dataGridViewTM.Name = "dataGridViewTM";
             this.dataGridViewTM.ReadOnly = true;
-            this.dataGridViewTM.Size = new System.Drawing.Size(1580, 240);
+            this.dataGridViewTM.Size = new System.Drawing.Size(1185, 195);
             this.dataGridViewTM.TabIndex = 6;
             // 
             // dataGridViewTMCalculate
@@ -285,11 +281,10 @@ namespace arquitectSoft.View
             this.dataGridViewTMCalculate.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
             this.dataGridViewTMCalculate.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewTMCalculate.EnableHeadersVisualStyles = false;
-            this.dataGridViewTMCalculate.Location = new System.Drawing.Point(4, 251);
-            this.dataGridViewTMCalculate.Margin = new System.Windows.Forms.Padding(4);
+            this.dataGridViewTMCalculate.Location = new System.Drawing.Point(3, 204);
             this.dataGridViewTMCalculate.Name = "dataGridViewTMCalculate";
             this.dataGridViewTMCalculate.ReadOnly = true;
-            this.dataGridViewTMCalculate.Size = new System.Drawing.Size(1580, 255);
+            this.dataGridViewTMCalculate.Size = new System.Drawing.Size(1185, 207);
             this.dataGridViewTMCalculate.TabIndex = 5;
             // 
             // tabPuertas
@@ -297,10 +292,9 @@ namespace arquitectSoft.View
             this.tabPuertas.BackColor = System.Drawing.Color.White;
             this.tabPuertas.Controls.Add(this.dataGridViewP);
             this.tabPuertas.Controls.Add(this.dataGridViewPCalculate);
-            this.tabPuertas.Location = new System.Drawing.Point(4, 25);
-            this.tabPuertas.Margin = new System.Windows.Forms.Padding(4);
+            this.tabPuertas.Location = new System.Drawing.Point(4, 22);
             this.tabPuertas.Name = "tabPuertas";
-            this.tabPuertas.Size = new System.Drawing.Size(1591, 513);
+            this.tabPuertas.Size = new System.Drawing.Size(1191, 414);
             this.tabPuertas.TabIndex = 3;
             this.tabPuertas.Text = "Puertas";
             // 
@@ -318,11 +312,10 @@ namespace arquitectSoft.View
             this.dataGridViewP.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
             this.dataGridViewP.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewP.EnableHeadersVisualStyles = false;
-            this.dataGridViewP.Location = new System.Drawing.Point(4, 4);
-            this.dataGridViewP.Margin = new System.Windows.Forms.Padding(4);
+            this.dataGridViewP.Location = new System.Drawing.Point(3, 3);
             this.dataGridViewP.Name = "dataGridViewP";
             this.dataGridViewP.ReadOnly = true;
-            this.dataGridViewP.Size = new System.Drawing.Size(1580, 240);
+            this.dataGridViewP.Size = new System.Drawing.Size(1185, 195);
             this.dataGridViewP.TabIndex = 9;
             // 
             // dataGridViewPCalculate
@@ -339,11 +332,10 @@ namespace arquitectSoft.View
             this.dataGridViewPCalculate.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle6;
             this.dataGridViewPCalculate.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewPCalculate.EnableHeadersVisualStyles = false;
-            this.dataGridViewPCalculate.Location = new System.Drawing.Point(4, 251);
-            this.dataGridViewPCalculate.Margin = new System.Windows.Forms.Padding(4);
+            this.dataGridViewPCalculate.Location = new System.Drawing.Point(3, 204);
             this.dataGridViewPCalculate.Name = "dataGridViewPCalculate";
             this.dataGridViewPCalculate.ReadOnly = true;
-            this.dataGridViewPCalculate.Size = new System.Drawing.Size(1580, 255);
+            this.dataGridViewPCalculate.Size = new System.Drawing.Size(1185, 207);
             this.dataGridViewPCalculate.TabIndex = 4;
             this.dataGridViewPCalculate.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dataGridViewPCalculate_CellFormatting);
             // 
@@ -352,11 +344,10 @@ namespace arquitectSoft.View
             this.tabVidrioPaneles.BackColor = System.Drawing.Color.White;
             this.tabVidrioPaneles.Controls.Add(this.dataGridViewVPCalculate);
             this.tabVidrioPaneles.Controls.Add(this.dataGridViewVP);
-            this.tabVidrioPaneles.Location = new System.Drawing.Point(4, 25);
-            this.tabVidrioPaneles.Margin = new System.Windows.Forms.Padding(4);
+            this.tabVidrioPaneles.Location = new System.Drawing.Point(4, 22);
             this.tabVidrioPaneles.Name = "tabVidrioPaneles";
-            this.tabVidrioPaneles.Padding = new System.Windows.Forms.Padding(4);
-            this.tabVidrioPaneles.Size = new System.Drawing.Size(1591, 513);
+            this.tabVidrioPaneles.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.tabVidrioPaneles.Size = new System.Drawing.Size(1191, 414);
             this.tabVidrioPaneles.TabIndex = 1;
             this.tabVidrioPaneles.Text = "Vidrio y Paneles";
             // 
@@ -375,11 +366,10 @@ namespace arquitectSoft.View
             this.dataGridViewVPCalculate.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle7;
             this.dataGridViewVPCalculate.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewVPCalculate.EnableHeadersVisualStyles = false;
-            this.dataGridViewVPCalculate.Location = new System.Drawing.Point(4, 228);
-            this.dataGridViewVPCalculate.Margin = new System.Windows.Forms.Padding(4);
+            this.dataGridViewVPCalculate.Location = new System.Drawing.Point(3, 185);
             this.dataGridViewVPCalculate.Name = "dataGridViewVPCalculate";
             this.dataGridViewVPCalculate.ReadOnly = true;
-            this.dataGridViewVPCalculate.Size = new System.Drawing.Size(1580, 274);
+            this.dataGridViewVPCalculate.Size = new System.Drawing.Size(1185, 223);
             this.dataGridViewVPCalculate.TabIndex = 2;
             // 
             // dataGridViewVP
@@ -397,11 +387,10 @@ namespace arquitectSoft.View
             this.dataGridViewVP.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle8;
             this.dataGridViewVP.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewVP.EnableHeadersVisualStyles = false;
-            this.dataGridViewVP.Location = new System.Drawing.Point(4, 5);
-            this.dataGridViewVP.Margin = new System.Windows.Forms.Padding(4);
+            this.dataGridViewVP.Location = new System.Drawing.Point(3, 4);
             this.dataGridViewVP.Name = "dataGridViewVP";
             this.dataGridViewVP.ReadOnly = true;
-            this.dataGridViewVP.Size = new System.Drawing.Size(1580, 218);
+            this.dataGridViewVP.Size = new System.Drawing.Size(1185, 177);
             this.dataGridViewVP.TabIndex = 1;
             // 
             // tabPerfilMetallico
@@ -409,11 +398,10 @@ namespace arquitectSoft.View
             this.tabPerfilMetallico.BackColor = System.Drawing.Color.White;
             this.tabPerfilMetallico.Controls.Add(this.dataGridViewPMCalculate);
             this.tabPerfilMetallico.Controls.Add(this.dataGridViewPM);
-            this.tabPerfilMetallico.Location = new System.Drawing.Point(4, 25);
-            this.tabPerfilMetallico.Margin = new System.Windows.Forms.Padding(4);
+            this.tabPerfilMetallico.Location = new System.Drawing.Point(4, 22);
             this.tabPerfilMetallico.Name = "tabPerfilMetallico";
-            this.tabPerfilMetallico.Padding = new System.Windows.Forms.Padding(4);
-            this.tabPerfilMetallico.Size = new System.Drawing.Size(1591, 513);
+            this.tabPerfilMetallico.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.tabPerfilMetallico.Size = new System.Drawing.Size(1191, 414);
             this.tabPerfilMetallico.TabIndex = 0;
             this.tabPerfilMetallico.Text = "Perfil Metalico";
             // 
@@ -432,15 +420,13 @@ namespace arquitectSoft.View
             this.dataGridViewPMCalculate.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle9;
             this.dataGridViewPMCalculate.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewPMCalculate.EnableHeadersVisualStyles = false;
-            this.dataGridViewPMCalculate.Location = new System.Drawing.Point(4, 247);
-            this.dataGridViewPMCalculate.Margin = new System.Windows.Forms.Padding(4);
+            this.dataGridViewPMCalculate.Location = new System.Drawing.Point(3, 201);
             this.dataGridViewPMCalculate.Name = "dataGridViewPMCalculate";
             this.dataGridViewPMCalculate.ReadOnly = true;
             dataGridViewCellStyle10.BackColor = System.Drawing.Color.White;
             this.dataGridViewPMCalculate.RowsDefaultCellStyle = dataGridViewCellStyle10;
-            this.dataGridViewPMCalculate.Size = new System.Drawing.Size(1580, 255);
+            this.dataGridViewPMCalculate.Size = new System.Drawing.Size(1185, 207);
             this.dataGridViewPMCalculate.TabIndex = 3;
-            this.dataGridViewPMCalculate.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewPMCalculate_CellContentDoubleClick);
             // 
             // dataGridViewPM
             // 
@@ -457,13 +443,12 @@ namespace arquitectSoft.View
             this.dataGridViewPM.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle11;
             this.dataGridViewPM.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewPM.EnableHeadersVisualStyles = false;
-            this.dataGridViewPM.Location = new System.Drawing.Point(4, 4);
-            this.dataGridViewPM.Margin = new System.Windows.Forms.Padding(4);
+            this.dataGridViewPM.Location = new System.Drawing.Point(3, 3);
             this.dataGridViewPM.Name = "dataGridViewPM";
             this.dataGridViewPM.ReadOnly = true;
             dataGridViewCellStyle12.BackColor = System.Drawing.Color.White;
             this.dataGridViewPM.RowsDefaultCellStyle = dataGridViewCellStyle12;
-            this.dataGridViewPM.Size = new System.Drawing.Size(1580, 236);
+            this.dataGridViewPM.Size = new System.Drawing.Size(1185, 192);
             this.dataGridViewPM.TabIndex = 0;
             // 
             // tabPrincipal
@@ -476,21 +461,19 @@ namespace arquitectSoft.View
             this.tabPrincipal.Controls.Add(this.tabPuertascant);
             this.tabPrincipal.Controls.Add(this.tabTubosMetalicos);
             this.tabPrincipal.Controls.Add(this.tabMamparas);
-            this.tabPrincipal.Location = new System.Drawing.Point(5, 117);
-            this.tabPrincipal.Margin = new System.Windows.Forms.Padding(4);
+            this.tabPrincipal.Location = new System.Drawing.Point(4, 95);
             this.tabPrincipal.Name = "tabPrincipal";
             this.tabPrincipal.SelectedIndex = 0;
-            this.tabPrincipal.Size = new System.Drawing.Size(1599, 542);
+            this.tabPrincipal.Size = new System.Drawing.Size(1199, 440);
             this.tabPrincipal.TabIndex = 49;
             // 
             // tabPerfilMetallicoHerraje
             // 
             this.tabPerfilMetallicoHerraje.Controls.Add(this.dataGridViewPMHerrajeCalculate);
             this.tabPerfilMetallicoHerraje.Controls.Add(this.dataGridViewPMHerraje);
-            this.tabPerfilMetallicoHerraje.Location = new System.Drawing.Point(4, 25);
-            this.tabPerfilMetallicoHerraje.Margin = new System.Windows.Forms.Padding(4);
+            this.tabPerfilMetallicoHerraje.Location = new System.Drawing.Point(4, 22);
             this.tabPerfilMetallicoHerraje.Name = "tabPerfilMetallicoHerraje";
-            this.tabPerfilMetallicoHerraje.Size = new System.Drawing.Size(1591, 513);
+            this.tabPerfilMetallicoHerraje.Size = new System.Drawing.Size(1191, 414);
             this.tabPerfilMetallicoHerraje.TabIndex = 9;
             this.tabPerfilMetallicoHerraje.Text = "Panel Metalico Herraje";
             this.tabPerfilMetallicoHerraje.UseVisualStyleBackColor = true;
@@ -510,13 +493,12 @@ namespace arquitectSoft.View
             this.dataGridViewPMHerrajeCalculate.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle13;
             this.dataGridViewPMHerrajeCalculate.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewPMHerrajeCalculate.EnableHeadersVisualStyles = false;
-            this.dataGridViewPMHerrajeCalculate.Location = new System.Drawing.Point(4, 250);
-            this.dataGridViewPMHerrajeCalculate.Margin = new System.Windows.Forms.Padding(4);
+            this.dataGridViewPMHerrajeCalculate.Location = new System.Drawing.Point(3, 203);
             this.dataGridViewPMHerrajeCalculate.Name = "dataGridViewPMHerrajeCalculate";
             this.dataGridViewPMHerrajeCalculate.ReadOnly = true;
             dataGridViewCellStyle14.BackColor = System.Drawing.Color.White;
             this.dataGridViewPMHerrajeCalculate.RowsDefaultCellStyle = dataGridViewCellStyle14;
-            this.dataGridViewPMHerrajeCalculate.Size = new System.Drawing.Size(1580, 255);
+            this.dataGridViewPMHerrajeCalculate.Size = new System.Drawing.Size(1185, 207);
             this.dataGridViewPMHerrajeCalculate.TabIndex = 5;
             // 
             // dataGridViewPMHerraje
@@ -534,23 +516,21 @@ namespace arquitectSoft.View
             this.dataGridViewPMHerraje.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle15;
             this.dataGridViewPMHerraje.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewPMHerraje.EnableHeadersVisualStyles = false;
-            this.dataGridViewPMHerraje.Location = new System.Drawing.Point(4, 6);
-            this.dataGridViewPMHerraje.Margin = new System.Windows.Forms.Padding(4);
+            this.dataGridViewPMHerraje.Location = new System.Drawing.Point(3, 5);
             this.dataGridViewPMHerraje.Name = "dataGridViewPMHerraje";
             this.dataGridViewPMHerraje.ReadOnly = true;
             dataGridViewCellStyle16.BackColor = System.Drawing.Color.White;
             this.dataGridViewPMHerraje.RowsDefaultCellStyle = dataGridViewCellStyle16;
-            this.dataGridViewPMHerraje.Size = new System.Drawing.Size(1580, 236);
+            this.dataGridViewPMHerraje.Size = new System.Drawing.Size(1185, 192);
             this.dataGridViewPMHerraje.TabIndex = 4;
             // 
             // tabPuertaHerr
             // 
             this.tabPuertaHerr.Controls.Add(this.dataGridViewPHerraje);
             this.tabPuertaHerr.Controls.Add(this.dataGridViewPHerrajeCalculate);
-            this.tabPuertaHerr.Location = new System.Drawing.Point(4, 25);
-            this.tabPuertaHerr.Margin = new System.Windows.Forms.Padding(4);
+            this.tabPuertaHerr.Location = new System.Drawing.Point(4, 22);
             this.tabPuertaHerr.Name = "tabPuertaHerr";
-            this.tabPuertaHerr.Size = new System.Drawing.Size(1591, 513);
+            this.tabPuertaHerr.Size = new System.Drawing.Size(1191, 414);
             this.tabPuertaHerr.TabIndex = 8;
             this.tabPuertaHerr.Text = "Puertas Herrajes";
             this.tabPuertaHerr.UseVisualStyleBackColor = true;
@@ -569,11 +549,10 @@ namespace arquitectSoft.View
             this.dataGridViewPHerraje.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle17;
             this.dataGridViewPHerraje.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewPHerraje.EnableHeadersVisualStyles = false;
-            this.dataGridViewPHerraje.Location = new System.Drawing.Point(4, 4);
-            this.dataGridViewPHerraje.Margin = new System.Windows.Forms.Padding(4);
+            this.dataGridViewPHerraje.Location = new System.Drawing.Point(3, 3);
             this.dataGridViewPHerraje.Name = "dataGridViewPHerraje";
             this.dataGridViewPHerraje.ReadOnly = true;
-            this.dataGridViewPHerraje.Size = new System.Drawing.Size(1580, 240);
+            this.dataGridViewPHerraje.Size = new System.Drawing.Size(1185, 195);
             this.dataGridViewPHerraje.TabIndex = 11;
             // 
             // dataGridViewPHerrajeCalculate
@@ -590,11 +569,10 @@ namespace arquitectSoft.View
             this.dataGridViewPHerrajeCalculate.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle18;
             this.dataGridViewPHerrajeCalculate.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewPHerrajeCalculate.EnableHeadersVisualStyles = false;
-            this.dataGridViewPHerrajeCalculate.Location = new System.Drawing.Point(4, 251);
-            this.dataGridViewPHerrajeCalculate.Margin = new System.Windows.Forms.Padding(4);
+            this.dataGridViewPHerrajeCalculate.Location = new System.Drawing.Point(3, 204);
             this.dataGridViewPHerrajeCalculate.Name = "dataGridViewPHerrajeCalculate";
             this.dataGridViewPHerrajeCalculate.ReadOnly = true;
-            this.dataGridViewPHerrajeCalculate.Size = new System.Drawing.Size(1580, 255);
+            this.dataGridViewPHerrajeCalculate.Size = new System.Drawing.Size(1185, 207);
             this.dataGridViewPHerrajeCalculate.TabIndex = 10;
             this.dataGridViewPHerrajeCalculate.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dataGridViewPHerrajeCalculate_CellFormatting);
             // 
@@ -603,10 +581,9 @@ namespace arquitectSoft.View
             this.tabPuertascant.BackColor = System.Drawing.Color.White;
             this.tabPuertascant.Controls.Add(this.dataGridViewP2);
             this.tabPuertascant.Controls.Add(this.dataGridViewP2Calculate);
-            this.tabPuertascant.Location = new System.Drawing.Point(4, 25);
-            this.tabPuertascant.Margin = new System.Windows.Forms.Padding(4);
+            this.tabPuertascant.Location = new System.Drawing.Point(4, 22);
             this.tabPuertascant.Name = "tabPuertascant";
-            this.tabPuertascant.Size = new System.Drawing.Size(1591, 513);
+            this.tabPuertascant.Size = new System.Drawing.Size(1191, 414);
             this.tabPuertascant.TabIndex = 7;
             this.tabPuertascant.Text = "Puertas Cantidad";
             // 
@@ -624,11 +601,10 @@ namespace arquitectSoft.View
             this.dataGridViewP2.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle19;
             this.dataGridViewP2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewP2.EnableHeadersVisualStyles = false;
-            this.dataGridViewP2.Location = new System.Drawing.Point(4, 4);
-            this.dataGridViewP2.Margin = new System.Windows.Forms.Padding(4);
+            this.dataGridViewP2.Location = new System.Drawing.Point(3, 3);
             this.dataGridViewP2.Name = "dataGridViewP2";
             this.dataGridViewP2.ReadOnly = true;
-            this.dataGridViewP2.Size = new System.Drawing.Size(1580, 240);
+            this.dataGridViewP2.Size = new System.Drawing.Size(1185, 195);
             this.dataGridViewP2.TabIndex = 11;
             // 
             // dataGridViewP2Calculate
@@ -645,11 +621,10 @@ namespace arquitectSoft.View
             this.dataGridViewP2Calculate.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle20;
             this.dataGridViewP2Calculate.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewP2Calculate.EnableHeadersVisualStyles = false;
-            this.dataGridViewP2Calculate.Location = new System.Drawing.Point(4, 251);
-            this.dataGridViewP2Calculate.Margin = new System.Windows.Forms.Padding(4);
+            this.dataGridViewP2Calculate.Location = new System.Drawing.Point(3, 204);
             this.dataGridViewP2Calculate.Name = "dataGridViewP2Calculate";
             this.dataGridViewP2Calculate.ReadOnly = true;
-            this.dataGridViewP2Calculate.Size = new System.Drawing.Size(1580, 255);
+            this.dataGridViewP2Calculate.Size = new System.Drawing.Size(1185, 207);
             this.dataGridViewP2Calculate.TabIndex = 10;
             // 
             // lblestadosAnalitica
@@ -657,8 +632,7 @@ namespace arquitectSoft.View
             this.lblestadosAnalitica.AutoSize = true;
             this.lblestadosAnalitica.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblestadosAnalitica.ForeColor = System.Drawing.Color.LightCoral;
-            this.lblestadosAnalitica.Location = new System.Drawing.Point(1168, 117);
-            this.lblestadosAnalitica.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblestadosAnalitica.Location = new System.Drawing.Point(876, 95);
             this.lblestadosAnalitica.Name = "lblestadosAnalitica";
             this.lblestadosAnalitica.Size = new System.Drawing.Size(0, 18);
             this.lblestadosAnalitica.TabIndex = 50;
@@ -685,8 +659,7 @@ namespace arquitectSoft.View
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F);
             this.label1.ForeColor = System.Drawing.Color.White;
             this.label1.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.label1.Location = new System.Drawing.Point(55, 73);
-            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label1.Location = new System.Drawing.Point(41, 59);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(153, 24);
             this.label1.TabIndex = 62;
@@ -697,10 +670,9 @@ namespace arquitectSoft.View
             this.label2.AutoSize = true;
             this.label2.BackColor = System.Drawing.Color.Black;
             this.label2.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label2.Location = new System.Drawing.Point(1056, 30);
-            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label2.Location = new System.Drawing.Point(792, 24);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(88, 16);
+            this.label2.Size = new System.Drawing.Size(69, 13);
             this.label2.TabIndex = 67;
             this.label2.Text = "Medida Base";
             // 
@@ -709,19 +681,17 @@ namespace arquitectSoft.View
             this.label3.AutoSize = true;
             this.label3.BackColor = System.Drawing.Color.Black;
             this.label3.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label3.Location = new System.Drawing.Point(1284, 31);
-            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label3.Location = new System.Drawing.Point(963, 25);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(96, 16);
+            this.label3.Size = new System.Drawing.Size(74, 13);
             this.label3.TabIndex = 69;
             this.label3.Text = "% Desperdicio";
             // 
             // NUpDownDesperdicio
             // 
-            this.NUpDownDesperdicio.Location = new System.Drawing.Point(1391, 26);
-            this.NUpDownDesperdicio.Margin = new System.Windows.Forms.Padding(4);
+            this.NUpDownDesperdicio.Location = new System.Drawing.Point(1043, 21);
             this.NUpDownDesperdicio.Name = "NUpDownDesperdicio";
-            this.NUpDownDesperdicio.Size = new System.Drawing.Size(109, 22);
+            this.NUpDownDesperdicio.Size = new System.Drawing.Size(82, 20);
             this.NUpDownDesperdicio.TabIndex = 71;
             this.NUpDownDesperdicio.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.NUpDownDesperdicio_KeyPress);
             // 
@@ -737,10 +707,9 @@ namespace arquitectSoft.View
             this.BtnSalir.ImageIndex = 51;
             this.BtnSalir.ImageList = this.ImgLista;
             this.BtnSalir.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.BtnSalir.Location = new System.Drawing.Point(1508, 17);
-            this.BtnSalir.Margin = new System.Windows.Forms.Padding(4);
+            this.BtnSalir.Location = new System.Drawing.Point(1131, 14);
             this.BtnSalir.Name = "BtnSalir";
-            this.BtnSalir.Size = new System.Drawing.Size(96, 43);
+            this.BtnSalir.Size = new System.Drawing.Size(72, 35);
             this.BtnSalir.TabIndex = 59;
             this.BtnSalir.Text = "Salir";
             this.BtnSalir.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
@@ -749,15 +718,14 @@ namespace arquitectSoft.View
             // 
             // NUpDownMedidaBase
             // 
-            this.NUpDownMedidaBase.Location = new System.Drawing.Point(1151, 27);
-            this.NUpDownMedidaBase.Margin = new System.Windows.Forms.Padding(4);
+            this.NUpDownMedidaBase.Location = new System.Drawing.Point(863, 22);
             this.NUpDownMedidaBase.Maximum = new decimal(new int[] {
             99999,
             0,
             0,
             0});
             this.NUpDownMedidaBase.Name = "NUpDownMedidaBase";
-            this.NUpDownMedidaBase.Size = new System.Drawing.Size(109, 22);
+            this.NUpDownMedidaBase.Size = new System.Drawing.Size(82, 20);
             this.NUpDownMedidaBase.TabIndex = 72;
             this.NUpDownMedidaBase.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.NUpDownMedidaBase_KeyPress);
             // 
@@ -773,10 +741,9 @@ namespace arquitectSoft.View
             this.btnExportar.ForeColor = System.Drawing.Color.White;
             this.btnExportar.ImageIndex = 6;
             this.btnExportar.ImageList = this.ImgListFinal;
-            this.btnExportar.Location = new System.Drawing.Point(144, 16);
-            this.btnExportar.Margin = new System.Windows.Forms.Padding(4);
+            this.btnExportar.Location = new System.Drawing.Point(108, 13);
             this.btnExportar.Name = "btnExportar";
-            this.btnExportar.Size = new System.Drawing.Size(56, 44);
+            this.btnExportar.Size = new System.Drawing.Size(42, 36);
             this.btnExportar.TabIndex = 65;
             this.btnExportar.TextColor = System.Drawing.Color.White;
             this.btnExportar.UseVisualStyleBackColor = false;
@@ -794,10 +761,9 @@ namespace arquitectSoft.View
             this.BtnCancelar.ForeColor = System.Drawing.Color.White;
             this.BtnCancelar.ImageIndex = 4;
             this.BtnCancelar.ImageList = this.ImgListFinal;
-            this.BtnCancelar.Location = new System.Drawing.Point(80, 15);
-            this.BtnCancelar.Margin = new System.Windows.Forms.Padding(4);
+            this.BtnCancelar.Location = new System.Drawing.Point(60, 12);
             this.BtnCancelar.Name = "BtnCancelar";
-            this.BtnCancelar.Size = new System.Drawing.Size(56, 44);
+            this.BtnCancelar.Size = new System.Drawing.Size(42, 36);
             this.BtnCancelar.TabIndex = 64;
             this.BtnCancelar.TextColor = System.Drawing.Color.White;
             this.BtnCancelar.UseVisualStyleBackColor = false;
@@ -815,10 +781,9 @@ namespace arquitectSoft.View
             this.BtnCargar.ForeColor = System.Drawing.Color.White;
             this.BtnCargar.ImageIndex = 9;
             this.BtnCargar.ImageList = this.ImgListFinal;
-            this.BtnCargar.Location = new System.Drawing.Point(16, 16);
-            this.BtnCargar.Margin = new System.Windows.Forms.Padding(4);
+            this.BtnCargar.Location = new System.Drawing.Point(12, 13);
             this.BtnCargar.Name = "BtnCargar";
-            this.BtnCargar.Size = new System.Drawing.Size(56, 44);
+            this.BtnCargar.Size = new System.Drawing.Size(42, 36);
             this.BtnCargar.TabIndex = 63;
             this.BtnCargar.TextColor = System.Drawing.Color.White;
             this.BtnCargar.UseVisualStyleBackColor = false;
@@ -828,10 +793,9 @@ namespace arquitectSoft.View
             // 
             this.elipseControl1.BackColor = System.Drawing.Color.Black;
             this.elipseControl1.CornerRadius = 15;
-            this.elipseControl1.Location = new System.Drawing.Point(41, 70);
-            this.elipseControl1.Margin = new System.Windows.Forms.Padding(4);
+            this.elipseControl1.Location = new System.Drawing.Point(31, 57);
             this.elipseControl1.Name = "elipseControl1";
-            this.elipseControl1.Size = new System.Drawing.Size(1540, 39);
+            this.elipseControl1.Size = new System.Drawing.Size(1155, 32);
             this.elipseControl1.TabIndex = 61;
             this.elipseControl1.Text = "elipseControl1";
             // 
@@ -840,9 +804,8 @@ namespace arquitectSoft.View
             this.EliCtrlButtons.BackColor = System.Drawing.Color.Black;
             this.EliCtrlButtons.CornerRadius = 15;
             this.EliCtrlButtons.Location = new System.Drawing.Point(0, -1);
-            this.EliCtrlButtons.Margin = new System.Windows.Forms.Padding(4);
             this.EliCtrlButtons.Name = "EliCtrlButtons";
-            this.EliCtrlButtons.Size = new System.Drawing.Size(1625, 75);
+            this.EliCtrlButtons.Size = new System.Drawing.Size(1219, 61);
             this.EliCtrlButtons.TabIndex = 60;
             this.EliCtrlButtons.Text = "elipseControl1";
             this.EliCtrlButtons.MouseDown += new System.Windows.Forms.MouseEventHandler(this.EliCtrlButtons_MouseDown);
@@ -851,10 +814,9 @@ namespace arquitectSoft.View
             // 
             this.elipseControl2.BackColor = System.Drawing.Color.White;
             this.elipseControl2.CornerRadius = 15;
-            this.elipseControl2.Location = new System.Drawing.Point(0, 94);
-            this.elipseControl2.Margin = new System.Windows.Forms.Padding(4);
+            this.elipseControl2.Location = new System.Drawing.Point(0, 76);
             this.elipseControl2.Name = "elipseControl2";
-            this.elipseControl2.Size = new System.Drawing.Size(1625, 609);
+            this.elipseControl2.Size = new System.Drawing.Size(1219, 495);
             this.elipseControl2.TabIndex = 66;
             this.elipseControl2.Text = "elipseControl1";
             // 
@@ -863,12 +825,34 @@ namespace arquitectSoft.View
             this.elipseComponent1.CornerRadius = 15;
             this.elipseComponent1.TargetControl = this;
             // 
+            // BtnChange
+            // 
+            this.BtnChange.BackColor = System.Drawing.Color.DimGray;
+            this.BtnChange.BackgroundColor = System.Drawing.Color.DimGray;
+            this.BtnChange.BorderColor = System.Drawing.Color.White;
+            this.BtnChange.BorderRadius = 10;
+            this.BtnChange.BorderSize = 0;
+            this.BtnChange.FlatAppearance.BorderSize = 0;
+            this.BtnChange.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnChange.ForeColor = System.Drawing.Color.White;
+            this.BtnChange.Location = new System.Drawing.Point(12, 541);
+            this.BtnChange.Name = "BtnChange";
+            this.BtnChange.Size = new System.Drawing.Size(111, 22);
+            this.BtnChange.TabIndex = 104;
+            this.BtnChange.Text = "Cambiar Acabado";
+            this.BtnChange.TextColor = System.Drawing.Color.White;
+            this.BtnChange.UseCompatibleTextRendering = true;
+            this.BtnChange.UseVisualStyleBackColor = false;
+            this.BtnChange.Visible = false;
+            this.BtnChange.Click += new System.EventHandler(this.BtnChange_Click);
+            // 
             // FrmAnalisisDatos
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.DimGray;
-            this.ClientSize = new System.Drawing.Size(1625, 700);
+            this.ClientSize = new System.Drawing.Size(1219, 569);
+            this.Controls.Add(this.BtnChange);
             this.Controls.Add(this.NUpDownMedidaBase);
             this.Controls.Add(this.NUpDownDesperdicio);
             this.Controls.Add(this.label3);
@@ -884,7 +868,6 @@ namespace arquitectSoft.View
             this.Controls.Add(this.tabPrincipal);
             this.Controls.Add(this.elipseControl2);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.Margin = new System.Windows.Forms.Padding(4);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FrmAnalisisDatos";
@@ -967,5 +950,6 @@ namespace arquitectSoft.View
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.NumericUpDown NUpDownDesperdicio;
         private System.Windows.Forms.NumericUpDown NUpDownMedidaBase;
+        private Generals.RJButton BtnChange;
     }
 }
