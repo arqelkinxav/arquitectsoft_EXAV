@@ -87,6 +87,7 @@ namespace arquitectSoft.View
             this.NUpDownDesperdicio = new System.Windows.Forms.NumericUpDown();
             this.BtnSalir = new System.Windows.Forms.Button();
             this.NUpDownMedidaBase = new System.Windows.Forms.NumericUpDown();
+            this.BtnChange = new arquitectSoft.Generals.RJButton();
             this.btnExportar = new arquitectSoft.Generals.RJButton();
             this.BtnCancelar = new arquitectSoft.Generals.RJButton();
             this.BtnCargar = new arquitectSoft.Generals.RJButton();
@@ -94,7 +95,6 @@ namespace arquitectSoft.View
             this.EliCtrlButtons = new arquitectSoft.Generals.ElipseControl();
             this.elipseControl2 = new arquitectSoft.Generals.ElipseControl();
             this.elipseComponent1 = new arquitectSoft.Generals.ElipseComponent();
-            this.BtnChange = new arquitectSoft.Generals.RJButton();
             this.tabMamparas.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewM)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMCalculate)).BeginInit();
@@ -264,7 +264,7 @@ namespace arquitectSoft.View
             this.dataGridViewTM.Location = new System.Drawing.Point(3, 3);
             this.dataGridViewTM.Name = "dataGridViewTM";
             this.dataGridViewTM.ReadOnly = true;
-            this.dataGridViewTM.Size = new System.Drawing.Size(1185, 195);
+            this.dataGridViewTM.Size = new System.Drawing.Size(1185, 408);
             this.dataGridViewTM.TabIndex = 6;
             // 
             // dataGridViewTMCalculate
@@ -286,6 +286,7 @@ namespace arquitectSoft.View
             this.dataGridViewTMCalculate.ReadOnly = true;
             this.dataGridViewTMCalculate.Size = new System.Drawing.Size(1185, 207);
             this.dataGridViewTMCalculate.TabIndex = 5;
+            this.dataGridViewTMCalculate.Visible = false;
             // 
             // tabPuertas
             // 
@@ -346,7 +347,7 @@ namespace arquitectSoft.View
             this.tabVidrioPaneles.Controls.Add(this.dataGridViewVP);
             this.tabVidrioPaneles.Location = new System.Drawing.Point(4, 22);
             this.tabVidrioPaneles.Name = "tabVidrioPaneles";
-            this.tabVidrioPaneles.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.tabVidrioPaneles.Padding = new System.Windows.Forms.Padding(3);
             this.tabVidrioPaneles.Size = new System.Drawing.Size(1191, 414);
             this.tabVidrioPaneles.TabIndex = 1;
             this.tabVidrioPaneles.Text = "Vidrio y Paneles";
@@ -400,7 +401,7 @@ namespace arquitectSoft.View
             this.tabPerfilMetallico.Controls.Add(this.dataGridViewPM);
             this.tabPerfilMetallico.Location = new System.Drawing.Point(4, 22);
             this.tabPerfilMetallico.Name = "tabPerfilMetallico";
-            this.tabPerfilMetallico.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.tabPerfilMetallico.Padding = new System.Windows.Forms.Padding(3);
             this.tabPerfilMetallico.Size = new System.Drawing.Size(1191, 414);
             this.tabPerfilMetallico.TabIndex = 0;
             this.tabPerfilMetallico.Text = "Perfil Metalico";
@@ -475,7 +476,7 @@ namespace arquitectSoft.View
             this.tabPerfilMetallicoHerraje.Name = "tabPerfilMetallicoHerraje";
             this.tabPerfilMetallicoHerraje.Size = new System.Drawing.Size(1191, 414);
             this.tabPerfilMetallicoHerraje.TabIndex = 9;
-            this.tabPerfilMetallicoHerraje.Text = "Panel Metalico Herraje";
+            this.tabPerfilMetallicoHerraje.Text = "Perfil Metalico Herraje";
             this.tabPerfilMetallicoHerraje.UseVisualStyleBackColor = true;
             // 
             // dataGridViewPMHerrajeCalculate
@@ -729,6 +730,27 @@ namespace arquitectSoft.View
             this.NUpDownMedidaBase.TabIndex = 72;
             this.NUpDownMedidaBase.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.NUpDownMedidaBase_KeyPress);
             // 
+            // BtnChange
+            // 
+            this.BtnChange.BackColor = System.Drawing.Color.DimGray;
+            this.BtnChange.BackgroundColor = System.Drawing.Color.DimGray;
+            this.BtnChange.BorderColor = System.Drawing.Color.White;
+            this.BtnChange.BorderRadius = 10;
+            this.BtnChange.BorderSize = 0;
+            this.BtnChange.FlatAppearance.BorderSize = 0;
+            this.BtnChange.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnChange.ForeColor = System.Drawing.Color.White;
+            this.BtnChange.Location = new System.Drawing.Point(12, 541);
+            this.BtnChange.Name = "BtnChange";
+            this.BtnChange.Size = new System.Drawing.Size(111, 22);
+            this.BtnChange.TabIndex = 104;
+            this.BtnChange.Text = "Cambiar Acabado";
+            this.BtnChange.TextColor = System.Drawing.Color.White;
+            this.BtnChange.UseCompatibleTextRendering = true;
+            this.BtnChange.UseVisualStyleBackColor = false;
+            this.BtnChange.Visible = false;
+            this.BtnChange.Click += new System.EventHandler(this.BtnChange_Click);
+            // 
             // btnExportar
             // 
             this.btnExportar.BackColor = System.Drawing.Color.DimGray;
@@ -824,27 +846,6 @@ namespace arquitectSoft.View
             // 
             this.elipseComponent1.CornerRadius = 15;
             this.elipseComponent1.TargetControl = this;
-            // 
-            // BtnChange
-            // 
-            this.BtnChange.BackColor = System.Drawing.Color.DimGray;
-            this.BtnChange.BackgroundColor = System.Drawing.Color.DimGray;
-            this.BtnChange.BorderColor = System.Drawing.Color.White;
-            this.BtnChange.BorderRadius = 10;
-            this.BtnChange.BorderSize = 0;
-            this.BtnChange.FlatAppearance.BorderSize = 0;
-            this.BtnChange.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnChange.ForeColor = System.Drawing.Color.White;
-            this.BtnChange.Location = new System.Drawing.Point(12, 541);
-            this.BtnChange.Name = "BtnChange";
-            this.BtnChange.Size = new System.Drawing.Size(111, 22);
-            this.BtnChange.TabIndex = 104;
-            this.BtnChange.Text = "Cambiar Acabado";
-            this.BtnChange.TextColor = System.Drawing.Color.White;
-            this.BtnChange.UseCompatibleTextRendering = true;
-            this.BtnChange.UseVisualStyleBackColor = false;
-            this.BtnChange.Visible = false;
-            this.BtnChange.Click += new System.EventHandler(this.BtnChange_Click);
             // 
             // FrmAnalisisDatos
             // 

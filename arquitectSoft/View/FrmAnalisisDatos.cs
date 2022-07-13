@@ -25,11 +25,12 @@ namespace arquitectSoft.View
 
         DataTable dtPuertas = new DataTable();
         DataTable dtVidrio = new DataTable();
+        DataTable dtTubos = new DataTable();
         DataTable dtPerfil = new DataTable();
         DataTable dtPerfilHR = new DataTable();
         DataTable dtPerfilR = new DataTable();
         DataTable dtPerfilOfVidrioPanel = new DataTable();
-        DataTable dtPerfilHROfVidrioPanel = new DataTable();
+        DataTable dtPerfilOfTubos = new DataTable();
         public FrmAnalisisDatos()
         {
             InitializeComponent();
@@ -57,8 +58,8 @@ namespace arquitectSoft.View
                     int idDocumento = int.Parse(Archivo.Name.ToString().Split('-')[0].Trim());
                     if (idDocumento == 1 || idDocumento == 2 || idDocumento == 4)
                     {
-                        if (idDocumento != 4)
-                            wantedFiles++;
+
+                        wantedFiles += idDocumento;
 
                         File_124.Add(file);
 
@@ -147,9 +148,33 @@ namespace arquitectSoft.View
 
                 dtPuertas = idDocumento == 3 ? dtResul : dtPuertas;
 
+                if (idDocumento == 4)
+                {
+                    if (wantedFiles != 4) { swmergePM = false; dtTubos = dtResul; }
+
+                    DataTable dtresulVP = new DataTable();
+                    dtPerfilOfTubos = dto.CalculateTab(1, dtResul, dtPuertas, true, medidabase, Desperdicio, swmergePM);
+                    dtresulVP = dtPerfilOfTubos.Copy();
+                    dtresulVP.Merge(dtPerfil);
+
+                    dataGridViewPMCalculate.DataSource = dtresulVP;
+                    dataGridViewPMCalculate.Columns[0].Visible = false;
+                    dataGridViewPMCalculate.Columns[6].Visible = false;
+
+                    if (swmergePM)
+                    {
+                        DataTable dtresulPMHerraje = new DataTable();
+                        dtresulPMHerraje = dto.CalculateTab(8, dtResul, dtPuertas, true, medidabase, Desperdicio, swmergePM);
+
+                        dataGridViewPMHerrajeCalculate.DataSource = dtresulPMHerraje;
+                        dataGridViewPMHerrajeCalculate.Columns[0].Visible = false;
+                    }
+
+                }
+
                 if (idDocumento == 2)
                 {
-                    if (wantedFiles == 2) { swmergePM = false; dtVidrio = dtResul; }
+                    if (wantedFiles != 2 && wantedFiles != 6) { swmergePM = false; dtVidrio = dtResul; }
 
                     DataTable dtresulVP = new DataTable();
                     dtPerfilOfVidrioPanel = dto.CalculateTab(1, dtResul, dtPuertas, true, medidabase, Desperdicio, swmergePM);
@@ -163,13 +188,14 @@ namespace arquitectSoft.View
                     if (swmergePM)
                     {
                         DataTable dtresulPMHerraje = new DataTable();
-                        dtresulPMHerraje = dto.CalculateTab(8, dtResul, dtPuertas, true, medidabase, Desperdicio, swmergePM);                       
+                        dtresulPMHerraje = dto.CalculateTab(8, dtResul, dtPuertas, true, medidabase, Desperdicio, swmergePM);
+                        if (wantedFiles == 6)
+                            dtresulPMHerraje.Merge(dto.CalculateTab(8, dtTubos, dtPuertas, true, medidabase, Desperdicio, swmergePM));
+
 
                         dataGridViewPMHerrajeCalculate.DataSource = dtresulPMHerraje;
                         dataGridViewPMHerrajeCalculate.Columns[0].Visible = false;
                     }
-
-
 
                 }
 
@@ -178,18 +204,21 @@ namespace arquitectSoft.View
                 if (idDocumento == 1)
                 {
                     dtPerfil = dtcalculate;
-                    dtPerfilR = dtResul;
-                    DataTable dtresulPM = new DataTable();
-                    dtresulPM = dtPerfilOfVidrioPanel.Copy();
-                    dtresulPM.Merge(dtPerfil);
-                    dtcalculate = dtresulPM;
+                    dtcalculate.Merge(dtPerfil);                   
+                    dtcalculate = dtPerfil;
 
                     DataTable dtresulPMHerraje = new DataTable();
                     dtresulPMHerraje = dto.CalculateTab(8, dtResul, dtPuertas, perfilandvidrios, medidabase, Desperdicio, swmergePM);
-                    if (wantedFiles == 2)
+                    if (wantedFiles == 7)
+                        dtresulPMHerraje.Merge(dto.CalculateTab(8, dtVidrio, dtPuertas, true, medidabase, Desperdicio, swmergePM));
+                        dtresulPMHerraje.Merge(dto.CalculateTab(8, dtTubos, dtPuertas, true, medidabase, Desperdicio, swmergePM));
+
+                    if (wantedFiles == 3)
                         dtresulPMHerraje.Merge(dto.CalculateTab(8, dtVidrio, dtPuertas, true, medidabase, Desperdicio, swmergePM));
 
-                    
+                    if (wantedFiles == 3)
+                        dtresulPMHerraje.Merge(dto.CalculateTab(8, dtTubos, dtPuertas, true, medidabase, Desperdicio, swmergePM));
+
 
                     dataGridViewPMHerrajeCalculate.DataSource = dtresulPMHerraje;
                     dataGridViewPMHerrajeCalculate.Columns[0].Visible = false;
@@ -286,9 +315,9 @@ namespace arquitectSoft.View
                     break;
                 case 4:
                     dataGridViewTM.DataSource = dt;
-                    dataGridViewTMCalculate.DataSource = dtcalculate;
-                    dataGridViewTMCalculate.Columns[0].Visible = false;
-                    dataGridViewTMCalculate.Columns[6].Visible = false;
+                    //dataGridViewTMCalculate.DataSource = dtcalculate;
+                    //dataGridViewTMCalculate.Columns[0].Visible = false;
+                    //dataGridViewTMCalculate.Columns[6].Visible = false;
                     break;
                 case 5:
                     dataGridViewM.DataSource = dt;
@@ -333,10 +362,11 @@ namespace arquitectSoft.View
             tabPrincipal.SelectTab(tabPerfilMetallico);
             dtPuertas.Rows.Clear();
             dtVidrio.Rows.Clear();
+            dtTubos.Rows.Clear();
             dtPerfil.Rows.Clear();
             dtPerfilHR.Rows.Clear();
             dtPerfilOfVidrioPanel.Rows.Clear();
-            dtPerfilHROfVidrioPanel.Rows.Clear();
+            dtPerfilOfTubos.Rows.Clear();
             lblestadosAnalitica.Text = "";
             BtnChange.Visible = false;
         }
@@ -558,6 +588,7 @@ namespace arquitectSoft.View
                                             row["cantidad"] = g.Sum(r => r.Field<float>("cantidad"));
                                             row["medida"] = g.Key.med;
                                             row["Medidida Calculada"] = g.Min(r => r.Field<string>("Medidida Calculada"));
+                                            row["Corte"] = g.Min(r => r.Field<string>("Corte"));
                                             row["Se_Calcula_Por"] = g.Key.cal;
                                             return row;
 
@@ -859,7 +890,7 @@ namespace arquitectSoft.View
                             Acabado = AcabadoDesc.Substring(posini + 1, posfin - (posini +1));                                                  
                         }
 
-                        if (Datagrid == 7 || Datagrid == 8)
+                        if (Datagrid == 8)
                         {
                             Acabado = row.Cells[2].Value.ToString();
                         }
@@ -879,7 +910,7 @@ namespace arquitectSoft.View
                                 }
                                 
                             }
-                            else if (Datagrid == 7 || Datagrid == 8)
+                            else if (Datagrid == 8)
                             {
                                 row.Cells[2].Value = param[1].ToString().Split('-')[1].Trim();
                             }
