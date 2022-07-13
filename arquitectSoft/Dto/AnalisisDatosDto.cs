@@ -391,11 +391,68 @@ namespace arquitectSoft.Dto
         public int getComponentePuertasAgrupar(DataTable dtmodelDoor, int SwHerraje)
         {
             DataTable dtresulPuerta = new DataTable();
+            DataTable dtresulPuertaFin = new DataTable();
 
             string Codigo, Apertura, Acabado, Nomenclatura;
             int altura, anchura, idComponente = 0;
             Generals.Conexion con = new Generals.Conexion();
             string fail = "";
+
+            List<string> listColumnsCompPuerta = setCreateColumns(9);
+            listColumnsCompPuerta.ForEach(delegate (string s)
+            {
+                dtresulPuerta.Columns.Add(s);
+            });
+
+            foreach (DataRow rowM in dtmodelDoor.Rows)
+            { 
+                Codigo = rowM["Codigo"].ToString().Replace("\"", "").Trim();
+                if (Codigo != "")
+                {
+                    Apertura = rowM["Apertura de Puerta"].ToString().Replace("\"", "").Trim();
+                    Acabado = rowM["Acabado Perfileria Puertas"].ToString().Replace("\"", "").Trim();
+                    Codigo = Codigo + Apertura + "-" + Acabado.Split('-')[0].Trim();
+                    altura = rowM["Altura"].ToString().Replace("\"", "").Trim() != "" ? Int32.Parse(rowM["Altura"].ToString().Replace("\"", "").Trim()) : 0;
+                    anchura = rowM["Anchura"].ToString().Replace("\"", "").Trim() != "" ? Int32.Parse(rowM["Anchura"].ToString().Replace("\"", "").Trim()) : 0;
+                    Nomenclatura = rowM["Nomenclatura"].ToString().Replace("\"", "").Trim().Replace("P-", "");
+
+                   
+                    string[] paramGeneral = { "pCodigo|" + Codigo };
+                    con.Open(out fail);
+                    DataTable dtResultG = con.ExecuteDataSetSPparam(Generals.Constantes.QUERY_GET_CALCULATE_PUERTAS_GENERAL, out fail, paramGeneral);
+                    con.Close();
+
+                    if (dtResultG != null)
+                    {
+                        if (dtResultG.Rows.Count > 0)
+                        {
+                            string descripcionGeneral = dtResultG.Rows[0]["Descripcion"].ToString();
+                            dtresulPuerta.Rows.Add(Nomenclatura,Codigo, descripcionGeneral,0, altura, anchura);
+                        }
+                    }
+                }
+
+            }
+
+     
+
+            var list = dtresulPuerta.AsEnumerable()
+                .GroupBy(t => new { Codigo = t.Field<string>("Codigo") , Altura = t.Field<string>("Longitud (Altura)"), Anchura = t.Field<string>("Anchura") }, (key, g) => new { key, g })
+                .Select(t => new
+                {
+                    Codigo = t.g.First().Field<string>("Codigo"),
+                    desc = t.g.First().Field<string>("Descripción"),
+                    Altura = t.g.First().Field<string>("Longitud (Altura)"),
+                    Achura = t.g.First().Field<string>("Anchura"),
+                    Reference = $"{string.Join(",", t.g.Select(z => z.Field<string>("Nomenclatura")))}",
+                }).ToList();
+
+         
+
+
+
+
+
             foreach (DataRow rowM in dtmodelDoor.Rows)
             {
                 Codigo = rowM["Codigo"].ToString().Replace("\"", "").Trim();
@@ -407,6 +464,8 @@ namespace arquitectSoft.Dto
                     altura = rowM["Altura"].ToString().Replace("\"", "").Trim() != "" ? Int32.Parse(rowM["Altura"].ToString().Replace("\"", "").Trim()) : 0;
                     anchura = rowM["Anchura"].ToString().Replace("\"", "").Trim() != "" ? Int32.Parse(rowM["Anchura"].ToString().Replace("\"", "").Trim()) : 0;
                     Nomenclatura = rowM["Nomenclatura"].ToString().Replace("\"", "").Trim().Replace("P-", "");
+
+
 
 
                     fail = "";
