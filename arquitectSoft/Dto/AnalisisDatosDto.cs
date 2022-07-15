@@ -138,12 +138,25 @@ namespace arquitectSoft.Dto
                     //-----------------
                     break;
                 case 10:
-                    //-----------------Puertas                    
+                    //-----------------PuertasCantidad                    
                     listColumns.Add("Codigo");
                     listColumns.Add("Descripcion");
                     listColumns.Add("Altura");
                     listColumns.Add("Anchura");
                     listColumns.Add("cantidad");
+                    //-----------------
+                    break;
+                case 11:
+                    //-----------------Puertas
+                    listColumns.Add("Nomenclatura");
+                    listColumns.Add("Codigo");
+                    listColumns.Add("Descripción");
+                    listColumns.Add("acabado");
+                    listColumns.Add("cantidad");
+                    listColumns.Add("Longitud (Altura)");
+                    listColumns.Add("Anchura");
+                    listColumns.Add("Corte");
+                    listColumns.Add("Mecanizado");
                     //-----------------
                     break;
             }
@@ -241,7 +254,7 @@ namespace arquitectSoft.Dto
                     dt = dtModelVidriosPaneles;
                     break;
                 case 3:                    
-                    dt = getComponentePuertas(dtmodel, getComponentePuertasAgrupar(dtmodel, 0));
+                    dt = getComponentePuertas(dtmodel, getComponentePuertasAgrupar(dtmodel, 0),0);
 
                     break;
                 case 5:
@@ -267,7 +280,7 @@ namespace arquitectSoft.Dto
                     break;
                 case 7:
                     
-                    dt = getComponentePuertas(dtmodel, getComponentePuertasAgrupar(dtmodel, 1));
+                    dt = getComponentePuertas(dtmodel, getComponentePuertasAgrupar(dtmodel, 1),1);
                     break;
                 
             }
@@ -280,123 +293,142 @@ namespace arquitectSoft.Dto
 
         #region Puertas
 
-        public DataTable getComponentePuertas(DataTable dtmodelDoor, DataTable dtmodelDoorGroup)
+        public DataTable getComponentePuertas(DataTable dtmodelDoor, DataTable dtmodelDoorGroup, int SwHerraje)
         {
             DataTable dtresulPuerta = new DataTable();
-            List<string> listColumnsCompPuerta = setCreateColumns(9);
+            List<string> listColumnsCompPuerta = setCreateColumns(SwHerraje == 0 ? 9 : 11);
             listColumnsCompPuerta.ForEach(delegate (string s)
             {
                 dtresulPuerta.Columns.Add(s);
             });
 
-            List<object[]> listDta = new List<object[]>();
-
-            string Codigo, Nomenclatura, Nomenclatura2;
-            int altura, anchura;        
-            int rowinitial = 0;
-            foreach (DataRow rowM in dtmodelDoorGroup.Rows)
+            if (SwHerraje == 1)
             {
+                Generals.Conexion con = new Generals.Conexion();
+                string failH = "";
+                string[] paramH = { "pSwHerraje|" + SwHerraje };
+                con.Open(out failH);
+                DataTable dtResult = con.ExecuteDataSetSPparam(Generals.Constantes.QUERY_GET_CALCULATE_PUERTAS_AGRUPAR, out failH, paramH);
+                con.Close();
 
-                Codigo = rowM["Codigo"].ToString();
-                if (Codigo != "")
-                {   
-                    altura = rowM["Altura"].ToString().Replace("\"", "").Trim() != "" ? Int32.Parse(rowM["Altura"].ToString().Replace("\"", "").Trim()) : 0;
-                    anchura = rowM["Anchura"].ToString().Replace("\"", "").Trim() != "" ? Int32.Parse(rowM["Anchura"].ToString().Replace("\"", "").Trim()) : 0;
-
-                    var dtExtra = dtmodelDoor.AsEnumerable()
-                                             .Where(x =>
-                                             x.Field<string>("Codigo").ToString().Replace("\"", "").Trim() + 
-                                             x.Field<string>("Apertura de Puerta").ToString().Replace("\"", "").Trim() + "-" + 
-                                             x.Field<string>("Acabado Perfileria Puertas").ToString().Replace("\"", "").Trim().Split('-')[0].Trim() == Codigo && 
-                                             x.Field<string>("Altura").ToString().Replace("\"", "").Trim() == altura.ToString() &&
-                                             x.Field<string>("Anchura").ToString().Replace("\"", "").Trim() == anchura.ToString())
-                                             .Select(t => new
-                                             {
-                                                 L1 = t.Field<string>("Conectado/pared Tubo L1").ToString().Replace("\"", "").Trim() == "No" ? false : true,
-                                                 L2 = t.Field<string>("Conectado/pared Tubo L2").ToString().Replace("\"", "").Trim() == "No" ? false : true
-                                             })
-                                             .ToList();
-
-
-                    int rowaddExtraCant = 0;
-                    foreach (var x in dtExtra)
+                if (dtResult.Rows.Count > 0)
+                {
+                    foreach (DataRow rowP in dtResult.Rows)
                     {
-                        if (x.L1)
-                            rowaddExtraCant++;
-
-                        if (x.L2)
-                            rowaddExtraCant++;
+                        dtresulPuerta.Rows.Add("", rowP["codigo"].ToString(), rowP["Descripcion"].ToString(), rowP["AcabadoDesc"].ToString(), rowP["cantidad"].ToString(), rowP["medidaC"].ToString().Replace(".00", ""), rowP["medidaCalculada"].ToString().Replace(".00", ""), rowP["corte"].ToString(), rowP["mecanizado"].ToString());
                     }
-
-                    bool rowaddExtra = rowaddExtraCant > 0 ? true : false;
-                    
-
-                    Nomenclatura = rowM["Nomenclatura"].ToString().Replace("\"", "").Trim().Replace("P", "Puerta ");
-                    Nomenclatura2 = rowM["Nomenclatura"].ToString().Replace("\"", "").Trim().Replace("P-", "");
-
-                    if (dtresulPuerta.Rows.Count > 0)
-                    {
-                        if (dtresulPuerta.Select("Codigo = '" + Codigo + "' and Nomenclatura = '" + Nomenclatura + "'").Length > 0)
-                        {
-                            break;
-                        }
-                    }
-                    
-
-                    Generals.Conexion con = new Generals.Conexion();
-                    string fail = "";
-                    string[] paramGeneral = { "pCodigo|" + Codigo };
-                    con.Open(out fail);
-                    DataTable dtResultG = con.ExecuteDataSetSPparam(Generals.Constantes.QUERY_GET_CALCULATE_PUERTAS_GENERAL, out fail, paramGeneral);
-                    con.Close();
-
-                    if (dtResultG != null)
-                    {
-                        if (dtResultG.Rows.Count > 0)
-                        {
-                            string descripcionGeneral = dtResultG.Rows[0]["Descripcion"].ToString() + "Altura: (" + altura + ") Anchura: (" + anchura + ")";
-
-                            string[] param = { };
-                            con.Open(out fail);
-                            DataTable dtResult = con.ExecuteDataSetSPparam(Generals.Constantes.QUERY_GET_CALCULATE_PUERTAS_AGRUPAR, out fail, param);
-                            con.Close();
-
-
-
-                            if (dtResult.Rows.Count > 0)
-                            {
-
-                                if (rowinitial > 0)
-                                {
-                                    dtresulPuerta.Rows.Add("", "", "", "", "", "");
-                                }
-
-                                dtresulPuerta.Rows.Add(Nomenclatura, Codigo, descripcionGeneral, "", "", "");
-
-                                foreach (DataRow rowP in dtResult.Select("CodigoComponente = '" + Codigo + "' and puerta = '" + Nomenclatura2 + "'"))
-                                {
-
-                                    string uniDes = rowP["unidaMedida"].ToString();
-                                
-                                    if (rowaddExtra & Int32.Parse(rowP["Extra"].ToString()) == 1)
-                                    {
-                                        dtresulPuerta.Rows.Add("Item-Extra (" + uniDes + ")", rowP["codigo"].ToString(), rowP["Descripcion"].ToString(), Int32.Parse(rowP["cantidad"].ToString()) * rowaddExtraCant, rowP["medidaC"].ToString().Replace(".00", ""), rowP["medidaCalculada"].ToString().Replace(".00", ""), rowP["corte"].ToString(), rowP["mecanizado"].ToString());
-                                    }
-                                    else if (Int32.Parse(rowP["Extra"].ToString()) == 0)
-                                    {
-                                        dtresulPuerta.Rows.Add("Item (" + uniDes + ")", rowP["codigo"].ToString(), rowP["Descripcion"].ToString(), rowP["cantidad"].ToString(), rowP["medidaC"].ToString().Replace(".00",""), rowP["medidaCalculada"].ToString().Replace(".00", ""), rowP["corte"].ToString(), rowP["mecanizado"].ToString());
-                                    }
-                                }
-                            }
-
-                            rowinitial += 1;
-                        }
-                    }
-                   
                 }
             }
+            else
+            {
+                List<object[]> listDta = new List<object[]>();
+
+                string Codigo, Nomenclatura, Nomenclatura2;
+                int altura, anchura;        
+                int rowinitial = 0;
+                foreach (DataRow rowM in dtmodelDoorGroup.Rows)
+                {
+
+                    Codigo = rowM["Codigo"].ToString();
+                    if (Codigo != "")
+                    {   
+                        altura = rowM["Altura"].ToString().Replace("\"", "").Trim() != "" ? Int32.Parse(rowM["Altura"].ToString().Replace("\"", "").Trim()) : 0;
+                        anchura = rowM["Anchura"].ToString().Replace("\"", "").Trim() != "" ? Int32.Parse(rowM["Anchura"].ToString().Replace("\"", "").Trim()) : 0;
+
+                        var dtExtra = dtmodelDoor.AsEnumerable()
+                                                 .Where(x =>
+                                                 x.Field<string>("Codigo").ToString().Replace("\"", "").Trim() + 
+                                                 x.Field<string>("Apertura de Puerta").ToString().Replace("\"", "").Trim() + "-" + 
+                                                 x.Field<string>("Acabado Perfileria Puertas").ToString().Replace("\"", "").Trim().Split('-')[0].Trim() == Codigo && 
+                                                 x.Field<string>("Altura").ToString().Replace("\"", "").Trim() == altura.ToString() &&
+                                                 x.Field<string>("Anchura").ToString().Replace("\"", "").Trim() == anchura.ToString())
+                                                 .Select(t => new
+                                                 {
+                                                     L1 = t.Field<string>("Conectado/pared Tubo L1").ToString().Replace("\"", "").Trim() == "No" ? false : true,
+                                                     L2 = t.Field<string>("Conectado/pared Tubo L2").ToString().Replace("\"", "").Trim() == "No" ? false : true
+                                                 })
+                                                 .ToList();
 
 
+                        int rowaddExtraCant = 0;
+                        foreach (var x in dtExtra)
+                        {
+                            if (x.L1)
+                                rowaddExtraCant++;
+
+                            if (x.L2)
+                                rowaddExtraCant++;
+                        }
+
+                        bool rowaddExtra = rowaddExtraCant > 0 ? true : false;
+                    
+
+                        Nomenclatura = rowM["Nomenclatura"].ToString().Replace("\"", "").Trim().Replace("P", "Puerta ");
+                        Nomenclatura2 = rowM["Nomenclatura"].ToString().Replace("\"", "").Trim().Replace("P-", "");
+
+                        if (dtresulPuerta.Rows.Count > 0)
+                        {
+                            if (dtresulPuerta.Select("Codigo = '" + Codigo + "' and Nomenclatura = '" + Nomenclatura + "'").Length > 0)
+                            {
+                                break;
+                            }
+                        }
+                    
+
+                        Generals.Conexion con = new Generals.Conexion();
+                        string fail = "";
+                        string[] paramGeneral = { "pCodigo|" + Codigo };
+                        con.Open(out fail);
+                        DataTable dtResultG = con.ExecuteDataSetSPparam(Generals.Constantes.QUERY_GET_CALCULATE_PUERTAS_GENERAL, out fail, paramGeneral);
+                        con.Close();
+
+                        if (dtResultG != null)
+                        {
+                            if (dtResultG.Rows.Count > 0)
+                            {
+                                string descripcionGeneral = dtResultG.Rows[0]["Descripcion"].ToString() + "Altura: (" + altura + ") Anchura: (" + anchura + ")";
+
+                                string[] param = { "pSwHerraje|" + SwHerraje };
+                                con.Open(out fail);
+                                DataTable dtResult = con.ExecuteDataSetSPparam(Generals.Constantes.QUERY_GET_CALCULATE_PUERTAS_AGRUPAR, out fail, param);
+                                con.Close();
+
+
+
+                                if (dtResult.Rows.Count > 0)
+                                {
+
+                                    if (rowinitial > 0)
+                                    {
+                                        dtresulPuerta.Rows.Add("", "", "", "", "", "");
+                                    }
+
+                                    dtresulPuerta.Rows.Add(Nomenclatura, Codigo, descripcionGeneral, "", "", "");
+
+                                    foreach (DataRow rowP in dtResult.Select("CodigoComponente = '" + Codigo + "' and puerta = '" + Nomenclatura2 + "'"))
+                                    {
+
+                                        string uniDes = rowP["unidaMedida"].ToString();
+                                
+                                        if (rowaddExtra & Int32.Parse(rowP["Extra"].ToString()) == 1)
+                                        {
+                                            dtresulPuerta.Rows.Add("Item-Extra (" + uniDes + ")", rowP["codigo"].ToString(), rowP["Descripcion"].ToString(), Int32.Parse(rowP["cantidad"].ToString()) * rowaddExtraCant, rowP["medidaC"].ToString().Replace(".00", ""), rowP["medidaCalculada"].ToString().Replace(".00", ""), rowP["corte"].ToString(), rowP["mecanizado"].ToString());
+                                        }
+                                        else if (Int32.Parse(rowP["Extra"].ToString()) == 0)
+                                        {
+                                            dtresulPuerta.Rows.Add("Item (" + uniDes + ")", rowP["codigo"].ToString(), rowP["Descripcion"].ToString(), rowP["cantidad"].ToString(), rowP["medidaC"].ToString().Replace(".00",""), rowP["medidaCalculada"].ToString().Replace(".00", ""), rowP["corte"].ToString(), rowP["mecanizado"].ToString());
+                                        }
+                                    }
+                                }
+
+                                rowinitial += 1;
+                            }
+                        }
+                   
+                    }
+                }
+            }
+         
             Generals.Conexion condelete = new Generals.Conexion();
             string faildelete = "";
             string[] paramdelete = { };

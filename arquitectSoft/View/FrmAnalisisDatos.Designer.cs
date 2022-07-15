@@ -575,7 +575,6 @@ namespace arquitectSoft.View
             this.dataGridViewPHerrajeCalculate.ReadOnly = true;
             this.dataGridViewPHerrajeCalculate.Size = new System.Drawing.Size(1185, 207);
             this.dataGridViewPHerrajeCalculate.TabIndex = 10;
-            this.dataGridViewPHerrajeCalculate.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dataGridViewPHerrajeCalculate_CellFormatting);
             // 
             // tabPuertascant
             // 

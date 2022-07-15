@@ -199,25 +199,35 @@ namespace arquitectSoft.View
 
                 }
 
-                dtcalculate = dto.CalculateTab(idDocumento, dtResul, dtPuertas, perfilandvidrios, medidabase, Desperdicio, swmergePM);
+                if (idDocumento != 4)
+                {
+                    dtcalculate = dto.CalculateTab(idDocumento, dtResul, dtPuertas, perfilandvidrios, medidabase, Desperdicio, swmergePM);
+                }
+               
 
                 if (idDocumento == 1)
                 {
+
                     dtPerfil = dtcalculate;
                     dtcalculate.Merge(dtPerfil);                   
                     dtcalculate = dtPerfil;
 
+                    if (wantedFiles != 1) { swmergePM = false; }
+
                     DataTable dtresulPMHerraje = new DataTable();
                     dtresulPMHerraje = dto.CalculateTab(8, dtResul, dtPuertas, perfilandvidrios, medidabase, Desperdicio, swmergePM);
+
                     if (wantedFiles == 7)
-                        dtresulPMHerraje.Merge(dto.CalculateTab(8, dtVidrio, dtPuertas, true, medidabase, Desperdicio, swmergePM));
-                        dtresulPMHerraje.Merge(dto.CalculateTab(8, dtTubos, dtPuertas, true, medidabase, Desperdicio, swmergePM));
+                    {
+                        dtresulPMHerraje = dto.CalculateTab(8, dtVidrio, dtPuertas, true, medidabase, Desperdicio, false);
+                        dtresulPMHerraje = dto.CalculateTab(8, dtTubos, dtPuertas, true, medidabase, Desperdicio, true);
+                    } 
 
                     if (wantedFiles == 3)
-                        dtresulPMHerraje.Merge(dto.CalculateTab(8, dtVidrio, dtPuertas, true, medidabase, Desperdicio, swmergePM));
+                        dtresulPMHerraje = dto.CalculateTab(8, dtVidrio, dtPuertas, true, medidabase, Desperdicio, true);
 
-                    if (wantedFiles == 3)
-                        dtresulPMHerraje.Merge(dto.CalculateTab(8, dtTubos, dtPuertas, true, medidabase, Desperdicio, swmergePM));
+                    if (wantedFiles == 5)
+                        dtresulPMHerraje = dto.CalculateTab(8, dtTubos, dtPuertas, true, medidabase, Desperdicio, true);
 
 
                     dataGridViewPMHerrajeCalculate.DataSource = dtresulPMHerraje;
@@ -235,6 +245,7 @@ namespace arquitectSoft.View
                     DataTable dtresulPHerraje = new DataTable();
                     dtresulPHerraje = dto.CalculateTab(7, dtResul, dtPuertas, true, medidabase, Desperdicio, swmergePM);
                     dataGridViewPHerrajeCalculate.DataSource = dtresulPHerraje;
+                    dataGridViewPHerrajeCalculate.Columns[0].Visible = false;
                     dataGridViewPHerrajeCalculate.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
                 }
 
@@ -796,20 +807,7 @@ namespace arquitectSoft.View
             SendMessage(this.Handle, 0x112, 0xf012, 0);
         }
 
-        private void dataGridViewPHerrajeCalculate_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
-        {
-            foreach (DataGridViewRow r in this.dataGridViewPHerrajeCalculate.Rows)
-            {
-                if (r.Cells[0].Value.ToString() == "")
-                {
-                    r.DefaultCellStyle.BackColor = Color.Gray;
-                }
-                else if (r.Cells[0].Value.ToString().Contains("Puerta"))
-                {
-                    r.DefaultCellStyle.BackColor = Color.Orange;
-                }
-            }
-        }
+   
 
         private void textBox2_TextChanged(object sender, EventArgs e)
         {
@@ -877,12 +875,12 @@ namespace arquitectSoft.View
                         string valuezero = row.Cells[0].Value.ToString();
                         string Acabado = row.Cells[3].Value.ToString();   
                         
-                        if ((Datagrid == 2 || Datagrid == 4) && !valuezero.Contains("Puerta"))
+                        if ((Datagrid == 2) && !valuezero.Contains("Puerta"))
                         {
                             continue;
                         }
 
-                        if (Datagrid == 2 || Datagrid == 4 || Datagrid == 6)
+                        if (Datagrid == 2 || Datagrid == 6)
                         {
                             AcabadoDesc = (Datagrid == 6) ? row.Cells[1].Value.ToString() : row.Cells[2].Value.ToString();
                             posini = AcabadoDesc.IndexOf("(");
