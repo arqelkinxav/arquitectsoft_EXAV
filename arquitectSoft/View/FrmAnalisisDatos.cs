@@ -188,9 +188,9 @@ namespace arquitectSoft.View
                     if (swmergePM)
                     {
                         DataTable dtresulPMHerraje = new DataTable();
-                        dtresulPMHerraje = dto.CalculateTab(8, dtResul, dtPuertas, true, medidabase, Desperdicio, swmergePM);
+                        dtresulPMHerraje = dto.CalculateTab(8, dtResul, dtPuertas, true, medidabase, Desperdicio, wantedFiles == 6 ? false : true);
                         if (wantedFiles == 6)
-                            dtresulPMHerraje.Merge(dto.CalculateTab(8, dtTubos, dtPuertas, true, medidabase, Desperdicio, swmergePM));
+                            dtresulPMHerraje.Merge(dto.CalculateTab(8, dtTubos, dtPuertas, true, medidabase, Desperdicio, true));
 
 
                         dataGridViewPMHerrajeCalculate.DataSource = dtresulPMHerraje;
@@ -457,12 +457,16 @@ namespace arquitectSoft.View
                 {
 
                     int valueinitial = 8;
+                    int valuecountDoor = dataGridViewPCalculate.RowCount;
+                    int valueinitialFoot = 0;
                     int PMValueFinish = 0;
                     int PMHValueFinish = 0;
                     string Range = string.Format("A{0}:G{0}", valueinitial);
                     string Descheader = "";
                     string Rangeheader = "A2:G4";
-                    string RangeSubheader = "A5:G6";
+                    string RangeSubheader = "A5:J6";
+                    string Rangetopfooter;
+                    string RangeSubfooter = "H5:J6"; ;
                     string rangetwo = "A{0}:G{0}";
                     string sheets = "";
 
@@ -475,8 +479,9 @@ namespace arquitectSoft.View
                     for (int Datagrid = 1; Datagrid <= 8; Datagrid++)
                     {
                         valueinitial = 8;
+                        valueinitialFoot = 0;
                         Rangeheader = "A2:G4";
-                        RangeSubheader = "A5:G6";
+                        RangeSubheader = "A5:J6";
                         int valuesubheaderDescr = 5;
                         int valuesubheaderValue = 6;
                         bool wrapTextDefault = true;
@@ -508,7 +513,7 @@ namespace arquitectSoft.View
                             case 3:
                                 sheets = "PERFIL METALICO HERRAJES";
                                 table = dataGridViewPMHerrajeCalculate;
-                                PMHValueFinish = dataGridViewPMCalculate.RowCount;
+                                PMHValueFinish = dataGridViewPMHerrajeCalculate.RowCount;
                                 Range = string.Format("A{0}:H{0}", valueinitial);
                                 Descheader = sheets;
                                 break;
@@ -622,12 +627,14 @@ namespace arquitectSoft.View
                                 }
                                 
                                 var ws = wb.Worksheets.Add(dt, sheets + "Puerta");
-                                string RangeSrcDoor = string.Format("A{0}:H{1}", 1, dt.Rows.Count);
+                                string RangeSrcDoor = string.Format("A{0}:H{1}", 1, dt.Rows.Count + 1);
                                 var rangeDoor = wb.Worksheet(sheets + "Puerta").Range(RangeSrcDoor);
 
                                 var wsPM = wb.Worksheet(1);
                                 string RangeDstDoor = string.Format("A{0}:H{1}", valueinitial, valueinitial + dt.Rows.Count);
                                 rangeDoor.CopyTo(wb.Worksheet(sheets).Range(RangeDstDoor));
+
+                                valueinitialFoot = valueinitial + dt.Rows.Count + 2;
 
                                 wb.Worksheet(sheets + "Puerta").Delete();
 
@@ -646,12 +653,14 @@ namespace arquitectSoft.View
                                 }
 
                                 var ws = wb.Worksheets.Add(dt, sheets + "PHer");
-                                string RangeSrcDoor = string.Format("A{0}:H{1}", 1, dt.Rows.Count);
+                                string RangeSrcDoor = string.Format("A{0}:H{1}", 1, dt.Rows.Count + 1);
                                 var rangeDoor = wb.Worksheet(sheets + "PHer").Range(RangeSrcDoor);
 
                                 var wsPM = wb.Worksheet(1);
                                 string RangeDstDoor = string.Format("A{0}:H{1}", valueinitial, valueinitial + dt.Rows.Count);
                                 rangeDoor.CopyTo(wb.Worksheet(sheets).Range(RangeDstDoor));
+
+                                valueinitialFoot = valueinitial + dt.Rows.Count + 2;
 
                                 wb.Worksheet(sheets + "PHer").Delete();
                             }
@@ -662,8 +671,41 @@ namespace arquitectSoft.View
                                 wb.Worksheet(sheets).AddPicture(path + imagePath)
                                   .MoveTo(150, 25)
                                   .Scale(.3); // optional: resize picture
+
+                                if (valuecountDoor == 0 || Datagrid > 4 )
+                                {
+                                    valueinitialFoot = dt.Rows.Count + 10;
+                                }
+                                else
+                                {
+                                    valueinitialFoot = 0;
+                                }
+
+
                             }
 
+                            if (valueinitialFoot > 0)
+                            {
+                                //Diseño del footer
+                                wb.Worksheet(sheets).Cell(string.Format("H{0}", 5)).Value = "VERIFICACIÓN DE DISEÑO";
+                                wb.Worksheet(sheets).Cell(string.Format("I{0}", 5)).Value = "OK";
+                                wb.Worksheet(sheets).Cell(string.Format("J{0}", 5)).Value = "FECHA";
+                                Rangetopfooter = string.Format("H{0}:J{1}", 5, 6);
+                                wb.Worksheet(sheets).Cells(Rangetopfooter).Style.Fill.BackgroundColor = XLColor.DarkCoral;
+
+                                wb.Worksheet(sheets).Cell(string.Format("H{0}", valueinitialFoot)).Value = "REVISION DE FABRICACIÓN";
+                                wb.Worksheet(sheets).Cell(string.Format("I{0}", valueinitialFoot)).Value = "OK";
+                                wb.Worksheet(sheets).Cell(string.Format("J{0}", valueinitialFoot)).Value = "FECHA";
+                                RangeSubfooter = string.Format("H{0}:J{1}", valueinitialFoot, valueinitialFoot + 1);
+                                wb.Worksheet(sheets).Cells(RangeSubfooter).Style.Fill.BackgroundColor = XLColor.DarkCoral;
+                                //Cuadricula footer
+                                wb.Worksheet(sheets).Range(RangeSubfooter).Style.Border.TopBorder = XLBorderStyleValues.Thin;
+                                wb.Worksheet(sheets).Range(RangeSubfooter).Style.Border.InsideBorder = XLBorderStyleValues.Dotted;
+                                wb.Worksheet(sheets).Range(RangeSubfooter).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                                wb.Worksheet(sheets).Range(RangeSubfooter).Style.Border.LeftBorder = XLBorderStyleValues.Thin;
+                                wb.Worksheet(sheets).Range(RangeSubfooter).Style.Border.RightBorder = XLBorderStyleValues.Thin;
+                                wb.Worksheet(sheets).Range(RangeSubfooter).Style.Border.TopBorder = XLBorderStyleValues.Thin;
+                            }
 
 
                             //Diseño Header
@@ -711,6 +753,8 @@ namespace arquitectSoft.View
                             wb.Worksheet(sheets).Range(RangeSubheader).Style.Border.LeftBorder = XLBorderStyleValues.Thin;
                             wb.Worksheet(sheets).Range(RangeSubheader).Style.Border.RightBorder = XLBorderStyleValues.Thin;
                             wb.Worksheet(sheets).Range(RangeSubheader).Style.Border.TopBorder = XLBorderStyleValues.Thin;
+
+
 
 
                             //Set the color of Header Row.
@@ -795,6 +839,7 @@ namespace arquitectSoft.View
 
         }
 
+
         private void BtnSalir_Click(object sender, EventArgs e)
         {
             this.Close();
@@ -806,8 +851,7 @@ namespace arquitectSoft.View
             ReleaseCapture();
             SendMessage(this.Handle, 0x112, 0xf012, 0);
         }
-
-   
+         
 
         private void textBox2_TextChanged(object sender, EventArgs e)
         {

@@ -675,7 +675,7 @@ namespace arquitectSoft.Dto
             return list;
         }
 
-        public List<object[]> getComponenteCalc(DataTable dtmodel, decimal Desperdicio, bool swmergePM)
+        public List<object[]> getComponenteCalc(DataTable dtmodel, decimal Desperdicio, bool swmergePM, int pSwHerraje)
         {
             List<object[]> list = new List<object[]>();
             Generals.Conexion con = new Generals.Conexion();
@@ -694,7 +694,7 @@ namespace arquitectSoft.Dto
             if (swmergePM)
             {
                 fail = "";
-                string[] paramGet = { "pDesperdicio|" + Desperdicio };
+                string[] paramGet = { "pDesperdicio|" + Desperdicio, "pSwHerraje|" + pSwHerraje.ToString() };
                 con.Open(out fail);
                 DataTable dtResult = con.ExecuteDataSetSPparam(Generals.Constantes.QUERY_GET_PROYECTO, out fail, paramGet);
                 con.Close();
@@ -743,7 +743,7 @@ namespace arquitectSoft.Dto
                 });
             });
 
-            List<object[]> listEndComp = getComponenteCalc(dtModelPerfiles, Desperdicio, swmergePM);
+            List<object[]> listEndComp = getComponenteCalc(dtModelPerfiles, Desperdicio, swmergePM, pSwHerraje);
 
             dtModelPerfiles.Rows.Clear();
             dtModelPerfiles.Columns.RemoveAt(1);
