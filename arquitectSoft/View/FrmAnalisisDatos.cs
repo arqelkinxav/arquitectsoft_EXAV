@@ -691,13 +691,13 @@ namespace arquitectSoft.View
                                 wb.Worksheet(sheets).Cell(string.Format("I{0}", 5)).Value = "OK";
                                 wb.Worksheet(sheets).Cell(string.Format("J{0}", 5)).Value = "FECHA";
                                 Rangetopfooter = string.Format("H{0}:J{1}", 5, 6);
-                                wb.Worksheet(sheets).Cells(Rangetopfooter).Style.Fill.BackgroundColor = XLColor.DarkCoral;
+                                wb.Worksheet(sheets).Cells(Rangetopfooter).Style.Fill.BackgroundColor = XLColor.LightGray;
 
                                 wb.Worksheet(sheets).Cell(string.Format("H{0}", valueinitialFoot)).Value = "REVISION DE FABRICACIÓN";
                                 wb.Worksheet(sheets).Cell(string.Format("I{0}", valueinitialFoot)).Value = "OK";
                                 wb.Worksheet(sheets).Cell(string.Format("J{0}", valueinitialFoot)).Value = "FECHA";
                                 RangeSubfooter = string.Format("H{0}:J{1}", valueinitialFoot, valueinitialFoot + 1);
-                                wb.Worksheet(sheets).Cells(RangeSubfooter).Style.Fill.BackgroundColor = XLColor.DarkCoral;
+                                wb.Worksheet(sheets).Cells(RangeSubfooter).Style.Fill.BackgroundColor = XLColor.LightGray;
                                 //Cuadricula footer
                                 wb.Worksheet(sheets).Range(RangeSubfooter).Style.Border.TopBorder = XLBorderStyleValues.Thin;
                                 wb.Worksheet(sheets).Range(RangeSubfooter).Style.Border.InsideBorder = XLBorderStyleValues.Dotted;
