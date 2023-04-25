@@ -476,7 +476,7 @@ namespace arquitectSoft.View
 
 
                     DataGridView table = new DataGridView();
-                    for (int Datagrid = 1; Datagrid <= 8; Datagrid++)
+                    for (int Datagrid = 1; Datagrid <= 9; Datagrid++)
                     {
                         valueinitial = 8;
                         valueinitialFoot = 0;
@@ -563,10 +563,18 @@ namespace arquitectSoft.View
                                 table = dataGridViewMCalculate;
                                 wrapTextDefault = false;
                                 break;
+                            case 9:
+                                Range = string.Format("A{0}:H{0}", valueinitial);
+                                rangetwo = "A{0}:E{0}";
+                                sheets = "ALBARAN";
+                                Descheader = sheets;
+                                table = dataGridViewPMCalculate;
+                                wrapTextDefault = false;
+                                break;
 
                         }
 
-                        if (table.Rows.Count > 0)
+                        if (table.Rows.Count > 0 && Datagrid != 9)
                         {
                             //sheetscount += 1;
                             //Creating DataTable.
@@ -663,6 +671,17 @@ namespace arquitectSoft.View
                                 valueinitialFoot = valueinitial + dt.Rows.Count + 2;
 
                                 wb.Worksheet(sheets + "PHer").Delete();
+                            }
+                            else if (Datagrid == 9)
+                            {
+                                var ws = wb.Worksheets.Add(dt, sheets);
+                                ws.Row(1).InsertRowsAbove(7);
+                                wb.Worksheet(sheets).AddPicture(path + imagePath)
+                                  .MoveTo(150, 25)
+                                  .Scale(.3); // optional: resize picture
+
+                                
+
                             }
                             else
                             {
@@ -801,7 +820,103 @@ namespace arquitectSoft.View
                             wb.Worksheet(sheets).Columns().AdjustToContents();
                             wb.Worksheet(sheets).Column(wrapTextDefault ? 3 : 2).Width = 57;
                         }
+                        else if (Datagrid == 9)
+                        {
+                            DataTable dt = new DataTable();
+                            DataTable dt1 = new DataTable();
+                            dt1.Columns.Add("CODIGO");
+                            dt1.Columns.Add("DESCRIPCION");
+                            dt1.Columns.Add("UD/M2/M");
+                            dt1.Columns.Add("MEDIDA");
+                            dt1.Columns.Add("ACABADO");
 
+                            foreach (DataGridViewColumn column in table.Columns)
+                            {
+                                dt.Columns.Add(column.HeaderText, column.ValueType);
+                            }
+
+
+                            //Adding the Rows.
+                            foreach (DataGridViewRow row in table.Rows)
+                            {
+                                dt.Rows.Add();
+                                foreach (DataGridViewCell cell in row.Cells)
+                                {
+                                    dt.Rows[dt.Rows.Count - 1][cell.ColumnIndex] = cell.Value.ToString();
+                                }
+                            }
+                                                       
+                            dt = dt.AsEnumerable()
+                                        .GroupBy(r => new { Cod = r["Codigo"], med = r["medida"], cal = r["Se_Calcula_Por"] })
+                                        .Select(g =>
+                                        {
+                                            var row = dt.NewRow();
+                                           
+                                            row["Codigo"] = g.Key.Cod;
+                                            row["descripcion"] = g.Min(r => r.Field<string>("descripcion"));
+                                            row["cantidad"] = g.Sum(r => r.Field<float>("cantidad"));
+                                            row["medida"] = g.Key.med;
+                                            row["acabado"] = g.Min(r => r.Field<string>("acabado")); 
+                                            return row;
+
+                                        })
+                                        .CopyToDataTable();
+
+                            foreach (DataRow row in dt.Rows)
+                            {
+                                dt1.Rows.Add(row["Codigo"], row["descripcion"], row["cantidad"], row["medida"], row["acabado"]);
+                            }
+
+                           
+
+                            var ws = wb.Worksheets.Add(dt1, sheets);
+                            ws.Row(1).InsertRowsAbove(14);
+                            wb.Worksheet(sheets).AddPicture(path + imagePath)
+                              .MoveTo(100, 25)
+                              .Scale(.5); // optional: resize picture
+
+                            if (valuecountDoor == 0 || Datagrid > 4)
+                            {
+                                valueinitialFoot = dt.Rows.Count + 10;
+                            }
+                            else
+                            {
+                                valueinitialFoot = 0;
+                            }
+
+                            wb.Worksheet(sheets).Cell(string.Format("B{0}", 7)).Value = "SISTEMAS ARQUIMART S.L.";
+                            wb.Worksheet(sheets).Cell(string.Format("B{0}", 8)).Value = "c/ Aitzgorri 6-Pol.Ind.Ansoleta";
+                            wb.Worksheet(sheets).Cell(string.Format("B{0}", 9)).Value = "01006 Vitoria-Gasteiz";
+                            wb.Worksheet(sheets).Cell(string.Format("B{0}", 10)).Value = "Tfno 945 29 14 89";
+                            wb.Worksheet(sheets).Cell(string.Format("B{0}", 11)).Value = "CIF B01472216";
+
+                            wb.Worksheet(sheets).Cell(string.Format("C{0}", 2)).Value = "ENTREGA EN:";
+                            wb.Worksheet(sheets).Cell(string.Format("C{0}", 5)).Value = "CLIENTE:";
+                            wb.Worksheet(sheets).Cell(string.Format("C{0}", 6)).Value = "REFERENCIA OBRA:";
+                            wb.Worksheet(sheets).Cell(string.Format("C{0}", 9)).Value = "HORARIO ENTREGA:";
+                            wb.Worksheet(sheets).Cell(string.Format("C{0}", 12)).Value = "PERSONA CONTACTO:";
+                            wb.Worksheet(sheets).Cell(string.Format("C{0}", 13)).Value = "TELEFONO DE CONTACTO:";
+
+
+                            wb.Worksheet(sheets).Cell(string.Format("A{0}", 14)).Value = "ALBARAN:";
+                            wb.Worksheet(sheets).Cell(string.Format("B{0}", 14)).Value = "FECHA:";
+                            wb.Worksheet(sheets).Cell(string.Format("B{0}", 14)).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center).Alignment.SetVertical(XLAlignmentVerticalValues.Center);
+
+                            wb.Worksheet(sheets).Columns().AdjustToContents();
+                           
+
+                            string Rangeheader1 = string.Format("C{0}:E{1}", 2, 7);
+                            string Rangeheader2 = string.Format("C{0}:E{1}", 9, 10);
+                            string Rangeheader3 = string.Format("C{0}:E{1}", 12, 13);
+                            //wb.Worksheet(sheets).Range(Rangeheader1).Style.Border.TopBorder = XLBorderStyleValues.Thin;
+                            //wb.Worksheet(sheets).Range(Rangeheader1).Style.Border.InsideBorder = XLBorderStyleValues.Dotted;
+                            wb.Worksheet(sheets).Range(Rangeheader1).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                            wb.Worksheet(sheets).Range(Rangeheader2).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                            wb.Worksheet(sheets).Range(Rangeheader3).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                            //wb.Worksheet(sheets).Range(Rangeheader1).Style.Border.BottomBorder = XLBorderStyleValues.Thin;
+
+                            wb.Worksheet(sheets).ShowGridLines = new BooleanValue(false);
+                        }   
 
                     }
 
