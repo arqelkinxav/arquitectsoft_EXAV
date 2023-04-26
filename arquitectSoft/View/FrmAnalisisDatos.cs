@@ -870,50 +870,91 @@ namespace arquitectSoft.View
                            
 
                             var ws = wb.Worksheets.Add(dt1, sheets);
-                            ws.Row(1).InsertRowsAbove(14);
+                            ws.Row(1).InsertRowsAbove(18);
                             wb.Worksheet(sheets).AddPicture(path + imagePath)
                               .MoveTo(100, 25)
-                              .Scale(.5); // optional: resize picture
+                              .Scale(.5); // optional: resize picture                           
 
-                            if (valuecountDoor == 0 || Datagrid > 4)
-                            {
-                                valueinitialFoot = dt.Rows.Count + 10;
-                            }
-                            else
-                            {
-                                valueinitialFoot = 0;
-                            }
 
+                            // BEGIN HEADER
                             wb.Worksheet(sheets).Cell(string.Format("B{0}", 7)).Value = "SISTEMAS ARQUIMART S.L.";
                             wb.Worksheet(sheets).Cell(string.Format("B{0}", 8)).Value = "c/ Aitzgorri 6-Pol.Ind.Ansoleta";
                             wb.Worksheet(sheets).Cell(string.Format("B{0}", 9)).Value = "01006 Vitoria-Gasteiz";
                             wb.Worksheet(sheets).Cell(string.Format("B{0}", 10)).Value = "Tfno 945 29 14 89";
                             wb.Worksheet(sheets).Cell(string.Format("B{0}", 11)).Value = "CIF B01472216";
 
-                            wb.Worksheet(sheets).Cell(string.Format("C{0}", 2)).Value = "ENTREGA EN:";
-                            wb.Worksheet(sheets).Cell(string.Format("C{0}", 5)).Value = "CLIENTE:";
-                            wb.Worksheet(sheets).Cell(string.Format("C{0}", 6)).Value = "REFERENCIA OBRA:";
-                            wb.Worksheet(sheets).Cell(string.Format("C{0}", 9)).Value = "HORARIO ENTREGA:";
-                            wb.Worksheet(sheets).Cell(string.Format("C{0}", 12)).Value = "PERSONA CONTACTO:";
-                            wb.Worksheet(sheets).Cell(string.Format("C{0}", 13)).Value = "TELEFONO DE CONTACTO:";
+                            wb.Worksheet(sheets).Cell(string.Format("D{0}", 2)).Value = "ENTREGA EN:";
+                            wb.Worksheet(sheets).Cell(string.Format("D{0}", 5)).Value = "CLIENTE:";
+                            wb.Worksheet(sheets).Cell(string.Format("D{0}", 6)).Value = "REFERENCIA OBRA:";
+                            wb.Worksheet(sheets).Cell(string.Format("D{0}", 9)).Value = "HORARIO ENTREGA:";
+                            wb.Worksheet(sheets).Cell(string.Format("D{0}", 12)).Value = "PERSONA CONTACTO:";
+                            wb.Worksheet(sheets).Cell(string.Format("D{0}", 13)).Value = "TELEFONO DE CONTACTO:";
 
 
-                            wb.Worksheet(sheets).Cell(string.Format("A{0}", 14)).Value = "ALBARAN:";
-                            wb.Worksheet(sheets).Cell(string.Format("B{0}", 14)).Value = "FECHA:";
-                            wb.Worksheet(sheets).Cell(string.Format("B{0}", 14)).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center).Alignment.SetVertical(XLAlignmentVerticalValues.Center);
+                            wb.Worksheet(sheets).Cell(string.Format("A{0}", 15)).Value = "ALBARAN:";
+                            wb.Worksheet(sheets).Cell(string.Format("C{0}", 15)).Value = "FECHA: " + param[3];                           
+                            
+                            wb.Worksheet(sheets).Cell(string.Format("A{0}", 16)).Value = param[0] + " - " + param[1];
+                            wb.Worksheet(sheets).Cell(string.Format("C{0}", 16)).Value = "PEDIDO:";
+
+                            wb.Worksheet(sheets).Cell(string.Format("A{0}", 17)).Value = "N CAJAS:";
+                            wb.Worksheet(sheets).Cell(string.Format("A{0}", 18)).Value = "N PALETS:";
+
+                            wb.Worksheet(sheets).Range(string.Format("A{0}:B{0}", 15)).Merge();
+                            wb.Worksheet(sheets).Range(string.Format("A{0}:B{0}", 16)).Merge();
+
+                            wb.Worksheet(sheets).Range(string.Format("A{0}:E{0}", 17)).Merge().Style.Font.SetBold().Font.FontSize = 16;
+                            wb.Worksheet(sheets).Range(string.Format("A{0}:E{0}", 17)).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center).Alignment.SetVertical(XLAlignmentVerticalValues.Center);
+                            wb.Worksheet(sheets).Range(string.Format("A{0}:E{0}", 18)).Merge().Style.Font.SetBold().Font.FontSize = 16;
+                            wb.Worksheet(sheets).Range(string.Format("A{0}:E{0}", 18)).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center).Alignment.SetVertical(XLAlignmentVerticalValues.Center);
 
                             wb.Worksheet(sheets).Columns().AdjustToContents();
                            
 
-                            string Rangeheader1 = string.Format("C{0}:E{1}", 2, 7);
-                            string Rangeheader2 = string.Format("C{0}:E{1}", 9, 10);
-                            string Rangeheader3 = string.Format("C{0}:E{1}", 12, 13);
+                            string Rangeheader1 = string.Format("D{0}:E{1}", 2, 7);
+                            string Rangeheader2 = string.Format("D{0}:E{1}", 9, 10);
+                            string Rangeheader3 = string.Format("D{0}:E{1}", 12, 13);
+                            string Rangeheader4 = string.Format("A{0}:E{1}", 17, 18);
                             //wb.Worksheet(sheets).Range(Rangeheader1).Style.Border.TopBorder = XLBorderStyleValues.Thin;
                             //wb.Worksheet(sheets).Range(Rangeheader1).Style.Border.InsideBorder = XLBorderStyleValues.Dotted;
                             wb.Worksheet(sheets).Range(Rangeheader1).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
                             wb.Worksheet(sheets).Range(Rangeheader2).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
                             wb.Worksheet(sheets).Range(Rangeheader3).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-                            //wb.Worksheet(sheets).Range(Rangeheader1).Style.Border.BottomBorder = XLBorderStyleValues.Thin;
+                            wb.Worksheet(sheets).Range(Rangeheader4).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                            wb.Worksheet(sheets).Range(Rangeheader4).Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+
+                            wb.Worksheet(sheets).Cell(string.Format("A{0}", 15)).Style.Font.SetBold();
+                            wb.Worksheet(sheets).Cell(string.Format("C{0}", 15)).Style.Font.SetBold();
+                            wb.Worksheet(sheets).Cell(string.Format("C{0}", 16)).Style.Font.SetBold();
+                            wb.Worksheet(sheets).Cell(string.Format("D{0}", 2)).Style.Font.SetBold();
+                            wb.Worksheet(sheets).Cell(string.Format("D{0}", 5)).Style.Font.SetBold();
+                            wb.Worksheet(sheets).Cell(string.Format("D{0}", 6)).Style.Font.SetBold();
+                            wb.Worksheet(sheets).Cell(string.Format("D{0}", 9)).Style.Font.SetBold();
+                            wb.Worksheet(sheets).Cell(string.Format("D{0}", 12)).Style.Font.SetBold();
+                            wb.Worksheet(sheets).Cell(string.Format("D{0}", 13)).Style.Font.SetBold();
+                            // END HEADER
+
+
+                            //BEGIN FOOTER
+                            int indexfooter = 21 + dt1.Rows.Count;
+                            wb.Worksheet(sheets).Cell(string.Format("A{0}", indexfooter)).Value = "Transportista:";
+                            wb.Worksheet(sheets).Cell(string.Format("A{0}", indexfooter + 1)).Value = "Pagador Portes:";
+                            wb.Worksheet(sheets).Cell(string.Format("D{0}", indexfooter)).Value = "F:";
+                            wb.Worksheet(sheets).Cell(string.Format("D{0}", indexfooter + 1)).Value = "C:";
+
+                            wb.Worksheet(sheets).Range(string.Format("B{0}:C{0}", indexfooter)).Merge();
+                            wb.Worksheet(sheets).Range(string.Format("B{0}:C{0}", indexfooter + 1)).Merge();
+
+                            string Rangeheaderfooter = string.Format("A{0}:E{1}", indexfooter, indexfooter + 1);
+                            wb.Worksheet(sheets).Range(Rangeheaderfooter).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                            wb.Worksheet(sheets).Range(Rangeheaderfooter).Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+
+                            wb.Worksheet(sheets).Cell(string.Format("A{0}", indexfooter + 3)).Value = "SISTEMAS ARQUIMART S.L. c/ Aitzgorri 6 - Pol.Ind. Ansoleta 01006 Vitoria-Gasteiz";
+                            wb.Worksheet(sheets).Cell(string.Format("A{0}", indexfooter + 4)).Value = "Tfno:945 29 14 89  e-mail: arquimart@arquimart.es CIF B 01472216";
+                            
+                            wb.Worksheet(sheets).Range(string.Format("A{0}:E{0}", indexfooter + 3)).Merge().Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center).Alignment.SetVertical(XLAlignmentVerticalValues.Center);
+                            wb.Worksheet(sheets).Range(string.Format("A{0}:E{0}", indexfooter + 4)).Merge().Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center).Alignment.SetVertical(XLAlignmentVerticalValues.Center);
+                            //END FOOTER
 
                             wb.Worksheet(sheets).ShowGridLines = new BooleanValue(false);
                         }   
