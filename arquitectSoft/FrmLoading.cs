@@ -17,6 +17,7 @@ namespace arquitectSoft
         public string Tecnico { get; set; }
         public string Acabado1 { get; set; }
         public string Acabado2 { get; set; }
+        public string Albaran { get; set; }
 
         public FrmLoading()
         {
@@ -119,6 +120,11 @@ namespace arquitectSoft
             CmbAcabado2.DataSource = Acb.GetAcabado();
             CmbAcabado2.DisplayMember = "Descripcion";
             CmbAcabado2.ValueMember = "Id_Acabado";
+
+            ChkListAlbaran.SetItemChecked(0, true);
+            ChkListAlbaran.SetItemChecked(1, true);
+            ChkListAlbaran.SetItemChecked(2, true);
+            ChkListAlbaran.SetItemChecked(3, true);
         }
 
         private void BtnAceptar_Click(object sender, EventArgs e)
@@ -148,6 +154,20 @@ namespace arquitectSoft
             Tecnico = txtTecnico.Text;
             Acabado1 = CmbAcabado1.Text;
             Acabado2 = CmbAcabado2.Text;
+
+            Albaran = "";
+            foreach (int indexChecked in ChkListAlbaran.CheckedIndices)
+            {
+                // The indexChecked variable contains the index of the item.
+                if (Albaran != "")
+                {
+                    Albaran += "|" + indexChecked.ToString();
+                }
+                else
+                {
+                    Albaran = indexChecked.ToString();
+                }
+            }
 
             if (fail != "")
             {

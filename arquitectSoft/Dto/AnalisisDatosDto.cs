@@ -159,6 +159,15 @@ namespace arquitectSoft.Dto
                     listColumns.Add("Mecanizado");
                     //-----------------
                     break;
+                case 12:
+                    //-----------------Albaran 
+                    listColumns.Add("codigo");
+                    listColumns.Add("descripcion");
+                    listColumns.Add("acabado");
+                    listColumns.Add("cantidad");
+                    listColumns.Add("medida");
+                    //-----------------
+                    break;
             }
 
             return listColumns;

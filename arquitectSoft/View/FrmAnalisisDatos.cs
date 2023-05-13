@@ -1,5 +1,8 @@
 ﻿using ClosedXML.Excel;
 using DocumentFormat.OpenXml;
+using DocumentFormat.OpenXml.Drawing;
+using DocumentFormat.OpenXml.Spreadsheet;
+using MySqlX.XDevAPI.Relational;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -11,6 +14,8 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Color = System.Drawing.Color;
+using Control = System.Windows.Forms.Control;
 
 namespace arquitectSoft.View
 {
@@ -388,12 +393,18 @@ namespace arquitectSoft.View
             FrmLoading bsc = new FrmLoading();
             bsc.ShowDialog();
 
+
             if (bsc.Numero == null)
             {
                 return;
             }
 
-            string[] param = { bsc.Numero, bsc.Nombre, bsc.Tecnico, bsc.Fecha, bsc.Acabado1, bsc.Acabado2 };
+            if (bsc.Albaran == null)
+            {
+                MessageBox.Show("No selecciono datos para cargar albaran!!", "Mensaje Alerta", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);                
+            }
+
+            string[] param = { bsc.Numero, bsc.Nombre, bsc.Tecnico, bsc.Fecha, bsc.Acabado1, bsc.Acabado2, bsc.Albaran };
 
             bool swexport = false;
             if (dataGridViewPMCalculate.RowCount > 0)
@@ -822,52 +833,88 @@ namespace arquitectSoft.View
                         }
                         else if (Datagrid == 9)
                         {
-                            DataTable dt = new DataTable();
-                            DataTable dt1 = new DataTable();
-                            dt1.Columns.Add("CODIGO");
-                            dt1.Columns.Add("DESCRIPCION");
-                            dt1.Columns.Add("UD/M2/M");
-                            dt1.Columns.Add("MEDIDA");
-                            dt1.Columns.Add("ACABADO");
-
-                            foreach (DataGridViewColumn column in table.Columns)
+                            Dto.AnalisisDatosDto dto = new Dto.AnalisisDatosDto();
+                            DataTable dt = new DataTable();   
+                            dto.setCreateColumns(12).ForEach(delegate (string s)
                             {
-                                dt.Columns.Add(column.HeaderText, column.ValueType);
+                                dt.Columns.Add(s, s == "cantidad" ? typeof(float) : typeof(string));
+                            });
+                            dt.Rows.Add("", "", "", 0, "");
+                            dt.AcceptChanges();
+                            dataGridViewCeroAlbaran.DataSource = dt;
+
+                            DataTable dt1 = new DataTable();                            
+                            DataGridView table1 = new DataGridView();
+                            DataGridView table2 = new DataGridView();
+                            
+                            foreach (DataGridViewColumn column in dataGridViewCeroAlbaran.Columns)
+                            {
+                                dt1.Columns.Add(column.HeaderText, column.ValueType);
                             }
 
 
-                            //Adding the Rows.
-                            foreach (DataGridViewRow row in table.Rows)
+
+                            foreach (string item in param[6].Split('|'))
                             {
-                                dt.Rows.Add();
-                                foreach (DataGridViewCell cell in row.Cells)
+                                switch (item)
                                 {
-                                    dt.Rows[dt.Rows.Count - 1][cell.ColumnIndex] = cell.Value.ToString();
+                                    case "0":
+                                        table1 = dataGridViewPMCalculate;
+                                        table2 = dataGridViewPMHerrajeCalculate;
+                                        foreach (DataGridViewRow row in table1.Rows)
+                                        {
+                                            dt1.Rows.Add(row.Cells[1].Value, row.Cells[2].Value, row.Cells[3].Value, row.Cells[4].Value, row.Cells[5].Value); 
+                                        }
+
+                                        foreach (DataGridViewRow row in table2.Rows)
+                                        {
+                                            dt1.Rows.Add(row.Cells[1].Value, row.Cells[2].Value, row.Cells[3].Value, row.Cells[4].Value, row.Cells[5].Value);
+                                        }
+
+                                        break;
+                                    case "1":
+                                        table1 = dataGridViewVPCalculate;
+                                        foreach (DataGridViewRow row in table1.Rows)
+                                        {
+                                            dt1.Rows.Add(row.Cells[1].Value, row.Cells[2].Value, row.Cells[3].Value, row.Cells[6].Value, row.Cells[4].Value);
+                                        }
+
+                                        break;
+                                    case "2":
+                                        table1 = dataGridViewPCalculate;
+                                        table2 = dataGridViewPHerrajeCalculate;
+                                        foreach (DataGridViewRow row in table1.Rows)
+                                        {
+                                            if (row.Cells[3].Value.ToString() != "")
+                                                dt1.Rows.Add(row.Cells[1].Value, row.Cells[2].Value, "", row.Cells[3].Value, row.Cells[4].Value);
+                                        }
+
+                                        foreach (DataGridViewRow row in table2.Rows)
+                                        {
+                                            dt1.Rows.Add(row.Cells[1].Value, row.Cells[2].Value, row.Cells[3].Value, row.Cells[4].Value, row.Cells[5].Value);
+                                        }
+                                        break;
+                                    
+
                                 }
                             }
-                                                       
-                            dt = dt.AsEnumerable()
-                                        .GroupBy(r => new { Cod = r["Codigo"], med = r["medida"], cal = r["Se_Calcula_Por"] })
+
+
+                            dt1 = dt1.AsEnumerable()
+                                        .GroupBy(r => new { Cod = r["Codigo"], med = r["medida"], cal = r["acabado"] })
                                         .Select(g =>
                                         {
-                                            var row = dt.NewRow();
-                                           
-                                            row["Codigo"] = g.Key.Cod;
+                                            var row = dt1.NewRow();
+
+                                            row["CODIGO"] = g.Key.Cod;
                                             row["descripcion"] = g.Min(r => r.Field<string>("descripcion"));
                                             row["cantidad"] = g.Sum(r => r.Field<float>("cantidad"));
                                             row["medida"] = g.Key.med;
-                                            row["acabado"] = g.Min(r => r.Field<string>("acabado")); 
+                                            row["acabado"] = g.Min(r => r.Field<string>("acabado"));
                                             return row;
 
                                         })
                                         .CopyToDataTable();
-
-                            foreach (DataRow row in dt.Rows)
-                            {
-                                dt1.Rows.Add(row["Codigo"], row["descripcion"], row["cantidad"], row["medida"], row["acabado"]);
-                            }
-
-                           
 
                             var ws = wb.Worksheets.Add(dt1, sheets);
                             ws.Row(1).InsertRowsAbove(18);

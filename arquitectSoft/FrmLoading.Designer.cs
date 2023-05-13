@@ -48,6 +48,8 @@ namespace arquitectSoft
             this.BtnCancelar = new arquitectSoft.Generals.RJButton();
             this.BtnAceptar = new arquitectSoft.Generals.RJButton();
             this.elipseControl3 = new arquitectSoft.Generals.ElipseControl();
+            this.ChkListAlbaran = new System.Windows.Forms.CheckedListBox();
+            this.label8 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label1
@@ -203,7 +205,7 @@ namespace arquitectSoft
             this.elipseControl2.CornerRadius = 15;
             this.elipseControl2.Location = new System.Drawing.Point(1, 63);
             this.elipseControl2.Name = "elipseControl2";
-            this.elipseControl2.Size = new System.Drawing.Size(498, 197);
+            this.elipseControl2.Size = new System.Drawing.Size(498, 244);
             this.elipseControl2.TabIndex = 94;
             this.elipseControl2.Text = "elipseControl1";
             // 
@@ -218,7 +220,7 @@ namespace arquitectSoft
             this.BtnCancelar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.BtnCancelar.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.BtnCancelar.ForeColor = System.Drawing.Color.DimGray;
-            this.BtnCancelar.Location = new System.Drawing.Point(114, 269);
+            this.BtnCancelar.Location = new System.Drawing.Point(114, 313);
             this.BtnCancelar.Name = "BtnCancelar";
             this.BtnCancelar.Size = new System.Drawing.Size(84, 22);
             this.BtnCancelar.TabIndex = 96;
@@ -237,7 +239,7 @@ namespace arquitectSoft
             this.BtnAceptar.FlatAppearance.BorderSize = 0;
             this.BtnAceptar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.BtnAceptar.ForeColor = System.Drawing.Color.White;
-            this.BtnAceptar.Location = new System.Drawing.Point(17, 269);
+            this.BtnAceptar.Location = new System.Drawing.Point(17, 313);
             this.BtnAceptar.Name = "BtnAceptar";
             this.BtnAceptar.Size = new System.Drawing.Size(84, 22);
             this.BtnAceptar.TabIndex = 95;
@@ -251,18 +253,43 @@ namespace arquitectSoft
             // 
             this.elipseControl3.BackColor = System.Drawing.Color.Black;
             this.elipseControl3.CornerRadius = 15;
-            this.elipseControl3.Location = new System.Drawing.Point(-1, 262);
+            this.elipseControl3.Location = new System.Drawing.Point(-1, 306);
             this.elipseControl3.Name = "elipseControl3";
             this.elipseControl3.Size = new System.Drawing.Size(500, 40);
             this.elipseControl3.TabIndex = 97;
             this.elipseControl3.Text = "elipseControl1";
+            // 
+            // ChkListAlbaran
+            // 
+            this.ChkListAlbaran.CheckOnClick = true;
+            this.ChkListAlbaran.Items.AddRange(new object[] {
+            "Perfiles Metalicos",
+            "Vidrios y Paneles",
+            "Puertas"});
+            this.ChkListAlbaran.Location = new System.Drawing.Point(141, 241);
+            this.ChkListAlbaran.Name = "ChkListAlbaran";
+            this.ChkListAlbaran.Size = new System.Drawing.Size(120, 49);
+            this.ChkListAlbaran.TabIndex = 98;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.BackColor = System.Drawing.Color.White;
+            this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label8.Location = new System.Drawing.Point(2, 258);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(121, 13);
+            this.label8.TabIndex = 99;
+            this.label8.Text = "Datos Para Albaran:";
             // 
             // FrmLoading
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.DimGray;
-            this.ClientSize = new System.Drawing.Size(499, 297);
+            this.ClientSize = new System.Drawing.Size(499, 345);
+            this.Controls.Add(this.label8);
+            this.Controls.Add(this.ChkListAlbaran);
             this.Controls.Add(this.BtnCancelar);
             this.Controls.Add(this.BtnAceptar);
             this.Controls.Add(this.elipseControl3);
@@ -318,5 +345,7 @@ namespace arquitectSoft
         private Generals.RJButton BtnCancelar;
         private Generals.RJButton BtnAceptar;
         private Generals.ElipseControl elipseControl3;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.CheckedListBox ChkListAlbaran;
     }
 }
