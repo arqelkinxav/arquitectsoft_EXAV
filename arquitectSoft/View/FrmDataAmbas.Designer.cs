@@ -87,7 +87,7 @@ namespace arquitectSoft.View
             this.label5.ImeMode = System.Windows.Forms.ImeMode.NoControl;
             this.label5.Location = new System.Drawing.Point(24, 40);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(108, 16);
+            this.label5.Size = new System.Drawing.Size(107, 16);
             this.label5.TabIndex = 95;
             this.label5.Text = "Data de Anchura";
             // 
@@ -124,6 +124,11 @@ namespace arquitectSoft.View
             // NudCantidadA
             // 
             this.NudCantidadA.Location = new System.Drawing.Point(68, 103);
+            this.NudCantidadA.Maximum = new decimal(new int[] {
+            9999999,
+            0,
+            0,
+            0});
             this.NudCantidadA.Name = "NudCantidadA";
             this.NudCantidadA.Size = new System.Drawing.Size(66, 20);
             this.NudCantidadA.TabIndex = 98;

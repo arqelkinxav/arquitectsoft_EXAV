@@ -833,14 +833,14 @@ namespace arquitectSoft.View
                         }
                         else if (Datagrid == 9)
                         {
+                            
                             Dto.AnalisisDatosDto dto = new Dto.AnalisisDatosDto();
                             DataTable dt = new DataTable();   
                             dto.setCreateColumns(12).ForEach(delegate (string s)
                             {
                                 dt.Columns.Add(s, s == "cantidad" ? typeof(float) : typeof(string));
                             });
-                            dt.Rows.Add("", "", "", 0, "");
-                            dt.AcceptChanges();
+
                             dataGridViewCeroAlbaran.DataSource = dt;
 
                             DataTable dt1 = new DataTable();                            
@@ -856,42 +856,59 @@ namespace arquitectSoft.View
 
                             foreach (string item in param[6].Split('|'))
                             {
+                                string categoryname = "";
                                 switch (item)
                                 {
                                     case "0":
+                                      
                                         table1 = dataGridViewPMCalculate;
                                         table2 = dataGridViewPMHerrajeCalculate;
                                         foreach (DataGridViewRow row in table1.Rows)
                                         {
-                                            dt1.Rows.Add(row.Cells[1].Value, row.Cells[2].Value, row.Cells[3].Value, row.Cells[4].Value, row.Cells[5].Value); 
+                                            dt1.Rows.Add(row.Cells[1].Value, row.Cells[2].Value, row.Cells[3].Value, row.Cells[4].Value, row.Cells[5].Value, "Perfil Metalico"); 
                                         }
 
                                         foreach (DataGridViewRow row in table2.Rows)
                                         {
-                                            dt1.Rows.Add(row.Cells[1].Value, row.Cells[2].Value, row.Cells[3].Value, row.Cells[4].Value, row.Cells[5].Value);
+                                            dt1.Rows.Add(row.Cells[1].Value, row.Cells[2].Value, row.Cells[3].Value, row.Cells[4].Value, row.Cells[5].Value, "Perfil Metalico Herraje");
                                         }
 
                                         break;
                                     case "1":
+                                       
                                         table1 = dataGridViewVPCalculate;
                                         foreach (DataGridViewRow row in table1.Rows)
                                         {
-                                            dt1.Rows.Add(row.Cells[1].Value, row.Cells[2].Value, row.Cells[3].Value, row.Cells[6].Value, row.Cells[4].Value);
+                                            dt1.Rows.Add(row.Cells[1].Value, row.Cells[2].Value, row.Cells[3].Value, row.Cells[6].Value, row.Cells[4].Value, "Vidrios y Paneles");
                                         }
 
                                         break;
                                     case "2":
                                         table1 = dataGridViewPCalculate;
                                         table2 = dataGridViewPHerrajeCalculate;
+                                        string acabadopuertas = "";
                                         foreach (DataGridViewRow row in table1.Rows)
                                         {
                                             if (row.Cells[3].Value.ToString() != "")
-                                                dt1.Rows.Add(row.Cells[1].Value, row.Cells[2].Value, "", row.Cells[3].Value, row.Cells[4].Value);
+                                            {
+                                                dt1.Rows.Add(row.Cells[1].Value, row.Cells[2].Value, acabadopuertas, row.Cells[3].Value, row.Cells[4].Value, "Puertas");
+                                            }
+                                            else
+                                            {
+                                                acabadopuertas = row.Cells[2].Value.ToString();
+                                                int pos1 = acabadopuertas.IndexOf("(");
+                                                int pos2 = acabadopuertas.IndexOf(")");
+                                                int cantacab = pos2 - pos1;
+                                                acabadopuertas = acabadopuertas.Substring(pos1+1, cantacab- 1);
+
+
+                                            }
+                                                
                                         }
 
                                         foreach (DataGridViewRow row in table2.Rows)
                                         {
-                                            dt1.Rows.Add(row.Cells[1].Value, row.Cells[2].Value, row.Cells[3].Value, row.Cells[4].Value, row.Cells[5].Value);
+                                            dt1.Rows.Add(row.Cells[1].Value, row.Cells[2].Value, row.Cells[3].Value, row.Cells[4].Value, row.Cells[5].Value, "Puertas Herrajes");
                                         }
                                         break;
                                     
@@ -907,6 +924,7 @@ namespace arquitectSoft.View
                                             var row = dt1.NewRow();
 
                                             row["CODIGO"] = g.Key.Cod;
+                                            row["categoria"] = g.Min(r => r.Field<string>("categoria"));
                                             row["descripcion"] = g.Min(r => r.Field<string>("descripcion"));
                                             row["cantidad"] = g.Sum(r => r.Field<float>("cantidad"));
                                             row["medida"] = g.Key.med;

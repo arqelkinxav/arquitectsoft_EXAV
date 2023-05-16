@@ -160,12 +160,14 @@ namespace arquitectSoft.Dto
                     //-----------------
                     break;
                 case 12:
-                    //-----------------Albaran 
+                    //-----------------Albaran
+                    
                     listColumns.Add("codigo");
                     listColumns.Add("descripcion");
                     listColumns.Add("acabado");
                     listColumns.Add("cantidad");
                     listColumns.Add("medida");
+                    listColumns.Add("categoria");
                     //-----------------
                     break;
             }

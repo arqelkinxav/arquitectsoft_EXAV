@@ -124,7 +124,6 @@ namespace arquitectSoft
             ChkListAlbaran.SetItemChecked(0, true);
             ChkListAlbaran.SetItemChecked(1, true);
             ChkListAlbaran.SetItemChecked(2, true);
-            ChkListAlbaran.SetItemChecked(3, true);
         }
 
         private void BtnAceptar_Click(object sender, EventArgs e)
