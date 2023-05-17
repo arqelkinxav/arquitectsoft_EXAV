@@ -637,11 +637,39 @@ namespace arquitectSoft.Dto
 
             string codigo;
             string Longitud;
+            string Anchura = "";            
+            float pAnchura = 0;
             float pLongitud = 0;
+            float pMedidaBase = MedidaBase;
+            bool anchurasw = false;
+
+            foreach (DataColumn columns in dtmodel.Columns)
+            {
+                if (columns.ToString() != "Anchura")
+                {
+                    continue;
+                }else
+                {
+                    anchurasw = true;
+                }
+
+            }
+              
+
             foreach (DataRow row in dtmodel.Rows)
             {
                 codigo = row["Codigo"].ToString().Replace("\"", "").Trim();
+
                 Longitud = row[StrCantidad].ToString().Replace("\"", "").Trim();
+                
+                if (StrCantidad == "Altura" && anchurasw)
+                {
+                    Anchura = row["Anchura"].ToString().Replace("\"", "").Trim();
+                    pAnchura = Anchura != "" ? float.Parse(Anchura) : pLongitud;
+                    pMedidaBase = pAnchura;
+                }
+
+
 
                 pLongitud = Longitud != "" ? float.Parse(Longitud) : pLongitud;
 
@@ -652,7 +680,7 @@ namespace arquitectSoft.Dto
 
                 Generals.Conexion con = new Generals.Conexion();
                 string fail = "";
-                string[] param = { "pCodigo|" + codigo, "plogitud|" + pLongitud.ToString(), "pSwHerraje|" + pSwHerraje.ToString(), "pMedidaBase|" + MedidaBase.ToString() };
+                string[] param = { "pCodigo|" + codigo, "plogitud|" + pLongitud.ToString(), "pSwHerraje|" + pSwHerraje.ToString(), "pMedidaBase|" + pMedidaBase.ToString(), "pAnchura|" + pAnchura.ToString() };
                 con.Open(out fail);
                 DataTable dtResult = con.ExecuteDataSetSPparam(Generals.Constantes.QUERY_GET_CALCULATE_PERFILES, out fail, param);
                 con.Close();
