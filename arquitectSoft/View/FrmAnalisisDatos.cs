@@ -893,7 +893,7 @@ namespace arquitectSoft.View
                                             {
                                                 dt1.Rows.Add(row.Cells[1].Value, row.Cells[2].Value, acabadopuertas, row.Cells[3].Value, row.Cells[4].Value, "Puertas");
                                             }
-                                            else
+                                            else if (row.Cells[2].Value.ToString() != "")
                                             {
                                                 acabadopuertas = row.Cells[2].Value.ToString();
                                                 int pos1 = acabadopuertas.IndexOf("(");
