@@ -887,11 +887,16 @@ namespace arquitectSoft.View
                                         table1 = dataGridViewPCalculate;
                                         table2 = dataGridViewPHerrajeCalculate;
                                         string acabadopuertas = "";
+                                        string medidaPuertas = "";
                                         foreach (DataGridViewRow row in table1.Rows)
                                         {
                                             if (row.Cells[3].Value.ToString() != "")
                                             {
-                                                dt1.Rows.Add(row.Cells[1].Value, row.Cells[2].Value, acabadopuertas, row.Cells[3].Value, row.Cells[4].Value, "Puertas");
+                                                medidaPuertas = row.Cells[4].Value.ToString();
+                                                if (row.Cells[4].Value.ToString() == "0")
+                                                    medidaPuertas = row.Cells[5].Value.ToString();
+
+                                                dt1.Rows.Add(row.Cells[1].Value, row.Cells[2].Value, acabadopuertas, row.Cells[3].Value, medidaPuertas, "Puertas");
                                             }
                                             else if (row.Cells[2].Value.ToString() != "")
                                             {
@@ -900,8 +905,6 @@ namespace arquitectSoft.View
                                                 int pos2 = acabadopuertas.IndexOf(")");
                                                 int cantacab = pos2 - pos1;
                                                 acabadopuertas = acabadopuertas.Substring(pos1+1, cantacab- 1);
-
-
                                             }
                                                 
                                         }
