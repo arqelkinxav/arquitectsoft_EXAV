@@ -122,13 +122,13 @@
   </metadata>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="TMSItem_componente.Size" type="System.Drawing.Size, System.Drawing">
-    <value>164, 22</value>
+    <value>180, 22</value>
   </data>
   <data name="TMSItem_componente.Text" xml:space="preserve">
     <value>Componente</value>
   </data>
   <data name="TMSItem_subComponente.Size" type="System.Drawing.Size, System.Drawing">
-    <value>164, 22</value>
+    <value>180, 22</value>
   </data>
   <data name="TMSItem_subComponente.Text" xml:space="preserve">
     <value>SubComponente</value>
@@ -162,7 +162,7 @@
     <value>Mecanizados</value>
   </data>
   <data name="TMSItem_configuracion.Size" type="System.Drawing.Size, System.Drawing">
-    <value>164, 22</value>
+    <value>180, 22</value>
   </data>
   <data name="TMSItem_configuracion.Text" xml:space="preserve">
     <value>Configuracion</value>
@@ -181,10 +181,16 @@
     <value>&amp;Administracion</value>
   </data>
   <data name="calcularCantidadesToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>163, 22</value>
+    <value>189, 22</value>
   </data>
   <data name="calcularCantidadesToolStripMenuItem.Text" xml:space="preserve">
-    <value>Analisis de Datos</value>
+    <value>Analisis de Mamparas</value>
+  </data>
+  <data name="analisisDePuertasToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>189, 22</value>
+  </data>
+  <data name="analisisDePuertasToolStripMenuItem.Text" xml:space="preserve">
+    <value>Analisis de Puertas</value>
   </data>
   <data name="TMSItem_procesos.ShortcutKeys" type="System.Windows.Forms.Keys, System.Windows.Forms">
     <value>Alt+P</value>
@@ -317,7 +323,7 @@
         m10DywfODjoMXrjleuvyba/b1++svDMwFDJ0dzhyeOQu++7kvaR7L+9n3J9/sOkh+mHhI6lH5Y+VHtf9
         qPdj64jlyJlR19G+J0FPHoyxxp7/lP7Th/H8p+Sn5ROqE42TZpOnp9ynbj5b/Wz8eerz+emCn6V/rn6h
         ++K7Xxx/6ZtZNTP+kv9y4dfiV/Kvjrxe9rp71n/28ZvkN/NzhW/l3x59x3jX+z7s/cR85gfsh4qPeh+7
-        Pnl/eriQvLDwG/eE8/s6uL5TAAAACXBIWXMAAC4jAAAuIwF4pT92AAAemElEQVR4Xu2dB7gkVZmG6Qld
+        Pnl/eriQvLDwG/eE8/s6uL5TAAAACXBIWXMAAC4iAAAuIgGq4t2SAAAemElEQVR4Xu2dB7gkVZmG6Qld
         1V09BBkYSYKBIIiCAoKCCOyKgBGzLo8IoogYFkWUFRWEVRiCGHHBhLiIrKAERWVFEQQEXESXEYWZkSAw
         gDBIhgHfr2/19XTdv2+HW31vd9d/n+e93V0n1An/d1KdqlopjmtfqVRqFzlO0Yjj5Mcr8eU38KTjFJD7
         XQBOkXEBOIXGBeAUGheAU2hcAE6hcQE4hcYF4BQaF4BTaFwATqFxATiFxgXgFBoXgFNoXABOoXEBOIXG
@@ -3081,6 +3087,12 @@
     <value>calcularCantidadesToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;calcularCantidadesToolStripMenuItem.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;analisisDePuertasToolStripMenuItem.Name" xml:space="preserve">
+    <value>analisisDePuertasToolStripMenuItem</value>
+  </data>
+  <data name="&gt;&gt;analisisDePuertasToolStripMenuItem.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;salirToolStripMenuItem.Name" xml:space="preserve">

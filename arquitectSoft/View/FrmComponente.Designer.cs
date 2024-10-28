@@ -50,13 +50,9 @@ namespace arquitectSoft.View
             this.lblEtiquetaCodigo = new System.Windows.Forms.Label();
             this.lbletiquetaDescripcion = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.BtnBorrar = new arquitectSoft.Generals.RJButton();
-            this.BtnAgregar = new arquitectSoft.Generals.RJButton();
-            this.elipseControl1 = new arquitectSoft.Generals.ElipseControl();
-            this.EliCtrlButtons = new arquitectSoft.Generals.ElipseControl();
-            this.elipseControl2 = new arquitectSoft.Generals.ElipseControl();
-            this.elipseControl3 = new arquitectSoft.Generals.ElipseControl();
-            this.elipseComponent1 = new arquitectSoft.Generals.ElipseComponent();
+            this.BtnSalir = new System.Windows.Forms.Button();
+            this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
+            this.bindingSource2 = new System.Windows.Forms.BindingSource(this.components);
             this.BtnDuplicar = new arquitectSoft.Generals.RJButton();
             this.BtnCancelar = new arquitectSoft.Generals.RJButton();
             this.BtnBuscar = new arquitectSoft.Generals.RJButton();
@@ -64,6 +60,9 @@ namespace arquitectSoft.View
             this.BtnEditar = new arquitectSoft.Generals.RJButton();
             this.BtnGuardar = new arquitectSoft.Generals.RJButton();
             this.BtnNuevo = new arquitectSoft.Generals.RJButton();
+            this.BtnBorrar = new arquitectSoft.Generals.RJButton();
+            this.BtnAgregar = new arquitectSoft.Generals.RJButton();
+            this.elipseControl1 = new arquitectSoft.Generals.ElipseControl();
             this.codigoDataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.descripcionDataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cxdefectoDataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -84,17 +83,18 @@ namespace arquitectSoft.View
             this.elevadoDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cortesDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.subComponentBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.BtnSalir = new System.Windows.Forms.Button();
-            this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
-            this.bindingSource2 = new System.Windows.Forms.BindingSource(this.components);
+            this.EliCtrlButtons = new arquitectSoft.Generals.ElipseControl();
+            this.elipseControl2 = new arquitectSoft.Generals.ElipseControl();
+            this.elipseControl3 = new arquitectSoft.Generals.ElipseControl();
+            this.elipseComponent1 = new arquitectSoft.Generals.ElipseComponent();
             ((System.ComponentModel.ISupportInitialize)(this.GridViewComponente)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.arquitectdbDataSet)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.unidadescalculadasBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.GridViewComponenteEsp)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.subComponentBindingSource1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.subComponentBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.subComponentBindingSource1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.subComponentBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // ImgLista
@@ -200,6 +200,7 @@ namespace arquitectSoft.View
             this.GridViewComponente.Size = new System.Drawing.Size(985, 300);
             this.GridViewComponente.TabIndex = 23;
             this.GridViewComponente.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.GridViewComponente_CellContentDoubleClick);
+            this.GridViewComponente.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.GridViewComponente_CellMouseDown);
             this.GridViewComponente.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.GridViewComponente_DataError);
             // 
             // arquitectdbDataSet
@@ -337,7 +338,7 @@ namespace arquitectSoft.View
             this.lblEtiquetaCodigo.ForeColor = System.Drawing.Color.Black;
             this.lblEtiquetaCodigo.Location = new System.Drawing.Point(-1, 90);
             this.lblEtiquetaCodigo.Name = "lblEtiquetaCodigo";
-            this.lblEtiquetaCodigo.Size = new System.Drawing.Size(55, 16);
+            this.lblEtiquetaCodigo.Size = new System.Drawing.Size(54, 16);
             this.lblEtiquetaCodigo.TabIndex = 97;
             this.lblEtiquetaCodigo.Text = "Codigo:";
             // 
@@ -349,7 +350,7 @@ namespace arquitectSoft.View
             this.lbletiquetaDescripcion.ForeColor = System.Drawing.Color.Black;
             this.lbletiquetaDescripcion.Location = new System.Drawing.Point(211, 90);
             this.lbletiquetaDescripcion.Name = "lbletiquetaDescripcion";
-            this.lbletiquetaDescripcion.Size = new System.Drawing.Size(83, 16);
+            this.lbletiquetaDescripcion.Size = new System.Drawing.Size(82, 16);
             this.lbletiquetaDescripcion.TabIndex = 98;
             this.lbletiquetaDescripcion.Text = "Descripcion:";
             // 
@@ -361,95 +362,30 @@ namespace arquitectSoft.View
             this.label2.ForeColor = System.Drawing.Color.Black;
             this.label2.Location = new System.Drawing.Point(671, 88);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(67, 16);
+            this.label2.Size = new System.Drawing.Size(66, 16);
             this.label2.TabIndex = 99;
             this.label2.Text = "Acabado:";
             // 
-            // BtnBorrar
+            // BtnSalir
             // 
-            this.BtnBorrar.BackColor = System.Drawing.SystemColors.Control;
-            this.BtnBorrar.BackgroundColor = System.Drawing.SystemColors.Control;
-            this.BtnBorrar.BorderColor = System.Drawing.Color.Black;
-            this.BtnBorrar.BorderRadius = 10;
-            this.BtnBorrar.BorderSize = 0;
-            this.BtnBorrar.FlatAppearance.BorderSize = 0;
-            this.BtnBorrar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnBorrar.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.BtnBorrar.ForeColor = System.Drawing.Color.DimGray;
-            this.BtnBorrar.Location = new System.Drawing.Point(109, 482);
-            this.BtnBorrar.Name = "BtnBorrar";
-            this.BtnBorrar.Size = new System.Drawing.Size(91, 22);
-            this.BtnBorrar.TabIndex = 53;
-            this.BtnBorrar.Text = "Borrar";
-            this.BtnBorrar.TextColor = System.Drawing.Color.DimGray;
-            this.BtnBorrar.UseVisualStyleBackColor = false;
-            this.BtnBorrar.Click += new System.EventHandler(this.BtnBorrar_Click);
-            // 
-            // BtnAgregar
-            // 
-            this.BtnAgregar.BackColor = System.Drawing.Color.DimGray;
-            this.BtnAgregar.BackgroundColor = System.Drawing.Color.DimGray;
-            this.BtnAgregar.BorderColor = System.Drawing.Color.Black;
-            this.BtnAgregar.BorderRadius = 10;
-            this.BtnAgregar.BorderSize = 0;
-            this.BtnAgregar.FlatAppearance.BorderSize = 0;
-            this.BtnAgregar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnAgregar.ForeColor = System.Drawing.Color.White;
-            this.BtnAgregar.Location = new System.Drawing.Point(12, 482);
-            this.BtnAgregar.Name = "BtnAgregar";
-            this.BtnAgregar.Size = new System.Drawing.Size(91, 22);
-            this.BtnAgregar.TabIndex = 52;
-            this.BtnAgregar.Text = "Agregar";
-            this.BtnAgregar.TextColor = System.Drawing.Color.White;
-            this.BtnAgregar.UseCompatibleTextRendering = true;
-            this.BtnAgregar.UseVisualStyleBackColor = false;
-            this.BtnAgregar.Click += new System.EventHandler(this.BtnAgregar_Click);
-            // 
-            // elipseControl1
-            // 
-            this.elipseControl1.BackColor = System.Drawing.Color.Black;
-            this.elipseControl1.CornerRadius = 15;
-            this.elipseControl1.Location = new System.Drawing.Point(23, 50);
-            this.elipseControl1.Name = "elipseControl1";
-            this.elipseControl1.Size = new System.Drawing.Size(935, 32);
-            this.elipseControl1.TabIndex = 48;
-            this.elipseControl1.Text = "elipseControl1";
-            // 
-            // EliCtrlButtons
-            // 
-            this.EliCtrlButtons.BackColor = System.Drawing.Color.Black;
-            this.EliCtrlButtons.CornerRadius = 15;
-            this.EliCtrlButtons.Location = new System.Drawing.Point(0, -1);
-            this.EliCtrlButtons.Name = "EliCtrlButtons";
-            this.EliCtrlButtons.Size = new System.Drawing.Size(986, 61);
-            this.EliCtrlButtons.TabIndex = 47;
-            this.EliCtrlButtons.Text = "elipseControl1";
-            this.EliCtrlButtons.MouseDown += new System.Windows.Forms.MouseEventHandler(this.EliCtrlButtons_MouseDown);
-            // 
-            // elipseControl2
-            // 
-            this.elipseControl2.BackColor = System.Drawing.Color.White;
-            this.elipseControl2.CornerRadius = 15;
-            this.elipseControl2.Location = new System.Drawing.Point(-1, 67);
-            this.elipseControl2.Name = "elipseControl2";
-            this.elipseControl2.Size = new System.Drawing.Size(987, 70);
-            this.elipseControl2.TabIndex = 50;
-            this.elipseControl2.Text = "elipseControl1";
-            // 
-            // elipseControl3
-            // 
-            this.elipseControl3.BackColor = System.Drawing.Color.Black;
-            this.elipseControl3.CornerRadius = 15;
-            this.elipseControl3.Location = new System.Drawing.Point(-1, 465);
-            this.elipseControl3.Name = "elipseControl3";
-            this.elipseControl3.Size = new System.Drawing.Size(987, 61);
-            this.elipseControl3.TabIndex = 54;
-            this.elipseControl3.Text = "elipseControl1";
-            // 
-            // elipseComponent1
-            // 
-            this.elipseComponent1.CornerRadius = 15;
-            this.elipseComponent1.TargetControl = this;
+            this.BtnSalir.BackColor = System.Drawing.Color.Black;
+            this.BtnSalir.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.BtnSalir.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.BtnSalir.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnSalir.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.BtnSalir.ForeColor = System.Drawing.Color.White;
+            this.BtnSalir.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.BtnSalir.ImageIndex = 51;
+            this.BtnSalir.ImageList = this.ImgLista;
+            this.BtnSalir.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.BtnSalir.Location = new System.Drawing.Point(902, 14);
+            this.BtnSalir.Name = "BtnSalir";
+            this.BtnSalir.Size = new System.Drawing.Size(72, 35);
+            this.BtnSalir.TabIndex = 17;
+            this.BtnSalir.Text = "Salir";
+            this.BtnSalir.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
+            this.BtnSalir.UseVisualStyleBackColor = false;
+            this.BtnSalir.Click += new System.EventHandler(this.BtnSalir_Click);
             // 
             // BtnDuplicar
             // 
@@ -591,6 +527,56 @@ namespace arquitectSoft.View
             this.BtnNuevo.UseVisualStyleBackColor = false;
             this.BtnNuevo.Click += new System.EventHandler(this.BtnNuevo_Click);
             // 
+            // BtnBorrar
+            // 
+            this.BtnBorrar.BackColor = System.Drawing.SystemColors.Control;
+            this.BtnBorrar.BackgroundColor = System.Drawing.SystemColors.Control;
+            this.BtnBorrar.BorderColor = System.Drawing.Color.Black;
+            this.BtnBorrar.BorderRadius = 10;
+            this.BtnBorrar.BorderSize = 0;
+            this.BtnBorrar.FlatAppearance.BorderSize = 0;
+            this.BtnBorrar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnBorrar.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.BtnBorrar.ForeColor = System.Drawing.Color.DimGray;
+            this.BtnBorrar.Location = new System.Drawing.Point(109, 482);
+            this.BtnBorrar.Name = "BtnBorrar";
+            this.BtnBorrar.Size = new System.Drawing.Size(91, 22);
+            this.BtnBorrar.TabIndex = 53;
+            this.BtnBorrar.Text = "Borrar";
+            this.BtnBorrar.TextColor = System.Drawing.Color.DimGray;
+            this.BtnBorrar.UseVisualStyleBackColor = false;
+            this.BtnBorrar.Click += new System.EventHandler(this.BtnBorrar_Click);
+            // 
+            // BtnAgregar
+            // 
+            this.BtnAgregar.BackColor = System.Drawing.Color.DimGray;
+            this.BtnAgregar.BackgroundColor = System.Drawing.Color.DimGray;
+            this.BtnAgregar.BorderColor = System.Drawing.Color.Black;
+            this.BtnAgregar.BorderRadius = 10;
+            this.BtnAgregar.BorderSize = 0;
+            this.BtnAgregar.FlatAppearance.BorderSize = 0;
+            this.BtnAgregar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnAgregar.ForeColor = System.Drawing.Color.White;
+            this.BtnAgregar.Location = new System.Drawing.Point(12, 482);
+            this.BtnAgregar.Name = "BtnAgregar";
+            this.BtnAgregar.Size = new System.Drawing.Size(91, 22);
+            this.BtnAgregar.TabIndex = 52;
+            this.BtnAgregar.Text = "Agregar";
+            this.BtnAgregar.TextColor = System.Drawing.Color.White;
+            this.BtnAgregar.UseCompatibleTextRendering = true;
+            this.BtnAgregar.UseVisualStyleBackColor = false;
+            this.BtnAgregar.Click += new System.EventHandler(this.BtnAgregar_Click);
+            // 
+            // elipseControl1
+            // 
+            this.elipseControl1.BackColor = System.Drawing.Color.Black;
+            this.elipseControl1.CornerRadius = 15;
+            this.elipseControl1.Location = new System.Drawing.Point(23, 50);
+            this.elipseControl1.Name = "elipseControl1";
+            this.elipseControl1.Size = new System.Drawing.Size(935, 32);
+            this.elipseControl1.TabIndex = 48;
+            this.elipseControl1.Text = "elipseControl1";
+            // 
             // codigoDataGridViewTextBoxColumn1
             // 
             this.codigoDataGridViewTextBoxColumn1.DataPropertyName = "Codigo";
@@ -725,26 +711,41 @@ namespace arquitectSoft.View
             // 
             this.subComponentBindingSource.DataSource = typeof(arquitectSoft.Class.Sub_Component);
             // 
-            // BtnSalir
+            // EliCtrlButtons
             // 
-            this.BtnSalir.BackColor = System.Drawing.Color.Black;
-            this.BtnSalir.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.BtnSalir.FlatAppearance.BorderColor = System.Drawing.Color.Black;
-            this.BtnSalir.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnSalir.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.BtnSalir.ForeColor = System.Drawing.Color.White;
-            this.BtnSalir.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.BtnSalir.ImageIndex = 51;
-            this.BtnSalir.ImageList = this.ImgLista;
-            this.BtnSalir.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.BtnSalir.Location = new System.Drawing.Point(902, 14);
-            this.BtnSalir.Name = "BtnSalir";
-            this.BtnSalir.Size = new System.Drawing.Size(72, 35);
-            this.BtnSalir.TabIndex = 17;
-            this.BtnSalir.Text = "Salir";
-            this.BtnSalir.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
-            this.BtnSalir.UseVisualStyleBackColor = false;
-            this.BtnSalir.Click += new System.EventHandler(this.BtnSalir_Click);
+            this.EliCtrlButtons.BackColor = System.Drawing.Color.Black;
+            this.EliCtrlButtons.CornerRadius = 15;
+            this.EliCtrlButtons.Location = new System.Drawing.Point(0, -1);
+            this.EliCtrlButtons.Name = "EliCtrlButtons";
+            this.EliCtrlButtons.Size = new System.Drawing.Size(986, 61);
+            this.EliCtrlButtons.TabIndex = 47;
+            this.EliCtrlButtons.Text = "elipseControl1";
+            this.EliCtrlButtons.MouseDown += new System.Windows.Forms.MouseEventHandler(this.EliCtrlButtons_MouseDown);
+            // 
+            // elipseControl2
+            // 
+            this.elipseControl2.BackColor = System.Drawing.Color.White;
+            this.elipseControl2.CornerRadius = 15;
+            this.elipseControl2.Location = new System.Drawing.Point(-1, 67);
+            this.elipseControl2.Name = "elipseControl2";
+            this.elipseControl2.Size = new System.Drawing.Size(987, 70);
+            this.elipseControl2.TabIndex = 50;
+            this.elipseControl2.Text = "elipseControl1";
+            // 
+            // elipseControl3
+            // 
+            this.elipseControl3.BackColor = System.Drawing.Color.Black;
+            this.elipseControl3.CornerRadius = 15;
+            this.elipseControl3.Location = new System.Drawing.Point(-1, 465);
+            this.elipseControl3.Name = "elipseControl3";
+            this.elipseControl3.Size = new System.Drawing.Size(987, 61);
+            this.elipseControl3.TabIndex = 54;
+            this.elipseControl3.Text = "elipseControl1";
+            // 
+            // elipseComponent1
+            // 
+            this.elipseComponent1.CornerRadius = 15;
+            this.elipseComponent1.TargetControl = this;
             // 
             // FrmComponente
             // 
@@ -789,10 +790,10 @@ namespace arquitectSoft.View
             ((System.ComponentModel.ISupportInitialize)(this.arquitectdbDataSet)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.unidadescalculadasBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.GridViewComponenteEsp)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.subComponentBindingSource1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.subComponentBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.subComponentBindingSource1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.subComponentBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

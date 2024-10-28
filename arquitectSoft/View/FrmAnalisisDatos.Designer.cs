@@ -43,6 +43,8 @@ namespace arquitectSoft.View
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle17 = new System.Windows.Forms.DataGridViewCellStyle();
@@ -51,8 +53,6 @@ namespace arquitectSoft.View
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle20 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle21 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle22 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
             this.ImgLista = new System.Windows.Forms.ImageList(this.components);
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.tabMamparas = new System.Windows.Forms.TabPage();
@@ -70,6 +70,7 @@ namespace arquitectSoft.View
             this.tabPerfilMetallico = new System.Windows.Forms.TabPage();
             this.dataGridViewPMCalculate = new System.Windows.Forms.DataGridView();
             this.dataGridViewPM = new System.Windows.Forms.DataGridView();
+            this.dataGridViewCeroAlbaran = new System.Windows.Forms.DataGridView();
             this.tabPrincipal = new System.Windows.Forms.TabControl();
             this.tabPerfilMetallicoHerraje = new System.Windows.Forms.TabPage();
             this.dataGridViewPMHerrajeCalculate = new System.Windows.Forms.DataGridView();
@@ -97,7 +98,6 @@ namespace arquitectSoft.View
             this.EliCtrlButtons = new arquitectSoft.Generals.ElipseControl();
             this.elipseControl2 = new arquitectSoft.Generals.ElipseControl();
             this.elipseComponent1 = new arquitectSoft.Generals.ElipseComponent();
-            this.dataGridViewCeroAlbaran = new System.Windows.Forms.DataGridView();
             this.tabMamparas.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewM)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMCalculate)).BeginInit();
@@ -113,6 +113,7 @@ namespace arquitectSoft.View
             this.tabPerfilMetallico.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewPMCalculate)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewPM)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewCeroAlbaran)).BeginInit();
             this.tabPrincipal.SuspendLayout();
             this.tabPerfilMetallicoHerraje.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewPMHerrajeCalculate)).BeginInit();
@@ -125,7 +126,6 @@ namespace arquitectSoft.View
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewP2Calculate)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NUpDownDesperdicio)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NUpDownMedidaBase)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewCeroAlbaran)).BeginInit();
             this.SuspendLayout();
             // 
             // ImgLista
@@ -457,6 +457,30 @@ namespace arquitectSoft.View
             this.dataGridViewPM.Size = new System.Drawing.Size(1185, 192);
             this.dataGridViewPM.TabIndex = 0;
             // 
+            // dataGridViewCeroAlbaran
+            // 
+            this.dataGridViewCeroAlbaran.AllowUserToAddRows = false;
+            this.dataGridViewCeroAlbaran.AllowUserToDeleteRows = false;
+            this.dataGridViewCeroAlbaran.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            dataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle13.BackColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle13.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle13.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle13.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle13.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle13.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewCeroAlbaran.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle13;
+            this.dataGridViewCeroAlbaran.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewCeroAlbaran.EnableHeadersVisualStyles = false;
+            this.dataGridViewCeroAlbaran.Location = new System.Drawing.Point(1136, 367);
+            this.dataGridViewCeroAlbaran.Name = "dataGridViewCeroAlbaran";
+            this.dataGridViewCeroAlbaran.ReadOnly = true;
+            dataGridViewCellStyle14.BackColor = System.Drawing.Color.White;
+            this.dataGridViewCeroAlbaran.RowsDefaultCellStyle = dataGridViewCellStyle14;
+            this.dataGridViewCeroAlbaran.Size = new System.Drawing.Size(48, 41);
+            this.dataGridViewCeroAlbaran.TabIndex = 4;
+            this.dataGridViewCeroAlbaran.Visible = false;
+            // 
             // tabPrincipal
             // 
             this.tabPrincipal.Controls.Add(this.tabPerfilMetallico);
@@ -666,9 +690,9 @@ namespace arquitectSoft.View
             this.label1.ImeMode = System.Windows.Forms.ImeMode.NoControl;
             this.label1.Location = new System.Drawing.Point(41, 59);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(153, 24);
+            this.label1.Size = new System.Drawing.Size(194, 24);
             this.label1.TabIndex = 62;
-            this.label1.Text = "Analisis de Datos";
+            this.label1.Text = "Analisis de Mamparas";
             // 
             // label2
             // 
@@ -851,30 +875,6 @@ namespace arquitectSoft.View
             this.elipseComponent1.CornerRadius = 15;
             this.elipseComponent1.TargetControl = this;
             // 
-            // dataGridViewCeroAlbaran
-            // 
-            this.dataGridViewCeroAlbaran.AllowUserToAddRows = false;
-            this.dataGridViewCeroAlbaran.AllowUserToDeleteRows = false;
-            this.dataGridViewCeroAlbaran.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            dataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle13.BackColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle13.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle13.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle13.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle13.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle13.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridViewCeroAlbaran.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle13;
-            this.dataGridViewCeroAlbaran.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewCeroAlbaran.EnableHeadersVisualStyles = false;
-            this.dataGridViewCeroAlbaran.Location = new System.Drawing.Point(1140, 367);
-            this.dataGridViewCeroAlbaran.Name = "dataGridViewCeroAlbaran";
-            this.dataGridViewCeroAlbaran.ReadOnly = true;
-            dataGridViewCellStyle14.BackColor = System.Drawing.Color.White;
-            this.dataGridViewCeroAlbaran.RowsDefaultCellStyle = dataGridViewCellStyle14;
-            this.dataGridViewCeroAlbaran.Size = new System.Drawing.Size(48, 41);
-            this.dataGridViewCeroAlbaran.TabIndex = 4;
-            this.dataGridViewCeroAlbaran.Visible = false;
-            // 
             // FrmAnalisisDatos
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -917,6 +917,7 @@ namespace arquitectSoft.View
             this.tabPerfilMetallico.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewPMCalculate)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewPM)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewCeroAlbaran)).EndInit();
             this.tabPrincipal.ResumeLayout(false);
             this.tabPerfilMetallicoHerraje.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewPMHerrajeCalculate)).EndInit();
@@ -929,7 +930,6 @@ namespace arquitectSoft.View
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewP2Calculate)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NUpDownDesperdicio)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NUpDownMedidaBase)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewCeroAlbaran)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

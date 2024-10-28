@@ -223,7 +223,7 @@ namespace arquitectSoft.Dto
         }
 
 
-        public DataTable CalculateTab(int index, DataTable dtmodel, DataTable dtmodelPuerta, bool VidrioPanel, Int32 MedidaBase, decimal Desperdicio, bool swmergePM)
+        public DataTable CalculateTab(int index, DataTable dtmodel, DataTable dtmodelPuerta, bool VidrioPanel, Int32 MedidaBase, decimal Desperdicio, bool swmergePM,int pSwAP)
         {
             DataTable dt = new DataTable();
             switch (index)
@@ -265,7 +265,7 @@ namespace arquitectSoft.Dto
                     dt = dtModelVidriosPaneles;
                     break;
                 case 3:                    
-                    dt = getComponentePuertas(dtmodel, getComponentePuertasAgrupar(dtmodel, 0),0);
+                    dt = getComponentePuertas(dtmodel, getComponentePuertasAgrupar(dtmodel, 0, pSwAP),0, pSwAP);
 
                     break;
                 case 5:
@@ -291,7 +291,7 @@ namespace arquitectSoft.Dto
                     break;
                 case 7:
                     
-                    dt = getComponentePuertas(dtmodel, getComponentePuertasAgrupar(dtmodel, 1),1);
+                    dt = getComponentePuertas(dtmodel, getComponentePuertasAgrupar(dtmodel, 1, pSwAP),1, pSwAP);
                     break;
                 
             }
@@ -304,7 +304,7 @@ namespace arquitectSoft.Dto
 
         #region Puertas
 
-        public DataTable getComponentePuertas(DataTable dtmodelDoor, DataTable dtmodelDoorGroup, int SwHerraje)
+        public DataTable getComponentePuertas(DataTable dtmodelDoor, DataTable dtmodelDoorGroup, int SwHerraje, int pSwAP)
         {
             DataTable dtresulPuerta = new DataTable();
             List<string> listColumnsCompPuerta = setCreateColumns(SwHerraje == 0 ? 9 : 11);
@@ -317,7 +317,7 @@ namespace arquitectSoft.Dto
             {
                 Generals.Conexion con = new Generals.Conexion();
                 string failH = "";
-                string[] paramH = { "pSwHerraje|" + SwHerraje };
+                string[] paramH = { "pSwHerraje|" + SwHerraje, "pSwAP|" + pSwAP };
                 con.Open(out failH);
                 DataTable dtResult = con.ExecuteDataSetSPparam(Generals.Constantes.QUERY_GET_CALCULATE_PUERTAS_AGRUPAR, out failH, paramH);
                 con.Close();
@@ -375,7 +375,7 @@ namespace arquitectSoft.Dto
                     
 
                         Nomenclatura = rowM["Nomenclatura"].ToString().Replace("\"", "").Trim().Replace("P", "Puerta ");
-                        Nomenclatura2 = rowM["Nomenclatura"].ToString().Replace("\"", "").Trim().Replace("P-", "");
+                        Nomenclatura2 = rowM["Nomenclatura"].ToString().Replace("\"", "").Trim();
 
                         if (dtresulPuerta.Rows.Count > 0)
                         {
@@ -384,8 +384,8 @@ namespace arquitectSoft.Dto
                                 break;
                             }
                         }
-                    
 
+                        
                         Generals.Conexion con = new Generals.Conexion();
                         string fail = "";
                         string[] paramGeneral = { "pCodigo|" + Codigo };
@@ -399,7 +399,7 @@ namespace arquitectSoft.Dto
                             {
                                 string descripcionGeneral = dtResultG.Rows[0]["Descripcion"].ToString() + "Altura: (" + altura + ") Anchura: (" + anchura + ")";
 
-                                string[] param = { "pSwHerraje|" + SwHerraje };
+                                string[] param = { "pSwHerraje|" + SwHerraje, "pSwAP|" + pSwAP };
                                 con.Open(out fail);
                                 DataTable dtResult = con.ExecuteDataSetSPparam(Generals.Constantes.QUERY_GET_CALCULATE_PUERTAS_AGRUPAR, out fail, param);
                                 con.Close();
@@ -450,7 +450,7 @@ namespace arquitectSoft.Dto
             return dtresulPuerta;
         }
 
-        public DataTable getComponentePuertasAgrupar(DataTable dtmodelDoor, int SwHerraje)
+        public DataTable getComponentePuertasAgrupar(DataTable dtmodelDoor, int SwHerraje, int pSwAP)
         {
             DataTable dtresulPuerta = new DataTable();
             DataTable dtresulPuertaFin = new DataTable();
@@ -473,7 +473,7 @@ namespace arquitectSoft.Dto
                    Codigo = t.g.First().Field<string>("Codigo").ToString().Replace("\"", "").Trim() + t.g.First().Field<string>("Apertura de Puerta").ToString().Replace("\"", "").Trim() + "-" + t.g.First().Field<string>("Acabado Perfileria Puertas").ToString().Replace("\"", "").Trim().Split('-')[0].Trim(),
                    Altura = t.g.First().Field<string>("Altura").ToString().Replace("\"", "").Trim() != "" ? Int32.Parse(t.g.First().Field<string>("Altura").ToString().Replace("\"", "").Trim()) : 0,
                    Achura = t.g.First().Field<string>("Anchura").ToString().Replace("\"", "").Trim() != "" ? Int32.Parse(t.g.First().Field<string>("Anchura").ToString().Replace("\"", "").Trim()) : 0,
-                   Reference = $"{string.Join(",", t.g.Select(z => z.Field<string>("Nomenclatura").ToString().Replace("\"", "").Trim().Replace("P-", "")))}",
+                   Reference = $"{string.Join(",", t.g.Select(z => z.Field<string>("Nomenclatura").ToString().Replace("\"", "").Trim()))}", //.Replace("P-", "")
                }).ToList();
 
             dtresulPuerta.Columns.Add("Codigo");
@@ -514,7 +514,7 @@ namespace arquitectSoft.Dto
                         {
                             string descripcionGeneral = dtResultG.Rows[0]["Descripcion"].ToString() + "Altura: (" + altura + ") Anchura: (" + anchura + ")";
 
-                            string[] param = { "pCodigo|" + Codigo, "plogitud|" + altura, "pAnchura|" + anchura, "pPuerta|" + Nomenclatura, "pSwHerraje|" + SwHerraje };
+                            string[] param = { "pCodigo|" + Codigo, "plogitud|" + altura, "pAnchura|" + anchura, "pPuerta|" + Nomenclatura, "pSwHerraje|" + SwHerraje, "pSwAP|" + pSwAP };
                             con.Open(out fail);
                             //con.ExecuteNonQuery(Generals.Constantes.QUERY_GET_CALCULATE_PUERTAS, out fail, param, 1);
                             DataTable dtResult = con.ExecuteDataSetSPparam(Generals.Constantes.QUERY_GET_CALCULATE_PUERTAS, out fail, param);

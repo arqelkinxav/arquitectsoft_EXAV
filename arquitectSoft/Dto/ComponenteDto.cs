@@ -93,7 +93,7 @@ namespace arquitectSoft.Dto
 
                 string[] param = { idComponente.ToString(), row.IdSubcomponente.ToString(), row.UnidadCalculada
                         ,row.Cxdefecto.ToString(),row.CAdicional.ToString(),adecre.ToString(),row.Elevado.ToString()
-                        ,row.Cortes.ToString(),extra.ToString(),row.Medida.ToString(),cantAnch,adecreAnch,row.Mecanizado.ToString() };
+                        ,row.Cortes.ToString(),extra.ToString(),row.Medida.ToString(),cantAnch,adecreAnch,row.Mecanizado.ToString(),row.Asignacion_puertas.ToString() };
 
                 int var = con.ExecuteNonQuery(Generals.Constantes.QUERY_INSERT_COMPONENTE_DETALLE, out fail, param, 0);
             }

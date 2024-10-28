@@ -33,6 +33,7 @@ namespace arquitectSoft.View
 
         public string Opc;
         public string condicionAcabado = "";
+        private int selectedRowIndex = -1;
 
         private void FrmComponente_Load(object sender, EventArgs e)
         {
@@ -45,8 +46,6 @@ namespace arquitectSoft.View
             BtnCheck.Enabled = false;
             BtnAgregar.Enabled = false;
             BtnBorrar.Enabled = false;
-
-
 
 
             initialize_datagrid();
@@ -313,6 +312,7 @@ namespace arquitectSoft.View
             GridViewComponente.Columns.Add(DGV_Handler.CreateCheckBox("Extra", "Extra", "Extra"));
             GridViewComponente.Columns.Add(DGV_Handler.CreateSeleccionMedidaComboBox());
             GridViewComponente.Columns.Add(DGV_Handler.CreateMecanizadoComboBox());
+            GridViewComponente.Columns.Add(DGV_Handler.CreateTextBox("Asignacion_puertas", "Asignacion_puertas", "Asignacion_puertas", false));
 
 
             GridViewComponenteEsp.Columns.Add(DGV_Handler.CreateTextBox("IdSubcomponente", "Id", "IdSubcomponente", false));
@@ -329,6 +329,7 @@ namespace arquitectSoft.View
             GridViewComponente.Columns[2].ReadOnly = true;
             GridViewComponente.Columns[7].Visible = false; //Se reutiliza campo elevado para guardar data de anchura
             GridViewComponente.Columns[11].Visible = true; //Se reutiliza campo elevado para guardar data de anchura
+            GridViewComponente.Columns[12].Visible = false; //Se reutiliza campo elevado para guardar Asignacion Puertas
 
             GridViewComponenteEsp.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             GridViewComponenteEsp.Columns[0].ReadOnly = true;
@@ -337,6 +338,18 @@ namespace arquitectSoft.View
             //GridViewComponente.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             GridViewComponente.RowHeadersVisible = false;
             GridViewComponenteEsp.RowHeadersVisible = false;
+
+            ContextMenuStrip contextMenu = new ContextMenuStrip();
+            ToolStripMenuItem item1 = new ToolStripMenuItem("Asignacion Puertas");
+            //ToolStripMenuItem item2 = new ToolStripMenuItem("Opción 2");
+
+            item1.Click += Item1_AP_Click;
+
+            contextMenu.Items.Add(item1);
+
+            GridViewComponente.ContextMenuStrip = contextMenu;
+
+            GridViewComponente.CellMouseDown += GridViewComponente_CellMouseDown;
 
         }
         private void habilitarNuevo(string opcion)
@@ -429,10 +442,11 @@ namespace arquitectSoft.View
 
                     string Mecanizado = (row.Cells["Mecanizado"].Value != null) ? row.Cells["Mecanizado"].Value.ToString() : "0";
 
+                    string A_Puerta = (row.Cells["Asignacion_puertas"].Value != null) ? row.Cells["Asignacion_puertas"].Value.ToString() : "0";
 
                     if (unidadcalculada == "6") { medida = 0; }
 
-                    Sub_Component sub = new Sub_Component(codigo, descripcion, Cxdefecto, CAdicional, unidadcalculada, ADecremento, id, Elevado, Corte, Extra, medida, int.Parse(Mecanizado));
+                    Sub_Component sub = new Sub_Component(codigo, descripcion, Cxdefecto, CAdicional, unidadcalculada, ADecremento, id, Elevado, Corte, Extra, medida, int.Parse(Mecanizado), int.Parse(A_Puerta));
 
                     Sbarray[row.Index] = sub;
                 }
@@ -486,7 +500,7 @@ namespace arquitectSoft.View
                 int mecanizado = row["mecanizado"].ToString() != "" ? Int32.Parse(row["mecanizado"].ToString()) : 0;
                 bool adrecre = decre == 1 ? true : false;
                 bool extracomp = extra == 1 ? true : false;
-                bindingSource1.Add(new Sub_Component(row["Codigo"].ToString(), row["Descripcion"].ToString(), (int)row["Cantidad_Default"], (int)row["Cantidad_Adicional"], row["Id_Unidad_Calculada"].ToString(), adrecre, (int)row["Id_Subcomponente"], row["elevado"].ToString(), cort, extracomp, (int)row["Medida"], mecanizado));
+                bindingSource1.Add(new Sub_Component(row["Codigo"].ToString(), row["Descripcion"].ToString(), (int)row["Cantidad_Default"], (int)row["Cantidad_Adicional"], row["Id_Unidad_Calculada"].ToString(), adrecre, (int)row["Id_Subcomponente"], row["elevado"].ToString(), cort, extracomp, (int)row["Medida"], mecanizado, (int)row["Asignacion_puertas"]));
 
 
                 string valorinicial = condicionAcabado == "" ? "'" : ",'";
@@ -529,6 +543,11 @@ namespace arquitectSoft.View
                         DataGridViewComboBoxCell comboBoxCell = (DataGridViewComboBoxCell)(row.Cells[11]);
                         comboBoxCell.Value = Mecanizado;
                     }
+
+                    int A_Puerta = Int32.Parse(dt.Rows[row.Index]["Asignacion_puertas"].ToString());
+                    row.DefaultCellStyle.BackColor = A_Puerta > 0 ? Color.LightGreen : Color.White;
+
+
                 }
             }
 
@@ -634,7 +653,7 @@ namespace arquitectSoft.View
 
             if (bsc.ReturnItem0 != null && bsc.ReturnItem4 == "0")
             {
-                bindingSource1.Add(new Sub_Component(bsc.ReturnItem1, bsc.ReturnItem2, 1, 30, "", false, Int32.Parse(bsc.ReturnItem0), "", 0, false, 1,0));
+                bindingSource1.Add(new Sub_Component(bsc.ReturnItem1, bsc.ReturnItem2, 1, 30, "", false, Int32.Parse(bsc.ReturnItem0), "", 0, false, 1,0,0));
 
                 GridViewComponente.DataSource = bindingSource1;
 
@@ -702,5 +721,30 @@ namespace arquitectSoft.View
             
         
     }
-}
+
+        private void GridViewComponente_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right && e.RowIndex >= 0 && e.ColumnIndex >= 0)
+            {
+                // Seleccionar la celda
+                GridViewComponente.ClearSelection();
+                GridViewComponente.Rows[e.RowIndex].Cells[e.ColumnIndex].Selected = true;
+                selectedRowIndex = e.RowIndex;
+
+                // Mostrar el menú contextual
+                GridViewComponente.ContextMenuStrip.Show(Cursor.Position);
+            }
+        }
+
+        private void Item1_AP_Click(object sender, EventArgs e)
+        {
+            if (selectedRowIndex >= 0)
+            {
+                string value = GridViewComponente.Rows[selectedRowIndex].Cells[12].Value.ToString() == "1" ? "0" : "1"; // Obtener el valor de AP             
+                GridViewComponente.Rows[selectedRowIndex].Cells[12].Value = value;
+                GridViewComponente.Rows[selectedRowIndex].DefaultCellStyle.BackColor = value == "1" ? Color.LightGreen : Color.White;                
+            }
+        }
+
+    }
 }

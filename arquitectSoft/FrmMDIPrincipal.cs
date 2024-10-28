@@ -308,5 +308,13 @@ namespace arquitectSoft
             formMecanizado.StartPosition = FormStartPosition.CenterScreen;
             formMecanizado.Show();
         }
+
+        private void analisisDePuertasToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            View.FrmAnalisisDatos_Puertas formDataAnalitics = new View.FrmAnalisisDatos_Puertas();
+            formDataAnalitics.MdiParent = this;
+            formDataAnalitics.StartPosition = FormStartPosition.CenterScreen;
+            formDataAnalitics.Show();
+        }
     }
 }

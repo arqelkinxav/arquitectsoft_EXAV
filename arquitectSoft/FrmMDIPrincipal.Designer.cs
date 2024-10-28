@@ -41,6 +41,7 @@ namespace arquitectSoft
             this.mecanizadoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.TMSItem_procesos = new System.Windows.Forms.ToolStripMenuItem();
             this.calcularCantidadesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.analisisDePuertasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.salirToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.acercaDeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
@@ -154,7 +155,8 @@ namespace arquitectSoft
             // TMSItem_procesos
             // 
             this.TMSItem_procesos.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.calcularCantidadesToolStripMenuItem});
+            this.calcularCantidadesToolStripMenuItem,
+            this.analisisDePuertasToolStripMenuItem});
             this.TMSItem_procesos.ForeColor = System.Drawing.SystemColors.Control;
             this.TMSItem_procesos.Name = "TMSItem_procesos";
             resources.ApplyResources(this.TMSItem_procesos, "TMSItem_procesos");
@@ -170,6 +172,14 @@ namespace arquitectSoft
             this.calcularCantidadesToolStripMenuItem.Click += new System.EventHandler(this.calcularCantidadesToolStripMenuItem_Click);
             this.calcularCantidadesToolStripMenuItem.MouseEnter += new System.EventHandler(this.calcularCantidadesToolStripMenuItem_MouseEnter);
             this.calcularCantidadesToolStripMenuItem.MouseLeave += new System.EventHandler(this.calcularCantidadesToolStripMenuItem_MouseLeave);
+            // 
+            // analisisDePuertasToolStripMenuItem
+            // 
+            this.analisisDePuertasToolStripMenuItem.BackColor = System.Drawing.SystemColors.Desktop;
+            this.analisisDePuertasToolStripMenuItem.ForeColor = System.Drawing.SystemColors.Control;
+            this.analisisDePuertasToolStripMenuItem.Name = "analisisDePuertasToolStripMenuItem";
+            resources.ApplyResources(this.analisisDePuertasToolStripMenuItem, "analisisDePuertasToolStripMenuItem");
+            this.analisisDePuertasToolStripMenuItem.Click += new System.EventHandler(this.analisisDePuertasToolStripMenuItem_Click);
             // 
             // salirToolStripMenuItem
             // 
@@ -252,6 +262,7 @@ namespace arquitectSoft
         private System.Windows.Forms.ToolStripStatusLabel Mdi_nameConnect2;
         private System.Windows.Forms.ToolStripMenuItem mecanizadoToolStripMenuItem;
         private System.Windows.Forms.PictureBox pictureBoxMdiPrincipal;
+        private System.Windows.Forms.ToolStripMenuItem analisisDePuertasToolStripMenuItem;
     }
 }
 

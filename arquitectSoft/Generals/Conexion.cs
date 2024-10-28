@@ -13,9 +13,11 @@ namespace arquitectSoft.Generals
 
    
         MySqlConnection conn;
-        static string host = "10.11.0.254";
+        //static string host = "10.11.0.254";
+        static string host = "localhost";
         static string database = "arquitectdb";
-        static string userDB = "remote";
+        //static string userDB = "remote";
+        static string userDB = "root";
         static string password = "poseidon";
         public static string strProvider = "server=" + host + ";Database=" + database + ";User ID=" + userDB + ";Password=" + password;
 

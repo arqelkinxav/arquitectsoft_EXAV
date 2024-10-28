@@ -1,5 +1,4 @@
-﻿
-using ClosedXML.Excel;
+﻿using ClosedXML.Excel;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Drawing;
 using DocumentFormat.OpenXml.Spreadsheet;
@@ -20,7 +19,7 @@ using Control = System.Windows.Forms.Control;
 
 namespace arquitectSoft.View
 {
-    public partial class FrmAnalisisDatos : Form
+    public partial class FrmAnalisisDatos_Puertas : Form
     {
 
         [DllImport("user32.DLL", EntryPoint = "ReleaseCapture")]
@@ -37,11 +36,11 @@ namespace arquitectSoft.View
         DataTable dtPerfilR = new DataTable();
         DataTable dtPerfilOfVidrioPanel = new DataTable();
         DataTable dtPerfilOfTubos = new DataTable();
-        public FrmAnalisisDatos()
+        public FrmAnalisisDatos_Puertas()
         {
             InitializeComponent();
+            
         }
-
 
 
         private void BtnCargar_Click(object sender, EventArgs e)
@@ -106,13 +105,7 @@ namespace arquitectSoft.View
             bool resul = false;
 
             if (dataGridViewPMCalculate.RowCount> 0 ||
-                dataGridViewPMHerrajeCalculate.RowCount > 0 ||
-                dataGridViewVPCalculate.RowCount > 0 ||
-                dataGridViewPCalculate.RowCount > 0 ||
-                dataGridViewPHerrajeCalculate.RowCount > 0 ||
-                dataGridViewP2Calculate.RowCount > 0 ||
-                dataGridViewTMCalculate.RowCount > 0 ||
-                dataGridViewMCalculate.RowCount > 0)
+                dataGridViewPCalculate.RowCount > 0 )
             {
                 resul = true;
 
@@ -154,106 +147,10 @@ namespace arquitectSoft.View
 
                 dtPuertas = idDocumento == 3 ? dtResul : dtPuertas;
 
-                if (idDocumento == 4)
-                {
-                    if (wantedFiles != 4) { swmergePM = false; dtTubos = dtResul; }
-
-                    DataTable dtresulVP = new DataTable();
-                    dtPerfilOfTubos = dto.CalculateTab(1, dtResul, dtPuertas, true, medidabase, Desperdicio, swmergePM, 0);
-                    dtresulVP = dtPerfilOfTubos.Copy();
-                    dtresulVP.Merge(dtPerfil);
-
-                    dataGridViewPMCalculate.DataSource = dtresulVP;
-                    dataGridViewPMCalculate.Columns[0].Visible = false;
-                    dataGridViewPMCalculate.Columns[6].Visible = false;
-
-                    if (swmergePM)
-                    {
-                        DataTable dtresulPMHerraje = new DataTable();
-                        dtresulPMHerraje = dto.CalculateTab(8, dtResul, dtPuertas, true, medidabase, Desperdicio, swmergePM, 0);
-
-                        dataGridViewPMHerrajeCalculate.DataSource = dtresulPMHerraje;
-                        dataGridViewPMHerrajeCalculate.Columns[0].Visible = false;
-                    }
-
-                }
-
-                if (idDocumento == 2)
-                {
-                    if (wantedFiles != 2 && wantedFiles != 6) { swmergePM = false; dtVidrio = dtResul; }
-
-                    DataTable dtresulVP = new DataTable();
-                    dtPerfilOfVidrioPanel = dto.CalculateTab(1, dtResul, dtPuertas, true, medidabase, Desperdicio, swmergePM, 0);
-                    dtresulVP = dtPerfilOfVidrioPanel.Copy();
-                    dtresulVP.Merge(dtPerfil);
-
-                    dataGridViewPMCalculate.DataSource = dtresulVP;
-                    dataGridViewPMCalculate.Columns[0].Visible = false;
-                    dataGridViewPMCalculate.Columns[6].Visible = false;
-
-                    if (swmergePM)
-                    {
-                        DataTable dtresulPMHerraje = new DataTable();
-                        dtresulPMHerraje = dto.CalculateTab(8, dtResul, dtPuertas, true, medidabase, Desperdicio, wantedFiles == 6 ? false : true, 0);
-                        if (wantedFiles == 6)
-                            dtresulPMHerraje.Merge(dto.CalculateTab(8, dtTubos, dtPuertas, true, medidabase, Desperdicio, true, 0));
-
-
-                        dataGridViewPMHerrajeCalculate.DataSource = dtresulPMHerraje;
-                        dataGridViewPMHerrajeCalculate.Columns[0].Visible = false;
-                    }
-
-                }
-
-                if (idDocumento != 4)
-                {
-                    dtcalculate = dto.CalculateTab(idDocumento, dtResul, dtPuertas, perfilandvidrios, medidabase, Desperdicio, swmergePM, 0);
-                }
-               
-
-                if (idDocumento == 1)
-                {
-
-                    dtPerfil = dtcalculate;
-                    dtcalculate.Merge(dtPerfil);                   
-                    dtcalculate = dtPerfil;
-
-                    if (wantedFiles != 1) { swmergePM = false; }
-
-                    DataTable dtresulPMHerraje = new DataTable();
-                    dtresulPMHerraje = dto.CalculateTab(8, dtResul, dtPuertas, perfilandvidrios, medidabase, Desperdicio, swmergePM,0);
-
-                    if (wantedFiles == 7)
-                    {
-                        dtresulPMHerraje = dto.CalculateTab(8, dtVidrio, dtPuertas, true, medidabase, Desperdicio, false, 0);
-                        dtresulPMHerraje = dto.CalculateTab(8, dtTubos, dtPuertas, true, medidabase, Desperdicio, true, 0);
-                    } 
-
-                    if (wantedFiles == 3)
-                        dtresulPMHerraje = dto.CalculateTab(8, dtVidrio, dtPuertas, true, medidabase, Desperdicio, true, 0);
-
-                    if (wantedFiles == 5)
-                        dtresulPMHerraje = dto.CalculateTab(8, dtTubos, dtPuertas, true, medidabase, Desperdicio, true, 0);
-
-
-                    dataGridViewPMHerrajeCalculate.DataSource = dtresulPMHerraje;
-                    dataGridViewPMHerrajeCalculate.Columns[0].Visible = false;
-
-                }
                 if (idDocumento == 3)
                 {
-
-                    DataTable dtresulPC = new DataTable();
-                    dtresulPC = dto.CalculateTab(6, dtResul, dtPuertas, true, medidabase, Desperdicio, swmergePM, 0);
-                    dataGridViewP2Calculate.DataSource = dtresulPC;
-                    dataGridViewP2Calculate.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-
-                    DataTable dtresulPHerraje = new DataTable();
-                    dtresulPHerraje = dto.CalculateTab(7, dtResul, dtPuertas, true, medidabase, Desperdicio, swmergePM, 0);
-                    dataGridViewPHerrajeCalculate.DataSource = dtresulPHerraje;
-                    dataGridViewPHerrajeCalculate.Columns[0].Visible = false;
-                    dataGridViewPHerrajeCalculate.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-                }
+                    dtcalculate = dto.CalculateTab(idDocumento, dtResul, dtPuertas, perfilandvidrios, medidabase, Desperdicio, swmergePM,1);
+                }      
 
                 SetDataView(dtResul, dtcalculate, idDocumento);
 
@@ -261,20 +158,8 @@ namespace arquitectSoft.View
 
             switch (UseTab.First())
             {
-                case 1:
-                    tabPrincipal.SelectTab(tabPerfilMetallico);
-                    break;
-                case 2:
-                    tabPrincipal.SelectTab(tabVidrioPaneles);
-                    break;
                 case 3:
                     tabPrincipal.SelectTab(tabPuertas);
-                    break;
-                case 4:
-                    tabPrincipal.SelectTab(tabTubosMetalicos);
-                    break;
-                case 5:
-                    tabPrincipal.SelectTab(tabMamparas);
                     break;
             }
         }
@@ -303,23 +188,8 @@ namespace arquitectSoft.View
         {
             switch (index)
             {
-
-                case 1:
-                    dataGridViewPM.DataSource = dt;
-                    dataGridViewPMHerraje.DataSource = dt;
-                    dataGridViewPMCalculate.DataSource = dtcalculate;
-                    dataGridViewPMCalculate.Columns[0].Visible = false;
-                    //dataGridViewPMCalculate.Columns[6].Visible = false;
-                    break;
-                case 2:
-                    dataGridViewVP.DataSource = dt;
-                    dataGridViewVPCalculate.DataSource = dtcalculate;
-                    dataGridViewVPCalculate.Columns[0].Visible = false;
-                    break;
                 case 3:
-                    dataGridViewP.DataSource = dt;
-                    dataGridViewP2.DataSource = dt;
-                    dataGridViewPHerraje.DataSource = dt;
+                    dataGridViewP.DataSource = dt;                  
                     dataGridViewPCalculate.DataSource = dtcalculate;
                     dataGridViewPCalculate.Refresh();
                     dataGridViewPCalculate.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
@@ -329,16 +199,6 @@ namespace arquitectSoft.View
                         col.SortMode = DataGridViewColumnSortMode.NotSortable;
                     }
 
-                    break;
-                case 4:
-                    dataGridViewTM.DataSource = dt;
-                    //dataGridViewTMCalculate.DataSource = dtcalculate;
-                    //dataGridViewTMCalculate.Columns[0].Visible = false;
-                    //dataGridViewTMCalculate.Columns[6].Visible = false;
-                    break;
-                case 5:
-                    dataGridViewM.DataSource = dt;
-                    dataGridViewMCalculate.DataSource = dtcalculate;
                     break;
             }
 
@@ -376,7 +236,7 @@ namespace arquitectSoft.View
                     }
                 }
             }
-            tabPrincipal.SelectTab(tabPerfilMetallico);
+            tabPrincipal.SelectTab(tabPuertas);
             dtPuertas.Rows.Clear();
             dtVidrio.Rows.Clear();
             dtTubos.Rows.Clear();
@@ -412,23 +272,7 @@ namespace arquitectSoft.View
             {
                 swexport = true;
             }
-            else if (dataGridViewVPCalculate.RowCount > 0)
-            {
-                swexport = true;
-            }
             else if (dataGridViewPCalculate.RowCount > 0)
-            {
-                swexport = true;
-            }
-            else if (dataGridViewTMCalculate.RowCount > 0)
-            {
-                swexport = true;
-            }
-            else if (dataGridViewMCalculate.RowCount > 0)
-            {
-                swexport = true;
-            }
-            else if (dataGridViewP2Calculate.RowCount > 0)
             {
                 swexport = true;
             }
@@ -488,7 +332,7 @@ namespace arquitectSoft.View
 
 
                     DataGridView table = new DataGridView();
-                    for (int Datagrid = 1; Datagrid <= 9; Datagrid++)
+                    for (int Datagrid = 1; Datagrid <= 3; Datagrid++)
                     {
                         valueinitial = 8;
                         valueinitialFoot = 0;
@@ -500,7 +344,7 @@ namespace arquitectSoft.View
                         switch (Datagrid)
                         {
                             case 1:
-                                sheets = "PERFIL METALICO";
+                                sheets = "PUERTAS";
                                 table = dataGridViewPMCalculate;
                                 PMValueFinish = dataGridViewPMCalculate.RowCount ;
                                 Range = string.Format("A{0}:H{0}", valueinitial);
@@ -516,66 +360,13 @@ namespace arquitectSoft.View
                                 }
 
                                 rangetwo = "A{0}:H{0}";
-                                sheets = "PERFIL METALICO";
+                                sheets = "PUERTAS";
                                 Descheader = "PUERTAS";
                                 RangeSubheader = string.Format("A{0}:G{1}", valuesubheaderDescr, valuesubheaderValue);
                                 Range = string.Format("A{0}:H{0}", valueinitial);
                                 table = dataGridViewPCalculate;
                                 break;
                             case 3:
-                                sheets = "PERFIL METALICO HERRAJES";
-                                table = dataGridViewPMHerrajeCalculate;
-                                PMHValueFinish = dataGridViewPMHerrajeCalculate.RowCount;
-                                Range = string.Format("A{0}:H{0}", valueinitial);
-                                Descheader = sheets;
-                                break;
-                            case 4:
-                                if (PMHValueFinish > 0)
-                                {
-                                    valueinitial = valueinitial + PMHValueFinish + 8;
-                                    Rangeheader = string.Format("A{0}:G{1}", valueinitial - 6, valueinitial - 4);
-                                    valuesubheaderDescr = valueinitial - 3;
-                                    valuesubheaderValue = valueinitial - 2;
-                                }
-
-                                
-                                rangetwo = "A{0}:H{0}";
-                                sheets = "PERFIL METALICO HERRAJES";
-                                Descheader = "PUERTAS HERRAJES";
-                                Range = string.Format("A{0}:H{0}", valueinitial);
-                                RangeSubheader = string.Format("A{0}:G{1}", valuesubheaderDescr, valuesubheaderValue);
-                                table = dataGridViewPHerrajeCalculate;
-                                break;
-                            case 5:
-                                Range = string.Format("A{0}:H{0}", valueinitial);
-                                sheets = "VIDRIOS Y PANELES";
-                                table = dataGridViewVPCalculate;
-                                Descheader = sheets;
-                                break;                           
-
-                            case 6:
-                                Range = string.Format("A{0}:E{0}", valueinitial);
-                                rangetwo = "A{0}:E{0}";
-                                sheets = "PUERTAS CANTIDAD";
-                                Descheader = sheets;
-                                table = dataGridViewP2Calculate;
-                                wrapTextDefault = false;
-                                break;
-                            case 7:
-                                Range = string.Format("A{0}:E{0}", valueinitial);
-                                sheets = "TUBO METALICOS";
-                                Descheader = sheets;
-                                table = dataGridViewTMCalculate;
-                                break;
-                            case 8:
-                                Range = string.Format("A{0}:H{0}", valueinitial);
-                                rangetwo = "A{0}:E{0}";
-                                sheets = "MAMPARAS";
-                                Descheader = sheets;
-                                table = dataGridViewMCalculate;
-                                wrapTextDefault = false;
-                                break;
-                            case 9:
                                 Range = string.Format("A{0}:H{0}", valueinitial);
                                 rangetwo = "A{0}:E{0}";
                                 sheets = "ALBARAN";
@@ -586,7 +377,7 @@ namespace arquitectSoft.View
 
                         }
 
-                        if (table.Rows.Count > 0 && Datagrid != 9)
+                        if (table.Rows.Count > 0 && Datagrid != 3)
                         {
                             //sheetscount += 1;
                             //Creating DataTable.
@@ -659,32 +450,7 @@ namespace arquitectSoft.View
                                 wb.Worksheet(sheets + "Puerta").Delete();
 
                             }
-                            else if (Datagrid == 4)
-                            {
-                                if (PMHValueFinish == 0)
-                                {
-                                    DataTable dtnew = new DataTable();
-                                    var wsDoorOutPm = wb.Worksheets.Add(dtnew, sheets);
-                                    wsDoorOutPm.Name = sheets;
-                                    wsDoorOutPm.Row(1).InsertRowsAbove(7);
-                                    wb.Worksheet(sheets).AddPicture(path + imagePath)
-                                      .MoveTo(150, 25)
-                                      .Scale(.3); // optional: resize picture
-                                }
-
-                                var ws = wb.Worksheets.Add(dt, sheets + "PHer");
-                                string RangeSrcDoor = string.Format("A{0}:H{1}", 1, dt.Rows.Count + 1);
-                                var rangeDoor = wb.Worksheet(sheets + "PHer").Range(RangeSrcDoor);
-
-                                var wsPM = wb.Worksheet(1);
-                                string RangeDstDoor = string.Format("A{0}:H{1}", valueinitial, valueinitial + dt.Rows.Count);
-                                rangeDoor.CopyTo(wb.Worksheet(sheets).Range(RangeDstDoor));
-
-                                valueinitialFoot = valueinitial + dt.Rows.Count + 2;
-
-                                wb.Worksheet(sheets + "PHer").Delete();
-                            }
-                            else if (Datagrid == 9)
+                            else if (Datagrid == 3)
                             {
                                 var ws = wb.Worksheets.Add(dt, sheets);
                                 ws.Row(1).InsertRowsAbove(7);
@@ -832,7 +598,7 @@ namespace arquitectSoft.View
                             wb.Worksheet(sheets).Columns().AdjustToContents();
                             wb.Worksheet(sheets).Column(wrapTextDefault ? 3 : 2).Width = 57;
                         }
-                        else if (Datagrid == 9)
+                        else if (Datagrid == 3)
                         {
                             
                             Dto.AnalisisDatosDto dto = new Dto.AnalisisDatosDto();
@@ -862,8 +628,7 @@ namespace arquitectSoft.View
                                 {
                                     case "0":
                                       
-                                        table1 = dataGridViewPMCalculate;
-                                        table2 = dataGridViewPMHerrajeCalculate;
+                                        table1 = dataGridViewPMCalculate;                                        
                                         foreach (DataGridViewRow row in table1.Rows)
                                         {
                                             dt1.Rows.Add(row.Cells[1].Value, row.Cells[2].Value, row.Cells[3].Value, row.Cells[4].Value, row.Cells[5].Value, "Perfil Metalico"); 
@@ -875,18 +640,8 @@ namespace arquitectSoft.View
                                         }
 
                                         break;
-                                    case "1":
-                                       
-                                        table1 = dataGridViewVPCalculate;
-                                        foreach (DataGridViewRow row in table1.Rows)
-                                        {
-                                            dt1.Rows.Add(row.Cells[1].Value, row.Cells[2].Value, row.Cells[3].Value, row.Cells[6].Value, row.Cells[4].Value, "Vidrios y Paneles");
-                                        }
-
-                                        break;
                                     case "2":
                                         table1 = dataGridViewPCalculate;
-                                        table2 = dataGridViewPHerrajeCalculate;
                                         string acabadopuertas = "";
                                         string medidaPuertas = "";
                                         foreach (DataGridViewRow row in table1.Rows)
@@ -1112,24 +867,6 @@ namespace arquitectSoft.View
                         break;
                     case 2:                        
                         table = dataGridViewPCalculate;
-                        break;
-                    case 3:
-                        table = dataGridViewPMHerrajeCalculate;
-                        break;
-                    case 4:                       
-                        table = dataGridViewPHerrajeCalculate;
-                        break;
-                    case 5:
-                        table = dataGridViewVPCalculate;
-                        break;
-                    case 6:                        
-                        table = dataGridViewP2Calculate;
-                        break;
-                    case 7:
-                        table = dataGridViewTMCalculate;
-                        break;
-                    case 8:
-                        table = dataGridViewMCalculate;
                         break;
 
                 }
