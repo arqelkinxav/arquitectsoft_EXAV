@@ -357,6 +357,11 @@ namespace arquitectSoft.View
                 {
                     r.DefaultCellStyle.BackColor = Color.Orange;
                 }
+                else if (r.Cells[0].Value.ToString().Contains("~"))
+                {
+                    r.DefaultCellStyle.BackColor = Color.LightGreen;
+                }
+
             }
         }
 

@@ -170,6 +170,17 @@ namespace arquitectSoft.Dto
                     listColumns.Add("categoria");
                     //-----------------
                     break;
+                case 13:
+                    //-----------------Puertas
+
+                    listColumns.Add("Nomenclatura");
+                    listColumns.Add("Codigo");
+                    listColumns.Add("Apertura de Puerta");
+                    listColumns.Add("Item");
+                    listColumns.Add("Altura");
+                    listColumns.Add("Anchura");
+                    //-----------------
+                    break;
             }
 
             return listColumns;
@@ -427,7 +438,13 @@ namespace arquitectSoft.Dto
                                         }
                                         else if (Int32.Parse(rowP["Extra"].ToString()) == 0)
                                         {
-                                            dtresulPuerta.Rows.Add("Item (" + uniDes + ")", rowP["codigo"].ToString(), rowP["Descripcion"].ToString(), rowP["cantidad"].ToString(), rowP["medidaC"].ToString().Replace(".00",""), rowP["medidaCalculada"].ToString().Replace(".00", ""), rowP["corte"].ToString(), rowP["mecanizado"].ToString());
+                                            int AP = Int32.Parse(rowP["Asignacion_puertas"].ToString());
+                                            string item = AP == 0 ? "Item (" + uniDes + ")" : "Item (" + uniDes + ")~";
+                                            string medidaCNew = rowP["medidaC"].ToString().Replace(".00", "");
+                                            string medidaCalculadaNew = rowP["medidaCalculada"].ToString().Replace(".00", "");
+                                            if (pSwAP == 0 && AP == 1){ medidaCNew = "0"; medidaCalculadaNew = "0"; }
+                                            dtresulPuerta.Rows.Add(item, rowP["codigo"].ToString(), rowP["Descripcion"].ToString(), rowP["cantidad"].ToString(), medidaCNew, medidaCalculadaNew, rowP["corte"].ToString(), rowP["mecanizado"].ToString());
+
                                         }
                                     }
                                 }
@@ -460,16 +477,36 @@ namespace arquitectSoft.Dto
             Generals.Conexion con = new Generals.Conexion();
             string fail = "";
 
-            var ListGroupby = dtmodelDoor.AsEnumerable()
-               .GroupBy(t => new { 
+            var ListGroupby =
+            pSwAP == 1 ? dtmodelDoor.AsEnumerable()
+               .GroupBy(t => new
+               {
                    Codigo = t.Field<string>("Codigo"),
                    Apertura = t.Field<string>("Apertura de Puerta"),
                    Acabado = t.Field<string>("Acabado Perfileria Puertas"),
-                   Altura = t.Field<string>("Altura"), 
-                   Anchura = t.Field<string>("Anchura") 
+                   Altura = t.Field<string>("Altura"),
+                   Anchura = t.Field<string>("Anchura"),
+                   Nomenclatura = t.Field<string>("Nomenclatura")
                }, (key, g) => new { key, g })
                .Select(t => new
-               {    
+               {
+                   Codigo = t.g.First().Field<string>("Codigo").ToString().Replace("\"", "").Trim() + t.g.First().Field<string>("Apertura de Puerta").ToString().Replace("\"", "").Trim() + "-" + t.g.First().Field<string>("Acabado Perfileria Puertas").ToString().Replace("\"", "").Trim().Split('-')[0].Trim(),
+                   Altura = t.g.First().Field<string>("Altura").ToString().Replace("\"", "").Trim() != "" ? Int32.Parse(t.g.First().Field<string>("Altura").ToString().Replace("\"", "").Trim()) : 0,
+                   Achura = t.g.First().Field<string>("Anchura").ToString().Replace("\"", "").Trim() != "" ? Int32.Parse(t.g.First().Field<string>("Anchura").ToString().Replace("\"", "").Trim()) : 0,
+                   Reference = $"{string.Join(",", t.g.Select(z => z.Field<string>("Nomenclatura").ToString().Replace("\"", "").Trim()))}", //.Replace("P-", "")
+               }).ToList() 
+               :
+               dtmodelDoor.AsEnumerable()
+               .GroupBy(t => new
+               {
+                   Codigo = t.Field<string>("Codigo"),
+                   Apertura = t.Field<string>("Apertura de Puerta"),
+                   Acabado = t.Field<string>("Acabado Perfileria Puertas"),
+                   Altura = t.Field<string>("Altura"),
+                   Anchura = t.Field<string>("Anchura")
+               }, (key, g) => new { key, g })
+               .Select(t => new
+               {
                    Codigo = t.g.First().Field<string>("Codigo").ToString().Replace("\"", "").Trim() + t.g.First().Field<string>("Apertura de Puerta").ToString().Replace("\"", "").Trim() + "-" + t.g.First().Field<string>("Acabado Perfileria Puertas").ToString().Replace("\"", "").Trim().Split('-')[0].Trim(),
                    Altura = t.g.First().Field<string>("Altura").ToString().Replace("\"", "").Trim() != "" ? Int32.Parse(t.g.First().Field<string>("Altura").ToString().Replace("\"", "").Trim()) : 0,
                    Achura = t.g.First().Field<string>("Anchura").ToString().Replace("\"", "").Trim() != "" ? Int32.Parse(t.g.First().Field<string>("Anchura").ToString().Replace("\"", "").Trim()) : 0,
@@ -498,9 +535,10 @@ namespace arquitectSoft.Dto
                     Codigo = Codigo + Apertura + "-" + Acabado.Split('-')[0].Trim();
                     altura = rowM["Altura"].ToString().Replace("\"", "").Trim() != "" ? Int32.Parse(rowM["Altura"].ToString().Replace("\"", "").Trim()) : 0;
                     anchura = rowM["Anchura"].ToString().Replace("\"", "").Trim() != "" ? Int32.Parse(rowM["Anchura"].ToString().Replace("\"", "").Trim()) : 0;
+                    
+                    var nomen = ListGroupby.Where(x => x.Codigo == Codigo && x.Altura == altura && x.Achura == anchura).ToList(); 
 
-                    var nomen = ListGroupby.Where(x => x.Codigo == Codigo && x.Altura == altura && x.Achura == anchura).ToList();                    
-                    Nomenclatura = nomen[0].Reference;
+                    Nomenclatura = pSwAP != 1 ? nomen[0].Reference : rowM["Nomenclatura"].ToString().Replace("\"", "").Trim();
 
                     fail = "";
                     string[] paramGeneral = { "pCodigo|" + Codigo };

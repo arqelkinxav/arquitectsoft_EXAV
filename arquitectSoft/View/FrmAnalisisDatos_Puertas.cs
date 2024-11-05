@@ -36,6 +36,7 @@ namespace arquitectSoft.View
         DataTable dtPerfilR = new DataTable();
         DataTable dtPerfilOfVidrioPanel = new DataTable();
         DataTable dtPerfilOfTubos = new DataTable();
+        DataTable dtAddRowsP = new DataTable();
         public FrmAnalisisDatos_Puertas()
         {
             InitializeComponent();
@@ -169,6 +170,7 @@ namespace arquitectSoft.View
             InitializeOpenFileDialog();
 
             NUpDownMedidaBase.Value = 2960;
+            dataGridViewP.Visible = false;
         }
 
         private void InitializeOpenFileDialog()
@@ -244,8 +246,17 @@ namespace arquitectSoft.View
             dtPerfilHR.Rows.Clear();
             dtPerfilOfVidrioPanel.Rows.Clear();
             dtPerfilOfTubos.Rows.Clear();
+            dtAddRowsP.Rows.Clear();
+            dtAddRowsP.Columns.Clear();
             lblestadosAnalitica.Text = "";
+            txtCodigo.Text = "";
+            txtacabado.Text = "";
+            txtDescripcion.Text = "";
+            txtAltura.Text = "";
+            txtAnchura.Text = "";
+            NUpDownRowsP.Value = 1;
             BtnChange.Visible = false;
+
         }
 
         private void btnExportar_Click(object sender, EventArgs e)
@@ -857,7 +868,7 @@ namespace arquitectSoft.View
         private void FnChangeInfo(string[] param)
         {
             DataGridView table = new DataGridView();
-            for (int Datagrid = 1; Datagrid <= 8; Datagrid++)
+            for (int Datagrid = 1; Datagrid <= 2; Datagrid++)
             {
                
                 switch (Datagrid)
@@ -942,6 +953,96 @@ namespace arquitectSoft.View
             FnChangeInfo(param);
 
 
+        }
+
+        private void txtCodigo_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+
+                Dto.ComponenteDto dto = new Dto.ComponenteDto();
+                FrmBuscar bsc = new FrmBuscar();
+                bsc.ShowDialog();
+
+                if (bsc.ReturnItem1 == null)
+                {
+                    return;
+                }
+                txtCodigo.Text = bsc.ReturnItem1.ToString().Split('-')[0];
+                txtacabado.Text = bsc.ReturnItem1.ToString().Split('-')[1];
+                txtDescripcion.Text = bsc.ReturnItem2;
+            }
+        }
+
+        private void btnAddRowDoor_Click(object sender, EventArgs e)
+        {
+            
+            if (dtAddRowsP.Rows.Count == 0)
+            {
+                dtAddRowsP.Columns.Add("Nomenclatura");
+                dtAddRowsP.Columns.Add("Codigo");
+                dtAddRowsP.Columns.Add("Apertura de Puerta");
+                dtAddRowsP.Columns.Add("Acabado Perfileria Puertas");                
+                dtAddRowsP.Columns.Add("Item");
+                dtAddRowsP.Columns.Add("Altura");
+                dtAddRowsP.Columns.Add("Anchura");
+                dtAddRowsP.Columns.Add("Conectado/pared Tubo L1");
+                dtAddRowsP.Columns.Add("Conectado/pared Tubo L2");
+                dtAddRowsP.Columns.Add("Cantidad");
+                dtAddRowsP.Columns.Add("Ubicación");
+                dtAddRowsP.Columns.Add("Area");
+             
+            }           
+
+            int n = int.Parse(NUpDownRowsP.Value.ToString());
+            int i = 1;
+            
+            while (i <= n)
+            {
+                int rowscount = dtAddRowsP.Rows.Count +1;
+                string rows = rowscount.ToString();
+                string Nomen = "P-" + rows;
+                dtAddRowsP.Rows.Add(Nomen, txtCodigo.Text, "", txtacabado.Text, txtDescripcion.Text, txtAltura.Text, txtAnchura.Text, "No", "No","1");
+                i++;
+            }
+               
+            dataGridViewPNew.DataSource = dtAddRowsP;
+            dataGridViewPNew.Columns[4].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            dataGridViewPNew.Columns[2].Visible = false;
+            dataGridViewPNew.Columns[7].Visible = false;
+            dataGridViewPNew.Columns[8].Visible = false;
+            dataGridViewPNew.Columns[9].Visible = false;
+            dataGridViewPNew.Columns[10].Visible = false;
+            dataGridViewPNew.Columns[11].Visible = false;
+
+        }
+
+        private void btnAnalizar_Click(object sender, EventArgs e)
+        {
+            Dto.AnalisisDatosDto dto = new Dto.AnalisisDatosDto();
+            
+            DataTable dtcalculate = new DataTable();
+            bool swmergePM = true;
+            bool perfilandvidrios = false;
+            int medidabase = Int32.Parse(NUpDownMedidaBase.Value.ToString());
+            decimal Desperdicio = (decimal.Parse(NUpDownDesperdicio.Value.ToString()) / 100) + 1;
+
+            dtcalculate = dto.CalculateTab(3, dtAddRowsP, dtPuertas, perfilandvidrios, medidabase, Desperdicio, swmergePM, 1);
+
+            DataTable dtresulPHerraje = new DataTable();
+            dtresulPHerraje = dto.CalculateTab(7, dtAddRowsP, dtPuertas, true, medidabase, Desperdicio, swmergePM, 1);
+            dataGridViewPHerrajeCalculate.DataSource = dtresulPHerraje;
+            dataGridViewPHerrajeCalculate.Columns[0].Visible = false;
+            dataGridViewPHerrajeCalculate.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+
+            SetDataView(dtAddRowsP, dtcalculate, 3);
+
+            if (FnValidateData())
+            {
+                BtnChange.Visible = true;
+            }
+
+            lblestadosAnalitica.Text = "Analitica Aplicada Correctamente!";
         }
     }
 }
