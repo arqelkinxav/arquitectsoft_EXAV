@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
+using System.IO;
 
 namespace arquitectSoft.Generals
 {
@@ -162,6 +164,47 @@ namespace arquitectSoft.Generals
             return -1;
         }
 
+        public string ExportBackupMysql(string backupFilePath)
+        {
 
+            string result = "";            
+            try
+            {
+                Open(out result);
+
+                MySqlCommand command = new MySqlCommand("", conn);
+                MySqlBackup backup = new MySqlBackup(command);
+                backup.ExportToFile(backupFilePath);
+                Close();
+                result = "Backup Exitoso!!";
+            }
+            catch (Exception er)
+            {
+                result = "Conexion Error ! " + er.Message;
+            }
+
+
+           return result;
+        }
+
+        public string ImportBackupMysql(string filepath)
+        {
+            string fail = "";
+            try
+            {                
+                Open(out fail);
+                MySqlCommand command = new MySqlCommand("", conn);
+                MySqlBackup backup = new MySqlBackup(command);
+                backup.ImportFromFile(filepath);
+                Close();
+            }
+            catch (Exception er)
+            {
+                fail = "Conexion Error ! " + er.Message;
+            }
+
+            return fail;
+
+        }
     }
 }

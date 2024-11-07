@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -45,12 +46,15 @@ namespace arquitectSoft
         {
 
             Controls.OfType<MdiClient>().FirstOrDefault().BackColor = Color.FromArgb(176, 196, 222);
-            Mdi_nameConnect2.Text = Mdi_nameConnect2.Text + " " + Generals.Global.NameConnect.ToUpper();
+            Mdi_nameConnect2.Text = Mdi_nameConnect2.Text + " " + Generals.Global.NameConnect.ToUpper().Split('-')[1];
             Mdi_nameConnect2.ForeColor = Color.White;
             this.BackgroundImage = Properties.Resources.Wallpaper_final;
             this.DoubleBuffered = true;
 
-
+            if(Generals.Global.NameConnect.ToUpper().Split('-')[0] == "DBA")
+            {
+                dBAToolStripMenuItem.Visible = true;
+            }
 
 
 
@@ -159,102 +163,12 @@ namespace arquitectSoft
             private void TMSItem_Administracion_MouseEnter(object sender, EventArgs e)
             {
                 ((ToolStripMenuItem)sender).ForeColor = Color.Black; //new color
-                TMSItem_configuracion.ForeColor = Color.White; //new color
             }
 
             private void TMSItem_Administracion_MouseLeave(object sender, EventArgs e)
             {
                 ((ToolStripMenuItem)sender).ForeColor = Color.White; //new color
             }
-
-            private void TMSItem_componente_MouseEnter(object sender, EventArgs e)
-            {
-                ((ToolStripMenuItem)sender).ForeColor = Color.Black; //new color
-                 
-            }
-
-            private void TMSItem_componente_MouseLeave(object sender, EventArgs e)
-            {
-                ((ToolStripMenuItem)sender).ForeColor = Color.White; //new color
-            }
-            private void TMSItem_subComponente_MouseEnter(object sender, EventArgs e)
-            {
-                ((ToolStripMenuItem)sender).ForeColor = Color.Black; //new color
-            }
-
-            private void TMSItem_subComponente_MouseLeave(object sender, EventArgs e)
-            {
-                ((ToolStripMenuItem)sender).ForeColor = Color.White; //new color
-            }
-
-            private void TMSItem_configuracion_MouseEnter(object sender, EventArgs e)
-            {
-                ((ToolStripMenuItem)sender).ForeColor = Color.Black; //new color
-            }
-
-            private void TMSItem_configuracion_MouseLeave(object sender, EventArgs e)
-            {
-
-                ((ToolStripMenuItem)sender).ForeColor = Color.White; //new color
-
-            }
-
-            private void TMSItem_acabados_MouseEnter(object sender, EventArgs e)
-            {
-                ToolStripMenuItem MyMenuItem = (ToolStripMenuItem)sender;
-                ToolStripMenuItem parent = (ToolStripMenuItem)MyMenuItem.OwnerItem;
-
-                parent.ForeColor = Color.Black; //new color
-                ((ToolStripMenuItem)sender).ForeColor = Color.Black; //new color
-            }
-
-            private void TMSItem_acabados_MouseLeave(object sender, EventArgs e)
-            {
-                ((ToolStripMenuItem)sender).ForeColor = Color.White; //new color
-            }
-            private void TMSItem_cortes_MouseEnter(object sender, EventArgs e)
-            {
-                ToolStripMenuItem MyMenuItem = (ToolStripMenuItem)sender;
-                ToolStripMenuItem parent = (ToolStripMenuItem)MyMenuItem.OwnerItem;
-
-                parent.ForeColor = Color.Black; //new color
-                ((ToolStripMenuItem)sender).ForeColor = Color.Black; //new color
-            }
-
-            private void TMSItem_cortes_MouseLeave(object sender, EventArgs e)
-            {
-                ((ToolStripMenuItem)sender).ForeColor = Color.White; //new color
-            }
-
-            private void unidadDeMedidaToolStripMenuItem_MouseEnter(object sender, EventArgs e)
-            {
-                ToolStripMenuItem MyMenuItem = (ToolStripMenuItem)sender;
-                ToolStripMenuItem parent = (ToolStripMenuItem)MyMenuItem.OwnerItem;
-
-                parent.ForeColor = Color.Black; //new color
-                ((ToolStripMenuItem)sender).ForeColor = Color.Black; //new color
-            }
-
-            private void unidadDeMedidaToolStripMenuItem_MouseLeave(object sender, EventArgs e)
-            {
-                ((ToolStripMenuItem)sender).ForeColor = Color.White; //new color
-            }
-
-        private void mecanizadoToolStripMenuItem_MouseEnter(object sender, EventArgs e)
-        {
-            ToolStripMenuItem MyMenuItem = (ToolStripMenuItem)sender;
-            ToolStripMenuItem parent = (ToolStripMenuItem)MyMenuItem.OwnerItem;
-
-            parent.ForeColor = Color.Black; //new color
-            ((ToolStripMenuItem)sender).ForeColor = Color.Black; //new color
-        }
-
-        private void mecanizadoToolStripMenuItem_MouseLeave(object sender, EventArgs e)
-        {
-            ((ToolStripMenuItem)sender).ForeColor = Color.White; //new color
-        }
-
-
 
         #endregion
 
@@ -269,15 +183,7 @@ namespace arquitectSoft
                 ((ToolStripMenuItem)sender).ForeColor = Color.White; //new color
             }
 
-            private void calcularCantidadesToolStripMenuItem_MouseEnter(object sender, EventArgs e)
-            {
-                ((ToolStripMenuItem)sender).ForeColor = Color.Black; //new color
-            }
-
-            private void calcularCantidadesToolStripMenuItem_MouseLeave(object sender, EventArgs e)
-            {
-                ((ToolStripMenuItem)sender).ForeColor = Color.White; //new color
-            }
+    
 
         #endregion
 
@@ -315,6 +221,39 @@ namespace arquitectSoft
             formDataAnalitics.MdiParent = this;
             formDataAnalitics.StartPosition = FormStartPosition.CenterScreen;
             formDataAnalitics.Show();
+        }
+
+        private void dBAToolStripMenuItem_MouseEnter(object sender, EventArgs e)
+        {
+            ((ToolStripMenuItem)sender).ForeColor = Color.Black; //new color
+        }
+
+        private void dBAToolStripMenuItem_MouseLeave(object sender, EventArgs e)
+        {
+            ((ToolStripMenuItem)sender).ForeColor = Color.White; //new color
+        }
+
+        private void exportDataToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FrmDBA formDba = new FrmDBA();
+            formDba.MdiParent = this;
+            formDba.StartPosition = FormStartPosition.CenterScreen;
+            formDba.Show();
+        }
+
+        private void importDataToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Generals.Conexion con = new Generals.Conexion();
+            DialogResult dr = this.openFileDialog1.ShowDialog();
+            if (dr == System.Windows.Forms.DialogResult.OK)
+            {
+                foreach (String file in openFileDialog1.FileNames)
+                {
+                    FileInfo Archivo = new FileInfo(file);
+                    con.ImportBackupMysql(Archivo.FullName);
+
+                }
+            }
         }
     }
 }

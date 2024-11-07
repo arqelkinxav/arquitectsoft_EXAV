@@ -12,17 +12,12 @@ using System.Diagnostics;
 
 namespace arquitectSoft
 {
-    public partial class FrmAcercade : Form
+    public partial class FrmDBA : Form
     {
-        public FrmAcercade()
+        public FrmDBA()
         {
             InitializeComponent();
             this.Text = String.Format("Acerca de {0}", AssemblyTitle);
-            this.labelProductName.Text = String.Format("Nombre del Producto: {0}", AssemblyProduct);
-            this.labelVersion.Text = String.Format("Versión {0}", AssemblyVersion);
-            this.labelCopyright.Text = AssemblyCopyright;
-            this.labelCompanyName.Text = AssemblyCompany;
-            this.textBoxDescription.Text = AssemblyDescription;
         }
 
         #region Descriptores de acceso de atributos de ensamblado
@@ -112,5 +107,38 @@ namespace arquitectSoft
             this.Close();
         }
 
+        private void BtnBackup_Click(object sender, EventArgs e)
+        {
+
+            if (txtPath.Text == "")
+            {
+                MessageBox.Show("Debe Seleccionar una Ruta", "Mensaje Alerta", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
+
+            string backupFolder = txtPath.Text;
+            
+            string database = "arquitectdb";
+            string fileName = $"{database}_backup_{DateTime.Now.ToString("yyyyMMdd_HHmmss")}.sql";
+            string backupFilePath = Path.Combine(backupFolder, fileName);
+            Generals.Conexion con = new Generals.Conexion();
+            string result = con.ExportBackupMysql(backupFilePath);
+            MessageBox.Show(result, "Mensaje Alerta", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+        }
+
+        private void btnExaminar_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog profilePath = new FolderBrowserDialog();
+            if (profilePath.ShowDialog() == DialogResult.OK)
+            {
+                txtPath.Text = profilePath.SelectedPath;
+            }
+        }
+
+        private void FrmDBA_Load(object sender, EventArgs e)
+        {
+
+
+        }
     }
 }

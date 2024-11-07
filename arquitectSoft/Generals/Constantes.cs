@@ -8,7 +8,7 @@ namespace arquitectSoft.Generals
 {
     class Constantes
     {
-        public static String QUERY_EXITS_USUARIO = "SELECT Nombre FROM usuario where usuario = ? and contrasena = ?;";
+        public static String QUERY_EXITS_USUARIO = "SELECT Nombre,usuario FROM usuario where usuario = ? and contrasena = ?;";
         
         //Componentes
         public static String QUERY_EXITS_COMPONENTES = "SELECT Id_Componente FROM componentes where (Codigo = ? or Descripcion = ?) and AcabadoPrincipal = ? LIMIT 1;";
@@ -52,7 +52,7 @@ namespace arquitectSoft.Generals
         //Mecanizado
         public static String QUERY_MECANIZADO = "SELECT Id_mecanizado,Codigo_Homologacion,Descripcion FROM mecanizados";
         public static String QUERY_INSERT_MECANIZADO = "INSERT mecanizados (Codigo_Homologacion, descripcion)VALUES(?,?)";
-        public static String QUERY_DELETE_MECANIZADO = "DELETE FROM mecanizados WHERE Id_Acabado = ?";
+        public static String QUERY_DELETE_MECANIZADO = "DELETE FROM mecanizados WHERE Id_mecanizado = ?";
         public static String QUERY_UPDATE_MECANIZADO = "UPDATE mecanizados SET descripcion = ? WHERE Id_mecanizado = ?";
         public static String QUERY_EXITS_MECANIZADO = "SELECT Id_mecanizado FROM mecanizados where Id_mecanizado = ? ;";
         public static String QUERY_MECANIZADO_MAX = "SELECT Max(Id_mecanizado) + 1 Id_Corte FROM mecanizados";

@@ -62,6 +62,8 @@ namespace arquitectSoft.View
             this.dataGridViewPMCalculate = new System.Windows.Forms.DataGridView();
             this.dataGridViewP = new System.Windows.Forms.DataGridView();
             this.tabPrincipal = new System.Windows.Forms.TabControl();
+            this.tabPuertaHerr = new System.Windows.Forms.TabPage();
+            this.dataGridViewPHerrajeCalculate = new System.Windows.Forms.DataGridView();
             this.lblestadosAnalitica = new System.Windows.Forms.Label();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.ImgListFinal = new System.Windows.Forms.ImageList(this.components);
@@ -79,8 +81,6 @@ namespace arquitectSoft.View
             this.EliCtrlButtons = new arquitectSoft.Generals.ElipseControl();
             this.elipseControl2 = new arquitectSoft.Generals.ElipseControl();
             this.elipseComponent1 = new arquitectSoft.Generals.ElipseComponent();
-            this.tabPuertaHerr = new System.Windows.Forms.TabPage();
-            this.dataGridViewPHerrajeCalculate = new System.Windows.Forms.DataGridView();
             this.tabPuertas.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewPNew)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NUpDownRowsP)).BeginInit();
@@ -89,10 +89,10 @@ namespace arquitectSoft.View
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewPMCalculate)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewP)).BeginInit();
             this.tabPrincipal.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.NUpDownDesperdicio)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.NUpDownMedidaBase)).BeginInit();
             this.tabPuertaHerr.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewPHerrajeCalculate)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NUpDownDesperdicio)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NUpDownMedidaBase)).BeginInit();
             this.SuspendLayout();
             // 
             // ImgLista
@@ -190,12 +190,13 @@ namespace arquitectSoft.View
             this.btnAnalizar.FlatAppearance.BorderColor = System.Drawing.Color.Green;
             this.btnAnalizar.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnAnalizar.ForeColor = System.Drawing.SystemColors.Control;
-            this.btnAnalizar.Location = new System.Drawing.Point(918, 12);
+            this.btnAnalizar.Location = new System.Drawing.Point(1103, 12);
             this.btnAnalizar.Name = "btnAnalizar";
             this.btnAnalizar.Size = new System.Drawing.Size(75, 23);
             this.btnAnalizar.TabIndex = 33;
             this.btnAnalizar.Text = "Analizar";
             this.btnAnalizar.UseVisualStyleBackColor = false;
+            this.btnAnalizar.Visible = false;
             this.btnAnalizar.Click += new System.EventHandler(this.btnAnalizar_Click);
             // 
             // dataGridViewPNew
@@ -432,6 +433,36 @@ namespace arquitectSoft.View
             this.tabPrincipal.Size = new System.Drawing.Size(1199, 440);
             this.tabPrincipal.TabIndex = 49;
             // 
+            // tabPuertaHerr
+            // 
+            this.tabPuertaHerr.Controls.Add(this.dataGridViewPHerrajeCalculate);
+            this.tabPuertaHerr.Location = new System.Drawing.Point(4, 22);
+            this.tabPuertaHerr.Name = "tabPuertaHerr";
+            this.tabPuertaHerr.Size = new System.Drawing.Size(1191, 414);
+            this.tabPuertaHerr.TabIndex = 4;
+            this.tabPuertaHerr.Text = "Puertas Herrajes";
+            this.tabPuertaHerr.UseVisualStyleBackColor = true;
+            // 
+            // dataGridViewPHerrajeCalculate
+            // 
+            this.dataGridViewPHerrajeCalculate.AllowUserToAddRows = false;
+            this.dataGridViewPHerrajeCalculate.AllowUserToDeleteRows = false;
+            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle8.BackColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle8.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewPHerrajeCalculate.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle8;
+            this.dataGridViewPHerrajeCalculate.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewPHerrajeCalculate.EnableHeadersVisualStyles = false;
+            this.dataGridViewPHerrajeCalculate.Location = new System.Drawing.Point(3, 3);
+            this.dataGridViewPHerrajeCalculate.Name = "dataGridViewPHerrajeCalculate";
+            this.dataGridViewPHerrajeCalculate.ReadOnly = true;
+            this.dataGridViewPHerrajeCalculate.Size = new System.Drawing.Size(1185, 408);
+            this.dataGridViewPHerrajeCalculate.TabIndex = 12;
+            // 
             // lblestadosAnalitica
             // 
             this.lblestadosAnalitica.AutoSize = true;
@@ -652,36 +683,6 @@ namespace arquitectSoft.View
             this.elipseComponent1.CornerRadius = 15;
             this.elipseComponent1.TargetControl = this;
             // 
-            // tabPuertaHerr
-            // 
-            this.tabPuertaHerr.Controls.Add(this.dataGridViewPHerrajeCalculate);
-            this.tabPuertaHerr.Location = new System.Drawing.Point(4, 22);
-            this.tabPuertaHerr.Name = "tabPuertaHerr";
-            this.tabPuertaHerr.Size = new System.Drawing.Size(1191, 414);
-            this.tabPuertaHerr.TabIndex = 4;
-            this.tabPuertaHerr.Text = "Puertas Herrajes";
-            this.tabPuertaHerr.UseVisualStyleBackColor = true;
-            // 
-            // dataGridViewPHerrajeCalculate
-            // 
-            this.dataGridViewPHerrajeCalculate.AllowUserToAddRows = false;
-            this.dataGridViewPHerrajeCalculate.AllowUserToDeleteRows = false;
-            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle8.BackColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle8.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridViewPHerrajeCalculate.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle8;
-            this.dataGridViewPHerrajeCalculate.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewPHerrajeCalculate.EnableHeadersVisualStyles = false;
-            this.dataGridViewPHerrajeCalculate.Location = new System.Drawing.Point(3, 3);
-            this.dataGridViewPHerrajeCalculate.Name = "dataGridViewPHerrajeCalculate";
-            this.dataGridViewPHerrajeCalculate.ReadOnly = true;
-            this.dataGridViewPHerrajeCalculate.Size = new System.Drawing.Size(1185, 408);
-            this.dataGridViewPHerrajeCalculate.TabIndex = 12;
-            // 
             // FrmAnalisisDatos_Puertas
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -718,10 +719,10 @@ namespace arquitectSoft.View
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewPMCalculate)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewP)).EndInit();
             this.tabPrincipal.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.NUpDownDesperdicio)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.NUpDownMedidaBase)).EndInit();
             this.tabPuertaHerr.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewPHerrajeCalculate)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NUpDownDesperdicio)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NUpDownMedidaBase)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

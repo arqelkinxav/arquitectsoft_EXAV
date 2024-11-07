@@ -102,7 +102,7 @@ namespace arquitectSoft.View
                 return;
             }
 
-            txtCodigo.Text = bsc.ReturnItem1;
+            txtCodigo.Text = bsc.ReturnItem0;
             txtDescripcion.Text = bsc.ReturnItem2.ToString();
 
             txtCodigo.Enabled = false;

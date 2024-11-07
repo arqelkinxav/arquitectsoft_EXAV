@@ -37,6 +37,7 @@ namespace arquitectSoft
             this.labelCompanyName = new System.Windows.Forms.Label();
             this.BtnCancelar = new arquitectSoft.Generals.RJButton();
             this.elipseComponent1 = new arquitectSoft.Generals.ElipseComponent();
+            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -133,6 +134,10 @@ namespace arquitectSoft
             this.elipseComponent1.CornerRadius = 40;
             this.elipseComponent1.TargetControl = this;
             // 
+            // openFileDialog1
+            // 
+            this.openFileDialog1.FileName = "openFileDialog1";
+            // 
             // FrmAcercade
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -165,5 +170,6 @@ namespace arquitectSoft
         private System.Windows.Forms.Label labelCopyright;
         private System.Windows.Forms.Label labelVersion;
         private Generals.RJButton BtnCancelar;
+        private System.Windows.Forms.OpenFileDialog openFileDialog1;
     }
 }

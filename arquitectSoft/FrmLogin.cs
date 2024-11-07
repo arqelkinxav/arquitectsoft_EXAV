@@ -56,7 +56,7 @@ namespace arquitectSoft
                     {
                         while (row.Read())
                         {
-                            NombreDesc = row["Nombre"].ToString();
+                            NombreDesc = row["usuario"].ToString() + "-" + row["Nombre"].ToString();
 
                         }
                     }
@@ -78,7 +78,7 @@ namespace arquitectSoft
             {
                 Generals.Global.NameConnect = NombreDesc;
 
-                MessageBox.Show("Bienvenido: " + NombreDesc + "!", "Mensaje Alerta", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Bienvenido: " + NombreDesc.Split('-')[1] + "!", "Mensaje Alerta", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.Hide();
                 FrmMDIPrincipal fm = new FrmMDIPrincipal();
                 fm.ShowDialog();

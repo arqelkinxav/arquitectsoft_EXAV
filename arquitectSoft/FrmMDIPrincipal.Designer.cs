@@ -44,9 +44,13 @@ namespace arquitectSoft
             this.analisisDePuertasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.salirToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.acercaDeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.dBAToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportDataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.importDataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.Mdi_nameConnect2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.pictureBoxMdiPrincipal = new System.Windows.Forms.PictureBox();
+            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.menuStrip.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxMdiPrincipal)).BeginInit();
@@ -59,7 +63,8 @@ namespace arquitectSoft
             this.TMSItem_Administracion,
             this.TMSItem_procesos,
             this.salirToolStripMenuItem,
-            this.acercaDeToolStripMenuItem});
+            this.acercaDeToolStripMenuItem,
+            this.dBAToolStripMenuItem});
             this.menuStrip.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
             resources.ApplyResources(this.menuStrip, "menuStrip");
             this.menuStrip.Name = "menuStrip";
@@ -80,77 +85,63 @@ namespace arquitectSoft
             // 
             // TMSItem_componente
             // 
-            this.TMSItem_componente.BackColor = System.Drawing.SystemColors.Desktop;
-            this.TMSItem_componente.ForeColor = System.Drawing.SystemColors.Control;
+            this.TMSItem_componente.BackColor = System.Drawing.SystemColors.Control;
+            this.TMSItem_componente.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.TMSItem_componente.Name = "TMSItem_componente";
             resources.ApplyResources(this.TMSItem_componente, "TMSItem_componente");
             this.TMSItem_componente.Click += new System.EventHandler(this.TMSItem_componente_Click);
-            this.TMSItem_componente.MouseEnter += new System.EventHandler(this.TMSItem_componente_MouseEnter);
-            this.TMSItem_componente.MouseLeave += new System.EventHandler(this.TMSItem_componente_MouseLeave);
             // 
             // TMSItem_subComponente
             // 
-            this.TMSItem_subComponente.BackColor = System.Drawing.SystemColors.Desktop;
-            this.TMSItem_subComponente.ForeColor = System.Drawing.SystemColors.Control;
+            this.TMSItem_subComponente.BackColor = System.Drawing.SystemColors.Control;
+            this.TMSItem_subComponente.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.TMSItem_subComponente.Name = "TMSItem_subComponente";
             resources.ApplyResources(this.TMSItem_subComponente, "TMSItem_subComponente");
             this.TMSItem_subComponente.Click += new System.EventHandler(this.TMSItem_subComponente_Click);
-            this.TMSItem_subComponente.MouseEnter += new System.EventHandler(this.TMSItem_subComponente_MouseEnter);
-            this.TMSItem_subComponente.MouseLeave += new System.EventHandler(this.TMSItem_subComponente_MouseLeave);
             // 
             // TMSItem_configuracion
             // 
-            this.TMSItem_configuracion.BackColor = System.Drawing.SystemColors.Desktop;
+            this.TMSItem_configuracion.BackColor = System.Drawing.SystemColors.Control;
             this.TMSItem_configuracion.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.TMSItem_acabados,
             this.TMSItem_cortes,
             this.unidadDeMedidaToolStripMenuItem,
             this.mecanizadoToolStripMenuItem});
-            this.TMSItem_configuracion.ForeColor = System.Drawing.SystemColors.Control;
+            this.TMSItem_configuracion.ForeColor = System.Drawing.SystemColors.Desktop;
             this.TMSItem_configuracion.Name = "TMSItem_configuracion";
             resources.ApplyResources(this.TMSItem_configuracion, "TMSItem_configuracion");
-            this.TMSItem_configuracion.MouseEnter += new System.EventHandler(this.TMSItem_configuracion_MouseEnter);
-            this.TMSItem_configuracion.MouseLeave += new System.EventHandler(this.TMSItem_configuracion_MouseLeave);
             // 
             // TMSItem_acabados
             // 
-            this.TMSItem_acabados.BackColor = System.Drawing.SystemColors.Desktop;
-            this.TMSItem_acabados.ForeColor = System.Drawing.SystemColors.Control;
+            this.TMSItem_acabados.BackColor = System.Drawing.SystemColors.Control;
+            this.TMSItem_acabados.ForeColor = System.Drawing.SystemColors.Desktop;
             this.TMSItem_acabados.Name = "TMSItem_acabados";
             resources.ApplyResources(this.TMSItem_acabados, "TMSItem_acabados");
             this.TMSItem_acabados.Click += new System.EventHandler(this.TMSItem_acabados_Click);
-            this.TMSItem_acabados.MouseEnter += new System.EventHandler(this.TMSItem_acabados_MouseEnter);
-            this.TMSItem_acabados.MouseLeave += new System.EventHandler(this.TMSItem_acabados_MouseLeave);
             // 
             // TMSItem_cortes
             // 
-            this.TMSItem_cortes.BackColor = System.Drawing.SystemColors.Desktop;
-            this.TMSItem_cortes.ForeColor = System.Drawing.SystemColors.Control;
+            this.TMSItem_cortes.BackColor = System.Drawing.SystemColors.Control;
+            this.TMSItem_cortes.ForeColor = System.Drawing.SystemColors.Desktop;
             this.TMSItem_cortes.Name = "TMSItem_cortes";
             resources.ApplyResources(this.TMSItem_cortes, "TMSItem_cortes");
             this.TMSItem_cortes.Click += new System.EventHandler(this.TMSItem_cortes_Click);
-            this.TMSItem_cortes.MouseEnter += new System.EventHandler(this.TMSItem_cortes_MouseEnter);
-            this.TMSItem_cortes.MouseLeave += new System.EventHandler(this.TMSItem_cortes_MouseLeave);
             // 
             // unidadDeMedidaToolStripMenuItem
             // 
-            this.unidadDeMedidaToolStripMenuItem.BackColor = System.Drawing.SystemColors.Desktop;
-            this.unidadDeMedidaToolStripMenuItem.ForeColor = System.Drawing.SystemColors.Control;
+            this.unidadDeMedidaToolStripMenuItem.BackColor = System.Drawing.SystemColors.Control;
+            this.unidadDeMedidaToolStripMenuItem.ForeColor = System.Drawing.SystemColors.Desktop;
             this.unidadDeMedidaToolStripMenuItem.Name = "unidadDeMedidaToolStripMenuItem";
             resources.ApplyResources(this.unidadDeMedidaToolStripMenuItem, "unidadDeMedidaToolStripMenuItem");
             this.unidadDeMedidaToolStripMenuItem.Click += new System.EventHandler(this.unidadDeMedidaToolStripMenuItem_Click);
-            this.unidadDeMedidaToolStripMenuItem.MouseEnter += new System.EventHandler(this.unidadDeMedidaToolStripMenuItem_MouseEnter);
-            this.unidadDeMedidaToolStripMenuItem.MouseLeave += new System.EventHandler(this.unidadDeMedidaToolStripMenuItem_MouseLeave);
             // 
             // mecanizadoToolStripMenuItem
             // 
-            this.mecanizadoToolStripMenuItem.BackColor = System.Drawing.SystemColors.Desktop;
-            this.mecanizadoToolStripMenuItem.ForeColor = System.Drawing.SystemColors.Control;
+            this.mecanizadoToolStripMenuItem.BackColor = System.Drawing.SystemColors.Control;
+            this.mecanizadoToolStripMenuItem.ForeColor = System.Drawing.SystemColors.Desktop;
             this.mecanizadoToolStripMenuItem.Name = "mecanizadoToolStripMenuItem";
             resources.ApplyResources(this.mecanizadoToolStripMenuItem, "mecanizadoToolStripMenuItem");
             this.mecanizadoToolStripMenuItem.Click += new System.EventHandler(this.mecanizadoToolStripMenuItem_Click);
-            this.mecanizadoToolStripMenuItem.MouseEnter += new System.EventHandler(this.mecanizadoToolStripMenuItem_MouseEnter);
-            this.mecanizadoToolStripMenuItem.MouseLeave += new System.EventHandler(this.mecanizadoToolStripMenuItem_MouseLeave);
             // 
             // TMSItem_procesos
             // 
@@ -165,18 +156,16 @@ namespace arquitectSoft
             // 
             // calcularCantidadesToolStripMenuItem
             // 
-            this.calcularCantidadesToolStripMenuItem.BackColor = System.Drawing.SystemColors.Desktop;
-            this.calcularCantidadesToolStripMenuItem.ForeColor = System.Drawing.SystemColors.Control;
+            this.calcularCantidadesToolStripMenuItem.BackColor = System.Drawing.SystemColors.Control;
+            this.calcularCantidadesToolStripMenuItem.ForeColor = System.Drawing.SystemColors.Desktop;
             this.calcularCantidadesToolStripMenuItem.Name = "calcularCantidadesToolStripMenuItem";
             resources.ApplyResources(this.calcularCantidadesToolStripMenuItem, "calcularCantidadesToolStripMenuItem");
             this.calcularCantidadesToolStripMenuItem.Click += new System.EventHandler(this.calcularCantidadesToolStripMenuItem_Click);
-            this.calcularCantidadesToolStripMenuItem.MouseEnter += new System.EventHandler(this.calcularCantidadesToolStripMenuItem_MouseEnter);
-            this.calcularCantidadesToolStripMenuItem.MouseLeave += new System.EventHandler(this.calcularCantidadesToolStripMenuItem_MouseLeave);
             // 
             // analisisDePuertasToolStripMenuItem
             // 
-            this.analisisDePuertasToolStripMenuItem.BackColor = System.Drawing.SystemColors.Desktop;
-            this.analisisDePuertasToolStripMenuItem.ForeColor = System.Drawing.SystemColors.Control;
+            this.analisisDePuertasToolStripMenuItem.BackColor = System.Drawing.SystemColors.Control;
+            this.analisisDePuertasToolStripMenuItem.ForeColor = System.Drawing.SystemColors.Desktop;
             this.analisisDePuertasToolStripMenuItem.Name = "analisisDePuertasToolStripMenuItem";
             resources.ApplyResources(this.analisisDePuertasToolStripMenuItem, "analisisDePuertasToolStripMenuItem");
             this.analisisDePuertasToolStripMenuItem.Click += new System.EventHandler(this.analisisDePuertasToolStripMenuItem_Click);
@@ -196,6 +185,29 @@ namespace arquitectSoft
             this.acercaDeToolStripMenuItem.Click += new System.EventHandler(this.acercaDeToolStripMenuItem_Click);
             this.acercaDeToolStripMenuItem.MouseEnter += new System.EventHandler(this.acercaDeToolStripMenuItem_MouseEnter);
             this.acercaDeToolStripMenuItem.MouseLeave += new System.EventHandler(this.acercaDeToolStripMenuItem_MouseLeave);
+            // 
+            // dBAToolStripMenuItem
+            // 
+            this.dBAToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.exportDataToolStripMenuItem,
+            this.importDataToolStripMenuItem});
+            this.dBAToolStripMenuItem.ForeColor = System.Drawing.SystemColors.Control;
+            this.dBAToolStripMenuItem.Name = "dBAToolStripMenuItem";
+            resources.ApplyResources(this.dBAToolStripMenuItem, "dBAToolStripMenuItem");
+            this.dBAToolStripMenuItem.MouseEnter += new System.EventHandler(this.dBAToolStripMenuItem_MouseEnter);
+            this.dBAToolStripMenuItem.MouseLeave += new System.EventHandler(this.dBAToolStripMenuItem_MouseLeave);
+            // 
+            // exportDataToolStripMenuItem
+            // 
+            this.exportDataToolStripMenuItem.Name = "exportDataToolStripMenuItem";
+            resources.ApplyResources(this.exportDataToolStripMenuItem, "exportDataToolStripMenuItem");
+            this.exportDataToolStripMenuItem.Click += new System.EventHandler(this.exportDataToolStripMenuItem_Click);
+            // 
+            // importDataToolStripMenuItem
+            // 
+            this.importDataToolStripMenuItem.Name = "importDataToolStripMenuItem";
+            resources.ApplyResources(this.importDataToolStripMenuItem, "importDataToolStripMenuItem");
+            this.importDataToolStripMenuItem.Click += new System.EventHandler(this.importDataToolStripMenuItem_Click);
             // 
             // statusStrip1
             // 
@@ -219,6 +231,10 @@ namespace arquitectSoft
             this.pictureBoxMdiPrincipal.BackColor = System.Drawing.Color.Transparent;
             this.pictureBoxMdiPrincipal.Name = "pictureBoxMdiPrincipal";
             this.pictureBoxMdiPrincipal.TabStop = false;
+            // 
+            // openFileDialog1
+            // 
+            this.openFileDialog1.FileName = "openFileDialog1";
             // 
             // FrmMDIPrincipal
             // 
@@ -263,6 +279,10 @@ namespace arquitectSoft
         private System.Windows.Forms.ToolStripMenuItem mecanizadoToolStripMenuItem;
         private System.Windows.Forms.PictureBox pictureBoxMdiPrincipal;
         private System.Windows.Forms.ToolStripMenuItem analisisDePuertasToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem dBAToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem exportDataToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem importDataToolStripMenuItem;
+        private System.Windows.Forms.OpenFileDialog openFileDialog1;
     }
 }
 

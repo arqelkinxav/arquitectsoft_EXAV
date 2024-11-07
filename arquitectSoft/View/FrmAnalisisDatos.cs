@@ -47,9 +47,10 @@ namespace arquitectSoft.View
         private void BtnCargar_Click(object sender, EventArgs e)
         {
             Dto.AnalisisDatosDto dto = new Dto.AnalisisDatosDto();
-            
 
-            DialogResult dr = this.openFileDialog1.ShowDialog();
+            string directoryName = "";
+            this.openFileDialog1.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            DialogResult dr = this.openFileDialog1.ShowDialog();            
             if (dr == System.Windows.Forms.DialogResult.OK)
             {
                 int wantedFiles = 0;
@@ -61,14 +62,14 @@ namespace arquitectSoft.View
                 foreach (String file in openFileDialog1.FileNames)
                 {                    
                     FileInfo Archivo = new FileInfo(file);
+                    directoryName = Archivo.DirectoryName;
+
                     int idDocumento = int.Parse(Archivo.Name.ToString().Split('-')[0].Trim());
                     if (idDocumento == 1 || idDocumento == 2 || idDocumento == 4)
                     {
 
                         wantedFiles += idDocumento;
-
                         File_124.Add(file);
-
 
                     }
                     else 
@@ -95,8 +96,9 @@ namespace arquitectSoft.View
                 {
                     BtnChange.Visible = true;
                 }
-                
+
                 lblestadosAnalitica.Text = "Analitica Aplicada Correctamente!";
+                lblDirectoryName.Text = directoryName;
 
             }
         }
@@ -390,6 +392,7 @@ namespace arquitectSoft.View
             dtPerfilOfVidrioPanel.Rows.Clear();
             dtPerfilOfTubos.Rows.Clear();
             lblestadosAnalitica.Text = "";
+            lblDirectoryName.Text = "";
             BtnChange.Visible = false;
         }
 
@@ -457,6 +460,7 @@ namespace arquitectSoft.View
             bool swend = true;
 
             FolderBrowserDialog profilePath = new FolderBrowserDialog();
+            profilePath.SelectedPath = lblDirectoryName.Text;
             if (profilePath.ShowDialog() == DialogResult.OK)
             {
                 folderPath = profilePath.SelectedPath;

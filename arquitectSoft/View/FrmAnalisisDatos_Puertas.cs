@@ -256,6 +256,7 @@ namespace arquitectSoft.View
             txtAnchura.Text = "";
             NUpDownRowsP.Value = 1;
             BtnChange.Visible = false;
+            btnAnalizar.Visible = false;
 
         }
 
@@ -327,7 +328,6 @@ namespace arquitectSoft.View
                     int valuecountDoor = dataGridViewPCalculate.RowCount;
                     int valueinitialFoot = 0;
                     int PMValueFinish = 0;
-                    int PMHValueFinish = 0;
                     string Range = string.Format("A{0}:G{0}", valueinitial);
                     string Descheader = "";
                     string Rangeheader = "A2:G4";
@@ -343,7 +343,7 @@ namespace arquitectSoft.View
 
 
                     DataGridView table = new DataGridView();
-                    for (int Datagrid = 1; Datagrid <= 3; Datagrid++)
+                    for (int Datagrid = 1; Datagrid <= 4; Datagrid++)
                     {
                         valueinitial = 8;
                         valueinitialFoot = 0;
@@ -377,7 +377,15 @@ namespace arquitectSoft.View
                                 Range = string.Format("A{0}:H{0}", valueinitial);
                                 table = dataGridViewPCalculate;
                                 break;
-                            case 3:
+                            case 3: 
+                                rangetwo = "A{0}:H{0}";
+                                sheets = "PUERTAS HERRAJES";
+                                Descheader = "PUERTAS HERRAJES";
+                                Range = string.Format("A{0}:H{0}", valueinitial);
+                                RangeSubheader = string.Format("A{0}:G{1}", valuesubheaderDescr, valuesubheaderValue);
+                                table = dataGridViewPHerrajeCalculate;
+                                break;
+                            case 4:
                                 Range = string.Format("A{0}:H{0}", valueinitial);
                                 rangetwo = "A{0}:E{0}";
                                 sheets = "ALBARAN";
@@ -388,7 +396,7 @@ namespace arquitectSoft.View
 
                         }
 
-                        if (table.Rows.Count > 0 && Datagrid != 3)
+                        if (table.Rows.Count > 0 && Datagrid != 5)
                         {
                             //sheetscount += 1;
                             //Creating DataTable.
@@ -461,7 +469,7 @@ namespace arquitectSoft.View
                                 wb.Worksheet(sheets + "Puerta").Delete();
 
                             }
-                            else if (Datagrid == 3)
+                            else if (Datagrid == 4)
                             {
                                 var ws = wb.Worksheets.Add(dt, sheets);
                                 ws.Row(1).InsertRowsAbove(7);
@@ -609,7 +617,7 @@ namespace arquitectSoft.View
                             wb.Worksheet(sheets).Columns().AdjustToContents();
                             wb.Worksheet(sheets).Column(wrapTextDefault ? 3 : 2).Width = 57;
                         }
-                        else if (Datagrid == 3)
+                        else if (Datagrid == 4)
                         {
                             
                             Dto.AnalisisDatosDto dto = new Dto.AnalisisDatosDto();
@@ -675,7 +683,8 @@ namespace arquitectSoft.View
                                             }
                                                 
                                         }
-
+                                        
+                                        table2 = dataGridViewPHerrajeCalculate;
                                         foreach (DataGridViewRow row in table2.Rows)
                                         {
                                             dt1.Rows.Add(row.Cells[1].Value, row.Cells[2].Value, row.Cells[3].Value, row.Cells[4].Value, row.Cells[5].Value, "Puertas Herrajes");
@@ -976,44 +985,64 @@ namespace arquitectSoft.View
 
         private void btnAddRowDoor_Click(object sender, EventArgs e)
         {
-            
-            if (dtAddRowsP.Rows.Count == 0)
+            if (txtCodigo.Text == "" ||
+                txtacabado.Text == "" ||
+                txtDescripcion.Text == "" ||
+                txtAltura.Text == "" ||
+                txtAnchura.Text == "")
             {
-                dtAddRowsP.Columns.Add("Nomenclatura");
-                dtAddRowsP.Columns.Add("Codigo");
-                dtAddRowsP.Columns.Add("Apertura de Puerta");
-                dtAddRowsP.Columns.Add("Acabado Perfileria Puertas");                
-                dtAddRowsP.Columns.Add("Item");
-                dtAddRowsP.Columns.Add("Altura");
-                dtAddRowsP.Columns.Add("Anchura");
-                dtAddRowsP.Columns.Add("Conectado/pared Tubo L1");
-                dtAddRowsP.Columns.Add("Conectado/pared Tubo L2");
-                dtAddRowsP.Columns.Add("Cantidad");
-                dtAddRowsP.Columns.Add("Ubicación");
-                dtAddRowsP.Columns.Add("Area");
-             
-            }           
-
-            int n = int.Parse(NUpDownRowsP.Value.ToString());
-            int i = 1;
-            
-            while (i <= n)
-            {
-                int rowscount = dtAddRowsP.Rows.Count +1;
-                string rows = rowscount.ToString();
-                string Nomen = "P-" + rows;
-                dtAddRowsP.Rows.Add(Nomen, txtCodigo.Text, "", txtacabado.Text, txtDescripcion.Text, txtAltura.Text, txtAnchura.Text, "No", "No","1");
-                i++;
+                MessageBox.Show("Debe digitar todos los datos", "Mensaje Alerta", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
+            else
+            {
+                if (dtAddRowsP.Rows.Count == 0)
+                {
+                    dtAddRowsP.Columns.Add("Nomenclatura");
+                    dtAddRowsP.Columns.Add("Codigo");
+                    dtAddRowsP.Columns.Add("Apertura de Puerta");
+                    dtAddRowsP.Columns.Add("Acabado Perfileria Puertas");                
+                    dtAddRowsP.Columns.Add("Item");
+                    dtAddRowsP.Columns.Add("Altura");
+                    dtAddRowsP.Columns.Add("Anchura");
+                    dtAddRowsP.Columns.Add("Conectado/pared Tubo L1");
+                    dtAddRowsP.Columns.Add("Conectado/pared Tubo L2");
+                    dtAddRowsP.Columns.Add("Cantidad");
+                    dtAddRowsP.Columns.Add("Ubicación");
+                    dtAddRowsP.Columns.Add("Area");
+             
+                }           
+
+                int n = int.Parse(NUpDownRowsP.Value.ToString());
+                int i = 1;
+            
+                while (i <= n)
+                {
+                    int rowscount = dtAddRowsP.Rows.Count +1;
+                    string rows = rowscount.ToString();
+                    string Nomen = "P-" + rows;
+                    dtAddRowsP.Rows.Add(Nomen, txtCodigo.Text, "", txtacabado.Text, txtDescripcion.Text, txtAltura.Text, txtAnchura.Text, "No", "No","1");
+                    i++;
+                }
                
-            dataGridViewPNew.DataSource = dtAddRowsP;
-            dataGridViewPNew.Columns[4].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            dataGridViewPNew.Columns[2].Visible = false;
-            dataGridViewPNew.Columns[7].Visible = false;
-            dataGridViewPNew.Columns[8].Visible = false;
-            dataGridViewPNew.Columns[9].Visible = false;
-            dataGridViewPNew.Columns[10].Visible = false;
-            dataGridViewPNew.Columns[11].Visible = false;
+                dataGridViewPNew.DataSource = dtAddRowsP;
+                dataGridViewPNew.Columns[4].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                dataGridViewPNew.Columns[2].Visible = false;
+                dataGridViewPNew.Columns[7].Visible = false;
+                dataGridViewPNew.Columns[8].Visible = false;
+                dataGridViewPNew.Columns[9].Visible = false;
+                dataGridViewPNew.Columns[10].Visible = false;
+                dataGridViewPNew.Columns[11].Visible = false;
+
+                if (dtAddRowsP.Rows.Count > 0)
+                {
+                    btnAnalizar.Visible = true;
+                }
+            }
+                
+            
+
+
+            
 
         }
 
