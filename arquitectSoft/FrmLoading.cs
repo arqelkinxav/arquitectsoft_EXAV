@@ -124,6 +124,13 @@ namespace arquitectSoft
             ChkListAlbaran.SetItemChecked(0, true);
             ChkListAlbaran.SetItemChecked(1, true);
             ChkListAlbaran.SetItemChecked(2, true);
+
+            if(Generals.Global.AnalisisType == "2")
+            {
+                ChkListAlbaran.Visible = false;
+                lblalbaran.Visible=false;
+            }
+
         }
 
         private void BtnAceptar_Click(object sender, EventArgs e)

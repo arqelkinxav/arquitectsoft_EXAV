@@ -286,6 +286,7 @@ namespace arquitectSoft.View
             InitializeOpenFileDialog();
 
             NUpDownMedidaBase.Value = 2960;
+            Generals.Global.AnalisisType = "1";
         }
 
         private void InitializeOpenFileDialog()

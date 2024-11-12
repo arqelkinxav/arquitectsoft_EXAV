@@ -28,6 +28,7 @@ namespace arquitectSoft
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmLoading));
             this.label1 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
@@ -49,7 +50,7 @@ namespace arquitectSoft
             this.BtnAceptar = new arquitectSoft.Generals.RJButton();
             this.elipseControl3 = new arquitectSoft.Generals.ElipseControl();
             this.ChkListAlbaran = new System.Windows.Forms.CheckedListBox();
-            this.label8 = new System.Windows.Forms.Label();
+            this.lblalbaran = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label1
@@ -271,16 +272,16 @@ namespace arquitectSoft
             this.ChkListAlbaran.Size = new System.Drawing.Size(120, 49);
             this.ChkListAlbaran.TabIndex = 98;
             // 
-            // label8
+            // lblalbaran
             // 
-            this.label8.AutoSize = true;
-            this.label8.BackColor = System.Drawing.Color.White;
-            this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.Location = new System.Drawing.Point(2, 258);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(121, 13);
-            this.label8.TabIndex = 99;
-            this.label8.Text = "Datos Para Albaran:";
+            this.lblalbaran.AutoSize = true;
+            this.lblalbaran.BackColor = System.Drawing.Color.White;
+            this.lblalbaran.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblalbaran.Location = new System.Drawing.Point(2, 258);
+            this.lblalbaran.Name = "lblalbaran";
+            this.lblalbaran.Size = new System.Drawing.Size(121, 13);
+            this.lblalbaran.TabIndex = 99;
+            this.lblalbaran.Text = "Datos Para Albaran:";
             // 
             // FrmLoading
             // 
@@ -288,7 +289,7 @@ namespace arquitectSoft
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.DimGray;
             this.ClientSize = new System.Drawing.Size(499, 345);
-            this.Controls.Add(this.label8);
+            this.Controls.Add(this.lblalbaran);
             this.Controls.Add(this.ChkListAlbaran);
             this.Controls.Add(this.BtnCancelar);
             this.Controls.Add(this.BtnAceptar);
@@ -310,6 +311,7 @@ namespace arquitectSoft
             this.Controls.Add(this.label1);
             this.Controls.Add(this.elipseControl2);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FrmLoading";
@@ -345,7 +347,7 @@ namespace arquitectSoft
         private Generals.RJButton BtnCancelar;
         private Generals.RJButton BtnAceptar;
         private Generals.ElipseControl elipseControl3;
-        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label lblalbaran;
         private System.Windows.Forms.CheckedListBox ChkListAlbaran;
     }
 }

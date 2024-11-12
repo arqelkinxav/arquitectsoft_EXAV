@@ -171,6 +171,7 @@ namespace arquitectSoft.View
 
             NUpDownMedidaBase.Value = 2960;
             dataGridViewP.Visible = false;
+            Generals.Global.AnalisisType = "2";
         }
 
         private void InitializeOpenFileDialog()

@@ -59,6 +59,7 @@ namespace arquitectSoft
             // menuStrip
             // 
             this.menuStrip.BackColor = System.Drawing.SystemColors.Desktop;
+            this.menuStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.TMSItem_Administracion,
             this.TMSItem_procesos,
@@ -212,6 +213,7 @@ namespace arquitectSoft
             // statusStrip1
             // 
             this.statusStrip1.BackColor = System.Drawing.Color.Black;
+            this.statusStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.Mdi_nameConnect2});
             resources.ApplyResources(this.statusStrip1, "statusStrip1");
