@@ -48,7 +48,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>arquitecto.ico</ApplicationIcon>
+    <ApplicationIcon>LOGO-ARQUIMART.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ClosedXML, Version=0.95.4.0, Culture=neutral, processorArchitecture=MSIL">
@@ -145,6 +145,12 @@
     <Compile Include="Dto\SubComponenteDto.cs" />
     <Compile Include="Dto\UnidadCalculadaDto.cs" />
     <Compile Include="Dto\UnidadMedidaDto.cs" />
+    <Compile Include="FrmDBA_Import.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmDBA_Import.Designer.cs">
+      <DependentUpon>FrmDBA_Import.cs</DependentUpon>
+    </Compile>
     <Compile Include="FrmDBA.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -285,6 +291,9 @@
     <Compile Include="View\FrmSubComponente.Designer.cs">
       <DependentUpon>FrmSubComponente.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="FrmDBA_Import.resx">
+      <DependentUpon>FrmDBA_Import.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FrmDBA.resx">
       <DependentUpon>FrmDBA.cs</DependentUpon>
     </EmbeddedResource>
@@ -443,6 +452,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="arquitecto.ico" />
+    <Content Include="LOGO-ARQUIMART.ico" />
     <Content Include="plano-de-la-casa.ico" />
     <Content Include="plano.ico" />
   </ItemGroup>

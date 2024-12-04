@@ -9,12 +9,13 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 using System.Diagnostics;
+using System.Data;
 
 namespace arquitectSoft
 {
-    public partial class FrmDBA : Form
+    public partial class FrmDBA_Import : Form
     {
-        public FrmDBA()
+        public FrmDBA_Import()
         {
             InitializeComponent();
             this.Text = String.Format("Acerca de {0}", AssemblyTitle);
@@ -112,42 +113,61 @@ namespace arquitectSoft
 
             if (txtPath.Text == "")
             {
-                MessageBox.Show("Debe Seleccionar una Ruta", "Mensaje Alerta", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("Debe Seleccionar un archivo", "Mensaje Alerta", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
 
-            string backupFolder = txtPath.Text;
-            
-            string database = "arquitectdb";
-            string fileName = $"{database}_backup_{DateTime.Now.ToString("yyyyMMdd_HHmmss")}.sql";
-            string backupFilePath = Path.Combine(backupFolder, fileName);
+            string FileBackup = txtPath.Text;
+
             Generals.Conexion con = new Generals.Conexion();
-            string result = con.ExportBackupMysql(backupFilePath);
+            con.ImportBackupMysql(FileBackup);
 
-            string headerText = "SET GLOBAL log_bin_trust_function_creators = 1;\n";
+            
+            string fail = "";
+            string[] param = { lblfilename.Text};
+            con.Open(out fail);
+            MySqlDataReader drResult = con.ExecuteReader(Generals.Constantes.QUERY_INSERT_dbmanagmet, out fail, param);
+            con.Close();
 
-            // Lee el contenido del archivo existente
-            string existingContent = File.ReadAllText(backupFilePath);
-
-            // Escribe el texto al inicio junto con el contenido existente
-            File.WriteAllText(backupFilePath, headerText + existingContent);
-
-            MessageBox.Show(result, "Mensaje Alerta", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            GetLastImportData();
+            MessageBox.Show("Archivo Cargado Correctamente", "Mensaje Alerta", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
 
         private void btnExaminar_Click(object sender, EventArgs e)
         {
-            FolderBrowserDialog profilePath = new FolderBrowserDialog();
-            if (profilePath.ShowDialog() == DialogResult.OK)
+            DialogResult dr = this.openFileDialog1.ShowDialog();
+            if (dr == System.Windows.Forms.DialogResult.OK)
             {
-                txtPath.Text = profilePath.SelectedPath;
+                foreach (String file in openFileDialog1.FileNames)
+                {
+                    FileInfo Archivo = new FileInfo(file);
+                    txtPath.Text = Archivo.FullName;
+                    lblfilename.Text = Archivo.Name.ToString().Replace(Archivo.Extension, "");
+                }
             }
         }
 
         private void FrmDBA_Load(object sender, EventArgs e)
         {
+            GetLastImportData(); 
+        }
 
+        public void GetLastImportData()
+        {
+            Generals.Conexion con = new Generals.Conexion();
+            string fail = "";
+            con.Open(out fail);
+            
+            DataTable dt = con.ExecuteDataSet("SELECT filename,created_at FROM `dbmanagments` ORDER BY `created_at` DESC LIMIT 1;", out fail).Tables[0];
+            con.Close();
 
+            if (dt.Rows.Count > 0)
+            {
+                DataRow row = dt.Rows[0];
+                labelFilename.Text = "Archivo Cargado: " + (string)row["filename"];
+                lblcurrentdate.Text = "Fecha Local Actualizacón: " +  row["created_at"].ToString();
+            }
+   
         }
     }
 }

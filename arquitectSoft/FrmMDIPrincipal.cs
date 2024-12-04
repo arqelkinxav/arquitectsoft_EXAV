@@ -243,17 +243,10 @@ namespace arquitectSoft
 
         private void importDataToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Generals.Conexion con = new Generals.Conexion();
-            DialogResult dr = this.openFileDialog1.ShowDialog();
-            if (dr == System.Windows.Forms.DialogResult.OK)
-            {
-                foreach (String file in openFileDialog1.FileNames)
-                {
-                    FileInfo Archivo = new FileInfo(file);
-                    con.ImportBackupMysql(Archivo.FullName);
-
-                }
-            }
+            FrmDBA_Import formDba = new FrmDBA_Import();
+            formDba.MdiParent = this;
+            formDba.StartPosition = FormStartPosition.CenterScreen;
+            formDba.Show();
         }
     }
 }

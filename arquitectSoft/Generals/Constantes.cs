@@ -8,6 +8,7 @@ namespace arquitectSoft.Generals
 {
     class Constantes
     {
+        
         public static String QUERY_EXITS_USUARIO = "SELECT Nombre,usuario FROM usuario where usuario = ? and contrasena = ?;";
         
         //Componentes
@@ -127,5 +128,8 @@ namespace arquitectSoft.Generals
         public static String QUERY_GET_CALCULATE_PUERTAS_AGRUPAR = "spSubComponentePuertaAgrupar";
 
         public static String QUERY_GET_COMPONENTE_CODIGOACABADO = "spComponenteGetCodigoAcabado";
+
+        //Managments data base
+        public static String QUERY_INSERT_dbmanagmet = "INSERT dbmanagments (filename) VALUES (?)";
     }
 }
