@@ -455,6 +455,17 @@
     <Content Include="LOGO-ARQUIMART.ico" />
     <Content Include="plano-de-la-casa.ico" />
     <Content Include="plano.ico" />
+    <Content Include="Resources\Icons_ArquitectSoft\icons8-cancel-48.png" />
+    <Content Include="Resources\Icons_ArquitectSoft\icons8-copy-48.png" />
+    <Content Include="Resources\Icons_ArquitectSoft\icons8-delete-table-48.png" />
+    <Content Include="Resources\Icons_ArquitectSoft\icons8-edit-48.png" />
+    <None Include="Resources\Icons_ArquitectSoft\icons8-exit-48.png" />
+    <None Include="Resources\Icons_ArquitectSoft\icons8-expand-48.png" />
+    <Content Include="Resources\Icons_ArquitectSoft\icons8-insert-table-48.png" />
+    <Content Include="Resources\Icons_ArquitectSoft\icons8-save-48.png" />
+    <Content Include="Resources\Icons_ArquitectSoft\icons8-search-48.png" />
+    <Content Include="Resources\Icons_ArquitectSoft\icons8-trash-48.png" />
+    <Content Include="Resources\Icons_ArquitectSoft\New.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -40,7 +40,6 @@ namespace arquitectSoft.View
             this.unidadescalculadasBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.unidades_calculadasTableAdapter = new arquitectSoft.arquitectdbDataSetTableAdapters.unidades_calculadasTableAdapter();
             this.GridViewComponenteEsp = new System.Windows.Forms.DataGridView();
-            this.label1 = new System.Windows.Forms.Label();
             this.chkEspecial = new System.Windows.Forms.CheckBox();
             this.BtnCheck = new System.Windows.Forms.Button();
             this.CmbAcabado = new System.Windows.Forms.ComboBox();
@@ -50,19 +49,22 @@ namespace arquitectSoft.View
             this.lblEtiquetaCodigo = new System.Windows.Forms.Label();
             this.lbletiquetaDescripcion = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.BtnSalir = new System.Windows.Forms.Button();
             this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
             this.bindingSource2 = new System.Windows.Forms.BindingSource(this.components);
-            this.BtnDuplicar = new arquitectSoft.Generals.RJButton();
-            this.BtnCancelar = new arquitectSoft.Generals.RJButton();
-            this.BtnBuscar = new arquitectSoft.Generals.RJButton();
-            this.BtnEliminar = new arquitectSoft.Generals.RJButton();
-            this.BtnEditar = new arquitectSoft.Generals.RJButton();
-            this.BtnGuardar = new arquitectSoft.Generals.RJButton();
-            this.BtnNuevo = new arquitectSoft.Generals.RJButton();
-            this.BtnBorrar = new arquitectSoft.Generals.RJButton();
-            this.BtnAgregar = new arquitectSoft.Generals.RJButton();
-            this.elipseControl1 = new arquitectSoft.Generals.ElipseControl();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.BtnNuevo = new System.Windows.Forms.ToolStripMenuItem();
+            this.BtnGuardar = new System.Windows.Forms.ToolStripMenuItem();
+            this.BtnEditar = new System.Windows.Forms.ToolStripMenuItem();
+            this.BtnEliminar = new System.Windows.Forms.ToolStripMenuItem();
+            this.BtnBuscar = new System.Windows.Forms.ToolStripMenuItem();
+            this.BtnCancelar = new System.Windows.Forms.ToolStripMenuItem();
+            this.BtnDuplicar = new System.Windows.Forms.ToolStripMenuItem();
+            this.salirToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.btnMaximizar = new System.Windows.Forms.ToolStripMenuItem();
+            this.iconMenuItem1 = new FontAwesome.Sharp.IconMenuItem();
+            this.BtnAgregar = new System.Windows.Forms.ToolStripMenuItem();
+            this.BtnBorrar = new System.Windows.Forms.ToolStripMenuItem();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.codigoDataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.descripcionDataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cxdefectoDataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -73,19 +75,7 @@ namespace arquitectSoft.View
             this.elevadoDataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cortesDataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.subComponentBindingSource1 = new System.Windows.Forms.BindingSource(this.components);
-            this.codigoDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.descripcionDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cxdefectoDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cAdicionalDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.unidadCalculadaDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.aDecrementoDataGridViewCheckBoxColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.idSubcomponenteDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.elevadoDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cortesDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.subComponentBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.EliCtrlButtons = new arquitectSoft.Generals.ElipseControl();
-            this.elipseControl2 = new arquitectSoft.Generals.ElipseControl();
-            this.elipseControl3 = new arquitectSoft.Generals.ElipseControl();
             this.elipseComponent1 = new arquitectSoft.Generals.ElipseComponent();
             ((System.ComponentModel.ISupportInitialize)(this.GridViewComponente)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.arquitectdbDataSet)).BeginInit();
@@ -93,6 +83,8 @@ namespace arquitectSoft.View
             ((System.ComponentModel.ISupportInitialize)(this.GridViewComponenteEsp)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource2)).BeginInit();
+            this.menuStrip1.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.subComponentBindingSource1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.subComponentBindingSource)).BeginInit();
             this.SuspendLayout();
@@ -160,7 +152,8 @@ namespace arquitectSoft.View
             this.GridViewComponente.AllowUserToDeleteRows = false;
             this.GridViewComponente.AllowUserToResizeColumns = false;
             this.GridViewComponente.AllowUserToResizeRows = false;
-            this.GridViewComponente.AutoGenerateColumns = false;
+            this.GridViewComponente.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.GridViewComponente.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
             this.GridViewComponente.BackgroundColor = System.Drawing.SystemColors.ButtonHighlight;
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
@@ -172,21 +165,11 @@ namespace arquitectSoft.View
             dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.GridViewComponente.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.GridViewComponente.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.GridViewComponente.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.codigoDataGridViewTextBoxColumn,
-            this.descripcionDataGridViewTextBoxColumn,
-            this.cxdefectoDataGridViewTextBoxColumn,
-            this.cAdicionalDataGridViewTextBoxColumn,
-            this.unidadCalculadaDataGridViewTextBoxColumn,
-            this.aDecrementoDataGridViewCheckBoxColumn,
-            this.idSubcomponenteDataGridViewTextBoxColumn,
-            this.elevadoDataGridViewTextBoxColumn,
-            this.cortesDataGridViewTextBoxColumn});
-            this.GridViewComponente.DataSource = this.subComponentBindingSource;
             this.GridViewComponente.Enabled = false;
             this.GridViewComponente.EnableHeadersVisualStyles = false;
             this.GridViewComponente.GridColor = System.Drawing.SystemColors.Control;
-            this.GridViewComponente.Location = new System.Drawing.Point(1, 143);
+            this.GridViewComponente.Location = new System.Drawing.Point(0, 232);
+            this.GridViewComponente.Margin = new System.Windows.Forms.Padding(4);
             this.GridViewComponente.Name = "GridViewComponente";
             dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
@@ -196,12 +179,14 @@ namespace arquitectSoft.View
             dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.GridViewComponente.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            this.GridViewComponente.RowHeadersWidth = 51;
             this.GridViewComponente.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.GridViewComponente.Size = new System.Drawing.Size(985, 300);
+            this.GridViewComponente.Size = new System.Drawing.Size(1795, 317);
             this.GridViewComponente.TabIndex = 23;
             this.GridViewComponente.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.GridViewComponente_CellContentDoubleClick);
             this.GridViewComponente.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.GridViewComponente_CellMouseDown);
             this.GridViewComponente.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.GridViewComponente_DataError);
+            this.GridViewComponente.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.GridViewComponente_EditingControlShowing);
             // 
             // arquitectdbDataSet
             // 
@@ -223,6 +208,8 @@ namespace arquitectSoft.View
             this.GridViewComponenteEsp.AllowUserToDeleteRows = false;
             this.GridViewComponenteEsp.AllowUserToResizeColumns = false;
             this.GridViewComponenteEsp.AllowUserToResizeRows = false;
+            this.GridViewComponenteEsp.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.GridViewComponenteEsp.AutoGenerateColumns = false;
             this.GridViewComponenteEsp.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
             this.GridViewComponenteEsp.BackgroundColor = System.Drawing.SystemColors.ButtonHighlight;
@@ -248,25 +235,14 @@ namespace arquitectSoft.View
             this.GridViewComponenteEsp.DataSource = this.subComponentBindingSource1;
             this.GridViewComponenteEsp.Enabled = false;
             this.GridViewComponenteEsp.EnableHeadersVisualStyles = false;
-            this.GridViewComponenteEsp.Location = new System.Drawing.Point(1, 292);
+            this.GridViewComponenteEsp.Location = new System.Drawing.Point(0, 557);
+            this.GridViewComponenteEsp.Margin = new System.Windows.Forms.Padding(4);
             this.GridViewComponenteEsp.Name = "GridViewComponenteEsp";
+            this.GridViewComponenteEsp.RowHeadersWidth = 51;
             this.GridViewComponenteEsp.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.GridViewComponenteEsp.Size = new System.Drawing.Size(919, 151);
+            this.GridViewComponenteEsp.Size = new System.Drawing.Size(1795, 334);
             this.GridViewComponenteEsp.TabIndex = 29;
             this.GridViewComponenteEsp.Visible = false;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.BackColor = System.Drawing.Color.Black;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F);
-            this.label1.ForeColor = System.Drawing.Color.White;
-            this.label1.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.label1.Location = new System.Drawing.Point(33, 52);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(120, 24);
-            this.label1.TabIndex = 49;
-            this.label1.Text = "Componente";
             // 
             // chkEspecial
             // 
@@ -274,9 +250,10 @@ namespace arquitectSoft.View
             this.chkEspecial.BackColor = System.Drawing.Color.White;
             this.chkEspecial.ForeColor = System.Drawing.Color.Black;
             this.chkEspecial.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.chkEspecial.Location = new System.Drawing.Point(874, 89);
+            this.chkEspecial.Location = new System.Drawing.Point(1176, 39);
+            this.chkEspecial.Margin = new System.Windows.Forms.Padding(4);
             this.chkEspecial.Name = "chkEspecial";
-            this.chkEspecial.Size = new System.Drawing.Size(100, 17);
+            this.chkEspecial.Size = new System.Drawing.Size(114, 19);
             this.chkEspecial.TabIndex = 22;
             this.chkEspecial.Text = "Vidrios/Paneles";
             this.chkEspecial.UseVisualStyleBackColor = false;
@@ -286,9 +263,10 @@ namespace arquitectSoft.View
             // 
             this.BtnCheck.ImageList = this.ImgLista;
             this.BtnCheck.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.BtnCheck.Location = new System.Drawing.Point(138, 108);
+            this.BtnCheck.Location = new System.Drawing.Point(195, 64);
+            this.BtnCheck.Margin = new System.Windows.Forms.Padding(4);
             this.BtnCheck.Name = "BtnCheck";
-            this.BtnCheck.Size = new System.Drawing.Size(64, 23);
+            this.BtnCheck.Size = new System.Drawing.Size(85, 28);
             this.BtnCheck.TabIndex = 24;
             this.BtnCheck.Text = "Validar";
             this.BtnCheck.UseVisualStyleBackColor = true;
@@ -297,9 +275,10 @@ namespace arquitectSoft.View
             // CmbAcabado
             // 
             this.CmbAcabado.FormattingEnabled = true;
-            this.CmbAcabado.Location = new System.Drawing.Point(683, 107);
+            this.CmbAcabado.Location = new System.Drawing.Point(922, 63);
+            this.CmbAcabado.Margin = new System.Windows.Forms.Padding(4);
             this.CmbAcabado.Name = "CmbAcabado";
-            this.CmbAcabado.Size = new System.Drawing.Size(291, 21);
+            this.CmbAcabado.Size = new System.Drawing.Size(387, 24);
             this.CmbAcabado.TabIndex = 44;
             // 
             // ImgListFinal
@@ -318,16 +297,19 @@ namespace arquitectSoft.View
             // 
             // txtDescripcion
             // 
-            this.txtDescripcion.Location = new System.Drawing.Point(219, 107);
+            this.txtDescripcion.Location = new System.Drawing.Point(303, 63);
+            this.txtDescripcion.Margin = new System.Windows.Forms.Padding(4);
             this.txtDescripcion.Name = "txtDescripcion";
-            this.txtDescripcion.Size = new System.Drawing.Size(441, 20);
+            this.txtDescripcion.Size = new System.Drawing.Size(587, 20);
             this.txtDescripcion.TabIndex = 63;
             // 
             // txtCodigo
             // 
-            this.txtCodigo.Location = new System.Drawing.Point(12, 107);
+            this.txtCodigo.Location = new System.Drawing.Point(27, 63);
+            this.txtCodigo.Margin = new System.Windows.Forms.Padding(4);
             this.txtCodigo.Name = "txtCodigo";
-            this.txtCodigo.Size = new System.Drawing.Size(120, 20);
+            this.txtCodigo.ReadOnly = true;
+            this.txtCodigo.Size = new System.Drawing.Size(159, 20);
             this.txtCodigo.TabIndex = 64;
             // 
             // lblEtiquetaCodigo
@@ -336,9 +318,10 @@ namespace arquitectSoft.View
             this.lblEtiquetaCodigo.BackColor = System.Drawing.Color.White;
             this.lblEtiquetaCodigo.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblEtiquetaCodigo.ForeColor = System.Drawing.Color.Black;
-            this.lblEtiquetaCodigo.Location = new System.Drawing.Point(-1, 90);
+            this.lblEtiquetaCodigo.Location = new System.Drawing.Point(10, 38);
+            this.lblEtiquetaCodigo.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblEtiquetaCodigo.Name = "lblEtiquetaCodigo";
-            this.lblEtiquetaCodigo.Size = new System.Drawing.Size(54, 16);
+            this.lblEtiquetaCodigo.Size = new System.Drawing.Size(66, 20);
             this.lblEtiquetaCodigo.TabIndex = 97;
             this.lblEtiquetaCodigo.Text = "Codigo:";
             // 
@@ -348,9 +331,10 @@ namespace arquitectSoft.View
             this.lbletiquetaDescripcion.BackColor = System.Drawing.Color.White;
             this.lbletiquetaDescripcion.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbletiquetaDescripcion.ForeColor = System.Drawing.Color.Black;
-            this.lbletiquetaDescripcion.Location = new System.Drawing.Point(211, 90);
+            this.lbletiquetaDescripcion.Location = new System.Drawing.Point(292, 39);
+            this.lbletiquetaDescripcion.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lbletiquetaDescripcion.Name = "lbletiquetaDescripcion";
-            this.lbletiquetaDescripcion.Size = new System.Drawing.Size(82, 16);
+            this.lbletiquetaDescripcion.Size = new System.Drawing.Size(104, 20);
             this.lbletiquetaDescripcion.TabIndex = 98;
             this.lbletiquetaDescripcion.Text = "Descripcion:";
             // 
@@ -360,387 +344,259 @@ namespace arquitectSoft.View
             this.label2.BackColor = System.Drawing.Color.White;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.Color.Black;
-            this.label2.Location = new System.Drawing.Point(671, 88);
+            this.label2.Location = new System.Drawing.Point(906, 37);
+            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(66, 16);
+            this.label2.Size = new System.Drawing.Size(79, 20);
             this.label2.TabIndex = 99;
             this.label2.Text = "Acabado:";
             // 
-            // BtnSalir
+            // menuStrip1
             // 
-            this.BtnSalir.BackColor = System.Drawing.Color.Black;
-            this.BtnSalir.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.BtnSalir.FlatAppearance.BorderColor = System.Drawing.Color.Black;
-            this.BtnSalir.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnSalir.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.BtnSalir.ForeColor = System.Drawing.Color.White;
-            this.BtnSalir.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.BtnSalir.ImageIndex = 51;
-            this.BtnSalir.ImageList = this.ImgLista;
-            this.BtnSalir.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.BtnSalir.Location = new System.Drawing.Point(902, 14);
-            this.BtnSalir.Name = "BtnSalir";
-            this.BtnSalir.Size = new System.Drawing.Size(72, 35);
-            this.BtnSalir.TabIndex = 17;
-            this.BtnSalir.Text = "Salir";
-            this.BtnSalir.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
-            this.BtnSalir.UseVisualStyleBackColor = false;
-            this.BtnSalir.Click += new System.EventHandler(this.BtnSalir_Click);
-            // 
-            // BtnDuplicar
-            // 
-            this.BtnDuplicar.BackColor = System.Drawing.Color.DimGray;
-            this.BtnDuplicar.BackgroundColor = System.Drawing.Color.DimGray;
-            this.BtnDuplicar.BorderColor = System.Drawing.Color.Black;
-            this.BtnDuplicar.BorderRadius = 20;
-            this.BtnDuplicar.BorderSize = 0;
-            this.BtnDuplicar.FlatAppearance.BorderSize = 0;
-            this.BtnDuplicar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnDuplicar.ForeColor = System.Drawing.Color.White;
-            this.BtnDuplicar.ImageIndex = 5;
-            this.BtnDuplicar.ImageList = this.ImgListFinal;
-            this.BtnDuplicar.Location = new System.Drawing.Point(299, 13);
-            this.BtnDuplicar.Name = "BtnDuplicar";
-            this.BtnDuplicar.Size = new System.Drawing.Size(42, 36);
-            this.BtnDuplicar.TabIndex = 62;
-            this.BtnDuplicar.TextColor = System.Drawing.Color.White;
-            this.BtnDuplicar.UseVisualStyleBackColor = false;
-            this.BtnDuplicar.Click += new System.EventHandler(this.BtnDuplicar_Click);
-            // 
-            // BtnCancelar
-            // 
-            this.BtnCancelar.BackColor = System.Drawing.Color.DimGray;
-            this.BtnCancelar.BackgroundColor = System.Drawing.Color.DimGray;
-            this.BtnCancelar.BorderColor = System.Drawing.Color.Black;
-            this.BtnCancelar.BorderRadius = 20;
-            this.BtnCancelar.BorderSize = 0;
-            this.BtnCancelar.FlatAppearance.BorderSize = 0;
-            this.BtnCancelar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnCancelar.ForeColor = System.Drawing.Color.White;
-            this.BtnCancelar.ImageIndex = 4;
-            this.BtnCancelar.ImageList = this.ImgListFinal;
-            this.BtnCancelar.Location = new System.Drawing.Point(251, 13);
-            this.BtnCancelar.Name = "BtnCancelar";
-            this.BtnCancelar.Size = new System.Drawing.Size(42, 36);
-            this.BtnCancelar.TabIndex = 61;
-            this.BtnCancelar.TextColor = System.Drawing.Color.White;
-            this.BtnCancelar.UseVisualStyleBackColor = false;
-            this.BtnCancelar.Click += new System.EventHandler(this.BtnCancelar_Click);
-            // 
-            // BtnBuscar
-            // 
-            this.BtnBuscar.BackColor = System.Drawing.Color.DimGray;
-            this.BtnBuscar.BackgroundColor = System.Drawing.Color.DimGray;
-            this.BtnBuscar.BorderColor = System.Drawing.Color.Black;
-            this.BtnBuscar.BorderRadius = 20;
-            this.BtnBuscar.BorderSize = 0;
-            this.BtnBuscar.FlatAppearance.BorderSize = 0;
-            this.BtnBuscar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnBuscar.ForeColor = System.Drawing.Color.White;
-            this.BtnBuscar.ImageIndex = 3;
-            this.BtnBuscar.ImageList = this.ImgListFinal;
-            this.BtnBuscar.Location = new System.Drawing.Point(203, 12);
-            this.BtnBuscar.Name = "BtnBuscar";
-            this.BtnBuscar.Size = new System.Drawing.Size(42, 36);
-            this.BtnBuscar.TabIndex = 60;
-            this.BtnBuscar.TextColor = System.Drawing.Color.White;
-            this.BtnBuscar.UseVisualStyleBackColor = false;
-            this.BtnBuscar.Click += new System.EventHandler(this.BtnBuscar_Click);
-            // 
-            // BtnEliminar
-            // 
-            this.BtnEliminar.BackColor = System.Drawing.Color.DimGray;
-            this.BtnEliminar.BackgroundColor = System.Drawing.Color.DimGray;
-            this.BtnEliminar.BorderColor = System.Drawing.Color.Black;
-            this.BtnEliminar.BorderRadius = 20;
-            this.BtnEliminar.BorderSize = 0;
-            this.BtnEliminar.FlatAppearance.BorderSize = 0;
-            this.BtnEliminar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnEliminar.ForeColor = System.Drawing.Color.White;
-            this.BtnEliminar.ImageIndex = 8;
-            this.BtnEliminar.ImageList = this.ImgListFinal;
-            this.BtnEliminar.Location = new System.Drawing.Point(156, 13);
-            this.BtnEliminar.Name = "BtnEliminar";
-            this.BtnEliminar.Size = new System.Drawing.Size(42, 36);
-            this.BtnEliminar.TabIndex = 59;
-            this.BtnEliminar.TextColor = System.Drawing.Color.White;
-            this.BtnEliminar.UseVisualStyleBackColor = false;
-            this.BtnEliminar.Click += new System.EventHandler(this.BtnEliminar_Click);
-            // 
-            // BtnEditar
-            // 
-            this.BtnEditar.BackColor = System.Drawing.Color.DimGray;
-            this.BtnEditar.BackgroundColor = System.Drawing.Color.DimGray;
-            this.BtnEditar.BorderColor = System.Drawing.Color.Black;
-            this.BtnEditar.BorderRadius = 20;
-            this.BtnEditar.BorderSize = 0;
-            this.BtnEditar.FlatAppearance.BorderSize = 0;
-            this.BtnEditar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnEditar.ForeColor = System.Drawing.Color.White;
-            this.BtnEditar.ImageIndex = 2;
-            this.BtnEditar.ImageList = this.ImgListFinal;
-            this.BtnEditar.Location = new System.Drawing.Point(108, 13);
-            this.BtnEditar.Name = "BtnEditar";
-            this.BtnEditar.Size = new System.Drawing.Size(42, 36);
-            this.BtnEditar.TabIndex = 58;
-            this.BtnEditar.TextColor = System.Drawing.Color.White;
-            this.BtnEditar.UseVisualStyleBackColor = false;
-            this.BtnEditar.Click += new System.EventHandler(this.BtnEditar_Click);
-            // 
-            // BtnGuardar
-            // 
-            this.BtnGuardar.BackColor = System.Drawing.Color.DimGray;
-            this.BtnGuardar.BackgroundColor = System.Drawing.Color.DimGray;
-            this.BtnGuardar.BorderColor = System.Drawing.Color.Black;
-            this.BtnGuardar.BorderRadius = 20;
-            this.BtnGuardar.BorderSize = 0;
-            this.BtnGuardar.FlatAppearance.BorderSize = 0;
-            this.BtnGuardar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnGuardar.ForeColor = System.Drawing.Color.White;
-            this.BtnGuardar.ImageIndex = 1;
-            this.BtnGuardar.ImageList = this.ImgListFinal;
-            this.BtnGuardar.Location = new System.Drawing.Point(60, 12);
-            this.BtnGuardar.Name = "BtnGuardar";
-            this.BtnGuardar.Size = new System.Drawing.Size(42, 36);
-            this.BtnGuardar.TabIndex = 57;
-            this.BtnGuardar.TextColor = System.Drawing.Color.White;
-            this.BtnGuardar.UseVisualStyleBackColor = false;
-            this.BtnGuardar.Click += new System.EventHandler(this.BtnGuardar_Click);
+            this.menuStrip1.AllowMerge = false;
+            this.menuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.BtnNuevo,
+            this.BtnGuardar,
+            this.BtnEditar,
+            this.BtnEliminar,
+            this.BtnBuscar,
+            this.BtnCancelar,
+            this.BtnDuplicar,
+            this.salirToolStripMenuItem,
+            this.btnMaximizar,
+            this.iconMenuItem1,
+            this.BtnAgregar,
+            this.BtnBorrar});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(1803, 76);
+            this.menuStrip1.TabIndex = 100;
+            this.menuStrip1.Text = "menuStrip1";
             // 
             // BtnNuevo
             // 
-            this.BtnNuevo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(102)))), ((int)(((byte)(102)))), ((int)(((byte)(102)))));
-            this.BtnNuevo.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(102)))), ((int)(((byte)(102)))), ((int)(((byte)(102)))));
-            this.BtnNuevo.BorderColor = System.Drawing.Color.Black;
-            this.BtnNuevo.BorderRadius = 20;
-            this.BtnNuevo.BorderSize = 0;
-            this.BtnNuevo.FlatAppearance.BorderSize = 0;
-            this.BtnNuevo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnNuevo.ForeColor = System.Drawing.Color.White;
-            this.BtnNuevo.ImageIndex = 0;
-            this.BtnNuevo.ImageList = this.ImgListFinal;
-            this.BtnNuevo.Location = new System.Drawing.Point(12, 13);
+            this.BtnNuevo.Image = global::arquitectSoft.Properties.Resources.New;
+            this.BtnNuevo.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.BtnNuevo.Name = "BtnNuevo";
-            this.BtnNuevo.Size = new System.Drawing.Size(42, 36);
-            this.BtnNuevo.TabIndex = 56;
-            this.BtnNuevo.TextColor = System.Drawing.Color.White;
-            this.BtnNuevo.UseVisualStyleBackColor = false;
+            this.BtnNuevo.Size = new System.Drawing.Size(66, 72);
+            this.BtnNuevo.Text = "Nuevo";
+            this.BtnNuevo.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.BtnNuevo.Click += new System.EventHandler(this.BtnNuevo_Click);
             // 
-            // BtnBorrar
+            // BtnGuardar
             // 
-            this.BtnBorrar.BackColor = System.Drawing.SystemColors.Control;
-            this.BtnBorrar.BackgroundColor = System.Drawing.SystemColors.Control;
-            this.BtnBorrar.BorderColor = System.Drawing.Color.Black;
-            this.BtnBorrar.BorderRadius = 10;
-            this.BtnBorrar.BorderSize = 0;
-            this.BtnBorrar.FlatAppearance.BorderSize = 0;
-            this.BtnBorrar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnBorrar.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.BtnBorrar.ForeColor = System.Drawing.Color.DimGray;
-            this.BtnBorrar.Location = new System.Drawing.Point(109, 482);
-            this.BtnBorrar.Name = "BtnBorrar";
-            this.BtnBorrar.Size = new System.Drawing.Size(91, 22);
-            this.BtnBorrar.TabIndex = 53;
-            this.BtnBorrar.Text = "Borrar";
-            this.BtnBorrar.TextColor = System.Drawing.Color.DimGray;
-            this.BtnBorrar.UseVisualStyleBackColor = false;
-            this.BtnBorrar.Click += new System.EventHandler(this.BtnBorrar_Click);
+            this.BtnGuardar.Image = global::arquitectSoft.Properties.Resources.icons8_save_48;
+            this.BtnGuardar.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.BtnGuardar.Name = "BtnGuardar";
+            this.BtnGuardar.Size = new System.Drawing.Size(76, 72);
+            this.BtnGuardar.Text = "Guardar";
+            this.BtnGuardar.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.BtnGuardar.Click += new System.EventHandler(this.BtnGuardar_Click);
+            // 
+            // BtnEditar
+            // 
+            this.BtnEditar.Image = global::arquitectSoft.Properties.Resources.icons8_edit_48;
+            this.BtnEditar.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.BtnEditar.Name = "BtnEditar";
+            this.BtnEditar.Size = new System.Drawing.Size(62, 72);
+            this.BtnEditar.Text = "Editar";
+            this.BtnEditar.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.BtnEditar.Click += new System.EventHandler(this.BtnEditar_Click);
+            // 
+            // BtnEliminar
+            // 
+            this.BtnEliminar.Image = global::arquitectSoft.Properties.Resources.icons8_trash_48;
+            this.BtnEliminar.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.BtnEliminar.Name = "BtnEliminar";
+            this.BtnEliminar.Size = new System.Drawing.Size(64, 72);
+            this.BtnEliminar.Text = "Borrar";
+            this.BtnEliminar.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.BtnEliminar.Click += new System.EventHandler(this.BtnEliminar_Click);
+            // 
+            // BtnBuscar
+            // 
+            this.BtnBuscar.Image = global::arquitectSoft.Properties.Resources.icons8_search_48;
+            this.BtnBuscar.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.BtnBuscar.Name = "BtnBuscar";
+            this.BtnBuscar.Size = new System.Drawing.Size(85, 72);
+            this.BtnBuscar.Text = "Consultar";
+            this.BtnBuscar.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.BtnBuscar.Click += new System.EventHandler(this.BtnBuscar_Click);
+            // 
+            // BtnCancelar
+            // 
+            this.BtnCancelar.Image = global::arquitectSoft.Properties.Resources.icons8_cancel_48;
+            this.BtnCancelar.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.BtnCancelar.Name = "BtnCancelar";
+            this.BtnCancelar.Size = new System.Drawing.Size(80, 72);
+            this.BtnCancelar.Text = "Cancelar";
+            this.BtnCancelar.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.BtnCancelar.Click += new System.EventHandler(this.BtnCancelar_Click);
+            // 
+            // BtnDuplicar
+            // 
+            this.BtnDuplicar.Image = global::arquitectSoft.Properties.Resources.icons8_copy_48;
+            this.BtnDuplicar.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.BtnDuplicar.Name = "BtnDuplicar";
+            this.BtnDuplicar.Size = new System.Drawing.Size(79, 72);
+            this.BtnDuplicar.Text = "Duplicar";
+            this.BtnDuplicar.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.BtnDuplicar.Click += new System.EventHandler(this.BtnDuplicar_Click);
+            // 
+            // salirToolStripMenuItem
+            // 
+            this.salirToolStripMenuItem.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.salirToolStripMenuItem.Image = global::arquitectSoft.Properties.Resources.icons8_exit_48;
+            this.salirToolStripMenuItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.salirToolStripMenuItem.Name = "salirToolStripMenuItem";
+            this.salirToolStripMenuItem.Size = new System.Drawing.Size(62, 72);
+            this.salirToolStripMenuItem.Text = "Salir";
+            this.salirToolStripMenuItem.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.salirToolStripMenuItem.Click += new System.EventHandler(this.BtnSalir_Click);
+            // 
+            // btnMaximizar
+            // 
+            this.btnMaximizar.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.btnMaximizar.Image = global::arquitectSoft.Properties.Resources.icons8_expand_48;
+            this.btnMaximizar.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.btnMaximizar.Name = "btnMaximizar";
+            this.btnMaximizar.Size = new System.Drawing.Size(92, 72);
+            this.btnMaximizar.Text = "Maximizar";
+            this.btnMaximizar.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.btnMaximizar.Click += new System.EventHandler(this.btnMaximizar_Click);
+            // 
+            // iconMenuItem1
+            // 
+            this.iconMenuItem1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.iconMenuItem1.Enabled = false;
+            this.iconMenuItem1.IconChar = FontAwesome.Sharp.IconChar.None;
+            this.iconMenuItem1.IconColor = System.Drawing.Color.Black;
+            this.iconMenuItem1.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            this.iconMenuItem1.Name = "iconMenuItem1";
+            this.iconMenuItem1.Size = new System.Drawing.Size(59, 72);
+            this.iconMenuItem1.Text = "------";
             // 
             // BtnAgregar
             // 
-            this.BtnAgregar.BackColor = System.Drawing.Color.DimGray;
-            this.BtnAgregar.BackgroundColor = System.Drawing.Color.DimGray;
-            this.BtnAgregar.BorderColor = System.Drawing.Color.Black;
-            this.BtnAgregar.BorderRadius = 10;
-            this.BtnAgregar.BorderSize = 0;
-            this.BtnAgregar.FlatAppearance.BorderSize = 0;
-            this.BtnAgregar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnAgregar.ForeColor = System.Drawing.Color.White;
-            this.BtnAgregar.Location = new System.Drawing.Point(12, 482);
+            this.BtnAgregar.Image = global::arquitectSoft.Properties.Resources.icons8_insert_table_48;
+            this.BtnAgregar.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.BtnAgregar.Name = "BtnAgregar";
-            this.BtnAgregar.Size = new System.Drawing.Size(91, 22);
-            this.BtnAgregar.TabIndex = 52;
+            this.BtnAgregar.Size = new System.Drawing.Size(77, 72);
             this.BtnAgregar.Text = "Agregar";
-            this.BtnAgregar.TextColor = System.Drawing.Color.White;
-            this.BtnAgregar.UseCompatibleTextRendering = true;
-            this.BtnAgregar.UseVisualStyleBackColor = false;
+            this.BtnAgregar.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.BtnAgregar.Click += new System.EventHandler(this.BtnAgregar_Click);
             // 
-            // elipseControl1
+            // BtnBorrar
             // 
-            this.elipseControl1.BackColor = System.Drawing.Color.Black;
-            this.elipseControl1.CornerRadius = 15;
-            this.elipseControl1.Location = new System.Drawing.Point(23, 50);
-            this.elipseControl1.Name = "elipseControl1";
-            this.elipseControl1.Size = new System.Drawing.Size(935, 32);
-            this.elipseControl1.TabIndex = 48;
-            this.elipseControl1.Text = "elipseControl1";
+            this.BtnBorrar.Image = global::arquitectSoft.Properties.Resources.icons8_delete_table_48;
+            this.BtnBorrar.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+            this.BtnBorrar.Name = "BtnBorrar";
+            this.BtnBorrar.Size = new System.Drawing.Size(64, 72);
+            this.BtnBorrar.Text = "Borrar";
+            this.BtnBorrar.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.BtnBorrar.Click += new System.EventHandler(this.BtnBorrar_Click);
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.BackColor = System.Drawing.Color.White;
+            this.groupBox1.Controls.Add(this.txtCodigo);
+            this.groupBox1.Controls.Add(this.label2);
+            this.groupBox1.Controls.Add(this.chkEspecial);
+            this.groupBox1.Controls.Add(this.lbletiquetaDescripcion);
+            this.groupBox1.Controls.Add(this.BtnCheck);
+            this.groupBox1.Controls.Add(this.lblEtiquetaCodigo);
+            this.groupBox1.Controls.Add(this.CmbAcabado);
+            this.groupBox1.Controls.Add(this.txtDescripcion);
+            this.groupBox1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.groupBox1.Location = new System.Drawing.Point(0, 103);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(1803, 122);
+            this.groupBox1.TabIndex = 101;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Info Data";
             // 
             // codigoDataGridViewTextBoxColumn1
             // 
             this.codigoDataGridViewTextBoxColumn1.DataPropertyName = "Codigo";
             this.codigoDataGridViewTextBoxColumn1.HeaderText = "Codigo";
+            this.codigoDataGridViewTextBoxColumn1.MinimumWidth = 6;
             this.codigoDataGridViewTextBoxColumn1.Name = "codigoDataGridViewTextBoxColumn1";
-            this.codigoDataGridViewTextBoxColumn1.Width = 65;
+            this.codigoDataGridViewTextBoxColumn1.Width = 81;
             // 
             // descripcionDataGridViewTextBoxColumn1
             // 
             this.descripcionDataGridViewTextBoxColumn1.DataPropertyName = "Descripcion";
             this.descripcionDataGridViewTextBoxColumn1.HeaderText = "Descripcion";
+            this.descripcionDataGridViewTextBoxColumn1.MinimumWidth = 6;
             this.descripcionDataGridViewTextBoxColumn1.Name = "descripcionDataGridViewTextBoxColumn1";
-            this.descripcionDataGridViewTextBoxColumn1.Width = 88;
+            this.descripcionDataGridViewTextBoxColumn1.Width = 111;
             // 
             // cxdefectoDataGridViewTextBoxColumn1
             // 
             this.cxdefectoDataGridViewTextBoxColumn1.DataPropertyName = "Cxdefecto";
             this.cxdefectoDataGridViewTextBoxColumn1.HeaderText = "Cxdefecto";
+            this.cxdefectoDataGridViewTextBoxColumn1.MinimumWidth = 6;
             this.cxdefectoDataGridViewTextBoxColumn1.Name = "cxdefectoDataGridViewTextBoxColumn1";
-            this.cxdefectoDataGridViewTextBoxColumn1.Width = 80;
+            this.cxdefectoDataGridViewTextBoxColumn1.Width = 99;
             // 
             // cAdicionalDataGridViewTextBoxColumn1
             // 
             this.cAdicionalDataGridViewTextBoxColumn1.DataPropertyName = "CAdicional";
             this.cAdicionalDataGridViewTextBoxColumn1.HeaderText = "CAdicional";
+            this.cAdicionalDataGridViewTextBoxColumn1.MinimumWidth = 6;
             this.cAdicionalDataGridViewTextBoxColumn1.Name = "cAdicionalDataGridViewTextBoxColumn1";
-            this.cAdicionalDataGridViewTextBoxColumn1.Width = 82;
+            this.cAdicionalDataGridViewTextBoxColumn1.Width = 103;
             // 
             // unidadCalculadaDataGridViewTextBoxColumn1
             // 
             this.unidadCalculadaDataGridViewTextBoxColumn1.DataPropertyName = "UnidadCalculada";
             this.unidadCalculadaDataGridViewTextBoxColumn1.HeaderText = "UnidadCalculada";
+            this.unidadCalculadaDataGridViewTextBoxColumn1.MinimumWidth = 6;
             this.unidadCalculadaDataGridViewTextBoxColumn1.Name = "unidadCalculadaDataGridViewTextBoxColumn1";
-            this.unidadCalculadaDataGridViewTextBoxColumn1.Width = 113;
+            this.unidadCalculadaDataGridViewTextBoxColumn1.Width = 144;
             // 
             // aDecrementoDataGridViewCheckBoxColumn1
             // 
             this.aDecrementoDataGridViewCheckBoxColumn1.DataPropertyName = "ADecremento";
             this.aDecrementoDataGridViewCheckBoxColumn1.HeaderText = "ADecremento";
+            this.aDecrementoDataGridViewCheckBoxColumn1.MinimumWidth = 6;
             this.aDecrementoDataGridViewCheckBoxColumn1.Name = "aDecrementoDataGridViewCheckBoxColumn1";
-            this.aDecrementoDataGridViewCheckBoxColumn1.Width = 78;
             // 
             // idSubcomponenteDataGridViewTextBoxColumn1
             // 
             this.idSubcomponenteDataGridViewTextBoxColumn1.DataPropertyName = "IdSubcomponente";
             this.idSubcomponenteDataGridViewTextBoxColumn1.HeaderText = "IdSubcomponente";
+            this.idSubcomponenteDataGridViewTextBoxColumn1.MinimumWidth = 6;
             this.idSubcomponenteDataGridViewTextBoxColumn1.Name = "idSubcomponenteDataGridViewTextBoxColumn1";
-            this.idSubcomponenteDataGridViewTextBoxColumn1.Width = 119;
+            this.idSubcomponenteDataGridViewTextBoxColumn1.Width = 151;
             // 
             // elevadoDataGridViewTextBoxColumn1
             // 
             this.elevadoDataGridViewTextBoxColumn1.DataPropertyName = "Elevado";
             this.elevadoDataGridViewTextBoxColumn1.HeaderText = "Elevado";
+            this.elevadoDataGridViewTextBoxColumn1.MinimumWidth = 6;
             this.elevadoDataGridViewTextBoxColumn1.Name = "elevadoDataGridViewTextBoxColumn1";
-            this.elevadoDataGridViewTextBoxColumn1.Width = 71;
+            this.elevadoDataGridViewTextBoxColumn1.Width = 88;
             // 
             // cortesDataGridViewTextBoxColumn1
             // 
             this.cortesDataGridViewTextBoxColumn1.DataPropertyName = "Cortes";
             this.cortesDataGridViewTextBoxColumn1.HeaderText = "Cortes";
+            this.cortesDataGridViewTextBoxColumn1.MinimumWidth = 6;
             this.cortesDataGridViewTextBoxColumn1.Name = "cortesDataGridViewTextBoxColumn1";
-            this.cortesDataGridViewTextBoxColumn1.Width = 62;
+            this.cortesDataGridViewTextBoxColumn1.Width = 78;
             // 
             // subComponentBindingSource1
             // 
             this.subComponentBindingSource1.DataSource = typeof(arquitectSoft.Class.Sub_Component);
             // 
-            // codigoDataGridViewTextBoxColumn
-            // 
-            this.codigoDataGridViewTextBoxColumn.DataPropertyName = "Codigo";
-            this.codigoDataGridViewTextBoxColumn.HeaderText = "Codigo";
-            this.codigoDataGridViewTextBoxColumn.Name = "codigoDataGridViewTextBoxColumn";
-            this.codigoDataGridViewTextBoxColumn.Width = 65;
-            // 
-            // descripcionDataGridViewTextBoxColumn
-            // 
-            this.descripcionDataGridViewTextBoxColumn.DataPropertyName = "Descripcion";
-            this.descripcionDataGridViewTextBoxColumn.HeaderText = "Descripcion";
-            this.descripcionDataGridViewTextBoxColumn.Name = "descripcionDataGridViewTextBoxColumn";
-            this.descripcionDataGridViewTextBoxColumn.Width = 88;
-            // 
-            // cxdefectoDataGridViewTextBoxColumn
-            // 
-            this.cxdefectoDataGridViewTextBoxColumn.DataPropertyName = "Cxdefecto";
-            this.cxdefectoDataGridViewTextBoxColumn.HeaderText = "Cxdefecto";
-            this.cxdefectoDataGridViewTextBoxColumn.Name = "cxdefectoDataGridViewTextBoxColumn";
-            this.cxdefectoDataGridViewTextBoxColumn.Width = 80;
-            // 
-            // cAdicionalDataGridViewTextBoxColumn
-            // 
-            this.cAdicionalDataGridViewTextBoxColumn.DataPropertyName = "CAdicional";
-            this.cAdicionalDataGridViewTextBoxColumn.HeaderText = "CAdicional";
-            this.cAdicionalDataGridViewTextBoxColumn.Name = "cAdicionalDataGridViewTextBoxColumn";
-            this.cAdicionalDataGridViewTextBoxColumn.Width = 82;
-            // 
-            // unidadCalculadaDataGridViewTextBoxColumn
-            // 
-            this.unidadCalculadaDataGridViewTextBoxColumn.DataPropertyName = "UnidadCalculada";
-            this.unidadCalculadaDataGridViewTextBoxColumn.HeaderText = "UnidadCalculada";
-            this.unidadCalculadaDataGridViewTextBoxColumn.Name = "unidadCalculadaDataGridViewTextBoxColumn";
-            this.unidadCalculadaDataGridViewTextBoxColumn.Width = 113;
-            // 
-            // aDecrementoDataGridViewCheckBoxColumn
-            // 
-            this.aDecrementoDataGridViewCheckBoxColumn.DataPropertyName = "ADecremento";
-            this.aDecrementoDataGridViewCheckBoxColumn.HeaderText = "ADecremento";
-            this.aDecrementoDataGridViewCheckBoxColumn.Name = "aDecrementoDataGridViewCheckBoxColumn";
-            this.aDecrementoDataGridViewCheckBoxColumn.Width = 78;
-            // 
-            // idSubcomponenteDataGridViewTextBoxColumn
-            // 
-            this.idSubcomponenteDataGridViewTextBoxColumn.DataPropertyName = "IdSubcomponente";
-            this.idSubcomponenteDataGridViewTextBoxColumn.HeaderText = "IdSubcomponente";
-            this.idSubcomponenteDataGridViewTextBoxColumn.Name = "idSubcomponenteDataGridViewTextBoxColumn";
-            this.idSubcomponenteDataGridViewTextBoxColumn.Width = 119;
-            // 
-            // elevadoDataGridViewTextBoxColumn
-            // 
-            this.elevadoDataGridViewTextBoxColumn.DataPropertyName = "Elevado";
-            this.elevadoDataGridViewTextBoxColumn.HeaderText = "Elevado";
-            this.elevadoDataGridViewTextBoxColumn.Name = "elevadoDataGridViewTextBoxColumn";
-            this.elevadoDataGridViewTextBoxColumn.Width = 71;
-            // 
-            // cortesDataGridViewTextBoxColumn
-            // 
-            this.cortesDataGridViewTextBoxColumn.DataPropertyName = "Cortes";
-            this.cortesDataGridViewTextBoxColumn.HeaderText = "Cortes";
-            this.cortesDataGridViewTextBoxColumn.Name = "cortesDataGridViewTextBoxColumn";
-            this.cortesDataGridViewTextBoxColumn.Width = 62;
-            // 
             // subComponentBindingSource
             // 
             this.subComponentBindingSource.DataSource = typeof(arquitectSoft.Class.Sub_Component);
-            // 
-            // EliCtrlButtons
-            // 
-            this.EliCtrlButtons.BackColor = System.Drawing.Color.Black;
-            this.EliCtrlButtons.CornerRadius = 15;
-            this.EliCtrlButtons.Location = new System.Drawing.Point(0, -1);
-            this.EliCtrlButtons.Name = "EliCtrlButtons";
-            this.EliCtrlButtons.Size = new System.Drawing.Size(986, 61);
-            this.EliCtrlButtons.TabIndex = 47;
-            this.EliCtrlButtons.Text = "elipseControl1";
-            this.EliCtrlButtons.MouseDown += new System.Windows.Forms.MouseEventHandler(this.EliCtrlButtons_MouseDown);
-            // 
-            // elipseControl2
-            // 
-            this.elipseControl2.BackColor = System.Drawing.Color.White;
-            this.elipseControl2.CornerRadius = 15;
-            this.elipseControl2.Location = new System.Drawing.Point(-1, 67);
-            this.elipseControl2.Name = "elipseControl2";
-            this.elipseControl2.Size = new System.Drawing.Size(987, 70);
-            this.elipseControl2.TabIndex = 50;
-            this.elipseControl2.Text = "elipseControl1";
-            // 
-            // elipseControl3
-            // 
-            this.elipseControl3.BackColor = System.Drawing.Color.Black;
-            this.elipseControl3.CornerRadius = 15;
-            this.elipseControl3.Location = new System.Drawing.Point(-1, 465);
-            this.elipseControl3.Name = "elipseControl3";
-            this.elipseControl3.Size = new System.Drawing.Size(987, 61);
-            this.elipseControl3.TabIndex = 54;
-            this.elipseControl3.Text = "elipseControl1";
+            this.subComponentBindingSource.Sort = "Descripcion";
             // 
             // elipseComponent1
             // 
@@ -749,38 +605,18 @@ namespace arquitectSoft.View
             // 
             // FrmComponente
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.DarkGray;
-            this.ClientSize = new System.Drawing.Size(986, 526);
+            this.ClientSize = new System.Drawing.Size(1803, 893);
             this.ControlBox = false;
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.lbletiquetaDescripcion);
-            this.Controls.Add(this.lblEtiquetaCodigo);
-            this.Controls.Add(this.txtCodigo);
-            this.Controls.Add(this.txtDescripcion);
-            this.Controls.Add(this.BtnDuplicar);
-            this.Controls.Add(this.BtnCancelar);
-            this.Controls.Add(this.BtnBuscar);
-            this.Controls.Add(this.BtnEliminar);
-            this.Controls.Add(this.BtnEditar);
-            this.Controls.Add(this.BtnGuardar);
-            this.Controls.Add(this.BtnNuevo);
-            this.Controls.Add(this.BtnBorrar);
-            this.Controls.Add(this.BtnAgregar);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.CmbAcabado);
-            this.Controls.Add(this.BtnCheck);
-            this.Controls.Add(this.elipseControl1);
-            this.Controls.Add(this.chkEspecial);
             this.Controls.Add(this.GridViewComponenteEsp);
             this.Controls.Add(this.GridViewComponente);
-            this.Controls.Add(this.BtnSalir);
-            this.Controls.Add(this.EliCtrlButtons);
-            this.Controls.Add(this.elipseControl2);
-            this.Controls.Add(this.elipseControl3);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.MaximizeBox = false;
+            this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.menuStrip1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MainMenuStrip = this.menuStrip1;
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.MinimizeBox = false;
             this.Name = "FrmComponente";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
@@ -792,6 +628,10 @@ namespace arquitectSoft.View
             ((System.ComponentModel.ISupportInitialize)(this.GridViewComponenteEsp)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource2)).EndInit();
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.subComponentBindingSource1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.subComponentBindingSource)).EndInit();
             this.ResumeLayout(false);
@@ -801,23 +641,12 @@ namespace arquitectSoft.View
 
         #endregion
         private System.Windows.Forms.ImageList ImgLista;
-        private System.Windows.Forms.Button BtnSalir;
         private System.Windows.Forms.DataGridView GridViewComponente;
         private arquitectdbDataSet arquitectdbDataSet;
         private System.Windows.Forms.BindingSource unidadescalculadasBindingSource;
         private arquitectdbDataSetTableAdapters.unidades_calculadasTableAdapter unidades_calculadasTableAdapter;
         private System.Windows.Forms.BindingSource bindingSource1;
-        private System.Windows.Forms.BindingSource subComponentBindingSource;
         private System.Windows.Forms.BindingSource subComponentBindingSource1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn codigoDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn descripcionDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cxdefectoDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cAdicionalDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn unidadCalculadaDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn aDecrementoDataGridViewCheckBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn idSubcomponenteDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn elevadoDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cortesDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridView GridViewComponenteEsp;
         private System.Windows.Forms.BindingSource bindingSource2;
         private System.Windows.Forms.DataGridViewTextBoxColumn codigoDataGridViewTextBoxColumn1;
@@ -829,29 +658,30 @@ namespace arquitectSoft.View
         private System.Windows.Forms.DataGridViewTextBoxColumn idSubcomponenteDataGridViewTextBoxColumn1;
         private System.Windows.Forms.DataGridViewTextBoxColumn elevadoDataGridViewTextBoxColumn1;
         private System.Windows.Forms.DataGridViewTextBoxColumn cortesDataGridViewTextBoxColumn1;
-        private Generals.ElipseControl EliCtrlButtons;
         private Generals.ElipseComponent elipseComponent1;
-        private Generals.ElipseControl elipseControl1;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ComboBox CmbAcabado;
         private System.Windows.Forms.Button BtnCheck;
         private System.Windows.Forms.CheckBox chkEspecial;
-        private Generals.ElipseControl elipseControl2;
-        private Generals.RJButton BtnAgregar;
-        private Generals.ElipseControl elipseControl3;
-        private Generals.RJButton BtnBorrar;
-        private Generals.RJButton BtnNuevo;
-        private Generals.RJButton BtnDuplicar;
-        private Generals.RJButton BtnCancelar;
-        private Generals.RJButton BtnBuscar;
-        private Generals.RJButton BtnEliminar;
-        private Generals.RJButton BtnEditar;
-        private Generals.RJButton BtnGuardar;
         private System.Windows.Forms.ImageList ImgListFinal;
         private System.Windows.Forms.TextBox txtDescripcion;
         private System.Windows.Forms.TextBox txtCodigo;
         private System.Windows.Forms.Label lblEtiquetaCodigo;
         private System.Windows.Forms.Label lbletiquetaDescripcion;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem BtnNuevo;
+        private System.Windows.Forms.ToolStripMenuItem BtnGuardar;
+        private System.Windows.Forms.ToolStripMenuItem BtnEditar;
+        private System.Windows.Forms.ToolStripMenuItem BtnEliminar;
+        private System.Windows.Forms.ToolStripMenuItem BtnBuscar;
+        private System.Windows.Forms.ToolStripMenuItem BtnCancelar;
+        private System.Windows.Forms.ToolStripMenuItem BtnDuplicar;
+        private System.Windows.Forms.ToolStripMenuItem salirToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem btnMaximizar;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private FontAwesome.Sharp.IconMenuItem iconMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem BtnAgregar;
+        private System.Windows.Forms.ToolStripMenuItem BtnBorrar;
+        public System.Windows.Forms.BindingSource subComponentBindingSource;
     }
 }

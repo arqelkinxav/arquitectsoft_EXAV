@@ -62,8 +62,8 @@ namespace arquitectSoft
             this.menuStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.TMSItem_Administracion,
-            this.TMSItem_procesos,
             this.salirToolStripMenuItem,
+            this.TMSItem_procesos,
             this.acercaDeToolStripMenuItem,
             this.dBAToolStripMenuItem});
             this.menuStrip.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;

@@ -74,6 +74,7 @@ namespace arquitectSoft.Generals
             combo.Name = "Mecanizado";
             combo.HeaderText = "Mecanizado";
             combo.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            combo.MinimumWidth = 200;
             return combo;
         }
 
@@ -119,6 +120,9 @@ namespace arquitectSoft.Generals
             textbox.DataPropertyName = dataproperty;
             textbox.HeaderText = headertext;
             textbox.Name = name;
+
+            if (dataproperty == "Descripcion")
+                textbox.MinimumWidth = 300;
 
             if (is_numbers)
             {

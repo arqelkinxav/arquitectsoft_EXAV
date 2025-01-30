@@ -37,6 +37,7 @@ namespace arquitectSoft.View
         DataTable dtPerfilR = new DataTable();
         DataTable dtPerfilOfVidrioPanel = new DataTable();
         DataTable dtPerfilOfTubos = new DataTable();
+        private int selectedRowIndex = -1;
         public FrmAnalisisDatos()
         {
             InitializeComponent();
@@ -312,6 +313,20 @@ namespace arquitectSoft.View
                     dataGridViewPMHerraje.DataSource = dt;
                     dataGridViewPMCalculate.DataSource = dtcalculate;
                     dataGridViewPMCalculate.Columns[0].Visible = false;
+
+                    ContextMenuStrip contextMenu = new ContextMenuStrip();
+                    ToolStripMenuItem item1 = new ToolStripMenuItem("Remplazar SubComponente");
+                    ToolStripMenuItem item2 = new ToolStripMenuItem("Cambiar Acabado Temporal");
+
+                    item1.Click += Item1_AP_Click;
+                    item2.Click += Item2_AP_Click;
+
+                    contextMenu.Items.Add(item1);
+                    contextMenu.Items.Add(item2);
+
+                    dataGridViewPMCalculate.ContextMenuStrip = contextMenu;
+
+                    dataGridViewPMCalculate.CellMouseDown += dataGridViewPMCalculate_CellMouseDown;
                     //dataGridViewPMCalculate.Columns[6].Visible = false;
                     break;
                 case 2:
@@ -1193,6 +1208,7 @@ namespace arquitectSoft.View
                             }
                             else
                             {
+                                row.Cells[1].Value = row.Cells[1].Value.ToString().Split('-')[0].Trim()+"-"+ param[1].ToString().Split('-')[0].Trim();
                                 row.Cells[3].Value = param[1].ToString().Split('-')[1].Trim();
                             }                            
                         }
@@ -1215,6 +1231,69 @@ namespace arquitectSoft.View
             FnChangeInfo(param);
 
 
+        }
+
+        private void dataGridViewPMCalculate_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right && e.RowIndex >= 0 && e.ColumnIndex >= 0)
+            {
+                // Seleccionar la celda
+                dataGridViewPMCalculate.ClearSelection();
+                dataGridViewPMCalculate.Rows[e.RowIndex].Cells[e.ColumnIndex].Selected = true;
+                selectedRowIndex = e.RowIndex;
+
+                // Mostrar el menú contextual
+                dataGridViewPMCalculate.ContextMenuStrip.Show(Cursor.Position);
+            }
+        }
+
+        private void Item1_AP_Click(object sender, EventArgs e)
+        {
+            if (selectedRowIndex >= 0)
+            {
+                int value = selectedRowIndex;
+                FrmBuscar bsc = new FrmBuscar();
+                bsc.Consulta = "SubComp";
+                bsc.ShowDialog();
+                if (bsc.ReturnItem1 == null)
+                {
+                    return;
+                }
+
+                string codigo = bsc.ReturnItem1.Trim();
+                string descripcion = bsc.ReturnItem2.Split('(')[0].Trim();
+                string acabadosplit = bsc.ReturnItem2.Split('(')[1].Trim().Replace(")","");
+                string acabado = bsc.ReturnItem5;
+                dataGridViewPMCalculate.Rows[selectedRowIndex].Cells[1].Value = codigo;
+                dataGridViewPMCalculate.Rows[selectedRowIndex].Cells[2].Value = descripcion;
+                dataGridViewPMCalculate.Rows[selectedRowIndex].Cells[3].Value = acabado;
+            }
+        }
+
+        private void Item2_AP_Click(object sender, EventArgs e)
+        {
+            if (selectedRowIndex >= 0)
+            {
+                FrmChange bsc = new FrmChange();
+                bsc.ShowDialog();
+                if (bsc.Acabado1 == null)
+                {
+                    return;
+                }
+
+                string acabadocodNew = bsc.Acabado2.ToString().Split('-')[0];
+                string acabadoDescNew = bsc.Acabado2.ToString().Split('-')[1].ToUpper();
+
+                string AcabadoDesc = dataGridViewPMCalculate.Rows[selectedRowIndex].Cells[3].Value.ToString();
+                string codigo = dataGridViewPMCalculate.Rows[selectedRowIndex].Cells[1].Value.ToString().Split('-')[0] + "-"+ acabadocodNew;
+
+               // string AcabadoOld = AcabadoDesc.Substring(AcabadoDesc.IndexOf("(") + 1, AcabadoDesc.IndexOf(")") - (AcabadoDesc.IndexOf(")") + 1));
+
+                dataGridViewPMCalculate.Rows[selectedRowIndex].Cells[1].Value = codigo;
+                dataGridViewPMCalculate.Rows[selectedRowIndex].Cells[3].Value = acabadoDescNew;
+                
+                
+            }
         }
     }
 }

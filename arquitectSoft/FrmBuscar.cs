@@ -26,6 +26,8 @@ namespace arquitectSoft
         public string ReturnItem2 { get; set; }
         public string ReturnItem3 { get; set; }
         public string ReturnItem4 { get; set; }
+        public string ReturnItem5 { get; set; }
+
 
         public DataTable ArrayMultiSelect;
         
@@ -98,6 +100,7 @@ namespace arquitectSoft
                     ReturnItem2 = GridViewBusqueda.SelectedCells[2].Value.ToString();
                     ReturnItem3 = GridViewBusqueda.SelectedCells[3].Value.ToString();
                     ReturnItem4 = GridViewBusqueda.SelectedCells[4].Value.ToString();
+                    ReturnItem5 = GridViewBusqueda.SelectedCells[5].Value.ToString();
                     break;
                 default:
                     ReturnItem0 = GridViewBusqueda.SelectedCells[0].Value.ToString();

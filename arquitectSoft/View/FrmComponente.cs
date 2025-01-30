@@ -1,9 +1,11 @@
 ﻿using arquitectSoft.Class;
 using arquitectSoft.Generals;
+using ClosedXML.Excel;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SqlClient;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
@@ -11,7 +13,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
+using SortOrder = System.Windows.Forms.SortOrder;
 
 namespace arquitectSoft.View
 {
@@ -39,7 +41,7 @@ namespace arquitectSoft.View
         {
             // TODO: This line of code loads data into the 'arquitectdbDataSet.unidades_calculadas' table. You can move, or remove it, as needed.
 
-            txtCodigo.Enabled = false;
+            txtCodigo.ReadOnly = true;
             txtDescripcion.Enabled = false;
             chkEspecial.Enabled = false;
             CmbAcabado.Enabled = false;
@@ -194,7 +196,7 @@ namespace arquitectSoft.View
             }
 
             CmbAcabado.SelectedValue = CmbAcabado.SelectedValue == null ? 0 : CmbAcabado.SelectedValue;
-            txtCodigo.Enabled = false;
+            txtCodigo.ReadOnly = true;
             txtDescripcion.Enabled = false;
             chkEspecial.Enabled = false;
 
@@ -323,19 +325,22 @@ namespace arquitectSoft.View
             GridViewComponenteEsp.Columns.Add(DGV_Handler.CreateTextBox("CAdicional", "C. Adicional", "CAdicional", true));
 
 
-            GridViewComponente.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            //GridViewComponente.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+          
             GridViewComponente.Columns[0].ReadOnly = true;
             GridViewComponente.Columns[1].ReadOnly = true;
             GridViewComponente.Columns[2].ReadOnly = true;
             GridViewComponente.Columns[7].Visible = false; //Se reutiliza campo elevado para guardar data de anchura
             GridViewComponente.Columns[11].Visible = true; //Se reutiliza campo elevado para guardar data de anchura
+            //GridViewComponente.Columns[11].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             GridViewComponente.Columns[12].Visible = false; //Se reutiliza campo elevado para guardar Asignacion Puertas
 
-            GridViewComponenteEsp.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            //GridViewComponenteEsp.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             GridViewComponenteEsp.Columns[0].ReadOnly = true;
             GridViewComponenteEsp.Columns[1].ReadOnly = true;
             GridViewComponenteEsp.Columns[2].ReadOnly = true;
             //GridViewComponente.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+          
             GridViewComponente.RowHeadersVisible = false;
             GridViewComponenteEsp.RowHeadersVisible = false;
 
@@ -351,6 +356,8 @@ namespace arquitectSoft.View
 
             GridViewComponente.CellMouseDown += GridViewComponente_CellMouseDown;
 
+            GridViewComponente.Height = 800;
+
         }
         private void habilitarNuevo(string opcion)
         {
@@ -360,13 +367,13 @@ namespace arquitectSoft.View
             switch (opcion)
             {
                 case "Editar":
-                    txtCodigo.Enabled = false;
+                    txtCodigo.ReadOnly = true;
                     break;
                 case "Duplicar":
-                    txtCodigo.Enabled = true;
+                    txtCodigo.ReadOnly = false;
                     break;
                 default:
-                    txtCodigo.Enabled = true;
+                    txtCodigo.ReadOnly = false; 
                     condicionAcabado = "";
                     GetAcabadoSelect("");
                     break;
@@ -392,7 +399,7 @@ namespace arquitectSoft.View
             BtnCancelar.Enabled = false;
             BtnGuardar.Enabled = false;
             BtnCheck.Enabled = false;
-            txtCodigo.Enabled = false;
+            txtCodigo.ReadOnly = true;
             txtDescripcion.Enabled = false;
             chkEspecial.Enabled = false;
             CmbAcabado.Enabled = false;
@@ -491,8 +498,11 @@ namespace arquitectSoft.View
         }
         private void CargarDataDetalle(DataTable dt)
         {
+
+            dt.DefaultView.Sort = "Descripcion ASC";
+
             condicionAcabado = "";
-            foreach (DataRow row in dt.Rows)
+            foreach (DataRowView row in dt.DefaultView)
             {
                 int decre = Int32.Parse(row["Aplica_Decremento"].ToString());
                 int extra = Int32.Parse(row["extra"].ToString());
@@ -506,8 +516,10 @@ namespace arquitectSoft.View
                 string valorinicial = condicionAcabado == "" ? "'" : ",'";
                 condicionAcabado += valorinicial + row["Codigo"].ToString().Split('-')[1] + "'";
             }
-
+           
+                     
             GridViewComponente.DataSource = bindingSource1;
+            
             GridViewComponente.Refresh();
 
             GetAcabadoSelect(condicionAcabado);
@@ -587,12 +599,12 @@ namespace arquitectSoft.View
         {
             if (swespecial == true)
             {
-                GridViewComponente.Height = 143;
+                GridViewComponente.Height = 250;
                 GridViewComponenteEsp.Visible = true;
             }
             else
             {
-                GridViewComponente.Height = 300;
+                GridViewComponente.Height = 800;
                 GridViewComponenteEsp.DataSource = "";
                 GridViewComponenteEsp.Visible = false;
             }
@@ -692,33 +704,31 @@ namespace arquitectSoft.View
 
         private void GridViewComponente_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (GridViewComponente.Rows[e.RowIndex].Cells[3].Value.ToString() == "6") {
+            if (e.RowIndex >= 0)
+            {
+                if (GridViewComponente.Rows[e.RowIndex].Cells[3].Value.ToString() == "6")
+                {
 
-                FrmDataAmbas bsc = new FrmDataAmbas();
-                string datavalue = GridViewComponente.Rows[e.RowIndex].Cells[7].Value.ToString();
-                if (datavalue == "0" || datavalue == "")
-                {
-                    bsc.ReturnItem0 = CantiAdiAnch;
-                    bsc.ReturnItem1 = AplDecreAnch;
+                    FrmDataAmbas bsc = new FrmDataAmbas();
+                    string datavalue = GridViewComponente.Rows[e.RowIndex].Cells[7].Value.ToString();
+                    if (datavalue == "0" || datavalue == "")
+                    {
+                        bsc.ReturnItem0 = CantiAdiAnch;
+                        bsc.ReturnItem1 = AplDecreAnch;
+                    }
+                    else
+                    {
+                        bsc.ReturnItem0 = decimal.Parse(GridViewComponente.Rows[e.RowIndex].Cells[7].Value.ToString().Split(';')[0].Split('|')[1]);
+                        bsc.ReturnItem1 = bool.Parse(GridViewComponente.Rows[e.RowIndex].Cells[7].Value.ToString().Split(';')[1].Split('|')[1]);
+                    }
+
+
+                    bsc.ShowDialog();
+                    GridViewComponente.Rows[e.RowIndex].Cells[7].Value = "Cant-Adi|" + bsc.ReturnItem0 + ";Apli-Decr|" + bsc.ReturnItem1;
+                    CantiAdiAnch = bsc.ReturnItem0;
+                    AplDecreAnch = bsc.ReturnItem1;
                 }
-                else
-                {
-                    bsc.ReturnItem0 = decimal.Parse(GridViewComponente.Rows[e.RowIndex].Cells[7].Value.ToString().Split(';')[0].Split('|')[1]);
-                    bsc.ReturnItem1 = bool.Parse(GridViewComponente.Rows[e.RowIndex].Cells[7].Value.ToString().Split(';')[1].Split('|')[1]);
-                }
-                
-               
-                bsc.ShowDialog();
-                GridViewComponente.Rows[e.RowIndex].Cells[7].Value = "Cant-Adi|" + bsc.ReturnItem0 + ";Apli-Decr|" + bsc.ReturnItem1;
-                CantiAdiAnch = bsc.ReturnItem0;
-                AplDecreAnch = bsc.ReturnItem1;
             }
-
-                
-           
-
-
-            
         
     }
 
@@ -746,5 +756,29 @@ namespace arquitectSoft.View
             }
         }
 
+        private void btnMaximizar_Click(object sender, EventArgs e)
+        {
+            if (this.WindowState != FormWindowState.Maximized)
+            {
+                this.WindowState = FormWindowState.Maximized;
+            }
+            else
+            {
+                this.WindowState = FormWindowState.Normal;
+            }            
+        }
+
+        private void GridViewComponente_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
+        {
+            var comboBox = e.Control as DataGridViewComboBoxEditingControl;
+            if (comboBox != null)
+            {
+                comboBox.DropDownStyle = ComboBoxStyle.DropDown;
+                comboBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            }
+        }
+
+     
     }
+
 }

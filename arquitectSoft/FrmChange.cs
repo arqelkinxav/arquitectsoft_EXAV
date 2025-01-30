@@ -35,7 +35,7 @@ namespace arquitectSoft
         private void BtnAceptar_Click(object sender, EventArgs e)
         {
             Acabado1 = CmbAcabado1.Text;
-            Acabado2 = CmbAcabado2.Text;           
+            Acabado2 = (ChkTemp.Checked) ? txtTemporalAcabado.Text : CmbAcabado2.Text;           
 
             this.Close();
 
@@ -46,6 +46,20 @@ namespace arquitectSoft
             Acabado1 = null;
             Acabado2 = null;
             this.Close();
+        }
+
+        private void ChkTemp_CheckedChanged(object sender, EventArgs e)
+        {
+            if (ChkTemp.Checked)
+            {
+                txtTemporalAcabado.Text = "";
+                txtTemporalAcabado.Visible = true;
+            }
+            else
+            {
+                txtTemporalAcabado.Text = "";
+                txtTemporalAcabado.Visible = false;
+            }
         }
     }
 }

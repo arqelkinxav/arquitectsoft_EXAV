@@ -40,7 +40,7 @@ namespace arquitectSoft.Generals
         //Sub Componente
         public static String QUERY_EXITS_SUBCOMPONENTES = "SELECT Id_SubComponente FROM subcomponentes where (Codigo_Homologacion = ? or Descripcion = ?)";
         public static String QUERY_SUBCOMPONENTES = "SELECT Id_SubComponente,CONCAT(subcomponentes.Codigo_Homologacion , '-' , acabados.Codigo_Homologacion) Codigo_Homologacion" +
-                                                    ", CONCAT(subcomponentes.Descripcion , '(' , acabados.Descripcion,') ') Descripcion,subcomponentes.Id_Acabado,Especial " +
+                                                    ", CONCAT(subcomponentes.Descripcion , '(' , acabados.Descripcion,') ') Descripcion,subcomponentes.Id_Acabado,Especial,acabados.Descripcion as DescripcionAcabado " +
                                                     "FROM subcomponentes JOIN acabados ON subcomponentes.Id_Acabado = acabados.Id_Acabado ";
         public static String QUERY_INSERT_SUBCOMPONENTES = "CALL spSubComponenteRegistrar(?,?,?,?,?);";
         public static String QUERY_UPDATE_SUBCOMPONENTES = "CALL spSubcomponenteUpdate(?,?,?,?,?);";
