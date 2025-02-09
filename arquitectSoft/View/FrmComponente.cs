@@ -765,7 +765,7 @@ namespace arquitectSoft.View
             else
             {
                 this.WindowState = FormWindowState.Normal;
-            }            
+            }
         }
 
         private void GridViewComponente_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
@@ -778,7 +778,7 @@ namespace arquitectSoft.View
             }
         }
 
-     
+       
     }
 
 }

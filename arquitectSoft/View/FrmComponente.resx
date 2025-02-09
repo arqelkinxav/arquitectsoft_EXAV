@@ -118,14 +118,14 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <metadata name="ImgLista.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>32767, 32767</value>
+    <value>152, 17</value>
   </metadata>
   <data name="ImgLista.ImageStream" mimetype="application/x-microsoft.net.object.binary.base64">
     <value>
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAACu
-        RQEAAk1TRnQBSQFMAgEBNAEAAcABAwHAAQMBFAEAARQBAAT/ASEBAAj/AUIBTQE2BwABNgMAASgDAAFQ
+        RQEAAk1TRnQBSQFMAgEBNAEAAXABBAFwAQQBFAEAARQBAAT/ASEBAAj/AUIBTQE2BwABNgMAASgDAAFQ
         AwABGAEBAgABAQEAASAGAAFeAQH/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A
         /wD/AP8A/wD/AEIAA7IB/wGkAqAB/wPxAf8MAAPxAf8DsgH/A7IF/2wAA/EB/wHwAcoBpgL/AcwBmQL/
         AcwBVgL/AcwBVgH/A+oB/zAAA2AB4yT/AwUBBjQAA5kB/wHMASMBAAH/AcwBVgEAAf8BmQJWAf8IAAPx
@@ -1518,26 +1518,26 @@
 </value>
   </data>
   <metadata name="arquitectdbDataSet.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>32767, 32767</value>
+    <value>266, 17</value>
   </metadata>
   <metadata name="unidadescalculadasBindingSource.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>32767, 32767</value>
+    <value>454, 17</value>
   </metadata>
   <metadata name="unidades_calculadasTableAdapter.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>32767, 32767</value>
+    <value>741, 17</value>
   </metadata>
   <metadata name="subComponentBindingSource1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>32767, 32767</value>
+    <value>1164, 17</value>
   </metadata>
   <metadata name="ImgListFinal.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>32767, 32767</value>
+    <value>1296, 17</value>
   </metadata>
   <data name="ImgListFinal.ImageStream" mimetype="application/x-microsoft.net.object.binary.base64">
     <value>
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAAAk
-        ogAAAk1TRnQBSQFMAgEBCQEAAcABAwHAAQMBKAEAASgBAAT/ASEBAAj/AUIBTQE2BwABNgMAASgDAAGg
+        ogAAAk1TRnQBSQFMAgEBCQEAAXABBAFwAQQBKAEAASgBAAT/ASEBAAj/AUIBTQE2BwABNgMAASgDAAGg
         AwABeAMAAQEBAAEgBgABLAEBRQADCgENAz8BbQNcAcMDgAH/A4AB/wOAAf8DgAH/A4AB/wOAAf8DgAH/
         A4AB/wNeAfADUgGjAy0BRf8A/wBCAAMPARQDbQH3A4AB/wOAAf8DgAH/A4AB/wOAAf8DgAH/A4AB/wOA
         Af8DgAH/A4AB/wOAAf8DgAH/A4AB/wOAAf8DgAH/A08Bmf8A/wAyAAMTARoDXQHKA4AB/wOAAf8DgAH/
@@ -2232,19 +2232,16 @@
 </value>
   </data>
   <metadata name="bindingSource1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>32767, 32767</value>
+    <value>1433, 17</value>
   </metadata>
   <metadata name="bindingSource2.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>32767, 32767</value>
-  </metadata>
-  <metadata name="menuStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>32767, 32767</value>
+    <value>1597, 17</value>
   </metadata>
   <metadata name="subComponentBindingSource.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>32767, 32767</value>
+    <value>17, 60</value>
   </metadata>
   <metadata name="elipseComponent1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>32767, 32767</value>
+    <value>277, 60</value>
   </metadata>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>52</value>

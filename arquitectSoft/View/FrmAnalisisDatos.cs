@@ -1281,8 +1281,8 @@ namespace arquitectSoft.View
                     return;
                 }
 
-                string acabadocodNew = bsc.Acabado2.ToString().Split('-')[0];
-                string acabadoDescNew = bsc.Acabado2.ToString().Split('-')[1].ToUpper();
+                string acabadocodNew = "XX"; //bsc.Acabado2.ToString().Split('-')[0];
+                string acabadoDescNew = bsc.Acabado2.ToString().ToUpper(); //.Split('-')[1]
 
                 string AcabadoDesc = dataGridViewPMCalculate.Rows[selectedRowIndex].Cells[3].Value.ToString();
                 string codigo = dataGridViewPMCalculate.Rows[selectedRowIndex].Cells[1].Value.ToString().Split('-')[0] + "-"+ acabadocodNew;
@@ -1293,6 +1293,18 @@ namespace arquitectSoft.View
                 dataGridViewPMCalculate.Rows[selectedRowIndex].Cells[3].Value = acabadoDescNew;
                 
                 
+            }
+        }
+
+        private void BtnMaximizar_Click(object sender, EventArgs e)
+        {
+            if (this.WindowState != FormWindowState.Maximized)
+            {
+                this.WindowState = FormWindowState.Maximized;
+            }
+            else
+            {
+                this.WindowState = FormWindowState.Normal;
             }
         }
     }

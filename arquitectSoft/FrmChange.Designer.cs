@@ -63,7 +63,7 @@
             // 
             this.CmbAcabado2.FormattingEnabled = true;
             this.CmbAcabado2.Location = new System.Drawing.Point(191, 135);
-            this.CmbAcabado2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.CmbAcabado2.Margin = new System.Windows.Forms.Padding(4);
             this.CmbAcabado2.Name = "CmbAcabado2";
             this.CmbAcabado2.Size = new System.Drawing.Size(460, 24);
             this.CmbAcabado2.TabIndex = 108;
@@ -72,7 +72,7 @@
             // 
             this.CmbAcabado1.FormattingEnabled = true;
             this.CmbAcabado1.Location = new System.Drawing.Point(191, 101);
-            this.CmbAcabado1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.CmbAcabado1.Margin = new System.Windows.Forms.Padding(4);
             this.CmbAcabado1.Name = "CmbAcabado1";
             this.CmbAcabado1.Size = new System.Drawing.Size(460, 24);
             this.CmbAcabado1.TabIndex = 107;
@@ -113,7 +113,7 @@
             this.BtnCancelar.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.BtnCancelar.ForeColor = System.Drawing.Color.DimGray;
             this.BtnCancelar.Location = new System.Drawing.Point(140, 236);
-            this.BtnCancelar.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.BtnCancelar.Margin = new System.Windows.Forms.Padding(4);
             this.BtnCancelar.Name = "BtnCancelar";
             this.BtnCancelar.Size = new System.Drawing.Size(112, 27);
             this.BtnCancelar.TabIndex = 104;
@@ -133,7 +133,7 @@
             this.BtnAceptar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.BtnAceptar.ForeColor = System.Drawing.Color.White;
             this.BtnAceptar.Location = new System.Drawing.Point(11, 236);
-            this.BtnAceptar.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.BtnAceptar.Margin = new System.Windows.Forms.Padding(4);
             this.BtnAceptar.Name = "BtnAceptar";
             this.BtnAceptar.Size = new System.Drawing.Size(112, 27);
             this.BtnAceptar.TabIndex = 103;
@@ -148,7 +148,7 @@
             this.elipseControl3.BackColor = System.Drawing.Color.Black;
             this.elipseControl3.CornerRadius = 15;
             this.elipseControl3.Location = new System.Drawing.Point(0, 226);
-            this.elipseControl3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.elipseControl3.Margin = new System.Windows.Forms.Padding(4);
             this.elipseControl3.Name = "elipseControl3";
             this.elipseControl3.Size = new System.Drawing.Size(667, 49);
             this.elipseControl3.TabIndex = 102;
@@ -159,7 +159,7 @@
             this.elipseControl6.BackColor = System.Drawing.Color.Black;
             this.elipseControl6.CornerRadius = 15;
             this.elipseControl6.Location = new System.Drawing.Point(19, 54);
-            this.elipseControl6.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.elipseControl6.Margin = new System.Windows.Forms.Padding(4);
             this.elipseControl6.Name = "elipseControl6";
             this.elipseControl6.Size = new System.Drawing.Size(623, 39);
             this.elipseControl6.TabIndex = 99;
@@ -170,7 +170,7 @@
             this.elipseControl1.BackColor = System.Drawing.Color.Black;
             this.elipseControl1.CornerRadius = 15;
             this.elipseControl1.Location = new System.Drawing.Point(23, 53);
-            this.elipseControl1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.elipseControl1.Margin = new System.Windows.Forms.Padding(4);
             this.elipseControl1.Name = "elipseControl1";
             this.elipseControl1.Size = new System.Drawing.Size(623, 39);
             this.elipseControl1.TabIndex = 99;
@@ -181,7 +181,7 @@
             this.elipseControl5.BackColor = System.Drawing.Color.Black;
             this.elipseControl5.CornerRadius = 15;
             this.elipseControl5.Location = new System.Drawing.Point(-3, 0);
-            this.elipseControl5.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.elipseControl5.Margin = new System.Windows.Forms.Padding(4);
             this.elipseControl5.Name = "elipseControl5";
             this.elipseControl5.Size = new System.Drawing.Size(668, 59);
             this.elipseControl5.TabIndex = 98;
@@ -192,7 +192,7 @@
             this.elipseControl2.BackColor = System.Drawing.Color.White;
             this.elipseControl2.CornerRadius = 15;
             this.elipseControl2.Location = new System.Drawing.Point(4, 78);
-            this.elipseControl2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.elipseControl2.Margin = new System.Windows.Forms.Padding(4);
             this.elipseControl2.Name = "elipseControl2";
             this.elipseControl2.Size = new System.Drawing.Size(664, 150);
             this.elipseControl2.TabIndex = 101;
@@ -207,10 +207,10 @@
             // 
             this.ChkTemp.AutoSize = true;
             this.ChkTemp.BackColor = System.Drawing.Color.White;
-            this.ChkTemp.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ChkTemp.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold);
             this.ChkTemp.Location = new System.Drawing.Point(14, 178);
             this.ChkTemp.Name = "ChkTemp";
-            this.ChkTemp.Size = new System.Drawing.Size(101, 24);
+            this.ChkTemp.Size = new System.Drawing.Size(98, 21);
             this.ChkTemp.TabIndex = 109;
             this.ChkTemp.Text = "Temporal";
             this.ChkTemp.UseVisualStyleBackColor = false;

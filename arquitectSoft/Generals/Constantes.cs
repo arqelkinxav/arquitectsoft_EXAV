@@ -97,8 +97,8 @@ namespace arquitectSoft.Generals
                         + " Id_Unidad_Medida, "
                         + " cantidad, "
                         + " medidaAdicional,"
-                        + " medida,Corte) "
-                        + "VALUES (?,?,?,?,?,?)";        
+                        + " medida,Corte,ubicacion) "
+                        + "VALUES (?,?,?,?,?,?,?)";        
 
         public static String QUERY_INSERT_PROYECTO_VIDRIO_PANEL = "INSERT INTO proyecto_vp "
                         + "(Id_Subcomponente, "
