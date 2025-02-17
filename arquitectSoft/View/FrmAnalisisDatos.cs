@@ -47,6 +47,8 @@ namespace arquitectSoft.View
 
         private void BtnCargar_Click(object sender, EventArgs e)
         {
+            Generals.Global.SwSegmentadoUbi = "0";
+           
             Dto.AnalisisDatosDto dto = new Dto.AnalisisDatosDto();
 
             string directoryName = "";
@@ -68,6 +70,11 @@ namespace arquitectSoft.View
                     int idDocumento = int.Parse(Archivo.Name.ToString().Split('-')[0].Trim());
                     if (idDocumento == 1 || idDocumento == 2 || idDocumento == 4)
                     {
+                        DialogResult result = MessageBox.Show("Le Gustaria Segmentar el analisis de datos en los Perfiles metalicos por Ubicación?", "Mensaje Alerta", MessageBoxButtons.YesNo);
+                        if (result == DialogResult.Yes)
+                        {
+                            Generals.Global.SwSegmentadoUbi = "1";
+                        }
 
                         wantedFiles += idDocumento;
                         File_124.Add(file);
@@ -305,6 +312,10 @@ namespace arquitectSoft.View
 
         private void SetDataView(DataTable dt, DataTable dtcalculate, int index)
         {
+            ContextMenuStrip contextMenu = new ContextMenuStrip();
+            ToolStripMenuItem item1 = new ToolStripMenuItem("Remplazar SubComponente");
+            ToolStripMenuItem item2 = new ToolStripMenuItem("Cambiar Acabado Temporal");
+
             switch (index)
             {
 
@@ -314,12 +325,8 @@ namespace arquitectSoft.View
                     dataGridViewPMCalculate.DataSource = dtcalculate;
                     dataGridViewPMCalculate.Columns[0].Visible = false;
 
-                    ContextMenuStrip contextMenu = new ContextMenuStrip();
-                    ToolStripMenuItem item1 = new ToolStripMenuItem("Remplazar SubComponente");
-                    ToolStripMenuItem item2 = new ToolStripMenuItem("Cambiar Acabado Temporal");
-
-                    item1.Click += Item1_AP_Click;
-                    item2.Click += Item2_AP_Click;
+                    item1.Click += Item1_PM_Click;
+                    item2.Click += Item2_PM_Click;
 
                     contextMenu.Items.Add(item1);
                     contextMenu.Items.Add(item2);
@@ -327,6 +334,11 @@ namespace arquitectSoft.View
                     dataGridViewPMCalculate.ContextMenuStrip = contextMenu;
 
                     dataGridViewPMCalculate.CellMouseDown += dataGridViewPMCalculate_CellMouseDown;
+                    dataGridViewPMCalculate.Columns[9].Visible = false;
+                    if (Generals.Global.SwSegmentadoUbi == "1")
+                    {
+                        dataGridViewPMCalculate.Columns[9].Visible = true;
+                    }
                     //dataGridViewPMCalculate.Columns[6].Visible = false;
                     break;
                 case 2:
@@ -1247,7 +1259,7 @@ namespace arquitectSoft.View
             }
         }
 
-        private void Item1_AP_Click(object sender, EventArgs e)
+        private void Item1_PM_Click(object sender, EventArgs e)
         {
             if (selectedRowIndex >= 0)
             {
@@ -1270,7 +1282,7 @@ namespace arquitectSoft.View
             }
         }
 
-        private void Item2_AP_Click(object sender, EventArgs e)
+        private void Item2_PM_Click(object sender, EventArgs e)
         {
             if (selectedRowIndex >= 0)
             {
@@ -1295,6 +1307,8 @@ namespace arquitectSoft.View
                 
             }
         }
+
+        
 
         private void BtnMaximizar_Click(object sender, EventArgs e)
         {

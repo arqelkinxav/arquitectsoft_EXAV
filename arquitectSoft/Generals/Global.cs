@@ -10,6 +10,7 @@ namespace arquitectSoft.Generals
     {
         private static string _nameconnect = "";
         private static string _AnalisisType = "";
+        private static string _SwSegmentadoUbi = "";
 
         public static string NameConnect
         {
@@ -21,6 +22,12 @@ namespace arquitectSoft.Generals
         {
             get { return _AnalisisType; }
             set { _AnalisisType = value; }
+        }
+
+        public static string SwSegmentadoUbi
+        {
+            get { return _SwSegmentadoUbi; }
+            set { _SwSegmentadoUbi = value; }
         }
     }
 }

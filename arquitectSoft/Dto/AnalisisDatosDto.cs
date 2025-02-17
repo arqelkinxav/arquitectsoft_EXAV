@@ -712,12 +712,12 @@ namespace arquitectSoft.Dto
                 con.Close();
 
                 List<object[]> listDta = new List<object[]>();
-
+                int ncol = (Generals.Global.SwSegmentadoUbi == "1") ? 11 : 10;
                 if (dtResult != null)
                 {
                     foreach (DataRow rowResult in dtResult.Rows)
                     {
-                        object[] data = new object[11];
+                        object[] data = new object[ncol];
                         data[0] = rowResult[0].ToString();
                         data[1] = rowResult[1].ToString();
                         data[2] = rowResult[2].ToString();
@@ -727,7 +727,7 @@ namespace arquitectSoft.Dto
                         data[6] = rowResult[5].ToString();
                         data[7] = rowResult[6].ToString();
                         data[9] = rowResult[7].ToString();
-                        data[10] = ubicacion;
+                        if (ncol == 11) { data[10] = ubicacion; }; 
                         listDta.Add(data);
                     }
 
@@ -752,6 +752,7 @@ namespace arquitectSoft.Dto
                 string[] param = { row["id_subcomponente"].ToString(), row["Id_Unidad_Medida"].ToString(),
                                     row["cantidad"].ToString(), row["medida"].ToString(),
                                     row["Medidida Calculada"].ToString(),row["Corte"].ToString(),row["Ubicación"].ToString() };
+
                 con.Open(out fail);
                 MySqlDataReader drResult = con.ExecuteReader(Generals.Constantes.QUERY_INSERT_PROYECTO, out fail, param);
                 con.Close();
@@ -760,16 +761,18 @@ namespace arquitectSoft.Dto
             if (swmergePM)
             {
                 fail = "";
-                string[] paramGet = { "pDesperdicio|" + Desperdicio, "pSwHerraje|" + pSwHerraje.ToString() };
+                string[] paramGet = { "pDesperdicio|" + Desperdicio, "pSwHerraje|" + pSwHerraje.ToString(), "pSwUbicacion|" + Generals.Global.SwSegmentadoUbi };
                 con.Open(out fail);
                 DataTable dtResult = con.ExecuteDataSetSPparam(Generals.Constantes.QUERY_GET_PROYECTO, out fail, paramGet);
                 con.Close();
+
+                int ncol = (Generals.Global.SwSegmentadoUbi == "1") ? 10 : 9;
 
                 if (dtResult != null)
                 {
                     foreach (DataRow rowResult in dtResult.Rows)
                     {
-                        object[] data = new object[10];
+                        object[] data = new object[ncol];
                         data[0] = Int32.Parse(rowResult[0].ToString());
                         data[1] = rowResult[1].ToString();
                         data[2] = rowResult[2].ToString();
@@ -779,7 +782,8 @@ namespace arquitectSoft.Dto
                         data[6] = float.Parse(rowResult[6].ToString());
                         data[7] = rowResult[7].ToString();
                         data[8] = rowResult[8].ToString();
-                        data[9] = rowResult[9].ToString();
+                        if (ncol == 10) { data[9] = rowResult[9].ToString(); };
+
 
                         list.Add(data);
                     }
@@ -876,7 +880,7 @@ namespace arquitectSoft.Dto
 
             return list;
         }
-
+        
         public List<object[]> getComponenteVidrioPanelCalc(DataTable dtmodel)
         {
             List<object[]> list = new List<object[]>();
