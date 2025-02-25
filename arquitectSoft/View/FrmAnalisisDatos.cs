@@ -47,10 +47,14 @@ namespace arquitectSoft.View
 
         private void BtnCargar_Click(object sender, EventArgs e)
         {
-            Generals.Global.SwSegmentadoUbi = "0";
+            Generals.Global.SwSegmentadoUbi = "1";
            
             Dto.AnalisisDatosDto dto = new Dto.AnalisisDatosDto();
-
+            DialogResult result = MessageBox.Show("Le Gustaria Segmentar el analisis de datos en los Perfiles metalicos por Ubicación?", "Mensaje Alerta", MessageBoxButtons.YesNo);
+            if (result == DialogResult.No)
+            {
+                Generals.Global.SwSegmentadoUbi = "0";
+            }
             string directoryName = "";
             this.openFileDialog1.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
             DialogResult dr = this.openFileDialog1.ShowDialog();            
@@ -70,11 +74,7 @@ namespace arquitectSoft.View
                     int idDocumento = int.Parse(Archivo.Name.ToString().Split('-')[0].Trim());
                     if (idDocumento == 1 || idDocumento == 2 || idDocumento == 4)
                     {
-                        DialogResult result = MessageBox.Show("Le Gustaria Segmentar el analisis de datos en los Perfiles metalicos por Ubicación?", "Mensaje Alerta", MessageBoxButtons.YesNo);
-                        if (result == DialogResult.Yes)
-                        {
-                            Generals.Global.SwSegmentadoUbi = "1";
-                        }
+                       
 
                         wantedFiles += idDocumento;
                         File_124.Add(file);
@@ -180,6 +180,7 @@ namespace arquitectSoft.View
                     if (swmergePM)
                     {
                         DataTable dtresulPMHerraje = new DataTable();
+                        Generals.Global.SwSegmentadoUbi = "0";
                         dtresulPMHerraje = dto.CalculateTab(8, dtResul, dtPuertas, true, medidabase, Desperdicio, swmergePM, 0);
 
                         dataGridViewPMHerrajeCalculate.DataSource = dtresulPMHerraje;
@@ -204,6 +205,7 @@ namespace arquitectSoft.View
                     if (swmergePM)
                     {
                         DataTable dtresulPMHerraje = new DataTable();
+                        Generals.Global.SwSegmentadoUbi = "0";
                         dtresulPMHerraje = dto.CalculateTab(8, dtResul, dtPuertas, true, medidabase, Desperdicio, wantedFiles == 6 ? false : true, 0);
                         if (wantedFiles == 6)
                             dtresulPMHerraje.Merge(dto.CalculateTab(8, dtTubos, dtPuertas, true, medidabase, Desperdicio, true, 0));
@@ -231,6 +233,7 @@ namespace arquitectSoft.View
                     if (wantedFiles != 1) { swmergePM = false; }
 
                     DataTable dtresulPMHerraje = new DataTable();
+                    Generals.Global.SwSegmentadoUbi = (Generals.Global.SwSegmentadoUbi == "1") ? "-1":"0";
                     dtresulPMHerraje = dto.CalculateTab(8, dtResul, dtPuertas, perfilandvidrios, medidabase, Desperdicio, swmergePM,0);
 
                     if (wantedFiles == 7)
@@ -248,11 +251,13 @@ namespace arquitectSoft.View
 
                     dataGridViewPMHerrajeCalculate.DataSource = dtresulPMHerraje;
                     dataGridViewPMHerrajeCalculate.Columns[0].Visible = false;
+                    dataGridViewPMHerrajeCalculate.Columns[9].Visible = false;
+
+                    Generals.Global.SwSegmentadoUbi = (Generals.Global.SwSegmentadoUbi == "-1") ? "1" : "0";
 
                 }
                 if (idDocumento == 3)
                 {
-
                     DataTable dtresulPC = new DataTable();
                     dtresulPC = dto.CalculateTab(6, dtResul, dtPuertas, true, medidabase, Desperdicio, swmergePM, 0);
                     dataGridViewP2Calculate.DataSource = dtresulPC;
@@ -1220,8 +1225,10 @@ namespace arquitectSoft.View
                             }
                             else
                             {
-                                row.Cells[1].Value = row.Cells[1].Value.ToString().Split('-')[0].Trim()+"-"+ param[1].ToString().Split('-')[0].Trim();
-                                row.Cells[3].Value = param[1].ToString().Split('-')[1].Trim();
+                                string acabadocodNew = "XX";                                
+
+                                row.Cells[1].Value = row.Cells[1].Value.ToString().Split('-')[0].Trim()+"-"+ acabadocodNew;
+                                row.Cells[3].Value = param[1].ToString();
                             }                            
                         }
                     }

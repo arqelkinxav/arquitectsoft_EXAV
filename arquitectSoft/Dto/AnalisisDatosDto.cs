@@ -771,6 +771,7 @@ namespace arquitectSoft.Dto
                 if (dtResult != null)
                 {
                     foreach (DataRow rowResult in dtResult.Rows)
+
                     {
                         object[] data = new object[ncol];
                         data[0] = Int32.Parse(rowResult[0].ToString());

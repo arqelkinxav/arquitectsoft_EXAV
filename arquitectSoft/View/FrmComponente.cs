@@ -356,7 +356,7 @@ namespace arquitectSoft.View
 
             GridViewComponente.CellMouseDown += GridViewComponente_CellMouseDown;
 
-            GridViewComponente.Height = 800;
+            GridViewComponente.Height = 520;
 
         }
         private void habilitarNuevo(string opcion)
@@ -604,7 +604,7 @@ namespace arquitectSoft.View
             }
             else
             {
-                GridViewComponente.Height = 800;
+                GridViewComponente.Height = 500;
                 GridViewComponenteEsp.DataSource = "";
                 GridViewComponenteEsp.Visible = false;
             }

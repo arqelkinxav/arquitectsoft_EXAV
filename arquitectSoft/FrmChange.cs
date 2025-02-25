@@ -35,7 +35,7 @@ namespace arquitectSoft
         private void BtnAceptar_Click(object sender, EventArgs e)
         {
             Acabado1 = CmbAcabado1.Text;
-            Acabado2 = (ChkTemp.Checked) ? txtTemporalAcabado.Text : CmbAcabado2.Text;           
+            Acabado2 = (ChkTemp.Checked) ? txtTemporalAcabado.Text.ToUpper() : CmbAcabado2.Text;           
 
             this.Close();
 

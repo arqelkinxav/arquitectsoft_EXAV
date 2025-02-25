@@ -90,7 +90,6 @@ namespace arquitectSoft.View
             this.tabMamparas = new System.Windows.Forms.TabPage();
             this.dataGridViewM = new System.Windows.Forms.DataGridView();
             this.dataGridViewMCalculate = new System.Windows.Forms.DataGridView();
-            this.BtnChange = new arquitectSoft.Generals.RJButton();
             this.panel2 = new System.Windows.Forms.Panel();
             this.BtnMaximizar = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
@@ -98,6 +97,7 @@ namespace arquitectSoft.View
             this.btnExportar = new System.Windows.Forms.Button();
             this.BtnCancelar = new System.Windows.Forms.Button();
             this.BtnCargar = new System.Windows.Forms.Button();
+            this.BtnChange = new arquitectSoft.Generals.RJButton();
             this.elipseComponent1 = new arquitectSoft.Generals.ElipseComponent();
             ((System.ComponentModel.ISupportInitialize)(this.NUpDownDesperdicio)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NUpDownMedidaBase)).BeginInit();
@@ -195,12 +195,12 @@ namespace arquitectSoft.View
             // lblestadosAnalitica
             // 
             this.lblestadosAnalitica.AutoSize = true;
-            this.lblestadosAnalitica.Font = new System.Drawing.Font("Microsoft Uighur", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblestadosAnalitica.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblestadosAnalitica.ForeColor = System.Drawing.Color.LightCoral;
             this.lblestadosAnalitica.Location = new System.Drawing.Point(1043, 117);
             this.lblestadosAnalitica.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblestadosAnalitica.Name = "lblestadosAnalitica";
-            this.lblestadosAnalitica.Size = new System.Drawing.Size(0, 22);
+            this.lblestadosAnalitica.Size = new System.Drawing.Size(0, 18);
             this.lblestadosAnalitica.TabIndex = 50;
             // 
             // ImgListFinal
@@ -227,7 +227,7 @@ namespace arquitectSoft.View
             this.label2.Location = new System.Drawing.Point(806, 28);
             this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(80, 15);
+            this.label2.Size = new System.Drawing.Size(88, 16);
             this.label2.TabIndex = 67;
             this.label2.Text = "Medida Base";
             // 
@@ -240,7 +240,7 @@ namespace arquitectSoft.View
             this.label3.Location = new System.Drawing.Point(1011, 27);
             this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(87, 15);
+            this.label3.Size = new System.Drawing.Size(96, 16);
             this.label3.TabIndex = 69;
             this.label3.Text = "% Desperdicio";
             // 
@@ -250,7 +250,7 @@ namespace arquitectSoft.View
             this.NUpDownDesperdicio.Location = new System.Drawing.Point(1106, 26);
             this.NUpDownDesperdicio.Margin = new System.Windows.Forms.Padding(4);
             this.NUpDownDesperdicio.Name = "NUpDownDesperdicio";
-            this.NUpDownDesperdicio.Size = new System.Drawing.Size(109, 20);
+            this.NUpDownDesperdicio.Size = new System.Drawing.Size(109, 22);
             this.NUpDownDesperdicio.TabIndex = 71;
             this.NUpDownDesperdicio.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.NUpDownDesperdicio_KeyPress);
             // 
@@ -288,7 +288,7 @@ namespace arquitectSoft.View
             0,
             0});
             this.NUpDownMedidaBase.Name = "NUpDownMedidaBase";
-            this.NUpDownMedidaBase.Size = new System.Drawing.Size(109, 20);
+            this.NUpDownMedidaBase.Size = new System.Drawing.Size(109, 22);
             this.NUpDownMedidaBase.TabIndex = 72;
             this.NUpDownMedidaBase.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.NUpDownMedidaBase_KeyPress);
             // 
@@ -412,7 +412,7 @@ namespace arquitectSoft.View
             this.lblDirectoryName.Location = new System.Drawing.Point(1524, 475);
             this.lblDirectoryName.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblDirectoryName.Name = "lblDirectoryName";
-            this.lblDirectoryName.Size = new System.Drawing.Size(0, 15);
+            this.lblDirectoryName.Size = new System.Drawing.Size(0, 16);
             this.lblDirectoryName.TabIndex = 5;
             // 
             // tabPerfilMetallicoHerraje
@@ -846,28 +846,6 @@ namespace arquitectSoft.View
             this.dataGridViewMCalculate.Size = new System.Drawing.Size(1310, 343);
             this.dataGridViewMCalculate.TabIndex = 7;
             // 
-            // BtnChange
-            // 
-            this.BtnChange.BackColor = System.Drawing.Color.DimGray;
-            this.BtnChange.BackgroundColor = System.Drawing.Color.DimGray;
-            this.BtnChange.BorderColor = System.Drawing.Color.White;
-            this.BtnChange.BorderRadius = 10;
-            this.BtnChange.BorderSize = 0;
-            this.BtnChange.FlatAppearance.BorderSize = 0;
-            this.BtnChange.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnChange.ForeColor = System.Drawing.Color.White;
-            this.BtnChange.Location = new System.Drawing.Point(8, 853);
-            this.BtnChange.Margin = new System.Windows.Forms.Padding(4);
-            this.BtnChange.Name = "BtnChange";
-            this.BtnChange.Size = new System.Drawing.Size(148, 27);
-            this.BtnChange.TabIndex = 104;
-            this.BtnChange.Text = "Cambiar Acabado";
-            this.BtnChange.TextColor = System.Drawing.Color.White;
-            this.BtnChange.UseCompatibleTextRendering = true;
-            this.BtnChange.UseVisualStyleBackColor = false;
-            this.BtnChange.Visible = false;
-            this.BtnChange.Click += new System.EventHandler(this.BtnChange_Click);
-            // 
             // panel2
             // 
             this.panel2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -953,7 +931,7 @@ namespace arquitectSoft.View
             this.BtnCancelar.ImageList = this.ImgListFinal;
             this.BtnCancelar.Location = new System.Drawing.Point(79, 4);
             this.BtnCancelar.Name = "BtnCancelar";
-            this.BtnCancelar.Size = new System.Drawing.Size(69, 69);
+            this.BtnCancelar.Size = new System.Drawing.Size(71, 69);
             this.BtnCancelar.TabIndex = 104;
             this.BtnCancelar.Text = "Cancelar";
             this.BtnCancelar.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
@@ -976,6 +954,28 @@ namespace arquitectSoft.View
             this.BtnCargar.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.BtnCargar.UseVisualStyleBackColor = false;
             this.BtnCargar.Click += new System.EventHandler(this.BtnCargar_Click);
+            // 
+            // BtnChange
+            // 
+            this.BtnChange.BackColor = System.Drawing.Color.DimGray;
+            this.BtnChange.BackgroundColor = System.Drawing.Color.DimGray;
+            this.BtnChange.BorderColor = System.Drawing.Color.White;
+            this.BtnChange.BorderRadius = 10;
+            this.BtnChange.BorderSize = 0;
+            this.BtnChange.FlatAppearance.BorderSize = 0;
+            this.BtnChange.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnChange.ForeColor = System.Drawing.Color.White;
+            this.BtnChange.Location = new System.Drawing.Point(8, 853);
+            this.BtnChange.Margin = new System.Windows.Forms.Padding(4);
+            this.BtnChange.Name = "BtnChange";
+            this.BtnChange.Size = new System.Drawing.Size(148, 27);
+            this.BtnChange.TabIndex = 104;
+            this.BtnChange.Text = "Cambiar Acabado";
+            this.BtnChange.TextColor = System.Drawing.Color.White;
+            this.BtnChange.UseCompatibleTextRendering = true;
+            this.BtnChange.UseVisualStyleBackColor = false;
+            this.BtnChange.Visible = false;
+            this.BtnChange.Click += new System.EventHandler(this.BtnChange_Click);
             // 
             // elipseComponent1
             // 
