@@ -684,7 +684,7 @@ namespace arquitectSoft.Dto
             foreach (DataRow row in dtmodel.Rows)
             {
                 codigo = row["Codigo"].ToString().Replace("\"", "").Trim();
-                ubicacion = row[colUbicacionName].ToString().Replace("\"", "").Trim();
+                ubicacion = (colUbicacionName is null) ? "": row[colUbicacionName].ToString().Replace("\"", "").Trim();
 
                 Longitud = row[StrCantidad].ToString().Replace("\"", "").Trim();
                 
