@@ -11,7 +11,7 @@ namespace arquitectSoft.Class
     public class Sub_Component
     {
 
-        public Sub_Component(string codigo, string descripcion, int cxdefecto, int cadicional, string unidadcalculada, bool adecremento,int IdSubcomponente, string elevado, int corte, bool extra, int medida, int mecanizado, int asignacion_puertas)
+        public Sub_Component(string codigo, string descripcion, int cxdefecto, int cadicional, string unidadcalculada, bool adecremento,int IdSubcomponente, string elevado, int corte, bool extra, int medida, string mecanizado, int asignacion_puertas, int cod_Mecanizado)
 
         {
 
@@ -28,6 +28,7 @@ namespace arquitectSoft.Class
             this.Medida = medida;
             this.Mecanizado = mecanizado;
             Asignacion_puertas = asignacion_puertas;
+            Cod_Mecanizado = cod_Mecanizado;
         }
 
         public string Codigo { get; set; }
@@ -52,8 +53,10 @@ namespace arquitectSoft.Class
 
         public int Medida { get; set; }
 
-        public int Mecanizado { get; set; }
+        public string Mecanizado { get; set; }
 
         public int Asignacion_puertas { get; set; }
+
+        public int Cod_Mecanizado { get; set; }
     }
 }

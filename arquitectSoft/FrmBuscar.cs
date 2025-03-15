@@ -130,34 +130,103 @@ namespace arquitectSoft
             Generals.Conexion con = new Generals.Conexion();
             string fail = "";
             string Fil = "";
+            string Condicion = "";
             try
             {
                 con.Open(out fail);
                 string sqlquery = "";
                 Fil = filter == true ? "1" : "0";
 
-
+                var searchsplit = txtBuscar.Text.Split(' ');
 
                 switch (Consulta)
                 {
                     case "Umed":
-                        sqlquery = Generals.Constantes.QUERY_UNIDADMEDIDA + " where Descripcion lIKE '%" + txtBuscar.Text + "%'";
+                        Condicion = " WHERE ";
+
+                        for (int i = 0; i < searchsplit.Length; i++)
+                        {
+                            if (i > 0)
+                            {
+                                Condicion += " AND "; // Usa OR si prefieres
+                            }
+                            Condicion += " Descripcion lIKE '%" + searchsplit[i] + "%'";
+                        }
+
+                        sqlquery = Generals.Constantes.QUERY_UNIDADMEDIDA + Condicion;
                         break;
                     case "Corte":
-                        sqlquery = Generals.Constantes.QUERY_CORTE + " where Descripcion lIKE '%" + txtBuscar.Text + "%'";
+                        Condicion = " WHERE ";
+
+                        for (int i = 0; i < searchsplit.Length; i++)
+                        {
+                            if (i > 0)
+                            {
+                                Condicion += " AND "; // Usa OR si prefieres
+                            }
+                            Condicion += " Descripcion lIKE '%" + searchsplit[i] + "%'";
+                        }
+
+                        sqlquery = Generals.Constantes.QUERY_CORTE + Condicion;
                         break;
                     case "Acaba-Multi":
                     case "Acaba":
-                        sqlquery = Generals.Constantes.QUERY_ACABADO + " where CONCAT(Codigo_Homologacion,' - ',Descripcion) lIKE '%" + txtBuscar.Text +"%'";
+                        Condicion = " WHERE ";
+
+                        for (int i = 0; i < searchsplit.Length; i++)
+                        {
+                            if (i > 0)
+                            {
+                                Condicion += " AND "; // Usa OR si prefieres
+                            }
+                            Condicion += " CONCAT(Codigo_Homologacion,' - ',Descripcion) lIKE '%" + searchsplit[i] + "%'";
+                        }
+
+                        sqlquery = Generals.Constantes.QUERY_ACABADO + Condicion;
                         break;
                     case "Mecan":
-                        sqlquery = Generals.Constantes.QUERY_MECANIZADO + " where CONCAT(Codigo_Homologacion,' - ',Descripcion) lIKE '%" + txtBuscar.Text + "%'";
+                        Condicion = " WHERE ";
+
+                        for (int i = 0; i < searchsplit.Length; i++)
+                        {
+                            if (i > 0)
+                            {
+                                Condicion += " AND "; // Usa OR si prefieres
+                            }
+                            Condicion += " CONCAT(Codigo_Homologacion,' - ',Descripcion) lIKE '%" + searchsplit[i] + "%'";
+                        }
+
+                        sqlquery = Generals.Constantes.QUERY_MECANIZADO + Condicion;
                         break;
                     case "SubComp":
-                        sqlquery = Generals.Constantes.QUERY_SUBCOMPONENTES + " where CONCAT(subcomponentes.Codigo_Homologacion,' - ',subcomponentes.Descripcion) lIKE '%" + txtBuscar.Text + "%' and Especial = " + Fil;
+
+                        Condicion = " WHERE Especial = " + Fil + " AND ";
+
+                        for (int i = 0; i < searchsplit.Length; i++)
+                        {
+                            if (i > 0)
+                            {
+                                Condicion += " AND "; // Usa OR si prefieres
+                            }
+                            Condicion += " CONCAT(subcomponentes.Codigo_Homologacion,' - ',subcomponentes.Descripcion) LIKE '%" + searchsplit[i] + "%'";
+                        }
+
+                        sqlquery = Generals.Constantes.QUERY_SUBCOMPONENTES + Condicion;
                         break;
                     default:
-                        sqlquery = Generals.Constantes.QUERY_COMPONENTES + " where CONCAT(CONCAT(Codigo , IFNULL(concat('-',acabados.Codigo_Homologacion),'')),' - ',componentes.Descripcion) lIKE '%" + txtBuscar.Text + "%' and Especial = " + Fil;
+
+                        Condicion = " WHERE Especial = " + Fil + " AND ";
+
+                        for (int i = 0; i < searchsplit.Length; i++)
+                        {
+                            if (i > 0)
+                            {
+                                Condicion += " AND "; // Usa OR si prefieres
+                            }
+                            Condicion += " CONCAT(CONCAT(Codigo , IFNULL(concat('-',acabados.Codigo_Homologacion),'')),' - ',componentes.Descripcion) LIKE '%" + searchsplit[i] + "%'";
+                        }                  
+
+                        sqlquery = Generals.Constantes.QUERY_COMPONENTES + Condicion;
                         break;
                 }
 

@@ -1,6 +1,7 @@
 ﻿using arquitectSoft.Class;
 using arquitectSoft.Generals;
 using ClosedXML.Excel;
+using MySqlX.XDevAPI.Common;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -313,8 +314,10 @@ namespace arquitectSoft.View
             GridViewComponente.Columns.Add(DGV_Handler.CreateCorteComboBox());
             GridViewComponente.Columns.Add(DGV_Handler.CreateCheckBox("Extra", "Extra", "Extra"));
             GridViewComponente.Columns.Add(DGV_Handler.CreateSeleccionMedidaComboBox());
-            GridViewComponente.Columns.Add(DGV_Handler.CreateMecanizadoComboBox());
+            GridViewComponente.Columns.Add(DGV_Handler.CreateTextBox("Mecanizado", "Mecanizado", "Mecanizado", false));
+            //GridViewComponente.Columns.Add(DGV_Handler.CreateMecanizadoComboBox());
             GridViewComponente.Columns.Add(DGV_Handler.CreateTextBox("Asignacion_puertas", "Asignacion_puertas", "Asignacion_puertas", false));
+            GridViewComponente.Columns.Add(DGV_Handler.CreateTextBox("Cod_Mecanizado", "Cod_Mecanizado", "Cod_Mecanizado", false));
 
 
             GridViewComponenteEsp.Columns.Add(DGV_Handler.CreateTextBox("IdSubcomponente", "Id", "IdSubcomponente", false));
@@ -331,10 +334,11 @@ namespace arquitectSoft.View
             GridViewComponente.Columns[1].ReadOnly = true;
             GridViewComponente.Columns[2].ReadOnly = true;
             GridViewComponente.Columns[7].Visible = false; //Se reutiliza campo elevado para guardar data de anchura
-            GridViewComponente.Columns[11].Visible = true; //Se reutiliza campo elevado para guardar data de anchura
+            GridViewComponente.Columns[11].Visible = true;
+            GridViewComponente.Columns[11].ReadOnly = true;
             //GridViewComponente.Columns[11].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             GridViewComponente.Columns[12].Visible = false; //Se reutiliza campo elevado para guardar Asignacion Puertas
-
+            GridViewComponente.Columns[13].Visible = false; //Se reutiliza campo para control de mecanizado
             //GridViewComponenteEsp.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             GridViewComponenteEsp.Columns[0].ReadOnly = true;
             GridViewComponenteEsp.Columns[1].ReadOnly = true;
@@ -346,11 +350,13 @@ namespace arquitectSoft.View
 
             ContextMenuStrip contextMenu = new ContextMenuStrip();
             ToolStripMenuItem item1 = new ToolStripMenuItem("Asignacion Puertas");
-            //ToolStripMenuItem item2 = new ToolStripMenuItem("Opción 2");
+            ToolStripMenuItem item2 = new ToolStripMenuItem("Quitar Mecanizado");
 
             item1.Click += Item1_AP_Click;
+            item2.Click += Item2_QM_Click;
 
             contextMenu.Items.Add(item1);
+            contextMenu.Items.Add(item2);
 
             GridViewComponente.ContextMenuStrip = contextMenu;
 
@@ -447,13 +453,15 @@ namespace arquitectSoft.View
 
                     int medida = (row.Cells["MedidaHA"].Value != null) ? (int)row.Cells["MedidaHA"].Value : 1;
 
-                    string Mecanizado = (row.Cells["Mecanizado"].Value != null) ? row.Cells["Mecanizado"].Value.ToString() : "0";
+                    string Mecanizado = row.Cells["Cod_Mecanizado"].Value.ToString();
+
+                    string Cod_Mecanizado = (row.Cells["Cod_Mecanizado"].Value != null) ? row.Cells["Cod_Mecanizado"].Value.ToString() : "0";
 
                     string A_Puerta = (row.Cells["Asignacion_puertas"].Value != null) ? row.Cells["Asignacion_puertas"].Value.ToString() : "0";
 
                     if (unidadcalculada == "6") { medida = 0; }
 
-                    Sub_Component sub = new Sub_Component(codigo, descripcion, Cxdefecto, CAdicional, unidadcalculada, ADecremento, id, Elevado, Corte, Extra, medida, int.Parse(Mecanizado), int.Parse(A_Puerta));
+                    Sub_Component sub = new Sub_Component(codigo, descripcion, Cxdefecto, CAdicional, unidadcalculada, ADecremento, id, Elevado, Corte, Extra, medida, Mecanizado, int.Parse(A_Puerta), int.Parse(Cod_Mecanizado));
 
                     Sbarray[row.Index] = sub;
                 }
@@ -499,18 +507,19 @@ namespace arquitectSoft.View
         private void CargarDataDetalle(DataTable dt)
         {
 
-            dt.DefaultView.Sort = "Descripcion ASC";
+            //dt.DefaultView.Sort = "Descripcion ASC";
 
             condicionAcabado = "";
-            foreach (DataRowView row in dt.DefaultView)
+            //foreach (DataRowView row in dt.DefaultView)
+            foreach (DataRow row in dt.Rows)
             {
                 int decre = Int32.Parse(row["Aplica_Decremento"].ToString());
                 int extra = Int32.Parse(row["extra"].ToString());
                 int cort = Int32.Parse(row["corte"].ToString());
-                int mecanizado = row["mecanizado"].ToString() != "" ? Int32.Parse(row["mecanizado"].ToString()) : 0;
+                int Cod_Mecanizado = row["Cod_Mecanizado"].ToString() != "" ? Int32.Parse(row["Cod_Mecanizado"].ToString()) : 0;
                 bool adrecre = decre == 1 ? true : false;
                 bool extracomp = extra == 1 ? true : false;
-                bindingSource1.Add(new Sub_Component(row["Codigo"].ToString(), row["Descripcion"].ToString(), (int)row["Cantidad_Default"], (int)row["Cantidad_Adicional"], row["Id_Unidad_Calculada"].ToString(), adrecre, (int)row["Id_Subcomponente"], row["elevado"].ToString(), cort, extracomp, (int)row["Medida"], mecanizado, (int)row["Asignacion_puertas"]));
+                bindingSource1.Add(new Sub_Component(row["Codigo"].ToString(), row["Descripcion"].ToString(), (int)row["Cantidad_Default"], (int)row["Cantidad_Adicional"], row["Id_Unidad_Calculada"].ToString(), adrecre, (int)row["Id_Subcomponente"], row["elevado"].ToString(), cort, extracomp, (int)row["Medida"], row["mecanizado"].ToString(), (int)row["Asignacion_puertas"], Cod_Mecanizado));
 
 
                 string valorinicial = condicionAcabado == "" ? "'" : ",'";
@@ -549,12 +558,12 @@ namespace arquitectSoft.View
                         comboBoxCell.Value = Medida;
                     }
 
-                    long Mecanizado = dt.Rows[row.Index]["Mecanizado"].ToString() == "" ? 0 : Int64.Parse(dt.Rows[row.Index]["Mecanizado"].ToString());
-                    if (Mecanizado > 0)
-                    {
-                        DataGridViewComboBoxCell comboBoxCell = (DataGridViewComboBoxCell)(row.Cells[11]);
-                        comboBoxCell.Value = Mecanizado;
-                    }
+                    //long Mecanizado = dt.Rows[row.Index]["Mecanizado"].ToString() == "" ? 0 : Int64.Parse(dt.Rows[row.Index]["Mecanizado"].ToString());
+                    //if (Mecanizado > 0)
+                    //{
+                    //    DataGridViewComboBoxCell comboBoxCell = (DataGridViewComboBoxCell)(row.Cells[11]);
+                    //    comboBoxCell.Value = Mecanizado;
+                    //}
 
                     int A_Puerta = Int32.Parse(dt.Rows[row.Index]["Asignacion_puertas"].ToString());
                     row.DefaultCellStyle.BackColor = A_Puerta > 0 ? Color.LightGreen : Color.White;
@@ -665,7 +674,7 @@ namespace arquitectSoft.View
 
             if (bsc.ReturnItem0 != null && bsc.ReturnItem4 == "0")
             {
-                bindingSource1.Add(new Sub_Component(bsc.ReturnItem1, bsc.ReturnItem2, 1, 30, "", false, Int32.Parse(bsc.ReturnItem0), "", 0, false, 1,0,0));
+                bindingSource1.Add(new Sub_Component(bsc.ReturnItem1, bsc.ReturnItem2, 1, 30, "", false, Int32.Parse(bsc.ReturnItem0), "", 0, false, 1,"",0,0));
 
                 GridViewComponente.DataSource = bindingSource1;
 
@@ -700,37 +709,7 @@ namespace arquitectSoft.View
         {
             ReleaseCapture();
             SendMessage(this.Handle, 0x112, 0xf012, 0);
-        }
-
-        private void GridViewComponente_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
-        {
-            if (e.RowIndex >= 0)
-            {
-                if (GridViewComponente.Rows[e.RowIndex].Cells[3].Value.ToString() == "6")
-                {
-
-                    FrmDataAmbas bsc = new FrmDataAmbas();
-                    string datavalue = GridViewComponente.Rows[e.RowIndex].Cells[7].Value.ToString();
-                    if (datavalue == "0" || datavalue == "")
-                    {
-                        bsc.ReturnItem0 = CantiAdiAnch;
-                        bsc.ReturnItem1 = AplDecreAnch;
-                    }
-                    else
-                    {
-                        bsc.ReturnItem0 = decimal.Parse(GridViewComponente.Rows[e.RowIndex].Cells[7].Value.ToString().Split(';')[0].Split('|')[1]);
-                        bsc.ReturnItem1 = bool.Parse(GridViewComponente.Rows[e.RowIndex].Cells[7].Value.ToString().Split(';')[1].Split('|')[1]);
-                    }
-
-
-                    bsc.ShowDialog();
-                    GridViewComponente.Rows[e.RowIndex].Cells[7].Value = "Cant-Adi|" + bsc.ReturnItem0 + ";Apli-Decr|" + bsc.ReturnItem1;
-                    CantiAdiAnch = bsc.ReturnItem0;
-                    AplDecreAnch = bsc.ReturnItem1;
-                }
-            }
-        
-    }
+        }    
 
         private void GridViewComponente_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
         {
@@ -756,8 +735,18 @@ namespace arquitectSoft.View
             }
         }
 
+        private void Item2_QM_Click(object sender, EventArgs e)
+        {
+            if (selectedRowIndex >= 0)
+            {                                                                                              
+                GridViewComponente.Rows[selectedRowIndex].Cells[13].Value = "0";
+                GridViewComponente.Rows[selectedRowIndex].Cells[11].Value = "";
+            }
+        }
+
         private void btnMaximizar_Click(object sender, EventArgs e)
         {
+
             if (this.WindowState != FormWindowState.Maximized)
             {
                 this.WindowState = FormWindowState.Maximized;
@@ -778,7 +767,54 @@ namespace arquitectSoft.View
             }
         }
 
-       
+        private void GridViewComponente_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0)
+            {
+                if (e.ColumnIndex == 2)
+                {
+                    if (GridViewComponente.Rows[e.RowIndex].Cells[3].Value.ToString() == "6")
+                    {
+
+                        FrmDataAmbas bsc = new FrmDataAmbas();
+                        string datavalue = GridViewComponente.Rows[e.RowIndex].Cells[7].Value.ToString();
+                        if (datavalue == "0" || datavalue == "")
+                        {
+                            bsc.ReturnItem0 = CantiAdiAnch;
+                            bsc.ReturnItem1 = AplDecreAnch;
+                        }
+                        else
+                        {
+                            bsc.ReturnItem0 = decimal.Parse(GridViewComponente.Rows[e.RowIndex].Cells[7].Value.ToString().Split(';')[0].Split('|')[1]);
+                            bsc.ReturnItem1 = bool.Parse(GridViewComponente.Rows[e.RowIndex].Cells[7].Value.ToString().Split(';')[1].Split('|')[1]);
+                        }
+
+
+                        bsc.ShowDialog();
+                        GridViewComponente.Rows[e.RowIndex].Cells[7].Value = "Cant-Adi|" + bsc.ReturnItem0 + ";Apli-Decr|" + bsc.ReturnItem1;
+                        CantiAdiAnch = bsc.ReturnItem0;
+                        AplDecreAnch = bsc.ReturnItem1;
+                    }
+                }
+
+                if (e.ColumnIndex == 11)
+                {
+                    FrmBuscar bsc = new FrmBuscar();
+                    bsc.Consulta = "Mecan";
+                    bsc.ShowDialog();
+                    if (bsc.ReturnItem1 == null)
+                    {
+                        return;
+                    }
+
+                    GridViewComponente.Rows[e.RowIndex].Cells[13].Value = bsc.ReturnItem0;
+                    GridViewComponente.Rows[e.RowIndex].Cells[11].Value = bsc.ReturnItem2.ToString();
+                }
+
+            }
+        }
+
+      
     }
 
 }

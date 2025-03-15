@@ -884,7 +884,7 @@ namespace arquitectSoft.View
                 switch (Datagrid)
                 {
                     case 1:                        
-                        table = dataGridViewPMCalculate;                        
+                        table = dataGridViewPHerrajeCalculate;                        
                         break;
                     case 2:                        
                         table = dataGridViewPCalculate;
@@ -924,7 +924,11 @@ namespace arquitectSoft.View
                         {
                             if (((Datagrid == 2 || Datagrid == 4) && valuezero.Contains("Puerta")) || Datagrid == 6)
                             {
-                                AcabadoDesc = AcabadoDesc.Substring(0, posini + 1) + param[1].ToString().Split('-')[1].Trim() + AcabadoDesc.Substring(posfin, AcabadoDesc.Length - posfin);
+                                string AcabadoDescini = AcabadoDesc.Substring(0, posini + 1); // + param[1].ToString().Split('-')[1].Trim() + AcabadoDesc.Substring(posfin, AcabadoDesc.Length - posfin);
+                                string AcabadoDescfin = AcabadoDesc.Substring(posfin, AcabadoDesc.Length - posfin);
+                                //string AcabadoDescOrigen = param[0].ToString().Split('-')[1].Trim();
+                                string AcabadoDescDestino = param[1].ToString().Contains("-") ? param[1].ToString().Split('-')[1].Trim() : param[1].ToString();
+                                AcabadoDesc = AcabadoDescini + AcabadoDescDestino + AcabadoDescfin;
                                 if (Datagrid == 6)
                                 {
                                     row.Cells[1].Value = AcabadoDesc;
@@ -941,7 +945,7 @@ namespace arquitectSoft.View
                             }
                             else
                             {
-                                row.Cells[3].Value = param[1].ToString().Split('-')[1].Trim();
+                                row.Cells[3].Value = param[1].ToString().Contains("-") ? param[1].ToString().Split('-')[1].Trim() : param[1].ToString();
                             }                            
                         }
                     }

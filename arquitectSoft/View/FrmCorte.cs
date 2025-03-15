@@ -120,10 +120,12 @@ namespace arquitectSoft.View
         #region Metodos
         private void FrmCorte_Load(object sender, EventArgs e)
         {
+            
             txtCodigo.Enabled = false;
             txtDescripcion.Enabled = false;
             NudLeft.Enabled = false;
-            NudRight.Enabled = false;
+            NudRight.Enabled = false;          
+       
         }
         private void habilitarNuevo(string opcion)
         {

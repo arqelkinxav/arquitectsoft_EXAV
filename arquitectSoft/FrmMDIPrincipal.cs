@@ -1,4 +1,5 @@
-﻿using System;
+﻿using arquitectSoft.View;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -91,7 +92,7 @@ namespace arquitectSoft
         {
 
             FrmAcercade formAbout = new FrmAcercade();
-            formAbout.MdiParent = this;
+            //formAbout.MdiParent = this;
             formAbout.StartPosition = FormStartPosition.CenterScreen;
             formAbout.Show();
 
@@ -111,8 +112,9 @@ namespace arquitectSoft
         {
 
             View.FrmAcabados formAbout = new View.FrmAcabados();
-            formAbout.MdiParent = this;
+            //formAbout.MdiParent = this;
             formAbout.StartPosition = FormStartPosition.CenterScreen;
+            formAbout.WindowState = FormWindowState.Normal;
             formAbout.Show();
 
         }
@@ -129,16 +131,18 @@ namespace arquitectSoft
         private void TMSItem_cortes_Click(object sender, EventArgs e)
         {
             View.FrmCorte formcortes = new View.FrmCorte();
-            formcortes.MdiParent = this;
+            // formcortes.MdiParent = this;
             formcortes.StartPosition = FormStartPosition.CenterScreen;
+            formcortes.WindowState = FormWindowState.Normal;
             formcortes.Show();
         }
 
         private void unidadDeMedidaToolStripMenuItem_Click(object sender, EventArgs e)
         {
             View.FrmUnidadMedida formUnidadMedida = new View.FrmUnidadMedida();
-            formUnidadMedida.MdiParent = this;
+            //formUnidadMedida.MdiParent = this;
             formUnidadMedida.StartPosition = FormStartPosition.CenterScreen;
+            formUnidadMedida.WindowState = FormWindowState.Normal;
             formUnidadMedida.Show();
         }
 
@@ -210,8 +214,9 @@ namespace arquitectSoft
         private void mecanizadoToolStripMenuItem_Click(object sender, EventArgs e)
         {
             View.FrmMecanizado formMecanizado = new View.FrmMecanizado();
-            formMecanizado.MdiParent = this;
+            // formMecanizado.MdiParent = this;
             formMecanizado.StartPosition = FormStartPosition.CenterScreen;
+            formMecanizado.WindowState = FormWindowState.Normal;
             formMecanizado.Show();
         }
 
