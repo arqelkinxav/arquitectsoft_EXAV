@@ -820,7 +820,7 @@ namespace arquitectSoft.View
                                       .Scale(.3); // optional: resize picture
                                 }
 
-                                dt.Columns.Remove("Ubicación");
+                                //dt.Columns.Remove("Ubicación");
 
                                 var ws = wb.Worksheets.Add(dt, sheets + "PHer");
                                 string RangeSrcDoor = string.Format("A{0}:H{1}", 1, dt.Rows.Count + 1);
