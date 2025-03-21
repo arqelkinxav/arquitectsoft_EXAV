@@ -39,8 +39,6 @@ namespace arquitectSoft
             this.datetimePFecha = new System.Windows.Forms.DateTimePicker();
             this.txtNombre = new System.Windows.Forms.TextBox();
             this.txtTecnico = new System.Windows.Forms.TextBox();
-            this.CmbAcabado1 = new System.Windows.Forms.ComboBox();
-            this.CmbAcabado2 = new System.Windows.Forms.ComboBox();
             this.EliCtrlButtons = new arquitectSoft.Generals.ElipseControl();
             this.elipseComponent1 = new arquitectSoft.Generals.ElipseComponent();
             this.label2 = new System.Windows.Forms.Label();
@@ -51,6 +49,10 @@ namespace arquitectSoft
             this.elipseControl3 = new arquitectSoft.Generals.ElipseControl();
             this.ChkListAlbaran = new System.Windows.Forms.CheckedListBox();
             this.lblalbaran = new System.Windows.Forms.Label();
+            this.txtAcabado1 = new System.Windows.Forms.TextBox();
+            this.btnacabadoP = new System.Windows.Forms.Button();
+            this.btnacabadoM = new System.Windows.Forms.Button();
+            this.txtAcabado2 = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // label1
@@ -145,22 +147,6 @@ namespace arquitectSoft
             this.txtTecnico.Name = "txtTecnico";
             this.txtTecnico.Size = new System.Drawing.Size(346, 20);
             this.txtTecnico.TabIndex = 60;
-            // 
-            // CmbAcabado1
-            // 
-            this.CmbAcabado1.FormattingEnabled = true;
-            this.CmbAcabado1.Location = new System.Drawing.Point(141, 177);
-            this.CmbAcabado1.Name = "CmbAcabado1";
-            this.CmbAcabado1.Size = new System.Drawing.Size(346, 21);
-            this.CmbAcabado1.TabIndex = 61;
-            // 
-            // CmbAcabado2
-            // 
-            this.CmbAcabado2.FormattingEnabled = true;
-            this.CmbAcabado2.Location = new System.Drawing.Point(141, 205);
-            this.CmbAcabado2.Name = "CmbAcabado2";
-            this.CmbAcabado2.Size = new System.Drawing.Size(346, 21);
-            this.CmbAcabado2.TabIndex = 62;
             // 
             // EliCtrlButtons
             // 
@@ -283,12 +269,50 @@ namespace arquitectSoft
             this.lblalbaran.TabIndex = 99;
             this.lblalbaran.Text = "Datos Para Albaran:";
             // 
+            // txtAcabado1
+            // 
+            this.txtAcabado1.Location = new System.Drawing.Point(141, 177);
+            this.txtAcabado1.Name = "txtAcabado1";
+            this.txtAcabado1.Size = new System.Drawing.Size(315, 20);
+            this.txtAcabado1.TabIndex = 100;
+            // 
+            // btnacabadoP
+            // 
+            this.btnacabadoP.Location = new System.Drawing.Point(463, 175);
+            this.btnacabadoP.Name = "btnacabadoP";
+            this.btnacabadoP.Size = new System.Drawing.Size(24, 23);
+            this.btnacabadoP.TabIndex = 101;
+            this.btnacabadoP.Text = "...";
+            this.btnacabadoP.UseVisualStyleBackColor = true;
+            this.btnacabadoP.Click += new System.EventHandler(this.btnacabadoP_Click);
+            // 
+            // btnacabadoM
+            // 
+            this.btnacabadoM.Location = new System.Drawing.Point(463, 203);
+            this.btnacabadoM.Name = "btnacabadoM";
+            this.btnacabadoM.Size = new System.Drawing.Size(24, 23);
+            this.btnacabadoM.TabIndex = 103;
+            this.btnacabadoM.Text = "...";
+            this.btnacabadoM.UseVisualStyleBackColor = true;
+            this.btnacabadoM.Click += new System.EventHandler(this.btnacabadoM_Click);
+            // 
+            // txtAcabado2
+            // 
+            this.txtAcabado2.Location = new System.Drawing.Point(141, 205);
+            this.txtAcabado2.Name = "txtAcabado2";
+            this.txtAcabado2.Size = new System.Drawing.Size(315, 20);
+            this.txtAcabado2.TabIndex = 102;
+            // 
             // FrmLoading
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.DimGray;
             this.ClientSize = new System.Drawing.Size(499, 345);
+            this.Controls.Add(this.btnacabadoM);
+            this.Controls.Add(this.txtAcabado2);
+            this.Controls.Add(this.btnacabadoP);
+            this.Controls.Add(this.txtAcabado1);
             this.Controls.Add(this.lblalbaran);
             this.Controls.Add(this.ChkListAlbaran);
             this.Controls.Add(this.BtnCancelar);
@@ -297,8 +321,6 @@ namespace arquitectSoft
             this.Controls.Add(this.label2);
             this.Controls.Add(this.elipseControl1);
             this.Controls.Add(this.EliCtrlButtons);
-            this.Controls.Add(this.CmbAcabado2);
-            this.Controls.Add(this.CmbAcabado1);
             this.Controls.Add(this.txtTecnico);
             this.Controls.Add(this.txtNombre);
             this.Controls.Add(this.datetimePFecha);
@@ -337,8 +359,6 @@ namespace arquitectSoft
         private System.Windows.Forms.DateTimePicker datetimePFecha;
         private System.Windows.Forms.TextBox txtNombre;
         private System.Windows.Forms.TextBox txtTecnico;
-        private System.Windows.Forms.ComboBox CmbAcabado1;
-        private System.Windows.Forms.ComboBox CmbAcabado2;
         private Generals.ElipseControl EliCtrlButtons;
         private Generals.ElipseComponent elipseComponent1;
         private System.Windows.Forms.Label label2;
@@ -349,5 +369,9 @@ namespace arquitectSoft
         private Generals.ElipseControl elipseControl3;
         private System.Windows.Forms.Label lblalbaran;
         private System.Windows.Forms.CheckedListBox ChkListAlbaran;
+        private System.Windows.Forms.Button btnacabadoM;
+        private System.Windows.Forms.TextBox txtAcabado2;
+        private System.Windows.Forms.Button btnacabadoP;
+        private System.Windows.Forms.TextBox txtAcabado1;
     }
 }

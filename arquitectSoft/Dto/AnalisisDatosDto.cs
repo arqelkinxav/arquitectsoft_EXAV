@@ -32,7 +32,7 @@ namespace arquitectSoft.Dto
             List<String> listColumns = new List<String>();
             switch (index)
             {
-
+                case 0:
                 case 1:
                     //-----------------perfil 
                     listColumns.Add("Codigo");
@@ -240,11 +240,14 @@ namespace arquitectSoft.Dto
             DataTable dt = new DataTable();
             switch (index)
             {
+                case 0:
                 case 1:
                 case 4:
                 case 8:
-                    string StrCant = (index == 1 || index == 8) && !VidrioPanel ? "Longitud" : "Altura";
+                    string StrCant = (index == 0 || index == 1 || index == 8) && !VidrioPanel ? "Longitud" : "Altura";
                     int herraje = index == 8 ? 1 : 0;
+
+                    
 
                     dt = GetDataFinal(dtmodel, StrCant, herraje, MedidaBase, Desperdicio, swmergePM);
                     break;

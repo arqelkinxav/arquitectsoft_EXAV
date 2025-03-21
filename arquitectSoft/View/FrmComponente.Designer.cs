@@ -69,9 +69,6 @@ namespace arquitectSoft.View
             this.tabPrincipal = new System.Windows.Forms.TabControl();
             this.tabPerfilMetallico = new System.Windows.Forms.TabPage();
             this.GridViewComponenteEsp = new System.Windows.Forms.DataGridView();
-            this.GridViewComponente = new System.Windows.Forms.DataGridView();
-            this.dataGridViewCeroAlbaran = new System.Windows.Forms.DataGridView();
-            this.lblDirectoryName = new System.Windows.Forms.Label();
             this.codigoDataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.descripcionDataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cxdefectoDataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -82,6 +79,9 @@ namespace arquitectSoft.View
             this.elevadoDataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cortesDataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.subComponentBindingSource1 = new System.Windows.Forms.BindingSource(this.components);
+            this.GridViewComponente = new System.Windows.Forms.DataGridView();
+            this.dataGridViewCeroAlbaran = new System.Windows.Forms.DataGridView();
+            this.lblDirectoryName = new System.Windows.Forms.Label();
             this.subComponentBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.elipseComponent1 = new arquitectSoft.Generals.ElipseComponent();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).BeginInit();
@@ -94,9 +94,9 @@ namespace arquitectSoft.View
             this.tabPrincipal.SuspendLayout();
             this.tabPerfilMetallico.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.GridViewComponenteEsp)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.subComponentBindingSource1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.GridViewComponente)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewCeroAlbaran)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.subComponentBindingSource1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.subComponentBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
@@ -416,6 +416,7 @@ namespace arquitectSoft.View
             this.BtnDuplicar.Text = "Duplicar";
             this.BtnDuplicar.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
             this.BtnDuplicar.UseVisualStyleBackColor = true;
+            this.BtnDuplicar.Click += new System.EventHandler(this.BtnDuplicar_Click);
             // 
             // BtnAgregar
             // 
@@ -540,7 +541,7 @@ namespace arquitectSoft.View
             this.tabPrincipal.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tabPrincipal.Controls.Add(this.tabPerfilMetallico);
-            this.tabPrincipal.Location = new System.Drawing.Point(0, 184);
+            this.tabPrincipal.Location = new System.Drawing.Point(2, 185);
             this.tabPrincipal.Name = "tabPrincipal";
             this.tabPrincipal.SelectedIndex = 0;
             this.tabPrincipal.Size = new System.Drawing.Size(994, 541);
@@ -600,81 +601,6 @@ namespace arquitectSoft.View
             this.GridViewComponenteEsp.Size = new System.Drawing.Size(976, 184);
             this.GridViewComponenteEsp.TabIndex = 30;
             this.GridViewComponenteEsp.Visible = false;
-            // 
-            // GridViewComponente
-            // 
-            this.GridViewComponente.AllowUserToAddRows = false;
-            this.GridViewComponente.AllowUserToDeleteRows = false;
-            this.GridViewComponente.AllowUserToResizeColumns = false;
-            this.GridViewComponente.AllowUserToResizeRows = false;
-            this.GridViewComponente.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.GridViewComponente.AutoGenerateColumns = false;
-            this.GridViewComponente.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
-            this.GridViewComponente.BackgroundColor = System.Drawing.SystemColors.ActiveBorder;
-            this.GridViewComponente.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Desktop;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.GridViewComponente.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
-            this.GridViewComponente.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.GridViewComponente.DataSource = this.bindingSource1;
-            this.GridViewComponente.Enabled = false;
-            this.GridViewComponente.EnableHeadersVisualStyles = false;
-            this.GridViewComponente.GridColor = System.Drawing.SystemColors.Control;
-            this.GridViewComponente.Location = new System.Drawing.Point(6, 6);
-            this.GridViewComponente.Name = "GridViewComponente";
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle3.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.GridViewComponente.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
-            this.GridViewComponente.RowHeadersWidth = 51;
-            this.GridViewComponente.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.GridViewComponente.Size = new System.Drawing.Size(976, 300);
-            this.GridViewComponente.TabIndex = 24;
-            this.GridViewComponente.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.GridViewComponente_CellDoubleClick);
-            // 
-            // dataGridViewCeroAlbaran
-            // 
-            this.dataGridViewCeroAlbaran.AllowUserToAddRows = false;
-            this.dataGridViewCeroAlbaran.AllowUserToDeleteRows = false;
-            this.dataGridViewCeroAlbaran.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle4.BackColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle4.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridViewCeroAlbaran.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
-            this.dataGridViewCeroAlbaran.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewCeroAlbaran.EnableHeadersVisualStyles = false;
-            this.dataGridViewCeroAlbaran.Location = new System.Drawing.Point(1136, 367);
-            this.dataGridViewCeroAlbaran.Name = "dataGridViewCeroAlbaran";
-            this.dataGridViewCeroAlbaran.ReadOnly = true;
-            this.dataGridViewCeroAlbaran.RowHeadersWidth = 51;
-            dataGridViewCellStyle5.BackColor = System.Drawing.Color.White;
-            this.dataGridViewCeroAlbaran.RowsDefaultCellStyle = dataGridViewCellStyle5;
-            this.dataGridViewCeroAlbaran.Size = new System.Drawing.Size(48, 41);
-            this.dataGridViewCeroAlbaran.TabIndex = 4;
-            this.dataGridViewCeroAlbaran.Visible = false;
-            // 
-            // lblDirectoryName
-            // 
-            this.lblDirectoryName.AutoSize = true;
-            this.lblDirectoryName.BackColor = System.Drawing.Color.Transparent;
-            this.lblDirectoryName.Location = new System.Drawing.Point(1143, 386);
-            this.lblDirectoryName.Name = "lblDirectoryName";
-            this.lblDirectoryName.Size = new System.Drawing.Size(0, 13);
-            this.lblDirectoryName.TabIndex = 5;
             // 
             // codigoDataGridViewTextBoxColumn1
             // 
@@ -752,6 +678,81 @@ namespace arquitectSoft.View
             // 
             this.subComponentBindingSource1.DataSource = typeof(arquitectSoft.Class.Sub_Component);
             // 
+            // GridViewComponente
+            // 
+            this.GridViewComponente.AllowUserToAddRows = false;
+            this.GridViewComponente.AllowUserToDeleteRows = false;
+            this.GridViewComponente.AllowUserToResizeColumns = false;
+            this.GridViewComponente.AllowUserToResizeRows = false;
+            this.GridViewComponente.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.GridViewComponente.AutoGenerateColumns = false;
+            this.GridViewComponente.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
+            this.GridViewComponente.BackgroundColor = System.Drawing.SystemColors.ActiveBorder;
+            this.GridViewComponente.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Desktop;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.GridViewComponente.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            this.GridViewComponente.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.GridViewComponente.DataSource = this.bindingSource1;
+            this.GridViewComponente.Enabled = false;
+            this.GridViewComponente.EnableHeadersVisualStyles = false;
+            this.GridViewComponente.GridColor = System.Drawing.SystemColors.Control;
+            this.GridViewComponente.Location = new System.Drawing.Point(6, 6);
+            this.GridViewComponente.Name = "GridViewComponente";
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.GridViewComponente.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            this.GridViewComponente.RowHeadersWidth = 51;
+            this.GridViewComponente.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.GridViewComponente.Size = new System.Drawing.Size(976, 300);
+            this.GridViewComponente.TabIndex = 24;
+            this.GridViewComponente.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.GridViewComponente_CellDoubleClick);
+            // 
+            // dataGridViewCeroAlbaran
+            // 
+            this.dataGridViewCeroAlbaran.AllowUserToAddRows = false;
+            this.dataGridViewCeroAlbaran.AllowUserToDeleteRows = false;
+            this.dataGridViewCeroAlbaran.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle4.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewCeroAlbaran.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
+            this.dataGridViewCeroAlbaran.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewCeroAlbaran.EnableHeadersVisualStyles = false;
+            this.dataGridViewCeroAlbaran.Location = new System.Drawing.Point(1136, 367);
+            this.dataGridViewCeroAlbaran.Name = "dataGridViewCeroAlbaran";
+            this.dataGridViewCeroAlbaran.ReadOnly = true;
+            this.dataGridViewCeroAlbaran.RowHeadersWidth = 51;
+            dataGridViewCellStyle5.BackColor = System.Drawing.Color.White;
+            this.dataGridViewCeroAlbaran.RowsDefaultCellStyle = dataGridViewCellStyle5;
+            this.dataGridViewCeroAlbaran.Size = new System.Drawing.Size(48, 41);
+            this.dataGridViewCeroAlbaran.TabIndex = 4;
+            this.dataGridViewCeroAlbaran.Visible = false;
+            // 
+            // lblDirectoryName
+            // 
+            this.lblDirectoryName.AutoSize = true;
+            this.lblDirectoryName.BackColor = System.Drawing.Color.Transparent;
+            this.lblDirectoryName.Location = new System.Drawing.Point(1143, 386);
+            this.lblDirectoryName.Name = "lblDirectoryName";
+            this.lblDirectoryName.Size = new System.Drawing.Size(0, 13);
+            this.lblDirectoryName.TabIndex = 5;
+            // 
             // subComponentBindingSource
             // 
             this.subComponentBindingSource.DataSource = typeof(arquitectSoft.Class.Sub_Component);
@@ -793,9 +794,9 @@ namespace arquitectSoft.View
             this.tabPerfilMetallico.ResumeLayout(false);
             this.tabPerfilMetallico.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.GridViewComponenteEsp)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.subComponentBindingSource1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.GridViewComponente)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewCeroAlbaran)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.subComponentBindingSource1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.subComponentBindingSource)).EndInit();
             this.ResumeLayout(false);
 

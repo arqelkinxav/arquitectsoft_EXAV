@@ -746,10 +746,16 @@ namespace arquitectSoft.View
 
         private void btnMaximizar_Click(object sender, EventArgs e)
         {
+            int incremento = 150;
 
             if (this.WindowState != FormWindowState.Maximized)
             {
                 this.WindowState = FormWindowState.Maximized;
+                //tabPrincipal.Height = (tabPrincipal.Height + incremento);
+                //tabPerfilMetallico.Height = (tabPerfilMetallico.Height + incremento);
+              
+         
+
             }
             else
             {

@@ -112,15 +112,6 @@ namespace arquitectSoft
 
         private void FrmLoading_Load(object sender, EventArgs e)
         {
-            Dto.AcabadoDto Acb = new Dto.AcabadoDto();
-            CmbAcabado1.DataSource = Acb.GetAcabado();
-            CmbAcabado1.DisplayMember = "Descripcion";
-            CmbAcabado1.ValueMember = "Id_Acabado";
-
-            CmbAcabado2.DataSource = Acb.GetAcabado();
-            CmbAcabado2.DisplayMember = "Descripcion";
-            CmbAcabado2.ValueMember = "Id_Acabado";
-
             ChkListAlbaran.SetItemChecked(0, true);
             ChkListAlbaran.SetItemChecked(1, true);
             ChkListAlbaran.SetItemChecked(2, true);
@@ -158,8 +149,8 @@ namespace arquitectSoft
 
             
             Tecnico = txtTecnico.Text;
-            Acabado1 = CmbAcabado1.Text;
-            Acabado2 = CmbAcabado2.Text;
+            Acabado1 = txtAcabado1.Text;
+            Acabado2 = txtAcabado2.Text;
 
             Albaran = "";
             foreach (int indexChecked in ChkListAlbaran.CheckedIndices)
@@ -196,6 +187,32 @@ namespace arquitectSoft
             Acabado1 = null;
             Acabado2 = null;
             this.Close();
+        }
+
+        private void btnacabadoP_Click(object sender, EventArgs e)
+        {
+            FrmBuscar bsc = new FrmBuscar();
+            bsc.Consulta = "Acaba";
+            bsc.ShowDialog();
+            if (bsc.ReturnItem1 == null)
+            {
+                return;
+            }
+
+            txtAcabado1.Text = bsc.ReturnItem2;
+        }
+
+        private void btnacabadoM_Click(object sender, EventArgs e)
+        {
+            FrmBuscar bsc = new FrmBuscar();
+            bsc.Consulta = "Acaba";
+            bsc.ShowDialog();
+            if (bsc.ReturnItem1 == null)
+            {
+                return;
+            }
+
+            txtAcabado2.Text = bsc.ReturnItem2;
         }
     }
 }
