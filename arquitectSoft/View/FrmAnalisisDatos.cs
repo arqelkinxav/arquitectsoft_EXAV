@@ -33,7 +33,7 @@ namespace arquitectSoft.View
         DataTable dtPuertas = new DataTable();
         DataTable dtVidrio = new DataTable();
         DataTable dtTubos = new DataTable();
-        DataTable dtPerfil = new DataTable();
+        DataTable dtPerfil = new DataTable();    
         DataTable dtPerfilCalculate = new DataTable();
         DataTable dtPerfilHRCalculate = new DataTable();
         
@@ -50,6 +50,7 @@ namespace arquitectSoft.View
 
         private void BtnCargar_Click(object sender, EventArgs e)
         {
+            Cancelar();
             Generals.Global.SwSegmentadoUbi = "1";
             swPMVertical = 0;
             Dto.AnalisisDatosDto dto = new Dto.AnalisisDatosDto();
@@ -243,34 +244,43 @@ namespace arquitectSoft.View
                     dtPerfil = dtResul;
                     dtPerfilCalculate = dtcalculate;
 
-                    if (wantedFiles !=1 ) { swmergePM = false; } 
+                    if (wantedFiles !=1 ) { swmergePM = false; }
 
-                    DataTable dtresulPMHerraje = new DataTable();
-                    Generals.Global.SwSegmentadoUbi = (Generals.Global.SwSegmentadoUbi == "1") ? "-1" : "0";
-                    dtresulPMHerraje = dto.CalculateTab(8, dtResul, dtPuertas, perfilandvidrios, medidabase, Desperdicio, swmergePM, 0);
-
-
-                    if (wantedFiles == 7)
+                    if (swPMVertical != 1) 
                     {
-                        dtresulPMHerraje = dto.CalculateTab(8, dtVidrio, dtPuertas, true, medidabase, Desperdicio, false, 0);
-                        dtresulPMHerraje = dto.CalculateTab(8, dtTubos, dtPuertas, true, medidabase, Desperdicio, true, 0);
+                        DataTable dtresulPMHerraje = new DataTable();
+                        Generals.Global.SwSegmentadoUbi = (Generals.Global.SwSegmentadoUbi == "1") ? "-1" : "0";
+                        dtresulPMHerraje = dto.CalculateTab(8, dtResul, dtPuertas, perfilandvidrios, medidabase, Desperdicio, swmergePM, 0);
+
+                       
+                        if (wantedFiles == 7)
+                        {
+                            swmergePM = (swPMVertical == 1) ? false : true;
+                            dtresulPMHerraje = dto.CalculateTab(8, dtVidrio, dtPuertas, true, medidabase, Desperdicio, false, 0);
+                            dtresulPMHerraje = dto.CalculateTab(8, dtTubos, dtPuertas, true, medidabase, Desperdicio, swmergePM, 0);
+                        }
+
+                        if (wantedFiles == 3)
+                        {
+                            swmergePM = (swPMVertical == 1) ? false : true;
+                            dtresulPMHerraje = dto.CalculateTab(8, dtVidrio, dtPuertas, true, medidabase, Desperdicio, swmergePM, 0);
+                        }
+
+
+                        if (wantedFiles == 5)
+                        {
+                            swmergePM = (swPMVertical == 1) ? false : true;
+                            dtresulPMHerraje = dto.CalculateTab(8, dtTubos, dtPuertas, true, medidabase, Desperdicio, swmergePM, 0);
+                        }
+
+                        dtPerfilHRCalculate = dtresulPMHerraje;
+
+                        dataGridViewPMHerrajeCalculate.DataSource = dtresulPMHerraje;
+                        dataGridViewPMHerrajeCalculate.Columns[0].Visible = false;
+                        dataGridViewPMHerrajeCalculate.Columns[9].Visible = false;
+
+                        Generals.Global.SwSegmentadoUbi = (Generals.Global.SwSegmentadoUbi == "-1") ? "1" : "0";
                     }
-
-                    if (wantedFiles == 3)
-                        dtresulPMHerraje = dto.CalculateTab(8, dtVidrio, dtPuertas, true, medidabase, Desperdicio, true, 0);
-
-                    if (wantedFiles == 5)
-                        dtresulPMHerraje = dto.CalculateTab(8, dtTubos, dtPuertas, true, medidabase, Desperdicio, true, 0);
-
-                    dtPerfilHRCalculate = dtresulPMHerraje;
-
-                    dataGridViewPMHerrajeCalculate.DataSource = dtresulPMHerraje;
-                    dataGridViewPMHerrajeCalculate.Columns[0].Visible = false;
-                    dataGridViewPMHerrajeCalculate.Columns[9].Visible = false;
-
-                    Generals.Global.SwSegmentadoUbi = (Generals.Global.SwSegmentadoUbi == "-1") ? "1" : "0";
-
-
 
                 }
                 if (idDocumento == 3)
@@ -289,33 +299,28 @@ namespace arquitectSoft.View
 
                 if (idDocumento == 0)
                 {
-                    dtPerfil.Merge(dtResul);
-                    dtPerfilCalculate.Merge(dtcalculate);
                     if (wantedFiles == 2 && swPMVertical == 1)
                         swmergePM = false;
 
                     DataTable dtresulPMHerraje = new DataTable();
                     Generals.Global.SwSegmentadoUbi = (Generals.Global.SwSegmentadoUbi == "1") ? "-1" : "0";
-                    dtresulPMHerraje = dto.CalculateTab(8, dtResul, dtPuertas, perfilandvidrios, medidabase, Desperdicio, swmergePM, 0);
 
+                    dtresulPMHerraje = dto.CalculateTab(8, dtPerfil, dtPuertas, perfilandvidrios, medidabase, Desperdicio, false, 0);
+                    dtresulPMHerraje = dto.CalculateTab(8, dtResul, dtPuertas, perfilandvidrios, medidabase, Desperdicio, false, 0);
+                    dtresulPMHerraje = dto.CalculateTab(8, dtVidrio, dtPuertas, true, medidabase, Desperdicio, true, 0);
 
-
-                    if (wantedFiles == 2 && swPMVertical == 1)
-                        dtresulPMHerraje = dto.CalculateTab(8, dtVidrio, dtPuertas, true, medidabase, Desperdicio, true, 0);
-
-                    dtPerfilHRCalculate.Merge(dtresulPMHerraje);
+                    dtPerfil.Merge(dtResul);
+                    dtPerfilCalculate.Merge(dtcalculate);                   
 
                     dataGridViewPMVHerrajeCalculate.DataSource = dtresulPMHerraje;
                     dataGridViewPMVHerrajeCalculate.Columns[0].Visible = false;
                     dataGridViewPMVHerrajeCalculate.Columns[9].Visible = false;
 
-                    dataGridViewPMHerrajeCalculate.DataSource = dtPerfilHRCalculate;
+                    dataGridViewPMHerrajeCalculate.DataSource = dtresulPMHerraje;
                     dataGridViewPMHerrajeCalculate.Columns[0].Visible = false;
                     dataGridViewPMHerrajeCalculate.Columns[9].Visible = false;
 
                     Generals.Global.SwSegmentadoUbi = (Generals.Global.SwSegmentadoUbi == "-1") ? "1" : "0";
-
-
 
                 }
 
@@ -374,27 +379,28 @@ namespace arquitectSoft.View
             switch (index)
             {
                 case 0:
-                    dataGridViewPMV.DataSource = dtPerfil;
-                    dataGridViewPMVHerraje.DataSource = dtPerfil;
-                    dataGridViewPMVCalculate.DataSource = dtcalculate;
-                    dataGridViewPMVCalculate.Columns[0].Visible = false;
+                    //dataGridViewPMV.DataSource = dtPerfil;
+                    //dataGridViewPMVHerraje.DataSource = dtPerfil;
+                    //dataGridViewPMVCalculate.DataSource = dtcalculate;
+                    //dataGridViewPMVCalculate.Columns[0].Visible = false;
 
-                    item1.Click += Item1_PMV_Click;
-                    item2.Click += Item2_PMV_Click;
+                    //item1.Click += Item1_PMV_Click;
+                    //item2.Click += Item2_PMV_Click;
 
-                    contextMenu.Items.Add(item1);
-                    contextMenu.Items.Add(item2);
+                    //contextMenu.Items.Add(item1);
+                    //contextMenu.Items.Add(item2);
 
-                    dataGridViewPMVCalculate.ContextMenuStrip = contextMenu;
+                    //dataGridViewPMVCalculate.ContextMenuStrip = contextMenu;
 
-                    dataGridViewPMVCalculate.CellMouseDown += dataGridViewPMVCalculate_CellMouseDown;
-                    dataGridViewPMVCalculate.Columns[9].Visible = false;
-                    if (Generals.Global.SwSegmentadoUbi == "1")
-                    {
-                        dataGridViewPMVCalculate.Columns[9].Visible = true;
-                    }                    
+                    //dataGridViewPMVCalculate.CellMouseDown += dataGridViewPMVCalculate_CellMouseDown;
+                    //dataGridViewPMVCalculate.Columns[9].Visible = false;
+                    //if (Generals.Global.SwSegmentadoUbi == "1")
+                    //{
+                    //    dataGridViewPMVCalculate.Columns[9].Visible = true;
+                    //}                    
                     
                     dataFinishPM(dtPerfil, dtPerfilCalculate, contextMenu, item1, item2);
+                  
                     break;
                 case 1:
 
@@ -479,50 +485,7 @@ namespace arquitectSoft.View
 
         private void BtnCancelar_Click(object sender, EventArgs e)
         {
-            foreach (Control c in this.tabPrincipal.Controls)
-            {
-                if (c is TabPage)
-                {
-                    foreach (Control d in c.Controls)
-                    {
-                        if (d is TabControl)
-                        {
-                            foreach (Control h in d.Controls)
-                            {
-                                if (h is TabPage)
-                                {
-                                    foreach (Control i in h.Controls)
-                                    {
-                                        if (i is DataGridView)
-                                        {
-                                            DataGridView dgv = (DataGridView)i;
-                                            dgv.DataSource = "";
-                                        }
-                                    }
-                                }
-                            }                           
-                        }
-
-                        if (d is DataGridView)
-                        {
-                            DataGridView dgv = (DataGridView)d;
-                            dgv.DataSource = "";
-                        }
-                    }
-                }
-            }
-            tabPrincipal.SelectTab(tabPerfilMetallico);
-            dtPuertas.Rows.Clear();
-            dtVidrio.Rows.Clear();
-            dtTubos.Rows.Clear();
-            dtPerfilCalculate.Rows.Clear();
-            dtPerfilCalculate.Rows.Clear();
-            dtPerfilHRCalculate.Rows.Clear();
-            dtPerfilOfVidrioPanel.Rows.Clear();
-            dtPerfilOfTubos.Rows.Clear();
-            lblestadosAnalitica.Text = "";
-            lblDirectoryName.Text = "";
-            BtnChange.Visible = false;
+            Cancelar();
         }
 
         private void btnExportar_Click(object sender, EventArgs e)
@@ -1499,7 +1462,55 @@ namespace arquitectSoft.View
             }
         }
 
+        private void Cancelar()
+        {
+            foreach (Control c in this.tabPrincipal.Controls)
+            {
+                if (c is TabPage)
+                {
+                    foreach (Control d in c.Controls)
+                    {
+                        if (d is TabControl)
+                        {
+                            foreach (Control h in d.Controls)
+                            {
+                                if (h is TabPage)
+                                {
+                                    foreach (Control i in h.Controls)
+                                    {
+                                        if (i is DataGridView)
+                                        {
+                                            DataGridView dgv = (DataGridView)i;
+                                            dgv.DataSource = "";
+                                        }
+                                    }
+                                }
+                            }
+                        }
 
+                        if (d is DataGridView)
+                        {
+                            DataGridView dgv = (DataGridView)d;
+                            dgv.DataSource = "";
+                        }
+                    }
+                }
+            }
+            tabPrincipal.SelectTab(tabPerfilMetallico);
+            dtPuertas.Rows.Clear();
+            dtVidrio.Rows.Clear();
+            dtTubos.Rows.Clear();
+            dtPerfilCalculate.Rows.Clear();
+            dtPerfilCalculate.Rows.Clear();
+            dtPerfilHRCalculate.Rows.Clear();
+            dtPerfilOfVidrioPanel.Rows.Clear();
+            dtPerfilOfTubos.Rows.Clear();
+            lblestadosAnalitica.Text = "";
+            lblDirectoryName.Text = "";
+            BtnChange.Visible = false;
+            dtPerfil.Clear();
+            dtPerfilCalculate.Clear();
+        }
 
         private void BtnMaximizar_Click(object sender, EventArgs e)
         {
