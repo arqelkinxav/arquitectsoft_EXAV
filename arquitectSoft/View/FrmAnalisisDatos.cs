@@ -307,6 +307,7 @@ namespace arquitectSoft.View
 
                     dtresulPMHerraje = dto.CalculateTab(8, dtPerfil, dtPuertas, perfilandvidrios, medidabase, Desperdicio, false, 0);
                     dtresulPMHerraje = dto.CalculateTab(8, dtResul, dtPuertas, perfilandvidrios, medidabase, Desperdicio, false, 0);
+                    dtresulPMHerraje = dto.CalculateTab(8, dtTubos, dtPuertas, true, medidabase, Desperdicio, false, 0);
                     dtresulPMHerraje = dto.CalculateTab(8, dtVidrio, dtPuertas, true, medidabase, Desperdicio, true, 0);
 
                     dtPerfil.Merge(dtResul);
@@ -1291,7 +1292,8 @@ namespace arquitectSoft.View
                         {
                             if (((Datagrid == 2 || Datagrid == 4) && valuezero.Contains("Puerta")) || Datagrid == 6)
                             {
-                                AcabadoDesc = AcabadoDesc.Substring(0, posini + 1) + param[1].ToString().Split('-')[1].Trim() + AcabadoDesc.Substring(posfin, AcabadoDesc.Length - posfin);
+                                string AcabadoFinal = (param[1].ToString().Contains("-")) ? param[1].ToString().Split('-')[1].Trim() : param[1].ToString().Trim();
+                                AcabadoDesc = AcabadoDesc.Substring(0, posini + 1) + AcabadoFinal + AcabadoDesc.Substring(posfin, AcabadoDesc.Length - posfin);
                                 if (Datagrid == 6)
                                 {
                                     row.Cells[1].Value = AcabadoDesc;
