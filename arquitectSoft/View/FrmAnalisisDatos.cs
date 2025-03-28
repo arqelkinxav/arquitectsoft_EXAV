@@ -1306,8 +1306,10 @@ namespace arquitectSoft.View
                             }
                             else if (Datagrid == 8)
                             {
+                                string acabadocodNew = (param[1].ToString().Contains("-")) ? param[1].ToString().Split('-')[0].Trim() : "XX";
 
-                                row.Cells[2].Value = param[1].ToString().Split('-')[1].Trim();
+                                row.Cells[0].Value = row.Cells[0].Value.ToString().Split('-')[0].Trim() + "-" + acabadocodNew;
+                                row.Cells[2].Value = (param[1].ToString().Contains("-")) ? param[1].ToString().Split('-')[1].Trim() : param[1].ToString().Trim(); 
                             }
                             else
                             {
