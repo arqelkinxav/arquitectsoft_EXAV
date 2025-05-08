@@ -39,10 +39,10 @@ namespace arquitectSoft
             this.TMSItem_cortes = new System.Windows.Forms.ToolStripMenuItem();
             this.unidadDeMedidaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mecanizadoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.salirToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.TMSItem_procesos = new System.Windows.Forms.ToolStripMenuItem();
             this.calcularCantidadesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.analisisDePuertasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.salirToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.acercaDeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dBAToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportDataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -144,6 +144,13 @@ namespace arquitectSoft
             resources.ApplyResources(this.mecanizadoToolStripMenuItem, "mecanizadoToolStripMenuItem");
             this.mecanizadoToolStripMenuItem.Click += new System.EventHandler(this.mecanizadoToolStripMenuItem_Click);
             // 
+            // salirToolStripMenuItem
+            // 
+            this.salirToolStripMenuItem.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.salirToolStripMenuItem.Name = "salirToolStripMenuItem";
+            resources.ApplyResources(this.salirToolStripMenuItem, "salirToolStripMenuItem");
+            this.salirToolStripMenuItem.Click += new System.EventHandler(this.salirToolStripMenuItem_Click);
+            // 
             // TMSItem_procesos
             // 
             this.TMSItem_procesos.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -170,13 +177,6 @@ namespace arquitectSoft
             this.analisisDePuertasToolStripMenuItem.Name = "analisisDePuertasToolStripMenuItem";
             resources.ApplyResources(this.analisisDePuertasToolStripMenuItem, "analisisDePuertasToolStripMenuItem");
             this.analisisDePuertasToolStripMenuItem.Click += new System.EventHandler(this.analisisDePuertasToolStripMenuItem_Click);
-            // 
-            // salirToolStripMenuItem
-            // 
-            this.salirToolStripMenuItem.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.salirToolStripMenuItem.Name = "salirToolStripMenuItem";
-            resources.ApplyResources(this.salirToolStripMenuItem, "salirToolStripMenuItem");
-            this.salirToolStripMenuItem.Click += new System.EventHandler(this.salirToolStripMenuItem_Click);
             // 
             // acercaDeToolStripMenuItem
             // 

@@ -102,6 +102,7 @@ namespace arquitectSoft.Dto
                     listColumns.Add("Se_Calcula_Por");
                     listColumns.Add("Corte");
                     listColumns.Add("Ubicación");
+                    listColumns.Add("Mecanizado");
                     //-----------------
                     break;
                 case 7:
@@ -715,12 +716,12 @@ namespace arquitectSoft.Dto
                 con.Close();
 
                 List<object[]> listDta = new List<object[]>();
-                int ncol = (Generals.Global.SwSegmentadoUbi == "1") ? 11 : 10;
+                int ncol = (Generals.Global.SwSegmentadoUbi == "1") ? 12 : 11;
                 if (dtResult != null)
                 {
                     foreach (DataRow rowResult in dtResult.Rows)
                     {
-                        object[] data = new object[ncol];
+                        object[] data = new object[12];
                         data[0] = rowResult[0].ToString();
                         data[1] = rowResult[1].ToString();
                         data[2] = rowResult[2].ToString();
@@ -730,7 +731,12 @@ namespace arquitectSoft.Dto
                         data[6] = rowResult[5].ToString();
                         data[7] = rowResult[6].ToString();
                         data[9] = rowResult[7].ToString();
-                        if (ncol == 11) { data[10] = ubicacion; }; 
+                        if (ncol == 12) 
+                        { 
+                            data[10] = ubicacion;
+                        }
+                        data[11] = rowResult[8].ToString();
+
                         listDta.Add(data);
                     }
 
@@ -754,7 +760,7 @@ namespace arquitectSoft.Dto
                 fail = "";
                 string[] param = { row["id_subcomponente"].ToString(), row["Id_Unidad_Medida"].ToString(),
                                     row["cantidad"].ToString(), row["medida"].ToString(),
-                                    row["Medidida Calculada"].ToString(),row["Corte"].ToString(),row["Ubicación"].ToString() };
+                                    row["Medidida Calculada"].ToString(),row["Corte"].ToString(),row["Ubicación"].ToString(),row["Mecanizado"].ToString() };
 
                 con.Open(out fail);
                 MySqlDataReader drResult = con.ExecuteReader(Generals.Constantes.QUERY_INSERT_PROYECTO, out fail, param);
@@ -769,14 +775,14 @@ namespace arquitectSoft.Dto
                 DataTable dtResult = con.ExecuteDataSetSPparam(Generals.Constantes.QUERY_GET_PROYECTO, out fail, paramGet);
                 con.Close();
 
-                int ncol = (Generals.Global.SwSegmentadoUbi == "1") ? 10 : 9;
-
+                int ncol = (Generals.Global.SwSegmentadoUbi == "1") ? 11 : 10;
+                int col = dtResult.Columns.Count;
                 if (dtResult != null)
                 {
                     foreach (DataRow rowResult in dtResult.Rows)
 
                     {
-                        object[] data = new object[ncol];
+                        object[] data = new object[11];
                         data[0] = Int32.Parse(rowResult[0].ToString());
                         data[1] = rowResult[1].ToString();
                         data[2] = rowResult[2].ToString();
@@ -785,8 +791,14 @@ namespace arquitectSoft.Dto
                         data[5] = Int32.Parse(rowResult[5].ToString());
                         data[6] = float.Parse(rowResult[6].ToString());
                         data[7] = rowResult[7].ToString();
-                        data[8] = rowResult[8].ToString();
-                        if (ncol == 10) { data[9] = rowResult[9].ToString(); };
+                        data[8] = rowResult[8].ToString();                        
+                        if (ncol == 11) 
+                        {
+                            data[9] = rowResult[10].ToString();
+                        }
+                        data[10] = rowResult[9].ToString();
+
+
 
 
                         list.Add(data);

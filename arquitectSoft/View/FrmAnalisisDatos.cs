@@ -168,6 +168,7 @@ namespace arquitectSoft.View
 
                 listColumns = dto.setCreateColumns(idDocumento);
 
+                
                 listData = dto.readFileTxt(file, dto.ValidationSplit(file));
 
                 DataTable dtResul = new DataTable();
@@ -712,6 +713,7 @@ namespace arquitectSoft.View
                                             row["medida"] = g.Key.med;
                                             row["Medidida Calculada"] = g.Min(r => r.Field<string>("Medidida Calculada"));
                                             row["Corte"] = g.Min(r => r.Field<string>("Corte"));
+                                            row["Mecanizado"] = g.Min(r => r.Field<string>("Mecanizado"));
                                             row["Se_Calcula_Por"] = g.Key.cal;
                                             return row;
 
@@ -735,6 +737,7 @@ namespace arquitectSoft.View
                                             row["Medidida Calculada"] = g.Min(r => r.Field<string>("Medidida Calculada"));
                                             row["Corte"] = g.Min(r => r.Field<string>("Corte"));
                                             row["Ubicación"] = g.Min(r => r.Field<string>("Ubicación"));
+                                            row["Mecanizado"] = g.Min(r => r.Field<string>("Mecanizado"));
                                             row["Se_Calcula_Por"] = g.Key.cal;
                                             return row;
 
