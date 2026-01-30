@@ -46,6 +46,7 @@ namespace arquitectSoft.Generals
         public static String QUERY_UPDATE_SUBCOMPONENTES = "CALL spSubcomponenteUpdate(?,?,?,?,?);";
         public static String QUERY_DELETE_SUBCOMPONENTES = "DELETE FROM subcomponentes WHERE Id_subcomponente = ?";
         public static String QUERY_GET_SUBCOMPONENTE_RELACION = "componenteRelationSub";
+        public static String QUERY_CHANGE_SUBCOMPONENTES = "UPDATE componentes_detalle SET Id_Subcomponente = ? WHERE Id_Subcomponente = ?";
 
         //Unidad Calculada
         public static String QUERY_UNIDADCALCULADA = "SELECT Id_Unidad_Calculada,Concat(Id_Unidad_Calculada, ' - ', Descripcion) Descripcion FROM unidades_calculadas";
@@ -104,8 +105,8 @@ namespace arquitectSoft.Generals
                         + "(Id_Subcomponente, "
                         + " Altura, "
                         + " Anchura,"
-                        + " Cantidad,Ubicacion,Mecanizado) "
-                        + "VALUES (?,?,?,?,?,?)";
+                        + " Cantidad,Ubicacion) "
+                        + "VALUES (?,?,?,?,?)";
 
         public static String QUERY_INSERT_PROYECTO_MAMPARAS = "INSERT INTO proyecto_mp "
                        + "(codigo, "

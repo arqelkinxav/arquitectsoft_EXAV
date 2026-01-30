@@ -1,4 +1,5 @@
 ﻿using arquitectSoft.Class;
+using FontAwesome.Sharp;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -51,6 +52,7 @@ namespace arquitectSoft.View
                 return;
             }
 
+            txtidSubComponente.Text = bsc.ReturnItem0;
             txtCodigo.Text = bsc.ReturnItem1.Split('-')[0].Trim();
             txtDescripcion.Text = bsc.ReturnItem2.Split('(')[0].Trim();
             CmbAcabado.SelectedValue = bsc.ReturnItem3;
@@ -289,6 +291,43 @@ namespace arquitectSoft.View
         private void btnclearmultiSel_Click(object sender, EventArgs e)
         {
             dataGridViewMA.Rows.Clear();
+        }
+
+        private void btnChangeSubComp_Click(object sender, EventArgs e)
+        {
+            DialogResult result = MessageBox.Show("Esta seguro de Remplazar este Subcomponente en todos los componentes?", "Mensaje Alerta", MessageBoxButtons.YesNo);
+            if (result == DialogResult.Yes)
+            {
+                FrmBuscar bsc = new FrmBuscar();
+                bsc.Consulta = "SubComp";
+                bsc.ShowDialog();
+                if (bsc.ReturnItem1 == null)
+                {
+                    return;
+                }
+
+                string msg =
+                    "¿Está seguro de realizar el siguiente reemplazo?" + Environment.NewLine +
+                    "- De " + txtCodigo.Text + "|" + txtDescripcion.Text  + Environment.NewLine +
+                    "- Por " + bsc.ReturnItem1.Split('-')[0].Trim() + "|" + bsc.ReturnItem2.Split('(')[0].Trim();
+
+                DialogResult result2 = MessageBox.Show(msg, "Mensaje Alerta", MessageBoxButtons.YesNo);
+                if (result2 == DialogResult.Yes)
+                {
+                    string sqlquery = Generals.Constantes.QUERY_CHANGE_SUBCOMPONENTES;
+                    string[] param = { bsc.ReturnItem0, txtidSubComponente.Text };
+                    string resul = "";
+                    string MsgResul = "SubComponente Remplazado Exitosamente";
+                    Generals.Conexion con = new Generals.Conexion();
+                    string fail = "";
+
+                    con.Open(out fail);
+                    int idComponente = con.ExecuteNonQuery(sqlquery, out fail, param, 1);
+                    con.Close();
+
+                    resul = fail == "" ? MsgResul : fail;
+                }
+            }            
         }
     }
 }

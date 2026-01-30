@@ -1275,6 +1275,14 @@ namespace arquitectSoft.View
                         
                         if ((Datagrid == 2) && !valuezero.Contains("Puerta"))
                         {
+                            string codAcabado = row.Cells[1].Value.ToString().Split('-')[1].Trim();
+                            string codAcabadoNew = param[0].ToString().Split('-')[0].Trim();
+
+                            if (codAcabado == codAcabadoNew)
+                            {
+                                string acabadocodNew = (param[1].ToString().Contains("-")) ? param[1].ToString().Split('-')[0].Trim() : "XX";
+                                row.Cells[1].Value = row.Cells[1].Value.ToString().Split('-')[0].Trim() + "-" + acabadocodNew;
+                            }
                             continue;
                         }
 
@@ -1297,12 +1305,15 @@ namespace arquitectSoft.View
                             {
                                 string AcabadoFinal = (param[1].ToString().Contains("-")) ? param[1].ToString().Split('-')[1].Trim() : param[1].ToString().Trim();
                                 AcabadoDesc = AcabadoDesc.Substring(0, posini + 1) + AcabadoFinal + AcabadoDesc.Substring(posfin, AcabadoDesc.Length - posfin);
+                                string acabadocodNew = (param[1].ToString().Contains("-")) ? param[1].ToString().Split('-')[0].Trim() : "XX";
                                 if (Datagrid == 6)
                                 {
+                                    row.Cells[0].Value = row.Cells[0].Value.ToString().Split('-')[0].Trim() + "-" + acabadocodNew;
                                     row.Cells[1].Value = AcabadoDesc;
                                 }
                                 else
                                 {
+                                    row.Cells[1].Value = row.Cells[1].Value.ToString().Split('-')[0].Trim() + "-" + acabadocodNew; 
                                     row.Cells[2].Value = AcabadoDesc;
                                 }
                                 
