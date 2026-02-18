@@ -531,6 +531,7 @@ namespace arquitectSoft.View
             this.txtidSubComponente.Name = "txtidSubComponente";
             this.txtidSubComponente.Size = new System.Drawing.Size(120, 20);
             this.txtidSubComponente.TabIndex = 101;
+            this.txtidSubComponente.Visible = false;
             // 
             // FrmSubComponente
             // 

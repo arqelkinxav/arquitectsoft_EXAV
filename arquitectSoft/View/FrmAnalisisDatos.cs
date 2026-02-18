@@ -1271,7 +1271,10 @@ namespace arquitectSoft.View
                         int posfin = 0;
                         string AcabadoDesc = "";
                         string valuezero = row.Cells[0].Value.ToString();
-                        string Acabado = row.Cells[3].Value.ToString();   
+                        string Acabado = row.Cells[3].Value.ToString();
+
+                        if (valuezero == "")
+                            continue;
                         
                         if ((Datagrid == 2) && !valuezero.Contains("Puerta"))
                         {
