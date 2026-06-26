@@ -15,8 +15,8 @@ namespace arquitectSoft.Generals
 
    
         MySqlConnection conn;
-        static string host = "10.11.0.254";
-        //static string host = "localhost";
+        //static string host = "10.11.0.254";
+        static string host = "localhost";
         static string database = "arquitectdb";
         static string userDB = "remote";
         //static string userDB = "root";
