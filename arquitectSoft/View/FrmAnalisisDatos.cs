@@ -41,9 +41,25 @@ namespace arquitectSoft.View
         DataTable dtPerfilOfTubos = new DataTable();
         private int selectedRowIndex = -1;
         private int swPMVertical = 0;
+
+        // --- Recálculo en tiempo real (Medida Base / % Desperdicio) ---
+        private System.Collections.Generic.List<string> _file124;
+        private System.Collections.Generic.List<string> _file35;
+        private int _wantedFiles;
+        private bool _datosCargados = false;
+        private System.Windows.Forms.Timer _recalcTimer;
+
         public FrmAnalisisDatos()
         {
             InitializeComponent();
+
+            // Recalcular con un pequeño retardo tras el último cambio, para no
+            // recalcular en cada clic del spinner.
+            _recalcTimer = new System.Windows.Forms.Timer();
+            _recalcTimer.Interval = 250;
+            _recalcTimer.Tick += RecalcTimer_Tick;
+            NUpDownMedidaBase.ValueChanged += ValoresAnalisis_Changed;
+            NUpDownDesperdicio.ValueChanged += ValoresAnalisis_Changed;
         }
 
 
@@ -64,7 +80,6 @@ namespace arquitectSoft.View
             DialogResult dr = this.openFileDialog1.ShowDialog();
             if (dr == System.Windows.Forms.DialogResult.OK)
             {
-                var __cronometro = System.Diagnostics.Stopwatch.StartNew();
                 int wantedFiles = 0;
                 int wantedFilesHerrajesPuertas = 0;
                 
@@ -99,30 +114,83 @@ namespace arquitectSoft.View
                 }
 
 
-                if (File_124.Count > 0)
+                // Guardar los archivos cargados para poder recalcular en tiempo
+                // real al cambiar Medida Base / % Desperdicio (sin volver a elegir
+                // archivos ni repetir la pregunta de segmentación).
+                _file124 = File_124.OrderByDescending(x => x).ToList();
+                _file35 = File_35;
+                _wantedFiles = wantedFiles;
+                _datosCargados = true;
+                lblDirectoryName.Text = directoryName;
+
+                EjecutarAnalisis();
+            }
+        }
+
+        /// <summary>
+        /// Ejecuta el cálculo sobre los archivos ya cargados usando los valores
+        /// ACTUALES de Medida Base y % Desperdicio, y refresca los grids.
+        /// Se llama al cargar y en cada recálculo en tiempo real.
+        /// </summary>
+        private void EjecutarAnalisis()
+        {
+            if (!_datosCargados) return;
+
+            var cronometro = System.Diagnostics.Stopwatch.StartNew();
+            int tabActual = tabPrincipal.SelectedIndex;   // conservar la pestaña que se está viendo
+
+            // Indicador de "trabajando" (el cálculo bloquea el hilo de la UI).
+            this.Cursor = Cursors.WaitCursor;
+            lblestadosAnalitica.ForeColor = System.Drawing.Color.Goldenrod;
+            lblestadosAnalitica.Text = "Calculando...";
+            lblestadosAnalitica.Refresh();
+            try
+            {
+                Cancelar();
+                Dto.AnalisisDatosDto dto = new Dto.AnalisisDatosDto();
+
+                if (_file124 != null && _file124.Count > 0)
                 {
-                    SetDataAll(dto, wantedFiles, File_124.OrderByDescending(x => x).ToList());
+                    SetDataAll(dto, _wantedFiles, _file124);
                 }
-
-                if (File_35.Count > 0)
+                if (_file35 != null && _file35.Count > 0)
                 {
-                    SetDataAll(dto, wantedFiles, File_35);
+                    SetDataAll(dto, _wantedFiles, _file35);
                 }
-
-
 
                 if (FnValidateData())
                 {
                     BtnChange.Visible = true;
                 }
 
-                __cronometro.Stop();
-                double __seg = __cronometro.ElapsedMilliseconds / 1000.0;
-                lblestadosAnalitica.Text = "Analitica Aplicada Correctamente!  (" + __seg.ToString("0.0") + " s)";
-                lblDirectoryName.Text = directoryName;
-                MessageBox.Show("Análisis completado en " + __seg.ToString("0.0") + " segundos.", "Tiempo de análisis", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                if (tabActual >= 0 && tabActual < tabPrincipal.TabCount)
+                {
+                    tabPrincipal.SelectedIndex = tabActual;
+                }
 
+                cronometro.Stop();
+                lblestadosAnalitica.ForeColor = System.Drawing.Color.LimeGreen;
+                lblestadosAnalitica.Text = "✓ Listo  (" + (cronometro.ElapsedMilliseconds / 1000.0).ToString("0.0") + " s)";
             }
+            finally
+            {
+                this.Cursor = Cursors.Default;
+            }
+        }
+
+        // Al cambiar Medida Base o % Desperdicio, reinicia el temporizador de
+        // recálculo (debounce): recalcula 0.5s después del último cambio.
+        private void ValoresAnalisis_Changed(object sender, EventArgs e)
+        {
+            if (!_datosCargados) return;
+            _recalcTimer.Stop();
+            _recalcTimer.Start();
+        }
+
+        private void RecalcTimer_Tick(object sender, EventArgs e)
+        {
+            _recalcTimer.Stop();
+            EjecutarAnalisis();
         }
 
         private bool FnValidateData()
