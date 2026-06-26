@@ -61,9 +61,10 @@ namespace arquitectSoft.View
             }
             string directoryName = "";
             this.openFileDialog1.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            DialogResult dr = this.openFileDialog1.ShowDialog();            
+            DialogResult dr = this.openFileDialog1.ShowDialog();
             if (dr == System.Windows.Forms.DialogResult.OK)
             {
+                var __cronometro = System.Diagnostics.Stopwatch.StartNew();
                 int wantedFiles = 0;
                 int wantedFilesHerrajesPuertas = 0;
                 
@@ -115,7 +116,8 @@ namespace arquitectSoft.View
                     BtnChange.Visible = true;
                 }
 
-                lblestadosAnalitica.Text = "Analitica Aplicada Correctamente!";
+                __cronometro.Stop();
+                lblestadosAnalitica.Text = "Analitica Aplicada Correctamente!  (" + (__cronometro.ElapsedMilliseconds / 1000.0).ToString("0.0") + " s)";
                 lblDirectoryName.Text = directoryName;
 
             }
