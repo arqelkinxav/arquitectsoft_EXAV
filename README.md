@@ -117,6 +117,8 @@ arquitectSoft/
 | Los análisis fallan tras restaurar | El backup del *programa* (MySqlBackup) **no** incluye procedimientos | Restaurar desde un dump hecho con `mysqldump --routines` |
 | No compila: falta `MySqlBackup` | (Histórico) referenciaba una DLL fuera del repo | Ya resuelto: la DLL está en `libs/` |
 | `CS1705` versión de MySql.Data | Desajuste de versiones | El proyecto usa `MySql.Data 8.0.32` (alineado con MySqlBackup.NET) |
+| `NullReferenceException` al cargar TXT | El servidor MySQL en modo estricto rechaza un parámetro vacío que el programa manda a un procedimiento (`ERROR 1366`) | Quitar `STRICT_TRANS_TABLES` del `sql-mode` en `my.ini` (ver más abajo) — el servidor de la empresa corre en modo no estricto |
+| `FileNotFoundException: LOGO.jpg` al exportar | Faltaba el logo junto al `.exe` | Ya resuelto: el csproj copia `Resources\LOGO.jpg` a la salida en cada build |
 
 ---
 
@@ -125,4 +127,14 @@ arquitectSoft/
 - Las tablas `proyecto`, `proyecto_pt`, `tbauxanchura` son **temporales de cálculo**
   (se vacían en cada corrida). El programa **no** archiva proyectos; el dato valioso
   y persistente es el **catálogo** (componentes, subcomponentes, acabados, etc.).
+- **`sql_mode` no estricto (importante).** El programa pasa a veces parámetros
+  numéricos vacíos a los procedimientos. Para que funcione, el servidor MySQL debe
+  correr **sin** `STRICT_TRANS_TABLES`. En Windows se ajusta en
+  `C:\ProgramData\MySQL\MySQL Server 8.0\my.ini` (línea `sql-mode=...`) y se reinicia
+  el servicio. **El mismo ajuste hay que aplicarlo en cualquier servidor** (incluida la nube).
+- **Configuración regional (punto vs coma).** Varios cálculos parsean números usando
+  la configuración regional de Windows. Si los TXT traen decimales con un separador
+  distinto al de Windows, los números se malinterpretan. Por ahora hay que igualar el
+  símbolo decimal de Windows al de los TXT (pendiente arreglar en el código para que
+  use un formato fijo e independiente de la máquina).
 - `bin/`, `obj/` y `packages/` no se suben al repo (se regeneran al compilar/restaurar).
