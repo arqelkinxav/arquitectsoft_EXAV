@@ -904,6 +904,20 @@ namespace arquitectSoft.View
                         
                         if ((Datagrid == 2) && !valuezero.Contains("Puerta"))
                         {
+                            // Componentes de la puerta (perfiles): cambiar el código de
+                            // acabado solo en los que tienen el acabado de origen
+                            // (ej. "ITC0102-01"). Igual que en el proceso de mamparas.
+                            string[] codeParts = row.Cells[1].Value.ToString().Split('-');
+                            if (codeParts.Length > 1)
+                            {
+                                string codAcabado = codeParts[1].Trim();
+                                string codAcabadoOrigen = param[0].ToString().Split('-')[0].Trim();
+                                if (codAcabado == codAcabadoOrigen)
+                                {
+                                    string acabadocodNew = param[1].ToString().Contains("-") ? param[1].ToString().Split('-')[0].Trim() : "XX";
+                                    row.Cells[1].Value = codeParts[0].Trim() + "-" + acabadocodNew;
+                                }
+                            }
                             continue;
                         }
 
@@ -935,6 +949,10 @@ namespace arquitectSoft.View
                                 }
                                 else
                                 {
+                                    // Actualizar también el CÓDIGO del acabado en la fila
+                                    // de la puerta (antes solo cambiaba la descripción).
+                                    string acabadocodNew = param[1].ToString().Contains("-") ? param[1].ToString().Split('-')[0].Trim() : "XX";
+                                    row.Cells[1].Value = row.Cells[1].Value.ToString().Split('-')[0].Trim() + "-" + acabadocodNew;
                                     row.Cells[2].Value = AcabadoDesc;
                                 }
                                 
