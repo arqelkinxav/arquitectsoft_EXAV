@@ -1071,8 +1071,9 @@ namespace arquitectSoft.View
 
         private void btnAnalizar_Click(object sender, EventArgs e)
         {
+            var __cronometro = System.Diagnostics.Stopwatch.StartNew();
             Dto.AnalisisDatosDto dto = new Dto.AnalisisDatosDto();
-            
+
             DataTable dtcalculate = new DataTable();
             bool swmergePM = true;
             bool perfilandvidrios = false;
@@ -1094,7 +1095,10 @@ namespace arquitectSoft.View
                 BtnChange.Visible = true;
             }
 
-            lblestadosAnalitica.Text = "Analitica Aplicada Correctamente!";
+            __cronometro.Stop();
+            double __seg = __cronometro.ElapsedMilliseconds / 1000.0;
+            lblestadosAnalitica.Text = "Analitica Aplicada Correctamente!  (" + __seg.ToString("0.0") + " s)";
+            MessageBox.Show("Análisis completado en " + __seg.ToString("0.0") + " segundos.", "Tiempo de análisis", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void BtnMaximizar_Click(object sender, EventArgs e)

@@ -117,8 +117,10 @@ namespace arquitectSoft.View
                 }
 
                 __cronometro.Stop();
-                lblestadosAnalitica.Text = "Analitica Aplicada Correctamente!  (" + (__cronometro.ElapsedMilliseconds / 1000.0).ToString("0.0") + " s)";
+                double __seg = __cronometro.ElapsedMilliseconds / 1000.0;
+                lblestadosAnalitica.Text = "Analitica Aplicada Correctamente!  (" + __seg.ToString("0.0") + " s)";
                 lblDirectoryName.Text = directoryName;
+                MessageBox.Show("Análisis completado en " + __seg.ToString("0.0") + " segundos.", "Tiempo de análisis", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
             }
         }
