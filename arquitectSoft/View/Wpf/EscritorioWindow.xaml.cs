@@ -165,7 +165,8 @@ namespace arquitectSoft.View.Wpf
         private void Puertas_Click(object sender, RoutedEventArgs e) => new PuertasWindow().Show();
         private void Componentes_Click(object sender, RoutedEventArgs e) => new ComponenteWindow().Show();
         private void Subcomponentes_Click(object sender, RoutedEventArgs e) => new SubComponenteWindow().Show();
-        private void Acabados_Click(object sender, RoutedEventArgs e) => new AcabadosWindow().Show();
+        private void Acabados_Click(object sender, RoutedEventArgs e) =>
+            AbrirPanel("Acabados", "", new AcabadosPanel(), 720, 560);
         private void Mecanizados_Click(object sender, RoutedEventArgs e) => new MecanizadoWindow().Show();
         private void Cortes_Click(object sender, RoutedEventArgs e) => new CorteWindow().Show();
         private void Unidad_Click(object sender, RoutedEventArgs e) => new UnidadMedidaWindow().Show();

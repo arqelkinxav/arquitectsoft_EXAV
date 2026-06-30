@@ -358,6 +358,13 @@
     <Compile Include="View\Wpf\Panels\AcercaPanel.xaml.cs">
       <DependentUpon>AcercaPanel.xaml</DependentUpon>
     </Compile>
+    <Page Include="View\Wpf\Panels\AcabadosPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Compile Include="View\Wpf\Panels\AcabadosPanel.xaml.cs">
+      <DependentUpon>AcabadosPanel.xaml</DependentUpon>
+    </Compile>
     <Page Include="View\Wpf\EscritorioWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
