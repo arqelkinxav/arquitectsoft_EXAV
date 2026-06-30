@@ -45,7 +45,9 @@
         </Border.BorderBrush>
         <Border.Effect><DropShadowEffect Color="Black" BlurRadius="24" ShadowDepth="0" Opacity="0.55"/></Border.Effect>
 
-        <Grid>
+        <!-- Recorte redondeado: evita que el shader del cristal rellene las esquinas
+             y asome por fuera del marco. El Clip se ajusta por código al tamaño. -->
+        <Grid x:Name="Recorte" SizeChanged="Recorte_SizeChanged">
             <!-- ===== Capas de LIQUID GLASS (refracción del fondo del escritorio) ===== -->
             <!-- Fondo refractado por el shader; lo monta el código (VisualBrush del wallpaper). -->
             <Rectangle x:Name="GlassBackdrop" RadiusX="11" RadiusY="11" IsHitTestVisible="False"/>

@@ -63,6 +63,14 @@ namespace arquitectSoft.View.Wpf
             LiquidGlass.MontarGlassMdi(this, GlassBackdrop, fondo);
         }
 
+        // Recorta el contenido (cristal incluido) a esquinas redondeadas, para que el shader
+        // no rellene las esquinas y se salga del marco.
+        private void Recorte_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            Recorte.Clip = new System.Windows.Media.RectangleGeometry(
+                new Rect(0, 0, Recorte.ActualWidth, Recorte.ActualHeight), 11, 11);
+        }
+
         private Canvas Lienzo
         {
             get { return _canvas ?? (_canvas = ParentOfType<Canvas>(this)); }
