@@ -78,6 +78,7 @@ namespace arquitectSoft.View.Wpf
         {
             var child = new MdiChild { Titulo = titulo, Width = w, Height = h };
             child.SetContenido(contenido);
+            child.MontarGlass(ImgFondo);   // liquid glass: refracta el wallpaper del escritorio
 
             // Snap (vista previa) + barra de tareas.
             child.MostrarPreviewSnap = MostrarPreview;

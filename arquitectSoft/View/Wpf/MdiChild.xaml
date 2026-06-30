@@ -34,7 +34,8 @@
         </ControlTemplate>
     </UserControl.Resources>
 
-    <Border x:Name="Frame" CornerRadius="12" Background="#E0121214" BorderThickness="1.2"
+    <!-- Marco de cristal: borde con rim-light + sombra de flotado -->
+    <Border x:Name="Frame" CornerRadius="12" Background="Transparent" BorderThickness="1.2"
             TextElement.FontFamily="{StaticResource Jakarta}" TextElement.Foreground="{StaticResource TextPrimary}">
         <Border.BorderBrush>
             <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
@@ -43,30 +44,50 @@
             </LinearGradientBrush>
         </Border.BorderBrush>
         <Border.Effect><DropShadowEffect Color="Black" BlurRadius="24" ShadowDepth="0" Opacity="0.55"/></Border.Effect>
-        <Grid>
-            <Grid.RowDefinitions><RowDefinition Height="34"/><RowDefinition Height="*"/></Grid.RowDefinitions>
 
-            <!-- Barra de título (arrastrable) -->
-            <Border Grid.Row="0" Background="#1F1F22" CornerRadius="11,11,0,0">
-                <Grid>
-                    <Thumb x:Name="DragThumb" Background="Transparent" Opacity="0" Template="{StaticResource ThumbTransparente}"/>
-                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="12,0,0,0" IsHitTestVisible="False">
-                        <Border Width="9" Height="9" CornerRadius="3" Background="{StaticResource Accent}" Margin="0,0,9,0"/>
-                        <TextBlock x:Name="LblTitulo" Text="Ventana" FontSize="12.5" FontWeight="Bold" VerticalAlignment="Center"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,14,0">
-                        <Button x:Name="BtnMin" Style="{StaticResource WinDot}" Content="&#xE921;" Click="Minimizar_Click" ToolTip="Minimizar"/>
-                        <Button x:Name="BtnMax" Style="{StaticResource WinDot}" Content="&#xE922;" Click="Maximizar_Click" ToolTip="Maximizar en el escritorio"/>
-                        <Button x:Name="BtnClose" Style="{StaticResource WinDot}" Content="&#xE8BB;" Click="Cerrar_Click" ToolTip="Cerrar"/>
-                    </StackPanel>
-                </Grid>
+        <Grid>
+            <!-- ===== Capas de LIQUID GLASS (refracción del fondo del escritorio) ===== -->
+            <!-- Fondo refractado por el shader; lo monta el código (VisualBrush del wallpaper). -->
+            <Rectangle x:Name="GlassBackdrop" RadiusX="11" RadiusY="11" IsHitTestVisible="False"/>
+            <!-- Tinte oscuro encima del cristal -->
+            <Rectangle Fill="#9E000000" RadiusX="11" RadiusY="11" IsHitTestVisible="False"/>
+            <!-- Brillo de cristal diagonal -->
+            <Border CornerRadius="11" IsHitTestVisible="False">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0.15,0" EndPoint="0.55,1">
+                        <GradientStop Color="#1FFFFFFF" Offset="0"/>
+                        <GradientStop Color="#0BFFFFFF" Offset="0.18"/>
+                        <GradientStop Color="#00FFFFFF" Offset="0.45"/>
+                    </LinearGradientBrush>
+                </Border.Background>
             </Border>
 
-            <!-- Contenido hospedado -->
-            <ContentControl x:Name="Host" Grid.Row="1"/>
+            <!-- ===== Contenido ===== -->
+            <Grid>
+                <Grid.RowDefinitions><RowDefinition Height="34"/><RowDefinition Height="*"/></Grid.RowDefinitions>
+
+                <!-- Barra de título (arrastrable) -->
+                <Border Grid.Row="0" Background="#59121214" CornerRadius="11,11,0,0">
+                    <Grid>
+                        <Thumb x:Name="DragThumb" Background="Transparent" Opacity="0" Template="{StaticResource ThumbTransparente}"/>
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="12,0,0,0" IsHitTestVisible="False">
+                            <Border Width="9" Height="9" CornerRadius="3" Background="{StaticResource Accent}" Margin="0,0,9,0"/>
+                            <TextBlock x:Name="LblTitulo" Text="Ventana" FontSize="12.5" FontWeight="Bold" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,14,0">
+                            <Button x:Name="BtnMin" Style="{StaticResource WinDot}" Content="&#xE921;" Click="Minimizar_Click" ToolTip="Minimizar"/>
+                            <Button x:Name="BtnMax" Style="{StaticResource WinDot}" Content="&#xE922;" Click="Maximizar_Click" ToolTip="Maximizar en el escritorio"/>
+                            <Button x:Name="BtnClose" Style="{StaticResource WinDot}" Content="&#xE8BB;" Click="Cerrar_Click" ToolTip="Cerrar"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <!-- Contenido hospedado -->
+                <ContentControl x:Name="Host" Grid.Row="1"/>
+            </Grid>
 
             <!-- ===== Agarres de redimensión (4 lados + 4 esquinas) ===== -->
-            <Grid x:Name="ResizeGrid" Grid.RowSpan="2">
+            <Grid x:Name="ResizeGrid">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="6"/><ColumnDefinition Width="*"/><ColumnDefinition Width="6"/>
                 </Grid.ColumnDefinitions>

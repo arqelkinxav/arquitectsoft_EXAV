@@ -84,6 +84,40 @@ namespace arquitectSoft.View.Wpf
             w.Loaded += (s, e) => actualizar();
         }
 
+        // ===== Liquid glass para ventanas CONTENIDAS (MdiChild) =====
+        // A diferencia de MontarGlass (que usa una foto del escritorio de Windows), aquí el
+        // fondo a refractar es el wallpaper del propio escritorio de la app (un Visual dentro
+        // de la ventana). Se recorta a la posición de la ventana hija dentro de ese fondo y
+        // se le aplica el mismo shader de refracción. Así toda ventana contenida tiene cristal.
+        public static void MontarGlassMdi(FrameworkElement ventana, Rectangle backdrop, Visual fondo)
+        {
+            if (backdrop == null || fondo == null || ventana == null) return;
+
+            var brush = new VisualBrush(fondo)
+            {
+                Stretch = Stretch.Fill,
+                ViewboxUnits = BrushMappingMode.Absolute,
+                ViewportUnits = BrushMappingMode.RelativeToBoundingBox
+            };
+            backdrop.Fill = brush;
+            backdrop.Effect = new GlassyEffect();
+
+            EventHandler actualizar = (s, e) =>
+            {
+                try
+                {
+                    if (ventana.ActualWidth <= 0 || ventana.ActualHeight <= 0) return;
+                    GeneralTransform t = ventana.TransformToVisual(fondo);
+                    Rect r = t.TransformBounds(new Rect(0, 0, ventana.ActualWidth, ventana.ActualHeight));
+                    if (r.Width > 0 && r.Height > 0) brush.Viewbox = r;
+                }
+                catch { /* aún sin layout */ }
+            };
+
+            // El MdiChild se mueve por Canvas.Left/Top: LayoutUpdated capta cada cambio.
+            ventana.LayoutUpdated += actualizar;
+        }
+
         // Cierre: encoge rápido con leve anticipación y se desvanece; llama alTerminar() al final.
         public static void Cierre(UIElement frame, ScaleTransform scale, Action alTerminar)
         {

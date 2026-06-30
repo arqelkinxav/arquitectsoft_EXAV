@@ -57,6 +57,12 @@ namespace arquitectSoft.View.Wpf
 
         public void SetContenido(UIElement contenido) { Host.Content = contenido; }
 
+        /// <summary>Activa el liquid glass refractando el fondo del escritorio (wallpaper).</summary>
+        public void MontarGlass(System.Windows.Media.Visual fondo)
+        {
+            LiquidGlass.MontarGlassMdi(this, GlassBackdrop, fondo);
+        }
+
         private Canvas Lienzo
         {
             get { return _canvas ?? (_canvas = ParentOfType<Canvas>(this)); }
