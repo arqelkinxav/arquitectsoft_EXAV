@@ -80,8 +80,8 @@ namespace arquitectSoft
 
                 MessageBox.Show("Bienvenido: " + NombreDesc.Split('-')[1] + "!", "Mensaje Alerta", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.Hide();
-                FrmMDIPrincipal fm = new FrmMDIPrincipal();
-                fm.ShowDialog();
+                new View.Wpf.EscritorioWindow().ShowDialog();   // shell WPF (escritorio + dock)
+                this.Close();   // al cerrar el escritorio, termina la app
             }
             else
             {

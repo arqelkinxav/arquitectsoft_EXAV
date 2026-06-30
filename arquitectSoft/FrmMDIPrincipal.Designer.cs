@@ -42,6 +42,7 @@ namespace arquitectSoft
             this.salirToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.TMSItem_procesos = new System.Windows.Forms.ToolStripMenuItem();
             this.calcularCantidadesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.calcularCantidadesWpfToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.analisisDePuertasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.acercaDeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dBAToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -155,6 +156,7 @@ namespace arquitectSoft
             // 
             this.TMSItem_procesos.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.calcularCantidadesToolStripMenuItem,
+            this.calcularCantidadesWpfToolStripMenuItem,
             this.analisisDePuertasToolStripMenuItem});
             this.TMSItem_procesos.ForeColor = System.Drawing.SystemColors.Control;
             this.TMSItem_procesos.Name = "TMSItem_procesos";
@@ -169,7 +171,16 @@ namespace arquitectSoft
             this.calcularCantidadesToolStripMenuItem.Name = "calcularCantidadesToolStripMenuItem";
             resources.ApplyResources(this.calcularCantidadesToolStripMenuItem, "calcularCantidadesToolStripMenuItem");
             this.calcularCantidadesToolStripMenuItem.Click += new System.EventHandler(this.calcularCantidadesToolStripMenuItem_Click);
-            // 
+            //
+            // calcularCantidadesWpfToolStripMenuItem
+            //
+            this.calcularCantidadesWpfToolStripMenuItem.BackColor = System.Drawing.SystemColors.Control;
+            this.calcularCantidadesWpfToolStripMenuItem.ForeColor = System.Drawing.SystemColors.Desktop;
+            this.calcularCantidadesWpfToolStripMenuItem.Name = "calcularCantidadesWpfToolStripMenuItem";
+            this.calcularCantidadesWpfToolStripMenuItem.Size = new System.Drawing.Size(220, 22);
+            this.calcularCantidadesWpfToolStripMenuItem.Text = "Análisis (Nuevo - WPF)";
+            this.calcularCantidadesWpfToolStripMenuItem.Click += new System.EventHandler(this.calcularCantidadesWpfToolStripMenuItem_Click);
+            //
             // analisisDePuertasToolStripMenuItem
             // 
             this.analisisDePuertasToolStripMenuItem.BackColor = System.Drawing.SystemColors.Control;
@@ -242,7 +253,7 @@ namespace arquitectSoft
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(70)))), ((int)(((byte)(70)))), ((int)(((byte)(82)))));
+            this.BackColor = System.Drawing.Color.Black;
             this.Controls.Add(this.pictureBoxMdiPrincipal);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.menuStrip);
@@ -273,6 +284,7 @@ namespace arquitectSoft
         private System.Windows.Forms.ToolStripMenuItem TMSItem_cortes;
         private System.Windows.Forms.ToolStripMenuItem TMSItem_procesos;
         private System.Windows.Forms.ToolStripMenuItem calcularCantidadesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem calcularCantidadesWpfToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem salirToolStripMenuItem;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripMenuItem acercaDeToolStripMenuItem;

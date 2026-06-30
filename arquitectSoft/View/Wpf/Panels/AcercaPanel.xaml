@@ -1,0 +1,41 @@
+<UserControl x:Class="arquitectSoft.View.Wpf.Panels.AcercaPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <UserControl.Resources>
+        <FontFamily x:Key="Jakarta">pack://application:,,,/Resources/Fonts/#Plus Jakarta Sans</FontFamily>
+        <SolidColorBrush x:Key="Accent" Color="#E07B5B"/>
+        <SolidColorBrush x:Key="TextPrimary" Color="#ECECEC"/>
+        <SolidColorBrush x:Key="TextMuted" Color="#8C8C8C"/>
+        <SolidColorBrush x:Key="PanelBorder" Color="#2F2F2F"/>
+    </UserControl.Resources>
+
+    <Grid TextElement.FontFamily="{StaticResource Jakarta}" TextElement.Foreground="{StaticResource TextPrimary}"
+          Margin="22,18,22,18">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,4">
+            <Border Width="44" Height="44" CornerRadius="12" Background="{StaticResource Accent}" Margin="0,0,14,0">
+                <TextBlock Text="&#xE73E;" FontFamily="Segoe MDL2 Assets" FontSize="22" Foreground="#201712"
+                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Border>
+            <StackPanel VerticalAlignment="Center">
+                <TextBlock x:Name="LblProducto" Text="Producto" FontSize="18" FontWeight="Bold"/>
+                <TextBlock x:Name="LblVersion" Foreground="{StaticResource TextMuted}" FontSize="11.5"/>
+            </StackPanel>
+        </StackPanel>
+
+        <TextBlock x:Name="LblEmpresa" Grid.Row="1" Foreground="{StaticResource TextMuted}" FontSize="11.5" Margin="0,14,0,0"/>
+        <TextBlock x:Name="LblCopyright" Grid.Row="2" Foreground="{StaticResource TextMuted}" FontSize="11.5" Margin="0,4,0,0" TextWrapping="Wrap"/>
+
+        <Border Grid.Row="3" Margin="0,14,0,0" CornerRadius="10" Background="#0E0E0E"
+                BorderBrush="{StaticResource PanelBorder}" BorderThickness="1" Padding="12">
+            <TextBlock x:Name="LblDescripcion" Foreground="{StaticResource TextPrimary}" FontSize="12.5"
+                       TextWrapping="Wrap" LineHeight="19"/>
+        </Border>
+    </Grid>
+</UserControl>

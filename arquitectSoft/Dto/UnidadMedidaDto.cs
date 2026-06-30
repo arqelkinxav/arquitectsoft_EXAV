@@ -10,7 +10,21 @@ namespace arquitectSoft.Dto
 {
     class UnidadMedidaDto
     {
-       
+        public DataTable GetUnidadMedida()
+        {
+            Generals.Conexion con = new Generals.Conexion();
+            string fail = "";
+            con.Open(out fail);
+
+            // Fila sintética (Id 0) al inicio, igual que el resto de catálogos.
+            DataTable dt = con.ExecuteDataSet(
+                "Select 0 Id_Unidad_Medida, ' ' Descripcion, ' ' Convencion union all " + Generals.Constantes.QUERY_UNIDADMEDIDA,
+                out fail).Tables[0];
+            con.Close();
+
+            return dt;
+        }
+
         public string ExistUnidadMedida(string codigo)
         {
             string resul = "0";

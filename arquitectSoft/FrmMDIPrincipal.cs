@@ -46,10 +46,34 @@ namespace arquitectSoft
         private void FrmMDIPrincipal_Load(object sender, EventArgs e)
         {
 
-            Controls.OfType<MdiClient>().FirstOrDefault().BackColor = Color.FromArgb(176, 196, 222);
+            // Fondo del área de trabajo (lo que se ve tras el cristal de las ventanas WPF):
+            // negro neutro + imagen de fondo estirada. Antes era azul acero (176,196,222),
+            // que el material acrílico difuminaba dando un tinte azulado.
+            // Fondo del área de trabajo: negro neutro + imagen de fondo (lo que se ve
+            // tras el cristal de las ventanas WPF). Antes era azul acero (176,196,222),
+            // que el material acrílico difuminaba dando un tinte azulado.
+            var mdiClient = Controls.OfType<MdiClient>().FirstOrDefault();
+            if (mdiClient != null)
+            {
+                mdiClient.BackColor = Color.Black;
+                string ruta = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "FondoApp.png");
+                if (File.Exists(ruta))
+                {
+                    try
+                    {
+                        using (var fs = new FileStream(ruta, FileMode.Open, FileAccess.Read))
+                            mdiClient.BackgroundImage = Image.FromStream(fs);
+                        mdiClient.BackgroundImageLayout = ImageLayout.Stretch;   // cubre toda la pantalla
+                    }
+                    catch { /* imagen corrupta: se queda en negro */ }
+                }
+            }
+
             Mdi_nameConnect2.Text = Mdi_nameConnect2.Text + " " + Generals.Global.NameConnect.ToUpper().Split('-')[1];
             Mdi_nameConnect2.ForeColor = Color.White;
-            this.BackgroundImage = Properties.Resources.Wallpaper_final;
+            this.BackColor = Color.Black;
+            this.BackgroundImage = null;
+            pictureBoxMdiPrincipal.Visible = false;   // logo inferior derecho oculto
             this.DoubleBuffered = true;
 
             if(Generals.Global.NameConnect.ToUpper().Split('-')[0] == "DBA")
@@ -77,13 +101,7 @@ namespace arquitectSoft
         private void TMSItem_componente_Click(object sender, EventArgs e)
         {
 
-            View.FrmComponente formComp = new View.FrmComponente();
-            formComp.MdiParent = this;
-            formComp.StartPosition = FormStartPosition.CenterScreen;
-            
-    
-            
-            formComp.Show();
+            new View.Wpf.ComponenteWindow().Show();
 
 
         }
@@ -91,32 +109,21 @@ namespace arquitectSoft
         private void acercaDeToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
-            FrmAcercade formAbout = new FrmAcercade();
-            //formAbout.MdiParent = this;
-            formAbout.StartPosition = FormStartPosition.CenterScreen;
-            formAbout.Show();
+            new View.Wpf.AcercaWindow().Show();
 
         }
 
         private void TMSItem_subComponente_Click(object sender, EventArgs e)
         {
 
-            View.FrmSubComponente formSubcomp = new View.FrmSubComponente();
-            formSubcomp.MdiParent = this;
-            formSubcomp.StartPosition = FormStartPosition.CenterScreen;
-            formSubcomp.Show();
+            new View.Wpf.SubComponenteWindow().Show();
 
         }
 
         private void TMSItem_acabados_Click(object sender, EventArgs e)
         {
-
-            View.FrmAcabados formAbout = new View.FrmAcabados();
-            //formAbout.MdiParent = this;
-            formAbout.StartPosition = FormStartPosition.CenterScreen;
-            formAbout.WindowState = FormWindowState.Normal;
-            formAbout.Show();
-
+            // Versión WPF (tema cristal). Ventana de nivel superior, no hija MDI.
+            new View.Wpf.AcabadosWindow().Show();
         }
 
         private void calcularCantidadesToolStripMenuItem_Click(object sender, EventArgs e)
@@ -128,22 +135,23 @@ namespace arquitectSoft
 
         }
 
+        // Versión WPF de "Análisis de Mamparas". Una Window de WPF no puede ser
+        // hijo MDI de un formulario WinForms, así que se abre como ventana propia
+        // de nivel superior. Comparte el mismo hilo/bucle de mensajes de la UI.
+        private void calcularCantidadesWpfToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            View.Wpf.AnalisisWindow ventana = new View.Wpf.AnalisisWindow();
+            ventana.Show();
+        }
+
         private void TMSItem_cortes_Click(object sender, EventArgs e)
         {
-            View.FrmCorte formcortes = new View.FrmCorte();
-            // formcortes.MdiParent = this;
-            formcortes.StartPosition = FormStartPosition.CenterScreen;
-            formcortes.WindowState = FormWindowState.Normal;
-            formcortes.Show();
+            new View.Wpf.CorteWindow().Show();
         }
 
         private void unidadDeMedidaToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            View.FrmUnidadMedida formUnidadMedida = new View.FrmUnidadMedida();
-            //formUnidadMedida.MdiParent = this;
-            formUnidadMedida.StartPosition = FormStartPosition.CenterScreen;
-            formUnidadMedida.WindowState = FormWindowState.Normal;
-            formUnidadMedida.Show();
+            new View.Wpf.UnidadMedidaWindow().Show();
         }
 
         private void minimizarToolStripMenuItem_Click(object sender, EventArgs e)
@@ -213,19 +221,12 @@ namespace arquitectSoft
 
         private void mecanizadoToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            View.FrmMecanizado formMecanizado = new View.FrmMecanizado();
-            // formMecanizado.MdiParent = this;
-            formMecanizado.StartPosition = FormStartPosition.CenterScreen;
-            formMecanizado.WindowState = FormWindowState.Normal;
-            formMecanizado.Show();
+            new View.Wpf.MecanizadoWindow().Show();
         }
 
         private void analisisDePuertasToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            View.FrmAnalisisDatos_Puertas formDataAnalitics = new View.FrmAnalisisDatos_Puertas();
-            formDataAnalitics.MdiParent = this;
-            formDataAnalitics.StartPosition = FormStartPosition.CenterScreen;
-            formDataAnalitics.Show();
+            new View.Wpf.PuertasWindow().Show();
         }
 
         private void dBAToolStripMenuItem_MouseEnter(object sender, EventArgs e)
@@ -240,18 +241,12 @@ namespace arquitectSoft
 
         private void exportDataToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FrmDBA formDba = new FrmDBA();
-            formDba.MdiParent = this;
-            formDba.StartPosition = FormStartPosition.CenterScreen;
-            formDba.Show();
+            new View.Wpf.DbaBackupWindow().Show();
         }
 
         private void importDataToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FrmDBA_Import formDba = new FrmDBA_Import();
-            formDba.MdiParent = this;
-            formDba.StartPosition = FormStartPosition.CenterScreen;
-            formDba.Show();
+            new View.Wpf.DbaImportWindow().Show();
         }
     }
 }

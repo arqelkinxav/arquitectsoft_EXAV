@@ -1350,13 +1350,19 @@ namespace arquitectSoft.View
                         
                         if ((Datagrid == 2) && !valuezero.Contains("Puerta"))
                         {
-                            string codAcabado = row.Cells[1].Value.ToString().Split('-')[1].Trim();
-                            string codAcabadoNew = param[0].ToString().Split('-')[0].Trim();
-
-                            if (codAcabado == codAcabadoNew)
+                            // Proteger contra códigos sin guion (antes reventaba con
+                            // IndexOutOfRange en Split('-')[1] y dejaba el cambio a medias).
+                            string[] codeParts = row.Cells[1].Value.ToString().Split('-');
+                            if (codeParts.Length > 1)
                             {
-                                string acabadocodNew = (param[1].ToString().Contains("-")) ? param[1].ToString().Split('-')[0].Trim() : "XX";
-                                row.Cells[1].Value = row.Cells[1].Value.ToString().Split('-')[0].Trim() + "-" + acabadocodNew;
+                                string codAcabado = codeParts[1].Trim();
+                                string codAcabadoNew = param[0].ToString().Split('-')[0].Trim();
+
+                                if (codAcabado == codAcabadoNew)
+                                {
+                                    string acabadocodNew = (param[1].ToString().Contains("-")) ? param[1].ToString().Split('-')[0].Trim() : "XX";
+                                    row.Cells[1].Value = codeParts[0].Trim() + "-" + acabadocodNew;
+                                }
                             }
                             continue;
                         }

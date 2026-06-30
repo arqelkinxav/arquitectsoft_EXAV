@@ -123,6 +123,11 @@
       <HintPath>..\packages\MySql.Data.8.0.29\lib\net452\Ubiety.Dns.Core.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
+    <!-- WPF: necesarias para hospedar ventanas WPF dentro de este proyecto WinForms -->
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="WindowsFormsIntegration" />
     <Reference Include="ZstdNet, Version=1.4.5.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
       <HintPath>..\packages\MySql.Data.8.0.29\lib\net452\ZstdNet.dll</HintPath>
     </Reference>
@@ -138,6 +143,10 @@
     <Compile Include="Class\Sub_ComponentEspecial.cs" />
     <Compile Include="Dto\AcabadoDto.cs" />
     <Compile Include="Dto\AnalisisDatosDto.cs" />
+    <Compile Include="Engine\AcabadoChanger.cs" />
+    <Compile Include="Engine\AnalisisEngine.cs" />
+    <Compile Include="Engine\ExcelExporter.cs" />
+    <Compile Include="Engine\ResultadoAnalisis.cs" />
     <Compile Include="Dto\ComponenteDto.cs" />
     <Compile Include="Dto\CorteDto.cs" />
     <Compile Include="Dto\MecanizadoDto.cs" />
@@ -225,6 +234,137 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Program.cs" />
+    <Resource Include="Resources\Fonts\PlusJakartaSans-Regular.ttf" />
+    <Resource Include="Resources\Fonts\PlusJakartaSans-Medium.ttf" />
+    <Resource Include="Resources\Fonts\PlusJakartaSans-SemiBold.ttf" />
+    <Resource Include="Resources\Fonts\PlusJakartaSans-Bold.ttf" />
+    <Page Include="View\Wpf\AnalisisWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Compile Include="View\Wpf\AnalisisWindow.xaml.cs">
+      <DependentUpon>AnalisisWindow.xaml</DependentUpon>
+    </Compile>
+    <Page Include="View\Wpf\GlassDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Compile Include="View\Wpf\GlassDialog.xaml.cs">
+      <DependentUpon>GlassDialog.xaml</DependentUpon>
+    </Compile>
+    <Page Include="View\Wpf\ExportDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Compile Include="View\Wpf\ExportDialog.xaml.cs">
+      <DependentUpon>ExportDialog.xaml</DependentUpon>
+    </Compile>
+    <Page Include="View\Wpf\BuscarDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Compile Include="View\Wpf\BuscarDialog.xaml.cs">
+      <DependentUpon>BuscarDialog.xaml</DependentUpon>
+    </Compile>
+    <Page Include="View\Wpf\AcabadosWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Compile Include="View\Wpf\AcabadosWindow.xaml.cs">
+      <DependentUpon>AcabadosWindow.xaml</DependentUpon>
+    </Compile>
+    <Page Include="View\Wpf\MecanizadoWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Compile Include="View\Wpf\MecanizadoWindow.xaml.cs">
+      <DependentUpon>MecanizadoWindow.xaml</DependentUpon>
+    </Compile>
+    <Page Include="View\Wpf\CorteWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Compile Include="View\Wpf\CorteWindow.xaml.cs">
+      <DependentUpon>CorteWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Wpf\LiquidGlass.cs" />
+    <Compile Include="View\Wpf\ScreenCaptureHelper.cs" />
+    <Compile Include="View\Wpf\Shaders\GlassyEffect.cs" />
+    <Resource Include="View\Wpf\Shaders\GlassyEffect.ps" />
+    <Page Include="View\Wpf\UnidadMedidaWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Compile Include="View\Wpf\UnidadMedidaWindow.xaml.cs">
+      <DependentUpon>UnidadMedidaWindow.xaml</DependentUpon>
+    </Compile>
+    <Page Include="View\Wpf\SubComponenteWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Compile Include="View\Wpf\SubComponenteWindow.xaml.cs">
+      <DependentUpon>SubComponenteWindow.xaml</DependentUpon>
+    </Compile>
+    <Page Include="View\Wpf\ComponenteWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Compile Include="View\Wpf\ComponenteWindow.xaml.cs">
+      <DependentUpon>ComponenteWindow.xaml</DependentUpon>
+    </Compile>
+    <Page Include="View\Wpf\AcercaWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Compile Include="View\Wpf\AcercaWindow.xaml.cs">
+      <DependentUpon>AcercaWindow.xaml</DependentUpon>
+    </Compile>
+    <Page Include="View\Wpf\DbaBackupWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Compile Include="View\Wpf\DbaBackupWindow.xaml.cs">
+      <DependentUpon>DbaBackupWindow.xaml</DependentUpon>
+    </Compile>
+    <Page Include="View\Wpf\DbaImportWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Compile Include="View\Wpf\DbaImportWindow.xaml.cs">
+      <DependentUpon>DbaImportWindow.xaml</DependentUpon>
+    </Compile>
+    <Page Include="View\Wpf\PuertasWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Compile Include="View\Wpf\PuertasWindow.xaml.cs">
+      <DependentUpon>PuertasWindow.xaml</DependentUpon>
+    </Compile>
+    <Page Include="View\Wpf\Estilos.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Wpf\MdiChild.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Compile Include="View\Wpf\MdiChild.xaml.cs">
+      <DependentUpon>MdiChild.xaml</DependentUpon>
+    </Compile>
+    <Page Include="View\Wpf\Panels\AcercaPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Compile Include="View\Wpf\Panels\AcercaPanel.xaml.cs">
+      <DependentUpon>AcercaPanel.xaml</DependentUpon>
+    </Compile>
+    <Page Include="View\Wpf\EscritorioWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Compile Include="View\Wpf\EscritorioWindow.xaml.cs">
+      <DependentUpon>EscritorioWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -387,6 +527,10 @@
       <Link>LOGO.jpg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Resources\FondoApp.png">
+      <Link>FondoApp.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">
@@ -472,4 +616,6 @@
     <Content Include="Resources\Icons_ArquitectSoft\New.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- WPF: habilita la compilacion de XAML (markup compile) en este proyecto WinForms -->
+  <Import Project="$(MSBuildToolsPath)\Microsoft.WinFx.targets" />
 </Project>

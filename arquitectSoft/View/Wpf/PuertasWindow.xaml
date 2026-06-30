@@ -1,0 +1,451 @@
+<Window x:Class="arquitectSoft.View.Wpf.PuertasWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Análisis de Puertas (manual)"
+        Width="1040" Height="700"
+        MinWidth="820" MinHeight="560"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None"
+        ResizeMode="CanResize"
+        Background="Transparent"
+        TextOptions.TextFormattingMode="Display"
+        UseLayoutRounding="True">
+
+    <WindowChrome.WindowChrome>
+        <WindowChrome CaptionHeight="44" CornerRadius="0" GlassFrameThickness="-1"
+                      ResizeBorderThickness="6" UseAeroCaptionButtons="False"/>
+    </WindowChrome.WindowChrome>
+
+    <Window.Resources>
+        <FontFamily x:Key="Jakarta">pack://application:,,,/Resources/Fonts/#Plus Jakarta Sans</FontFamily>
+        <SolidColorBrush x:Key="Panel"       Color="#1E1E1E"/>
+        <SolidColorBrush x:Key="PanelBorder" Color="#2F2F2F"/>
+        <SolidColorBrush x:Key="InputDark"   Color="#0E0E0E"/>
+        <SolidColorBrush x:Key="Accent"      Color="#E07B5B"/>
+        <SolidColorBrush x:Key="TextPrimary" Color="#ECECEC"/>
+        <SolidColorBrush x:Key="TextMuted"   Color="#8C8C8C"/>
+
+        <Style x:Key="DotButton" TargetType="Button">
+            <Setter Property="Width" Value="14"/><Setter Property="Height" Value="14"/>
+            <Setter Property="Margin" Value="5,0"/><Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="FontFamily" Value="Segoe MDL2 Assets"/><Setter Property="FontSize" Value="7"/>
+            <Setter Property="Foreground" Value="#0B0B0B"/>
+            <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid><Ellipse x:Name="dot" Fill="#3A3A3A"/>
+                            <ContentPresenter x:Name="g" Opacity="0" HorizontalAlignment="Center" VerticalAlignment="Center"/></Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="dot" Property="Fill" Value="#E07B5B"/>
+                                <Setter TargetName="g" Property="Opacity" Value="1"/></Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="Cap" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{StaticResource TextMuted}"/>
+            <Setter Property="FontSize" Value="10"/><Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="Margin" Value="3,0,0,5"/>
+        </Style>
+
+        <Style x:Key="Field" TargetType="TextBox">
+            <Setter Property="Height" Value="40"/><Setter Property="Background" Value="{StaticResource InputDark}"/>
+            <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+            <Setter Property="CaretBrush" Value="{StaticResource Accent}"/>
+            <Setter Property="SelectionBrush" Value="{StaticResource Accent}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource PanelBorder}"/><Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/><Setter Property="Padding" Value="12,0"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border x:Name="bd" CornerRadius="9" Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                            <ScrollViewer x:Name="PART_ContentHost" Margin="{TemplateBinding Padding}" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                                <Setter TargetName="bd" Property="BorderBrush" Value="{StaticResource Accent}"/></Trigger>
+                            <Trigger Property="IsEnabled" Value="False"><Setter Property="Opacity" Value="0.5"/></Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="Ghost" TargetType="Button">
+            <Setter Property="Cursor" Value="Hand"/><Setter Property="Foreground" Value="{StaticResource TextMuted}"/>
+            <Setter Property="FontWeight" Value="Medium"/><Setter Property="FontSize" Value="13"/>
+            <Setter Property="Height" Value="40"/><Setter Property="MinWidth" Value="96"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="bd" CornerRadius="9" Background="Transparent"
+                                BorderBrush="{StaticResource PanelBorder}" BorderThickness="1" Padding="14,0">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="bd" Property="Background" Value="#2A2A2A"/>
+                                <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/></Trigger>
+                            <Trigger Property="IsEnabled" Value="False"><Setter Property="Opacity" Value="0.35"/></Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="Primary" TargetType="Button">
+            <Setter Property="Cursor" Value="Hand"/><Setter Property="Foreground" Value="#2A1810"/>
+            <Setter Property="FontWeight" Value="SemiBold"/><Setter Property="FontSize" Value="13"/>
+            <Setter Property="Height" Value="40"/><Setter Property="MinWidth" Value="110"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid>
+                            <Border x:Name="bd" CornerRadius="11" Padding="16,0" RenderTransformOrigin="0.5,0.5">
+                                <Border.RenderTransform><ScaleTransform x:Name="sc" ScaleX="1" ScaleY="1"/></Border.RenderTransform>
+                                <Border.Background>
+                                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                        <GradientStop Color="#F2966D" Offset="0"/><GradientStop Color="#E67E5C" Offset="0.5"/><GradientStop Color="#C9684A" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Border.Background>
+                                <Grid>
+                                    <Border x:Name="gloss" CornerRadius="10" Margin="1.2" IsHitTestVisible="False">
+                                        <Border.Background>
+                                            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                                <GradientStop Color="#42FFFFFF" Offset="0"/><GradientStop Color="#0CFFFFFF" Offset="0.5"/><GradientStop Color="#00FFFFFF" Offset="1"/>
+                                            </LinearGradientBrush>
+                                        </Border.Background>
+                                    </Border>
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Grid>
+                            </Border>
+                            <Border CornerRadius="11" BorderThickness="1" IsHitTestVisible="False">
+                                <Border.BorderBrush>
+                                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                        <GradientStop Color="#66FFFFFF" Offset="0"/><GradientStop Color="#22FFFFFF" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Border.BorderBrush>
+                            </Border>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="bd" Property="Effect">
+                                    <Setter.Value><DropShadowEffect Color="#E07B5B" BlurRadius="16" ShadowDepth="0" Opacity="0.6"/></Setter.Value></Setter>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Trigger.EnterActions><BeginStoryboard><Storyboard>
+                                    <DoubleAnimation Storyboard.TargetName="sc" Storyboard.TargetProperty="ScaleX" To="0.93" Duration="0:0:0.09"/>
+                                    <DoubleAnimation Storyboard.TargetName="sc" Storyboard.TargetProperty="ScaleY" To="0.86" Duration="0:0:0.09"/>
+                                    <DoubleAnimation Storyboard.TargetName="gloss" Storyboard.TargetProperty="Opacity" To="0.35" Duration="0:0:0.09"/>
+                                </Storyboard></BeginStoryboard></Trigger.EnterActions>
+                                <Trigger.ExitActions><BeginStoryboard><Storyboard>
+                                    <DoubleAnimation Storyboard.TargetName="sc" Storyboard.TargetProperty="ScaleX" To="1" Duration="0:0:0.5"><DoubleAnimation.EasingFunction><ElasticEase Oscillations="2" Springiness="5" EasingMode="EaseOut"/></DoubleAnimation.EasingFunction></DoubleAnimation>
+                                    <DoubleAnimation Storyboard.TargetName="sc" Storyboard.TargetProperty="ScaleY" To="1" Duration="0:0:0.5"><DoubleAnimation.EasingFunction><ElasticEase Oscillations="2" Springiness="5" EasingMode="EaseOut"/></DoubleAnimation.EasingFunction></DoubleAnimation>
+                                    <DoubleAnimation Storyboard.TargetName="gloss" Storyboard.TargetProperty="Opacity" To="1" Duration="0:0:0.3"/>
+                                </Storyboard></BeginStoryboard></Trigger.ExitActions>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False"><Setter Property="Opacity" Value="0.35"/></Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Scrollbar moderna -->
+        <Style x:Key="ScrollThumb" TargetType="Thumb">
+            <Setter Property="OverridesDefaultStyle" Value="True"/><Setter Property="IsTabStop" Value="False"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Thumb">
+                        <Border x:Name="t" CornerRadius="5" Background="#3C3C3C" Margin="2"/>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="t" Property="Background" Value="#565656"/></Trigger>
+                            <Trigger Property="IsDragging" Value="True"><Setter TargetName="t" Property="Background" Value="{StaticResource Accent}"/></Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="ScrollPage" TargetType="RepeatButton">
+            <Setter Property="OverridesDefaultStyle" Value="True"/><Setter Property="IsTabStop" Value="False"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Template"><Setter.Value><ControlTemplate TargetType="RepeatButton"><Border Background="Transparent"/></ControlTemplate></Setter.Value></Setter>
+        </Style>
+        <Style TargetType="ScrollBar">
+            <Setter Property="OverridesDefaultStyle" Value="True"/><Setter Property="Background" Value="Transparent"/><Setter Property="Width" Value="12"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ScrollBar">
+                        <Grid Background="#14000000">
+                            <Track x:Name="PART_Track" IsDirectionReversed="True">
+                                <Track.DecreaseRepeatButton><RepeatButton Style="{StaticResource ScrollPage}" Command="ScrollBar.PageUpCommand"/></Track.DecreaseRepeatButton>
+                                <Track.Thumb><Thumb Style="{StaticResource ScrollThumb}" MinHeight="30"/></Track.Thumb>
+                                <Track.IncreaseRepeatButton><RepeatButton Style="{StaticResource ScrollPage}" Command="ScrollBar.PageDownCommand"/></Track.IncreaseRepeatButton>
+                            </Track>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="Orientation" Value="Horizontal">
+                    <Setter Property="Width" Value="Auto"/><Setter Property="Height" Value="12"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ScrollBar">
+                                <Grid Background="#14000000">
+                                    <Track x:Name="PART_Track">
+                                        <Track.DecreaseRepeatButton><RepeatButton Style="{StaticResource ScrollPage}" Command="ScrollBar.PageLeftCommand"/></Track.DecreaseRepeatButton>
+                                        <Track.Thumb><Thumb Style="{StaticResource ScrollThumb}" MinWidth="30"/></Track.Thumb>
+                                        <Track.IncreaseRepeatButton><RepeatButton Style="{StaticResource ScrollPage}" Command="ScrollBar.PageRightCommand"/></Track.IncreaseRepeatButton>
+                                    </Track>
+                                </Grid>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- DataGrid oscuro -->
+        <Style TargetType="DataGridColumnHeader">
+            <Setter Property="Background" Value="#2A2A2A"/><Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+            <Setter Property="FontWeight" Value="SemiBold"/><Setter Property="FontSize" Value="12"/>
+            <Setter Property="Padding" Value="10,0"/><Setter Property="Height" Value="34"/>
+            <Setter Property="BorderThickness" Value="0,0,1,0"/><Setter Property="BorderBrush" Value="#3A3A3A"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+        <Style TargetType="DataGridCell">
+            <Setter Property="BorderThickness" Value="0"/><Setter Property="Padding" Value="8,5"/>
+            <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="DataGridCell">
+                        <Border x:Name="bd" Background="{TemplateBinding Background}">
+                            <ContentPresenter VerticalAlignment="Center" Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="bd" Property="Background" Value="#3DE07B5B"/>
+                                <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/></Trigger>
+                            <Trigger Property="IsEditing" Value="True"><Setter TargetName="bd" Property="Background" Value="#0E0E0E"/></Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="DataGridRow"><Setter Property="FontSize" Value="12"/>
+            <Style.Triggers><Trigger Property="IsMouseOver" Value="True"><Setter Property="Background" Value="#262017"/></Trigger></Style.Triggers>
+        </Style>
+
+        <!-- Pestañas oscuras -->
+        <Style TargetType="TabControl">
+            <Setter Property="Background" Value="Transparent"/><Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TabControl">
+                        <Grid>
+                            <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/></Grid.RowDefinitions>
+                            <TabPanel Grid.Row="0" IsItemsHost="True" Background="Transparent" Margin="2,0,0,6"/>
+                            <ContentPresenter Grid.Row="1" ContentSource="SelectedContent"/>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="TabItem">
+            <Setter Property="Foreground" Value="{StaticResource TextMuted}"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TabItem">
+                        <Border x:Name="bd" Background="Transparent" CornerRadius="9" Margin="3,0" Padding="16,9,16,11">
+                            <Grid>
+                                <ContentPresenter ContentSource="Header" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <Border x:Name="underline" Height="3" CornerRadius="2" VerticalAlignment="Bottom"
+                                        Margin="8,0,8,-7" Background="{StaticResource Accent}" RenderTransformOrigin="0,0.5">
+                                    <Border.RenderTransform><ScaleTransform x:Name="ulScale" ScaleX="0" ScaleY="1"/></Border.RenderTransform>
+                                </Border>
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="IsMouseOver" Value="True"/>
+                                    <Condition Property="IsSelected" Value="False"/>
+                                </MultiTrigger.Conditions>
+                                <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+                                <MultiTrigger.EnterActions>
+                                    <BeginStoryboard><Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="ulScale" Storyboard.TargetProperty="ScaleX" To="1" Duration="0:0:0.25">
+                                            <DoubleAnimation.EasingFunction><CubicEase EasingMode="EaseOut"/></DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
+                                    </Storyboard></BeginStoryboard>
+                                </MultiTrigger.EnterActions>
+                                <MultiTrigger.ExitActions>
+                                    <BeginStoryboard><Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="ulScale" Storyboard.TargetProperty="ScaleX" To="0" Duration="0:0:0.18"/>
+                                    </Storyboard></BeginStoryboard>
+                                </MultiTrigger.ExitActions>
+                            </MultiTrigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="bd" Property="Background" Value="{StaticResource Accent}"/>
+                                <Setter Property="Foreground" Value="#201712"/>
+                                <Setter Property="FontWeight" Value="SemiBold"/>
+                                <Setter TargetName="underline" Property="Visibility" Value="Collapsed"/>
+                                <Setter TargetName="bd" Property="Effect">
+                                    <Setter.Value><DropShadowEffect Color="#E07B5B" BlurRadius="12" ShadowDepth="0" Opacity="0.45"/></Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Border x:Name="FrameRim" CornerRadius="8" BorderThickness="1.1" Background="Transparent" RenderTransformOrigin="0.5,0.5">
+        <Border.RenderTransform><ScaleTransform x:Name="WinScale" ScaleX="1" ScaleY="1"/></Border.RenderTransform>
+        <Border.BorderBrush>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#73FFFFFF" Offset="0"/><GradientStop Color="#1FFFFFFF" Offset="0.28"/>
+                <GradientStop Color="#05FFFFFF" Offset="0.55"/><GradientStop Color="#26FFFFFF" Offset="1"/>
+            </LinearGradientBrush>
+        </Border.BorderBrush>
+
+    <Grid TextElement.FontFamily="{StaticResource Jakarta}" TextElement.Foreground="{StaticResource TextPrimary}">
+        <Grid.RowDefinitions><RowDefinition Height="44"/><RowDefinition Height="*"/></Grid.RowDefinitions>
+
+        <!-- Fondo liquid glass real (igual que las demás ventanas) -->
+        <Rectangle x:Name="GlassBackdrop" Grid.Row="0" Grid.RowSpan="2" IsHitTestVisible="False" RadiusX="7" RadiusY="7"/>
+        <Rectangle Grid.Row="0" Grid.RowSpan="2" IsHitTestVisible="False" Fill="#9E000000" RadiusX="7" RadiusY="7"/>
+
+        <Border Grid.Row="0" Grid.RowSpan="2" IsHitTestVisible="False" Panel.ZIndex="0">
+            <Border.Background>
+                <LinearGradientBrush StartPoint="0.15,0" EndPoint="0.55,1">
+                    <GradientStop Color="#1FFFFFFF" Offset="0"/><GradientStop Color="#0BFFFFFF" Offset="0.18"/><GradientStop Color="#00FFFFFF" Offset="0.45"/>
+                </LinearGradientBrush>
+            </Border.Background>
+        </Border>
+
+        <Grid Grid.Row="0" Background="#01000000">
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="20,0,0,0">
+                <Border Width="10" Height="10" CornerRadius="3" Background="{StaticResource Accent}" Margin="0,0,11,0"/>
+                <TextBlock Text="Análisis de Puertas (manual)" FontSize="13" FontWeight="Bold" VerticalAlignment="Center"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,18,0">
+                <Button Style="{StaticResource DotButton}" Content="&#xE921;" Click="Minimizar_Click" ToolTip="Minimizar"/>
+                <Button Style="{StaticResource DotButton}" Content="&#xE922;" Click="Maximizar_Click" ToolTip="Maximizar"/>
+                <Button Style="{StaticResource DotButton}" Content="&#xE8BB;" Click="Cerrar_Click" ToolTip="Cerrar"/>
+            </StackPanel>
+        </Grid>
+
+        <Grid Grid.Row="1" Margin="18,4,18,16">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>                 <!-- entrada -->
+                <RowDefinition Height="2.4*" MinHeight="130"/> <!-- puertas a analizar (redimensionable) -->
+                <RowDefinition Height="7"/>                    <!-- divisor -->
+                <RowDefinition Height="3*" MinHeight="160"/>   <!-- resultados (pestañas) -->
+                <RowDefinition Height="Auto"/>                 <!-- estado -->
+            </Grid.RowDefinitions>
+
+            <!-- ===== Entrada manual (barra opaca) ===== -->
+            <Border Grid.Row="0" CornerRadius="14" Background="{StaticResource Panel}"
+                    BorderBrush="{StaticResource PanelBorder}" BorderThickness="1" Padding="14">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="170"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="90"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0" Margin="0,0,8,0">
+                        <TextBlock Text="CÓDIGO" Style="{StaticResource Cap}"/>
+                        <TextBox x:Name="TxtCodigo" Style="{StaticResource Field}" IsReadOnly="True"/>
+                    </StackPanel>
+                    <Button Grid.Column="1" Style="{StaticResource Ghost}" Content="Buscar…" VerticalAlignment="Bottom"
+                            Margin="0,0,10,0" Click="BuscarCodigo_Click"/>
+                    <StackPanel Grid.Column="2" Margin="0,0,10,0">
+                        <TextBlock Text="DESCRIPCIÓN" Style="{StaticResource Cap}"/>
+                        <TextBox x:Name="TxtDescripcion" Style="{StaticResource Field}" IsReadOnly="True"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="3" Margin="0,0,10,0">
+                        <TextBlock Text="CANT." Style="{StaticResource Cap}"/>
+                        <TextBox x:Name="TxtCantidad" Style="{StaticResource Field}" Text="1"/>
+                    </StackPanel>
+                    <Button Grid.Column="4" Style="{StaticResource Primary}" Content="+ Agregar" VerticalAlignment="Bottom"
+                            Click="Agregar_Click"/>
+                </Grid>
+            </Border>
+
+            <!-- ===== Puertas a analizar (editable) ===== -->
+            <Border Grid.Row="1" Margin="0,12,0,0" CornerRadius="14" Background="{StaticResource Panel}"
+                    BorderBrush="{StaticResource PanelBorder}" BorderThickness="1" Padding="6">
+                <Grid>
+                    <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/></Grid.RowDefinitions>
+                    <Grid Grid.Row="0" Margin="6,4,6,6">
+                        <TextBlock Text="Puertas a analizar  ·  edita altura, anchura o código directamente en la tabla"
+                                   Style="{StaticResource Cap}" VerticalAlignment="Center"/>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <Button x:Name="BtnAnalizar" Style="{StaticResource Primary}" Content="Analizar" Height="32" MinWidth="100" Margin="0,0,8,0" Click="Analizar_Click"/>
+                            <Button x:Name="BtnCambiar" Style="{StaticResource Ghost}" Content="Cambiar acabado" Height="32" MinWidth="130" Margin="0,0,8,0" Click="CambiarAcabado_Click"/>
+                            <Button x:Name="BtnLimpiar" Style="{StaticResource Ghost}" Content="Limpiar" Height="32" MinWidth="84" Click="Limpiar_Click"/>
+                        </StackPanel>
+                    </Grid>
+                    <DataGrid x:Name="DgNuevas" Grid.Row="1" AutoGenerateColumns="True" IsReadOnly="False"
+                              CanUserAddRows="False" CanUserDeleteRows="False"
+                              HeadersVisibility="Column" GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="#2A2A2A"
+                              BorderThickness="0" Background="Transparent" RowBackground="Transparent" AlternatingRowBackground="#242424"
+                              RowHeaderWidth="0" SelectionMode="Single" SelectionUnit="FullRow"
+                              Foreground="{StaticResource TextPrimary}"
+                              AutoGeneratingColumn="DgNuevas_AutoGeneratingColumn" CellEditEnding="DgNuevas_CellEditEnding"/>
+                </Grid>
+            </Border>
+
+            <!-- Divisor para ajustar la altura de las tarjetas a gusto -->
+            <GridSplitter Grid.Row="2" Height="7" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                          Background="Transparent" Cursor="SizeNS" ResizeBehavior="PreviousAndNext" ResizeDirection="Rows">
+                <GridSplitter.Template>
+                    <ControlTemplate TargetType="GridSplitter">
+                        <Grid Background="{TemplateBinding Background}">
+                            <Border Width="46" Height="4" CornerRadius="2" Background="#454545" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Grid>
+                    </ControlTemplate>
+                </GridSplitter.Template>
+            </GridSplitter>
+
+            <!-- ===== Resultados en pestañas ===== -->
+            <Border Grid.Row="3" Margin="0,2,0,0" CornerRadius="14" Background="{StaticResource Panel}"
+                    BorderBrush="{StaticResource PanelBorder}" BorderThickness="1" Padding="10,8,10,10">
+                <TabControl>
+                    <TabItem Header="Perfilería de puertas">
+                        <DataGrid x:Name="DgPerfil" AutoGenerateColumns="True" IsReadOnly="True"
+                                  HeadersVisibility="Column" GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="#2A2A2A"
+                                  BorderThickness="0" Background="Transparent" RowBackground="Transparent" RowHeaderWidth="0"
+                                  SelectionMode="Single" SelectionUnit="FullRow" Foreground="{StaticResource TextPrimary}"
+                                  LoadingRow="DgPerfil_LoadingRow"/>
+                    </TabItem>
+                    <TabItem Header="Herrajes de puertas">
+                        <DataGrid x:Name="DgHerraje" AutoGenerateColumns="True" IsReadOnly="True"
+                                  HeadersVisibility="Column" GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="#2A2A2A"
+                                  BorderThickness="0" Background="Transparent" RowBackground="Transparent" AlternatingRowBackground="#242424"
+                                  RowHeaderWidth="0" SelectionMode="Single" SelectionUnit="FullRow" Foreground="{StaticResource TextPrimary}"
+                                  AutoGeneratingColumn="DgHerraje_AutoGeneratingColumn"/>
+                    </TabItem>
+                </TabControl>
+            </Border>
+
+            <TextBlock x:Name="LblEstado" Grid.Row="4" Margin="4,10,4,0"
+                       Foreground="{StaticResource TextMuted}" FontSize="11.5" TextWrapping="Wrap"
+                       Text="Busca un código de puerta y pulsa Agregar; luego edita altura/anchura en la tabla y pulsa Analizar."/>
+        </Grid>
+    </Grid>
+    </Border>
+</Window>
