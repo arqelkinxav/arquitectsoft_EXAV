@@ -1,12 +1,13 @@
 <UserControl x:Class="arquitectSoft.View.Wpf.MdiChild"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             MinWidth="320" MinHeight="220">
+             MinWidth="320" MinHeight="200">
     <UserControl.Resources>
         <FontFamily x:Key="Jakarta">pack://application:,,,/Resources/Fonts/#Plus Jakarta Sans</FontFamily>
         <SolidColorBrush x:Key="Accent" Color="#E07B5B"/>
         <SolidColorBrush x:Key="TextPrimary" Color="#ECECEC"/>
 
+        <!-- Botón de control de ventana (minimizar / maximizar / cerrar) estilo macOS -->
         <Style x:Key="WinDot" TargetType="Button">
             <Setter Property="Width" Value="13"/><Setter Property="Height" Value="13"/>
             <Setter Property="Margin" Value="5,0"/><Setter Property="Cursor" Value="Hand"/>
@@ -26,6 +27,11 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
+        <!-- Plantilla de Thumb transparente reutilizable para los agarres de redimensión -->
+        <ControlTemplate x:Key="ThumbTransparente" TargetType="Thumb">
+            <Border Background="Transparent"/>
+        </ControlTemplate>
     </UserControl.Resources>
 
     <Border x:Name="Frame" CornerRadius="12" Background="#E0121214" BorderThickness="1.2"
@@ -43,14 +49,13 @@
             <!-- Barra de título (arrastrable) -->
             <Border Grid.Row="0" Background="#1F1F22" CornerRadius="11,11,0,0">
                 <Grid>
-                    <Thumb x:Name="DragThumb" Background="Transparent" Opacity="0">
-                        <Thumb.Template><ControlTemplate TargetType="Thumb"><Border Background="Transparent"/></ControlTemplate></Thumb.Template>
-                    </Thumb>
+                    <Thumb x:Name="DragThumb" Background="Transparent" Opacity="0" Template="{StaticResource ThumbTransparente}"/>
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="12,0,0,0" IsHitTestVisible="False">
                         <Border Width="9" Height="9" CornerRadius="3" Background="{StaticResource Accent}" Margin="0,0,9,0"/>
                         <TextBlock x:Name="LblTitulo" Text="Ventana" FontSize="12.5" FontWeight="Bold" VerticalAlignment="Center"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,14,0">
+                        <Button x:Name="BtnMin" Style="{StaticResource WinDot}" Content="&#xE921;" Click="Minimizar_Click" ToolTip="Minimizar"/>
                         <Button x:Name="BtnMax" Style="{StaticResource WinDot}" Content="&#xE922;" Click="Maximizar_Click" ToolTip="Maximizar en el escritorio"/>
                         <Button x:Name="BtnClose" Style="{StaticResource WinDot}" Content="&#xE8BB;" Click="Cerrar_Click" ToolTip="Cerrar"/>
                     </StackPanel>
@@ -60,17 +65,25 @@
             <!-- Contenido hospedado -->
             <ContentControl x:Name="Host" Grid.Row="1"/>
 
-            <!-- Agarradera de redimensionado -->
-            <Thumb x:Name="ResizeThumb" Grid.Row="1" Width="18" Height="18"
-                   HorizontalAlignment="Right" VerticalAlignment="Bottom" Cursor="SizeNWSE" Opacity="0.5">
-                <Thumb.Template>
-                    <ControlTemplate TargetType="Thumb">
-                        <Border Background="Transparent">
-                            <Path Stroke="#8C8C8C" StrokeThickness="1.4" Data="M 13,4 L 4,13 M 13,9 L 9,13" Margin="0,0,3,3"/>
-                        </Border>
-                    </ControlTemplate>
-                </Thumb.Template>
-            </Thumb>
+            <!-- ===== Agarres de redimensión (4 lados + 4 esquinas) ===== -->
+            <Grid x:Name="ResizeGrid" Grid.RowSpan="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="6"/><ColumnDefinition Width="*"/><ColumnDefinition Width="6"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="6"/><RowDefinition Height="*"/><RowDefinition Height="6"/>
+                </Grid.RowDefinitions>
+                <!-- Esquinas -->
+                <Thumb x:Name="RzTL" Grid.Row="0" Grid.Column="0" Cursor="SizeNWSE" Template="{StaticResource ThumbTransparente}"/>
+                <Thumb x:Name="RzTR" Grid.Row="0" Grid.Column="2" Cursor="SizeNESW" Template="{StaticResource ThumbTransparente}"/>
+                <Thumb x:Name="RzBL" Grid.Row="2" Grid.Column="0" Cursor="SizeNESW" Template="{StaticResource ThumbTransparente}"/>
+                <Thumb x:Name="RzBR" Grid.Row="2" Grid.Column="2" Cursor="SizeNWSE" Template="{StaticResource ThumbTransparente}"/>
+                <!-- Lados -->
+                <Thumb x:Name="RzT" Grid.Row="0" Grid.Column="1" Cursor="SizeNS" Template="{StaticResource ThumbTransparente}"/>
+                <Thumb x:Name="RzB" Grid.Row="2" Grid.Column="1" Cursor="SizeNS" Template="{StaticResource ThumbTransparente}"/>
+                <Thumb x:Name="RzL" Grid.Row="1" Grid.Column="0" Cursor="SizeWE" Template="{StaticResource ThumbTransparente}"/>
+                <Thumb x:Name="RzR" Grid.Row="1" Grid.Column="2" Cursor="SizeWE" Template="{StaticResource ThumbTransparente}"/>
+            </Grid>
         </Grid>
     </Border>
 </UserControl>

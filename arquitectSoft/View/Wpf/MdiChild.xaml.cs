@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -7,25 +7,53 @@ using System.Windows.Input;
 namespace arquitectSoft.View.Wpf
 {
     /// <summary>
-    /// Ventana "hija" dentro del canvas del escritorio (MDI propio): se mueve por la
-    /// barra de tÃ­tulo, se redimensiona por la esquina, se trae al frente al tocarla,
-    /// y maximiza DENTRO del canvas (no a toda la pantalla). Queda contenida en el canvas.
+    /// Ventana "hija" dentro del canvas del escritorio (MDI propio). Se comporta como una
+    /// ventana de Windows pero contenida en el lienzo: se mueve por la barra de título,
+    /// se redimensiona por los 4 lados y las 4 esquinas, hace snap a los bordes
+    /// (mitad/mitad, cuartos, maximizar), se minimiza a la barra de tareas, se maximiza
+    /// dentro del canvas, se trae al frente al tocarla y se cierra.
     /// </summary>
     public partial class MdiChild : UserControl
     {
+        private enum Estado { Normal, Maximizada, Snap, Minimizada }
+
         private Canvas _canvas;
-        private bool _maximizada;
-        private Rect _restaurar;
+        private Estado _estado = Estado.Normal;
+        private Rect _restaurar;            // geometría a la que vuelve al restaurar
+        private bool _arrastrando;
+
+        // Vista previa de snap: la pinta el escritorio (callback) durante el arrastre.
+        public Action<Rect?> MostrarPreviewSnap;
+        // Avisos para que el escritorio mantenga la barra de tareas.
+        public event EventHandler Cerrada;
+        public event EventHandler EstadoCambiado;
 
         public MdiChild()
         {
             InitializeComponent();
+
+            DragThumb.DragStarted += DragThumb_DragStarted;
             DragThumb.DragDelta += DragThumb_DragDelta;
-            ResizeThumb.DragDelta += ResizeThumb_DragDelta;
+            DragThumb.DragCompleted += DragThumb_DragCompleted;
+
+            // Doble clic en la barra de título = maximizar / restaurar (como Windows).
+            DragThumb.MouseDoubleClick += (s, e) => Maximizar_Click(null, null);
+
+            // Agarres de redimensión.
+            RzL.DragDelta += (s, e) => Redimensionar(e, true, false, false, false);
+            RzR.DragDelta += (s, e) => Redimensionar(e, false, false, true, false);
+            RzT.DragDelta += (s, e) => Redimensionar(e, false, true, false, false);
+            RzB.DragDelta += (s, e) => Redimensionar(e, false, false, false, true);
+            RzTL.DragDelta += (s, e) => Redimensionar(e, true, true, false, false);
+            RzTR.DragDelta += (s, e) => Redimensionar(e, false, true, true, false);
+            RzBL.DragDelta += (s, e) => Redimensionar(e, true, false, false, true);
+            RzBR.DragDelta += (s, e) => Redimensionar(e, false, false, true, true);
+
             PreviewMouseLeftButtonDown += (s, e) => TraerAlFrente();
         }
 
         public string Titulo { get { return LblTitulo.Text; } set { LblTitulo.Text = value; } }
+        public bool EstaMinimizada { get { return _estado == Estado.Minimizada; } }
 
         public void SetContenido(UIElement contenido) { Host.Content = contenido; }
 
@@ -34,79 +62,242 @@ namespace arquitectSoft.View.Wpf
             get { return _canvas ?? (_canvas = ParentOfType<Canvas>(this)); }
         }
 
+        // ===================== Z-order =====================
         public void TraerAlFrente()
         {
             var c = Lienzo;
             if (c == null) return;
             int max = 0;
-            foreach (UIElement e in c.Children)
+            foreach (UIElement el in c.Children)
             {
-                int z = Panel.GetZIndex(e);
+                int z = Panel.GetZIndex(el);
                 if (z > max) max = z;
             }
             Panel.SetZIndex(this, max + 1);
+            OnEstadoCambiado();
+        }
+
+        public bool EsFrontal()
+        {
+            var c = Lienzo;
+            if (c == null) return false;
+            int z = Panel.GetZIndex(this);
+            foreach (UIElement el in c.Children)
+            {
+                var o = el as MdiChild;
+                if (o == null || o == this || o._estado == Estado.Minimizada) continue;
+                if (Panel.GetZIndex(el) > z) return false;
+            }
+            return true;
+        }
+
+        // ===================== Arrastre + snap =====================
+        private void DragThumb_DragStarted(object sender, DragStartedEventArgs e)
+        {
+            _arrastrando = true;
+            // Si está maximizada/snap, "salta" a tamaño normal bajo el cursor (como Windows).
+            if (_estado == Estado.Maximizada || _estado == Estado.Snap)
+            {
+                var c = Lienzo;
+                double nw = _restaurar.Width > 0 ? _restaurar.Width : 480;
+                double nh = _restaurar.Height > 0 ? _restaurar.Height : 360;
+                Point p = c != null ? Mouse.GetPosition(c) : new Point(40, 40);
+                Width = nw; Height = nh;
+                Canvas.SetLeft(this, p.X - nw / 2);
+                Canvas.SetTop(this, Math.Max(0, p.Y - 17)); // 17 ≈ media barra de título
+                _estado = Estado.Normal;
+                OnEstadoCambiado();
+            }
         }
 
         private void DragThumb_DragDelta(object sender, DragDeltaEventArgs e)
         {
-            if (_maximizada) return;
             var c = Lienzo; if (c == null) return;
-            double x = Canvas.GetLeft(this); if (double.IsNaN(x)) x = 0;
-            double y = Canvas.GetTop(this); if (double.IsNaN(y)) y = 0;
+            double x = GetLeft(); double y = GetTop();
             x = Clamp(x + e.HorizontalChange, 0, Math.Max(0, c.ActualWidth - ActualWidth));
             y = Clamp(y + e.VerticalChange, 0, Math.Max(0, c.ActualHeight - ActualHeight));
             Canvas.SetLeft(this, x);
             Canvas.SetTop(this, y);
+
+            // Vista previa de la zona de snap según dónde esté el cursor.
+            Rect? zona = ZonaSnap(Mouse.GetPosition(c), c);
+            if (MostrarPreviewSnap != null) MostrarPreviewSnap(zona);
         }
 
-        private void ResizeThumb_DragDelta(object sender, DragDeltaEventArgs e)
+        private void DragThumb_DragCompleted(object sender, DragCompletedEventArgs e)
         {
-            if (_maximizada) return;
+            _arrastrando = false;
             var c = Lienzo; if (c == null) return;
-            double x = Canvas.GetLeft(this); if (double.IsNaN(x)) x = 0;
-            double y = Canvas.GetTop(this); if (double.IsNaN(y)) y = 0;
-            double w = Clamp(Width + e.HorizontalChange, MinWidth, c.ActualWidth - x);
-            double h = Clamp(Height + e.VerticalChange, MinHeight, c.ActualHeight - y);
+            Rect? zona = ZonaSnap(Mouse.GetPosition(c), c);
+            if (MostrarPreviewSnap != null) MostrarPreviewSnap(null);
+            if (zona.HasValue) AplicarSnap(zona.Value);
+        }
+
+        /// <summary>Devuelve el rectángulo destino si el cursor está en una zona de snap, o null.</summary>
+        private Rect? ZonaSnap(Point p, Canvas c)
+        {
+            double W = c.ActualWidth, H = c.ActualHeight;
+            const double borde = 16;     // franja sensible junto al borde
+            const double esquina = 80;   // alto/ancho de las esquinas (cuartos)
+
+            bool izq = p.X <= borde, der = p.X >= W - borde;
+            bool arr = p.Y <= borde, aba = p.Y >= H - borde;
+
+            // Esquinas → cuartos
+            if (izq && p.Y <= esquina) return new Rect(0, 0, W / 2, H / 2);
+            if (der && p.Y <= esquina) return new Rect(W / 2, 0, W / 2, H / 2);
+            if (izq && p.Y >= H - esquina) return new Rect(0, H / 2, W / 2, H / 2);
+            if (der && p.Y >= H - esquina) return new Rect(W / 2, H / 2, W / 2, H / 2);
+            // Lados → mitades
+            if (izq) return new Rect(0, 0, W / 2, H);
+            if (der) return new Rect(W / 2, 0, W / 2, H);
+            // Borde superior → maximizar
+            if (arr) return new Rect(0, 0, W, H);
+            // (no usamos el borde inferior para snap: ahí va la barra de tareas)
+            _ = aba;
+            return null;
+        }
+
+        private void AplicarSnap(Rect r)
+        {
+            if (_estado == Estado.Normal) GuardarRestaurar();
+            Canvas.SetLeft(this, r.X); Canvas.SetTop(this, r.Y);
+            Width = r.Width; Height = r.Height;
+            // Maximizar (ocupa todo) se marca como Maximizada; el resto como Snap.
+            var c = Lienzo;
+            bool full = c != null && r.Width >= c.ActualWidth - 1 && r.Height >= c.ActualHeight - 1;
+            _estado = full ? Estado.Maximizada : Estado.Snap;
+            ActualizarIconoMax();
+            OnEstadoCambiado();
+        }
+
+        // ===================== Redimensión =====================
+        private void Redimensionar(DragDeltaEventArgs e, bool izq, bool arr, bool der, bool aba)
+        {
+            if (_estado == Estado.Maximizada) return;
+            var c = Lienzo; if (c == null) return;
+            // Cualquier redimensión rompe el estado de snap.
+            if (_estado == Estado.Snap) { _estado = Estado.Normal; ActualizarIconoMax(); OnEstadoCambiado(); }
+
+            double x = GetLeft(), y = GetTop();
+            double w = double.IsNaN(Width) ? ActualWidth : Width;
+            double h = double.IsNaN(Height) ? ActualHeight : Height;
+            double dx = e.HorizontalChange, dy = e.VerticalChange;
+
+            if (der) w = w + dx;
+            if (aba) h = h + dy;
+            if (izq) { double nw = w - dx; if (nw >= MinWidth && x + dx >= 0) { w = nw; x += dx; } }
+            if (arr) { double nh = h - dy; if (nh >= MinHeight && y + dy >= 0) { h = nh; y += dy; } }
+
+            w = Clamp(w, MinWidth, c.ActualWidth - x);
+            h = Clamp(h, MinHeight, c.ActualHeight - y);
+            Canvas.SetLeft(this, x); Canvas.SetTop(this, y);
             Width = w; Height = h;
         }
 
+        // ===================== Botones de ventana =====================
         private void Maximizar_Click(object sender, RoutedEventArgs e)
         {
             var c = Lienzo; if (c == null) return;
-            if (!_maximizada)
+            if (_estado != Estado.Maximizada)
             {
-                double x = Canvas.GetLeft(this); if (double.IsNaN(x)) x = 0;
-                double y = Canvas.GetTop(this); if (double.IsNaN(y)) y = 0;
-                _restaurar = new Rect(x, y, ActualWidth, ActualHeight);
+                if (_estado == Estado.Normal) GuardarRestaurar();
                 Canvas.SetLeft(this, 0); Canvas.SetTop(this, 0);
                 Width = c.ActualWidth; Height = c.ActualHeight;
-                _maximizada = true;
-                BtnMax.Content = "";   // restaurar
+                _estado = Estado.Maximizada;
             }
             else
             {
+                RestaurarGeometria();
+                _estado = Estado.Normal;
+            }
+            ActualizarIconoMax();
+            OnEstadoCambiado();
+        }
+
+        private void Minimizar_Click(object sender, RoutedEventArgs e) { Minimizar(); }
+
+        public void Minimizar()
+        {
+            if (_estado != Estado.Minimizada && _estado != Estado.Maximizada && _estado != Estado.Snap)
+                GuardarRestaurar();
+            else if (_estado != Estado.Minimizada)
+            {
+                // venía de max/snap: guarda su rect actual para volver a él
+                _restaurar = RectActual();
+            }
+            Visibility = Visibility.Collapsed;
+            _estado = Estado.Minimizada;
+            OnEstadoCambiado();
+        }
+
+        /// <summary>Restaura desde la barra de tareas y la trae al frente.</summary>
+        public void RestaurarDesdeBarra()
+        {
+            if (_estado == Estado.Minimizada)
+            {
+                Visibility = Visibility.Visible;
                 Canvas.SetLeft(this, _restaurar.X); Canvas.SetTop(this, _restaurar.Y);
                 Width = _restaurar.Width; Height = _restaurar.Height;
-                _maximizada = false;
-                BtnMax.Content = "";   // maximizar
+                _estado = Estado.Normal;
+                ActualizarIconoMax();
+                OnEstadoCambiado();
             }
+            TraerAlFrente();
+        }
+
+        /// <summary>Clic en el botón de la barra de tareas: minimiza/restaura/trae al frente.</summary>
+        public void AlternarDesdeBarra()
+        {
+            if (_estado == Estado.Minimizada) RestaurarDesdeBarra();
+            else if (EsFrontal()) Minimizar();
+            else TraerAlFrente();
         }
 
         private void Cerrar_Click(object sender, RoutedEventArgs e)
         {
             var c = Lienzo;
             if (c != null) c.Children.Remove(this);
+            if (Cerrada != null) Cerrada(this, EventArgs.Empty);
         }
 
-        // Re-clampa al tamaÃ±o del canvas (p.ej. cuando el escritorio cambia de tamaÃ±o).
+        // ===================== Ajuste al cambiar el canvas =====================
         public void AjustarAlCanvas()
         {
             var c = Lienzo; if (c == null) return;
-            if (_maximizada) { Width = c.ActualWidth; Height = c.ActualHeight; return; }
-            double x = Clamp(double.IsNaN(Canvas.GetLeft(this)) ? 0 : Canvas.GetLeft(this), 0, Math.Max(0, c.ActualWidth - ActualWidth));
-            double y = Clamp(double.IsNaN(Canvas.GetTop(this)) ? 0 : Canvas.GetTop(this), 0, Math.Max(0, c.ActualHeight - ActualHeight));
+            if (_estado == Estado.Maximizada) { Canvas.SetLeft(this, 0); Canvas.SetTop(this, 0); Width = c.ActualWidth; Height = c.ActualHeight; return; }
+            if (_estado == Estado.Minimizada) return;
+            double x = Clamp(GetLeft(), 0, Math.Max(0, c.ActualWidth - ActualWidth));
+            double y = Clamp(GetTop(), 0, Math.Max(0, c.ActualHeight - ActualHeight));
             Canvas.SetLeft(this, x); Canvas.SetTop(this, y);
         }
+
+        // ===================== Helpers =====================
+        private void GuardarRestaurar() { _restaurar = RectActual(); }
+
+        private void RestaurarGeometria()
+        {
+            Canvas.SetLeft(this, _restaurar.X); Canvas.SetTop(this, _restaurar.Y);
+            Width = _restaurar.Width; Height = _restaurar.Height;
+        }
+
+        private Rect RectActual()
+        {
+            double w = double.IsNaN(Width) ? ActualWidth : Width;
+            double h = double.IsNaN(Height) ? ActualHeight : Height;
+            return new Rect(GetLeft(), GetTop(), w, h);
+        }
+
+        private double GetLeft() { double v = Canvas.GetLeft(this); return double.IsNaN(v) ? 0 : v; }
+        private double GetTop() { double v = Canvas.GetTop(this); return double.IsNaN(v) ? 0 : v; }
+
+        private void ActualizarIconoMax()
+        {
+            // E922 = maximizar, E923 = restaurar (Segoe MDL2 Assets)
+            BtnMax.Content = (_estado == Estado.Maximizada || _estado == Estado.Snap) ? "" : "";
+        }
+
+        private void OnEstadoCambiado() { if (EstadoCambiado != null) EstadoCambiado(this, EventArgs.Empty); }
 
         private static double Clamp(double v, double min, double max)
         {
@@ -121,4 +312,3 @@ namespace arquitectSoft.View.Wpf
         }
     }
 }
-

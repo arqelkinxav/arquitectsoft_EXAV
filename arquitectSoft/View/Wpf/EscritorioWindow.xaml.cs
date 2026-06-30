@@ -67,18 +67,33 @@ namespace arquitectSoft.View.Wpf
             catch { /* sin fondo: queda el degradado */ }
         }
 
+        // Botón de barra de tareas por cada ventana contenida.
+        private readonly System.Collections.Generic.Dictionary<MdiChild, Button> _botonesBarra
+            = new System.Collections.Generic.Dictionary<MdiChild, Button>();
+        private static readonly System.Windows.Media.Brush AcentoBarra =
+            new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(0xE0, 0x7B, 0x5B));
+
         // ===== Abrir una pantalla como ventana contenida en el escritorio =====
-        private void AbrirPanel(string titulo, UIElement contenido, double w, double h)
+        private void AbrirPanel(string titulo, string icono, UIElement contenido, double w, double h)
         {
             var child = new MdiChild { Titulo = titulo, Width = w, Height = h };
             child.SetContenido(contenido);
+
+            // Snap (vista previa) + barra de tareas.
+            child.MostrarPreviewSnap = MostrarPreview;
+            child.Cerrada += (s, e) => QuitarDeBarra(child);
+            child.EstadoCambiado += (s, e) => RefrescarBarra();
+
             double off = (Lienzo.Children.Count % 6) * 28;
             Canvas.SetLeft(child, 40 + off);
             Canvas.SetTop(child, 28 + off);
             Lienzo.Children.Add(child);
+
+            AgregarABarra(child, icono);
             child.TraerAlFrente();
             child.UpdateLayout();
             child.AjustarAlCanvas();
+            RefrescarBarra();
         }
 
         private void Lienzo_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -90,9 +105,60 @@ namespace arquitectSoft.View.Wpf
             }
         }
 
+        // ===== Vista previa de snap =====
+        private void MostrarPreview(Rect? zona)
+        {
+            if (!zona.HasValue) { PreviewSnap.Visibility = Visibility.Collapsed; return; }
+            Rect r = zona.Value;
+            PreviewSnap.Margin = new Thickness(r.X, r.Y, 0, 0);
+            PreviewSnap.Width = r.Width;
+            PreviewSnap.Height = r.Height;
+            PreviewSnap.Visibility = Visibility.Visible;
+        }
+
+        // ===== Barra de tareas =====
+        private void AgregarABarra(MdiChild child, string icono)
+        {
+            var btn = new Button
+            {
+                Style = (Style)FindResource("TaskButton"),
+                Content = child.Titulo,
+                Tag = icono,
+                BorderBrush = System.Windows.Media.Brushes.Transparent
+            };
+            btn.Click += (s, e) => child.AlternarDesdeBarra();
+            _botonesBarra[child] = btn;
+            BarraTareas.Children.Add(btn);
+            BarraTareasHost.Visibility = Visibility.Visible;
+        }
+
+        private void QuitarDeBarra(MdiChild child)
+        {
+            Button btn;
+            if (_botonesBarra.TryGetValue(child, out btn))
+            {
+                BarraTareas.Children.Remove(btn);
+                _botonesBarra.Remove(child);
+            }
+            if (_botonesBarra.Count == 0) BarraTareasHost.Visibility = Visibility.Collapsed;
+            else RefrescarBarra();
+        }
+
+        // Resalta el botón de la ventana frontal y atenúa el de las minimizadas.
+        private void RefrescarBarra()
+        {
+            foreach (var kv in _botonesBarra)
+            {
+                MdiChild c = kv.Key; Button b = kv.Value;
+                bool activa = !c.EstaMinimizada && c.EsFrontal();
+                b.BorderBrush = activa ? AcentoBarra : System.Windows.Media.Brushes.Transparent;
+                b.Opacity = c.EstaMinimizada ? 0.55 : 1.0;
+            }
+        }
+
         // ===== Dock: piloto contenido =====
         private void Acerca_Click(object sender, RoutedEventArgs e) =>
-            AbrirPanel("Acerca de", new AcercaPanel(), 500, 380);
+            AbrirPanel("Acerca de", "", new AcercaPanel(), 500, 380);
 
         // ===== Dock: resto (por ahora como ventana flotante; Fase 2 las contiene) =====
         private void Analisis_Click(object sender, RoutedEventArgs e) => new AnalisisWindow().Show();
