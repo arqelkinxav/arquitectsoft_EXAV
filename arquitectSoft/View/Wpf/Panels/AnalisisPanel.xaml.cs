@@ -140,7 +140,27 @@ namespace arquitectSoft.View.Wpf.Panels
             }
 
             LblRuta.Text = _engine.DirectorioActual ?? "";
+            ActualizarTituloVentana();
             await RecalcularAsync(seleccionarPestana: true);
+        }
+
+        // Pone el título de la ventana contenedora = "código nombre" del proyecto cargado
+        // (mismo formato que el nombre del Excel). Si no hay info, deja el título por defecto.
+        private void ActualizarTituloVentana()
+        {
+            string t = AnalisisEngine.NombreProyecto(_engine.ProyectoCodigo, _engine.ProyectoNombre);
+            MdiChild host = HostMdi();
+            if (host != null)
+                host.CambiarTitulo(string.IsNullOrEmpty(t) ? "Análisis de Mamparas" : t);
+        }
+
+        // Sube por el árbol visual hasta la ventana hija (MdiChild) que contiene el panel.
+        private MdiChild HostMdi()
+        {
+            DependencyObject d = this;
+            while (d != null && !(d is MdiChild))
+                d = VisualTreeHelper.GetParent(d);
+            return d as MdiChild;
         }
 
         // ===== Arrastrar y soltar archivos sobre el panel =====

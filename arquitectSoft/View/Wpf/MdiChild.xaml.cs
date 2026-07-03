@@ -55,6 +55,13 @@ namespace arquitectSoft.View.Wpf
         public string Titulo { get { return LblTitulo.Text; } set { LblTitulo.Text = value; } }
         public bool EstaMinimizada { get { return _estado == Estado.Minimizada; } }
 
+        /// <summary>Cambia el título en caliente y refresca la barra de tareas.</summary>
+        public void CambiarTitulo(string t)
+        {
+            LblTitulo.Text = t ?? "";
+            OnEstadoCambiado();
+        }
+
         public void SetContenido(UIElement contenido) { Host.Content = contenido; }
 
         private System.Windows.Media.Visual _fondo;

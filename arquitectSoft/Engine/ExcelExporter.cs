@@ -2,6 +2,7 @@ using System;
 using System.Data;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using arquitectSoft.Dto;
 using ClosedXML.Excel;
 
@@ -564,12 +565,43 @@ namespace arquitectSoft.Engine
                     }
                 }
 
-                string FileNameStr = param[0] + " " + param[1];
+                // Mismo formato "código nombre" que el título de la ventana de análisis.
+                string FileNameStr = AnalisisEngine.NombreProyecto(param[0], param[1]);
+                if (string.IsNullOrWhiteSpace(FileNameStr)) FileNameStr = "Presupuesto";
+                foreach (char c in System.IO.Path.GetInvalidFileNameChars())
+                    FileNameStr = FileNameStr.Replace(c, '_');
                 filefinish = folderPath + "\\" + FileNameStr + ".xlsx";
-                wb.SaveAs(filefinish);
+                GuardarXlsx(wb, filefinish);
             }
 
             return filefinish;
+        }
+
+        // Guarda el libro de forma robusta frente a carpetas sincronizadas (Google Drive /
+        // OneDrive): ClosedXML falla al escribir DIRECTO sobre esas unidades porque el
+        // cliente de sincronización bloquea el archivo (IOException). Estrategia: guardar
+        // en un temporal LOCAL en C: y copiar al destino con reintentos (absorbe el bloqueo
+        // momentáneo del sync). Si el destino está realmente abierto en Excel, tras los
+        // reintentos relanza la IOException para que la UI avise de cerrarlo.
+        private static void GuardarXlsx(XLWorkbook wb, string destino)
+        {
+            string temp = Path.Combine(Path.GetTempPath(),
+                "arqsoft_" + Guid.NewGuid().ToString("N") + ".xlsx");
+            wb.SaveAs(temp);
+            try
+            {
+                IOException ultimo = null;
+                for (int intento = 0; intento < 5; intento++)
+                {
+                    try { File.Copy(temp, destino, true); ultimo = null; break; }
+                    catch (IOException ex) { ultimo = ex; Thread.Sleep(400); }
+                }
+                if (ultimo != null) throw ultimo;   // destino bloqueado de verdad (Excel abierto)
+            }
+            finally
+            {
+                try { File.Delete(temp); } catch { /* el temp se limpia solo tarde o temprano */ }
+            }
         }
 
         private static int Filas(DataTable t)

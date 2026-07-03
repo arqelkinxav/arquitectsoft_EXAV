@@ -159,6 +159,7 @@ namespace arquitectSoft.View.Wpf
                 bool activa = !c.EstaMinimizada && c.EsFrontal();
                 b.BorderBrush = activa ? AcentoBarra : System.Windows.Media.Brushes.Transparent;
                 b.Opacity = c.EstaMinimizada ? 0.55 : 1.0;
+                b.Content = c.Titulo;   // refleja el título aunque cambie tras abrir
             }
         }
 

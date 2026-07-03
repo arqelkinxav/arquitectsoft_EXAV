@@ -45,6 +45,20 @@ namespace arquitectSoft.Engine
         public string ProyectoNombre { get; private set; }
 
         /// <summary>
+        /// Formato único "código nombre" usado tanto para el título de la ventana de
+        /// análisis como para el nombre del archivo Excel, para que siempre coincidan.
+        /// Devuelve "" si no hay ni código ni nombre.
+        /// </summary>
+        public static string NombreProyecto(string codigo, string nombre)
+        {
+            codigo = (codigo ?? "").Trim();
+            nombre = (nombre ?? "").Trim();
+            if (codigo.Length == 0) return nombre;
+            if (nombre.Length == 0) return codigo;
+            return codigo + " " + nombre;
+        }
+
+        /// <summary>
         /// Clasifica los archivos TXT seleccionados (equivalente a BtnCargar_Click).
         /// No calcula nada todavía.
         /// </summary>
