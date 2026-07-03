@@ -143,8 +143,10 @@
     <Compile Include="Class\Sub_ComponentEspecial.cs" />
     <Compile Include="Dto\AcabadoDto.cs" />
     <Compile Include="Dto\AnalisisDatosDto.cs" />
+    <Compile Include="Dto\DependenciaDto.cs" />
     <Compile Include="Engine\AcabadoChanger.cs" />
     <Compile Include="Engine\AnalisisEngine.cs" />
+    <Compile Include="Engine\DependenciaResolver.cs" />
     <Compile Include="Engine\ExcelExporter.cs" />
     <Compile Include="Engine\ResultadoAnalisis.cs" />
     <Compile Include="Dto\ComponenteDto.cs" />
@@ -364,6 +366,76 @@
     </Page>
     <Compile Include="View\Wpf\Panels\AcabadosPanel.xaml.cs">
       <DependentUpon>AcabadosPanel.xaml</DependentUpon>
+    </Compile>
+    <Page Include="View\Wpf\Panels\DependenciasPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Compile Include="View\Wpf\Panels\DependenciasPanel.xaml.cs">
+      <DependentUpon>DependenciasPanel.xaml</DependentUpon>
+    </Compile>
+    <Page Include="View\Wpf\Panels\MecanizadoPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Compile Include="View\Wpf\Panels\MecanizadoPanel.xaml.cs">
+      <DependentUpon>MecanizadoPanel.xaml</DependentUpon>
+    </Compile>
+    <Page Include="View\Wpf\Panels\CortePanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Compile Include="View\Wpf\Panels\CortePanel.xaml.cs">
+      <DependentUpon>CortePanel.xaml</DependentUpon>
+    </Compile>
+    <Page Include="View\Wpf\Panels\UnidadMedidaPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Compile Include="View\Wpf\Panels\UnidadMedidaPanel.xaml.cs">
+      <DependentUpon>UnidadMedidaPanel.xaml</DependentUpon>
+    </Compile>
+    <Page Include="View\Wpf\Panels\SubComponentePanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Compile Include="View\Wpf\Panels\SubComponentePanel.xaml.cs">
+      <DependentUpon>SubComponentePanel.xaml</DependentUpon>
+    </Compile>
+    <Page Include="View\Wpf\Panels\ComponentePanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Compile Include="View\Wpf\Panels\ComponentePanel.xaml.cs">
+      <DependentUpon>ComponentePanel.xaml</DependentUpon>
+    </Compile>
+    <Page Include="View\Wpf\Panels\AnalisisPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Compile Include="View\Wpf\Panels\AnalisisPanel.xaml.cs">
+      <DependentUpon>AnalisisPanel.xaml</DependentUpon>
+    </Compile>
+    <Page Include="View\Wpf\Panels\PuertasPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Compile Include="View\Wpf\Panels\PuertasPanel.xaml.cs">
+      <DependentUpon>PuertasPanel.xaml</DependentUpon>
+    </Compile>
+    <Page Include="View\Wpf\Panels\DbaBackupPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Compile Include="View\Wpf\Panels\DbaBackupPanel.xaml.cs">
+      <DependentUpon>DbaBackupPanel.xaml</DependentUpon>
+    </Compile>
+    <Page Include="View\Wpf\Panels\DbaImportPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Compile Include="View\Wpf\Panels\DbaImportPanel.xaml.cs">
+      <DependentUpon>DbaImportPanel.xaml</DependentUpon>
     </Compile>
     <Page Include="View\Wpf\EscritorioWindow.xaml">
       <SubType>Designer</SubType>

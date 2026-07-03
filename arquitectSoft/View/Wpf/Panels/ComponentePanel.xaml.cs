@@ -1,58 +1,38 @@
 using arquitectSoft.Class;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Data;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
-using System.Windows.Interop;
-using System.Windows.Media;
 
-namespace arquitectSoft.View.Wpf
+namespace arquitectSoft.View.Wpf.Panels
 {
     /// <summary>
-    /// Versión WPF (cristal) de FrmComponente — FASE 1: editor con encabezado
-    /// (Código/Descripción/Especial/Acabado) + dos grillas editables (genérica y
-    /// especial) con columnas ComboBox de catálogo, máquina de estados, Buscar
-    /// (carga detalle), Agregar subcomponente, Guardar, Eliminar, Nuevo, Cancelar,
-    /// Verificar y Duplicar. Reutiliza Dto.ComponenteDto / AcabadoDto y los catálogos.
-    /// PENDIENTE Fase 2: diálogos in-cell (anchura "Ambas" / Mecanizado), menú
-    /// contextual (Asignación Puertas / Quitar Mecanizado), coloreado de filas.
+    /// Versión "panel" de Componente para hospedarse dentro del escritorio (MdiChild):
+    /// editor con encabezado (Código/Descripción/Especial/Acabado) + dos grillas editables
+    /// (genérica y especial) con columnas ComboBox de catálogo, máquina de estados, Buscar,
+    /// Agregar subcomponente, Guardar, Eliminar, Nuevo, Cancelar, Verificar y Duplicar, más
+    /// el menú contextual (Asignación Puertas / Mecanizado / anchura "Ambas"). Sin chrome ni
+    /// liquid glass: lo aporta la ventana hija. Reutiliza Dto.ComponenteDto / AcabadoDto y los
+    /// catálogos, y el converter arquitectSoft.View.Wpf.PuertaABrushConverter.
     /// </summary>
-    public partial class ComponenteWindow : Window
+    public partial class ComponentePanel : UserControl
     {
-        [DllImport("dwmapi.dll")]
-        private static extern int DwmSetWindowAttribute(IntPtr hwnd, int attr, ref int val, int size);
-        private const int DWMWA_USE_IMMERSIVE_DARK_MODE = 20;
-        private const int DWMWA_BORDER_COLOR = 34;
-        private const int DWMWA_WINDOW_CORNER_PREFERENCE = 33;
-        private const int DWMWA_SYSTEMBACKDROP_TYPE = 38;
-        private const int DWMWCP_ROUND = 2;
-        private const int DWMSBT_TRANSIENTWINDOW = 3;
-        private const uint DWMWA_COLOR_NONE = 0xFFFFFFFE;
-
         private string _opc;
         private string _idComponente = "";
         private string _condicionAcabado = "";
-        private bool _cerrando;
 
         private readonly ObservableCollection<Sub_Component> _items = new ObservableCollection<Sub_Component>();
         private readonly ObservableCollection<Sub_ComponentEspecial> _itemsEsp = new ObservableCollection<Sub_ComponentEspecial>();
 
         private DataView _dtUnidad, _dtCorte, _dtMedida, _dtColumna;
 
-        public ComponenteWindow()
+        public ComponentePanel()
         {
-            ScreenCaptureHelper.CaptureFullScreen();   // foto del escritorio antes de mostrarse
             InitializeComponent();
-            System.Windows.Forms.Integration.ElementHost.EnableModelessKeyboardInterop(this);
-            SourceInitialized += OnSourceInitialized;
-            StateChanged += (s, e) => BtnMaxGlifo();
 
             CargarCatalogos();
             ConstruirColumnasGenerico();
@@ -60,22 +40,24 @@ namespace arquitectSoft.View.Wpf
             GridComponente.ItemsSource = _items;
             GridComponenteEsp.ItemsSource = _itemsEsp;
 
-            LiquidGlass.PrepararOculto(FrameRim, WinScale);
-            LiquidGlass.MontarGlass(this, GlassBackdrop);
-            KeyDown += Window_KeyDown;
+            KeyDown += Panel_KeyDown;
             Loaded += (s, e) =>
             {
-                CargarAcabados("");
-                EstadoInicial();
-                LiquidGlass.Apertura(FrameRim, WinScale);
+                if (CmbAcabado.ItemsSource == null)
+                {
+                    CargarAcabados("");
+                    EstadoInicial();
+                }
             };
         }
 
-        // Atajos: Esc = cerrar, Ctrl+Z = cancelar, Supr = quitar fila seleccionada.
-        private void Window_KeyDown(object sender, KeyEventArgs e)
+        // Ventana que hospeda el panel (para que los diálogos cristal tengan owner).
+        private Window Owner { get { return Window.GetWindow(this); } }
+
+        // Atajos: Ctrl+Z = cancelar, Supr = quitar fila seleccionada.
+        private void Panel_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Escape) { Close(); e.Handled = true; }
-            else if (e.Key == Key.Z && (Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
+            if (e.Key == Key.Z && (Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
             {
                 if (BtnCancelar.IsEnabled) { Cancelar_Click(null, null); e.Handled = true; }
             }
@@ -86,44 +68,6 @@ namespace arquitectSoft.View.Wpf
                 { Borrar_Click(null, null); e.Handled = true; }
             }
         }
-
-        protected override void OnClosing(CancelEventArgs e)
-        {
-            if (!_cerrando)
-            {
-                e.Cancel = true;
-                _cerrando = true;
-                LiquidGlass.Cierre(FrameRim, WinScale, Close);
-                return;
-            }
-            base.OnClosing(e);
-        }
-
-        private void OnSourceInitialized(object sender, EventArgs e)
-        {
-            IntPtr hwnd = new WindowInteropHelper(this).Handle;
-            try
-            {
-                int round = DWMWCP_ROUND;
-                DwmSetWindowAttribute(hwnd, DWMWA_WINDOW_CORNER_PREFERENCE, ref round, sizeof(int));
-                int dark = 1;
-                DwmSetWindowAttribute(hwnd, DWMWA_USE_IMMERSIVE_DARK_MODE, ref dark, sizeof(int));
-                int backdrop = DWMSBT_TRANSIENTWINDOW;
-                DwmSetWindowAttribute(hwnd, DWMWA_SYSTEMBACKDROP_TYPE, ref backdrop, sizeof(int));
-                int sinBorde = unchecked((int)DWMWA_COLOR_NONE);
-                DwmSetWindowAttribute(hwnd, DWMWA_BORDER_COLOR, ref sinBorde, sizeof(int));
-            }
-            catch { }
-            HwndSource src = HwndSource.FromHwnd(hwnd);
-            if (src != null && src.CompositionTarget != null)
-                src.CompositionTarget.BackgroundColor = Colors.Transparent;
-        }
-
-        private void Minimizar_Click(object sender, RoutedEventArgs e) => WindowState = WindowState.Minimized;
-        private void Maximizar_Click(object sender, RoutedEventArgs e) =>
-            WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
-        private void Cerrar_Click(object sender, RoutedEventArgs e) => Close();
-        private void BtnMaxGlifo() { /* glifo fijo; el filo lo maneja el DWM */ }
 
         // ===== Catálogos para los combos de las grillas =====
         private void CargarCatalogos()
@@ -209,8 +153,6 @@ namespace arquitectSoft.View.Wpf
         private DataGridComboBoxColumn Combo(string header, string prop, DataView source, string valuePath, double width)
         {
             var st = (Style)FindResource("GridCombo");
-            // Sin DisplayMemberPath: el display lo da el ItemTemplate de GridCombo
-            // (DisplayMemberPath dejaba "System.Data.DataRowView" en el cuadro cerrado).
             return new DataGridComboBoxColumn
             {
                 Header = header,
@@ -358,7 +300,7 @@ namespace arquitectSoft.View.Wpf
 
         private void Buscar_Click(object sender, RoutedEventArgs e)
         {
-            var bsc = new BuscarDialog { Owner = this };   // sin Consulta = componentes
+            var bsc = new BuscarDialog { Owner = Owner };   // sin Consulta = componentes
             bsc.ShowDialog();
             if (bsc.ReturnItem1 == null) return;
 
@@ -396,31 +338,31 @@ namespace arquitectSoft.View.Wpf
         private void Check_Click(object sender, RoutedEventArgs e)
         {
             string resul = new Dto.ComponenteDto().ExistComponent(TxtCodigo.Text, TxtDescripcion.Text, AcabadoSeleccionado());
-            GlassDialog.Informar(this, "Componente",
+            GlassDialog.Informar(Owner, "Componente",
                 resul != "0" ? "El componente ya existe." : "Componente disponible para guardar.");
         }
 
         private void Eliminar_Click(object sender, RoutedEventArgs e)
         {
-            if (!GlassDialog.Pregunta(this, "Componente", "¿Seguro que quieres eliminar el registro?")) return;
+            if (!GlassDialog.Pregunta(Owner, "Componente", "¿Seguro que quieres eliminar el registro?")) return;
             var dto = new Dto.ComponenteDto();
             string resul = dto.ExistComponent(TxtCodigo.Text, TxtDescripcion.Text, AcabadoSeleccionado());
             int id;
             if (!int.TryParse(resul, out id))
             {
-                GlassDialog.Informar(this, "Componente", "No se pudo identificar el registro: " + resul);
+                GlassDialog.Informar(Owner, "Componente", "No se pudo identificar el registro: " + resul);
                 return;
             }
             resul = dto.DeleteComponent(id);
             BloquearCancelar();
             ClearComponent();
             HabilitarEspecial(false);
-            GlassDialog.Informar(this, "Componente", resul);
+            GlassDialog.Informar(Owner, "Componente", resul);
         }
 
         private void Agregar_Click(object sender, RoutedEventArgs e)
         {
-            var bsc = new BuscarDialog { Consulta = "SubComp", Owner = this };
+            var bsc = new BuscarDialog { Consulta = "SubComp", Owner = Owner };
             bsc.ShowDialog();
             if (bsc.ReturnItem0 == null && bsc.ReturnItem4 == null) return;
 
@@ -440,7 +382,7 @@ namespace arquitectSoft.View.Wpf
             }
             else
             {
-                GlassDialog.Informar(this, "Componente", "Primero marca que es un componente Especial.");
+                GlassDialog.Informar(Owner, "Componente", "Primero marca que es un componente Especial.");
             }
         }
 
@@ -451,7 +393,7 @@ namespace arquitectSoft.View.Wpf
             var esp = GridComponenteEsp.SelectedItems.OfType<Sub_ComponentEspecial>().ToList();
             if (gen.Count == 0 && esp.Count == 0)
             {
-                GlassDialog.Informar(this, "Componente", "Selecciona una o varias filas para quitar.");
+                GlassDialog.Informar(Owner, "Componente", "Selecciona una o varias filas para quitar.");
                 return;
             }
             if (gen.Count > 0)
@@ -459,7 +401,7 @@ namespace arquitectSoft.View.Wpf
                 string msg = gen.Count == 1
                     ? "¿Quitar el subcomponente \"" + gen[0].Descripcion + "\"?"
                     : "¿Quitar los " + gen.Count + " subcomponentes seleccionados?";
-                if (GlassDialog.Pregunta(this, "Componente", msg))
+                if (GlassDialog.Pregunta(Owner, "Componente", msg))
                     foreach (var s in gen) _items.Remove(s);
             }
             if (esp.Count > 0)
@@ -467,7 +409,7 @@ namespace arquitectSoft.View.Wpf
                 string msg = esp.Count == 1
                     ? "¿Quitar el subcomponente especial \"" + esp[0].Descripcion + "\"?"
                     : "¿Quitar los " + esp.Count + " subcomponentes especiales seleccionados?";
-                if (GlassDialog.Pregunta(this, "Componente", msg))
+                if (GlassDialog.Pregunta(Owner, "Componente", msg))
                     foreach (var s in esp) _itemsEsp.Remove(s);
             }
         }
@@ -491,13 +433,13 @@ namespace arquitectSoft.View.Wpf
                     if (r.Medida == 0 && r.UnidadCalculada != "6")
                     { fail = "La selección de medida en uno de los subcomponentes está vacía."; ok = false; break; }
                     if ((r.Elevado == "0" || r.Elevado == "") && r.UnidadCalculada == "6")
-                    { fail = "No se han seleccionado datos para la anchura (unidad 'Ambas'). [Disponible en Fase 2]"; ok = false; break; }
+                    { fail = "No se han seleccionado datos para la anchura (unidad 'Ambas')."; ok = false; break; }
                 }
             }
 
             if (!ok)
             {
-                GlassDialog.Informar(this, "Componente", fail);
+                GlassDialog.Informar(Owner, "Componente", fail);
                 return;
             }
 
@@ -510,11 +452,11 @@ namespace arquitectSoft.View.Wpf
                 ClearComponent();
                 BloquearCancelar();
                 HabilitarEspecial(false);
-                GlassDialog.Informar(this, "Componente", resul);
+                GlassDialog.Informar(Owner, "Componente", resul);
             }
             else
             {
-                GlassDialog.Informar(this, "Componente", "El componente ya existe.");
+                GlassDialog.Informar(Owner, "Componente", "El componente ya existe.");
             }
         }
 
@@ -559,11 +501,11 @@ namespace arquitectSoft.View.Wpf
             _condicionAcabado += sep + ac + "'";
         }
 
-        // ===== FASE 2: acciones por fila (menú contextual de la grilla genérica) =====
+        // ===== Acciones por fila (menú contextual de la grilla genérica) =====
         private Sub_Component FilaSel()
         {
             var s = GridComponente.SelectedItem as Sub_Component;
-            if (s == null) GlassDialog.Informar(this, "Componente", "Selecciona primero una fila.");
+            if (s == null) GlassDialog.Informar(Owner, "Componente", "Selecciona primero una fila.");
             return s;
         }
 
@@ -585,7 +527,7 @@ namespace arquitectSoft.View.Wpf
         private void AsignarMecanizado_Click(object sender, RoutedEventArgs e)
         {
             var s = FilaSel(); if (s == null) return;
-            var bsc = new BuscarDialog { Consulta = "Mecan", Owner = this };
+            var bsc = new BuscarDialog { Consulta = "Mecan", Owner = Owner };
             bsc.ShowDialog();
             if (bsc.ReturnItem1 == null) return;
             int cod; int.TryParse(bsc.ReturnItem0, out cod);
@@ -599,7 +541,7 @@ namespace arquitectSoft.View.Wpf
             var s = FilaSel(); if (s == null) return;
             if (s.UnidadCalculada != "6")
             {
-                GlassDialog.Informar(this, "Componente",
+                GlassDialog.Informar(Owner, "Componente",
                     "Los datos de anchura solo aplican cuando la Unidad Calculada es 'Ambas' (6).");
                 return;
             }
@@ -634,22 +576,6 @@ namespace arquitectSoft.View.Wpf
             if (!r.Table.Columns.Contains(col)) return "";
             object v = r[col];
             return v == null || v == DBNull.Value ? "" : v.ToString();
-        }
-    }
-
-    /// <summary>Pinta de verde translúcido la fila cuyo subcomponente tiene Asignación de Puertas (>0).</summary>
-    public sealed class PuertaABrushConverter : System.Windows.Data.IValueConverter
-    {
-        private static readonly Brush Verde = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#3D4CAF50"));
-        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            int n;
-            if (value != null && int.TryParse(value.ToString(), out n) && n > 0) return Verde;
-            return Brushes.Transparent;
-        }
-        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            return System.Windows.Data.Binding.DoNothing;
         }
     }
 }

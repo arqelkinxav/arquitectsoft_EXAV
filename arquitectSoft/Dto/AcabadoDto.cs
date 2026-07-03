@@ -68,6 +68,24 @@ namespace arquitectSoft.Dto
             return resul;
         }
 
+        /// <summary>True si el código está libre (ningún OTRO acabado distinto de idActual lo usa).</summary>
+        public bool CodigoLibre(string codigo, string idActual)
+        {
+            bool libre = true;
+            Generals.Conexion con = new Generals.Conexion();
+            string fail = "";
+            try
+            {
+                con.Open(out fail);
+                string[] param = { codigo, idActual };
+                MySqlDataReader row = con.ExecuteReader(Generals.Constantes.QUERY_ACABADO_COD_OTRO, out fail, param);
+                if (row != null && row.Read()) libre = false;
+                con.Close();
+            }
+            catch { con.Close(); }
+            return libre;
+        }
+
         public string DeleteAcabado(int idComponente)
         {
             Generals.Conexion con = new Generals.Conexion();
@@ -108,11 +126,11 @@ namespace arquitectSoft.Dto
                 switch (opcion)
                 {
                     case "Editar":
+                        // Actualiza código + descripción del MISMO registro (por Id_Acabado):
+                        // el Id no cambia, así que las relaciones (subcomponentes por Id_Acabado)
+                        // no se rompen; solo cambia el texto del código/descripción.
                         sqlquery = Generals.Constantes.QUERY_UPDATE_ACABADO;
-
-                        param[0] = descripcion;
-                        param[1] = IdAcabadoExist;
-
+                        param = new string[] { codigo, descripcion, IdAcabadoExist };
                         MsgResul = "Registro Editado Correctamente";
                         break;
                     default:

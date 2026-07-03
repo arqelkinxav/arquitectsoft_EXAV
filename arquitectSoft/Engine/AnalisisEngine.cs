@@ -40,6 +40,10 @@ namespace arquitectSoft.Engine
         public bool DatosCargados { get; private set; }
         public string DirectorioActual { get; private set; }
 
+        // --- Información del proyecto leída de un TXT de info (ver Cargar / LeerInfoProyecto) ---
+        public string ProyectoCodigo { get; private set; }
+        public string ProyectoNombre { get; private set; }
+
         /// <summary>
         /// Clasifica los archivos TXT seleccionados (equivalente a BtnCargar_Click).
         /// No calcula nada todavía.
@@ -52,6 +56,8 @@ namespace arquitectSoft.Engine
         {
             _swSegmentadoUbiInicial = segmentarPorUbicacion ? "1" : "0";
             swPMVertical = 0;
+            ProyectoCodigo = null;
+            ProyectoNombre = null;
 
             int wantedFiles = 0;
             var file124 = new List<string>();
@@ -62,7 +68,16 @@ namespace arquitectSoft.Engine
             {
                 FileInfo archivo = new FileInfo(file);
                 directorio = archivo.DirectoryName;
-                int idDocumento = int.Parse(archivo.Name.Split('-')[0].Trim());
+
+                // Los despieces se nombran "N-...txt" (N = id de documento). Un TXT cuyo
+                // prefijo NO sea numérico se trata como TABLA DE INFORMACIÓN DEL PROYECTO
+                // (contiene el código y el nombre del proyecto), no como un despiece.
+                int idDocumento;
+                if (!int.TryParse(archivo.Name.Split('-')[0].Trim(), out idDocumento))
+                {
+                    LeerInfoProyecto(file);
+                    continue;
+                }
 
                 if (idDocumento == 0) { swPMVertical = 1; }
 
@@ -82,6 +97,62 @@ namespace arquitectSoft.Engine
             _wantedFiles = wantedFiles;
             DirectorioActual = directorio;
             DatosCargados = true;
+        }
+
+        /// <summary>
+        /// Lee un TXT de información del proyecto y rellena <see cref="ProyectoCodigo"/> /
+        /// <see cref="ProyectoNombre"/>. Acepta varios formatos para tolerar lo que la
+        /// empresa decida usar (el formato aún no está cerrado):
+        ///   • Una línea "CODIGO;NOMBRE" (separadores admitidos: ; , | o tabulador).
+        ///   • Dos líneas: la 1ª = código, la 2ª = nombre.
+        ///   • Una sola línea sin separador: se toma como nombre.
+        /// También reconoce etiquetas "codigo:" / "nombre:" / "proyecto:" si aparecen.
+        /// </summary>
+        private void LeerInfoProyecto(string ruta)
+        {
+            try
+            {
+                var lineas = File.ReadAllLines(ruta)
+                    .Select(l => l.Trim())
+                    .Where(l => l.Length > 0)
+                    .ToList();
+                if (lineas.Count == 0) return;
+
+                // 1) Etiquetas explícitas en cualquier línea (codigo:/nombre:/proyecto:).
+                foreach (string l in lineas)
+                {
+                    int idx = l.IndexOf(':');
+                    if (idx <= 0) continue;
+                    string etq = l.Substring(0, idx).Trim().ToLowerInvariant();
+                    string val = l.Substring(idx + 1).Trim();
+                    if (val.Length == 0) continue;
+                    if (etq.StartsWith("cod")) ProyectoCodigo = val;
+                    else if (etq.StartsWith("nom") || etq.StartsWith("proy")) ProyectoNombre = val;
+                }
+                if (!string.IsNullOrEmpty(ProyectoCodigo) || !string.IsNullOrEmpty(ProyectoNombre))
+                    return;
+
+                // 2) Una línea con separador → "CODIGO<sep>NOMBRE".
+                char[] seps = { ';', '\t', '|', ',' };
+                string[] partes = lineas[0].Split(seps, StringSplitOptions.RemoveEmptyEntries);
+                if (partes.Length >= 2)
+                {
+                    ProyectoCodigo = partes[0].Trim();
+                    ProyectoNombre = string.Join(" ", partes.Skip(1)).Trim();
+                }
+                else if (lineas.Count >= 2)
+                {
+                    // 3) Dos líneas: código y nombre.
+                    ProyectoCodigo = lineas[0];
+                    ProyectoNombre = lineas[1];
+                }
+                else
+                {
+                    // 4) Una sola palabra: la tomamos como nombre.
+                    ProyectoNombre = lineas[0];
+                }
+            }
+            catch { /* TXT ilegible: se ignora sin romper la carga */ }
         }
 
         /// <summary>

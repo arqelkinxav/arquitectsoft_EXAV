@@ -57,10 +57,25 @@ namespace arquitectSoft.View.Wpf
 
         public void SetContenido(UIElement contenido) { Host.Content = contenido; }
 
+        private System.Windows.Media.Visual _fondo;
+        private Action _desmontarGlass;
+
         /// <summary>Activa el liquid glass refractando el fondo del escritorio (wallpaper).</summary>
         public void MontarGlass(System.Windows.Media.Visual fondo)
         {
-            LiquidGlass.MontarGlassMdi(this, GlassBackdrop, fondo);
+            _fondo = fondo;
+            AplicarGlass();
+        }
+
+        /// <summary>
+        /// (Re)aplica el cristal según LiquidGlass.ModoRendimiento. Permite alternar
+        /// cristal↔rendimiento en caliente sobre ventanas ya abiertas.
+        /// </summary>
+        public void AplicarGlass()
+        {
+            if (_desmontarGlass != null) { _desmontarGlass(); _desmontarGlass = null; }
+            if (_fondo != null)
+                _desmontarGlass = LiquidGlass.MontarGlassMdi(this, GlassBackdrop, _fondo);
         }
 
         // Recorta el contenido (cristal incluido) a esquinas redondeadas, para que el shader

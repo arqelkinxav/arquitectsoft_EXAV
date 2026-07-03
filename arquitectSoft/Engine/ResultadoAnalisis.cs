@@ -51,5 +51,39 @@ namespace arquitectSoft.Engine
         {
             return t != null && t.Rows.Count > 0;
         }
+
+        /// <summary>
+        /// Copia profunda del resultado (cada DataTable se clona con sus filas). Se usa como
+        /// "base intacta": las tablas calculadas traen los acabados placeholder (MOD…) y la
+        /// perfilería por defecto; al cambiar la perfilería se reconstruye desde esta copia
+        /// para poder re-resolver las dependencias tantas veces como haga falta.
+        /// </summary>
+        public ResultadoAnalisis Copiar()
+        {
+            return new ResultadoAnalisis
+            {
+                PerfilMetalico = Dup(PerfilMetalico),
+                PerfilMetalicoHerraje = Dup(PerfilMetalicoHerraje),
+                VidrioPaneles = Dup(VidrioPaneles),
+                Puertas = Dup(Puertas),
+                PuertasHerraje = Dup(PuertasHerraje),
+                PuertasCantidad = Dup(PuertasCantidad),
+                Tubos = Dup(Tubos),
+                Mamparas = Dup(Mamparas),
+                PMVHerraje = Dup(PMVHerraje),
+                PerfilMetalicoRaw = Dup(PerfilMetalicoRaw),
+                VidrioRaw = Dup(VidrioRaw),
+                PuertasRaw = Dup(PuertasRaw),
+                TubosRaw = Dup(TubosRaw),
+                MamparasRaw = Dup(MamparasRaw),
+                PestanaSugerida = PestanaSugerida,
+                SwSegmentadoUbiFinal = SwSegmentadoUbiFinal
+            };
+        }
+
+        private static DataTable Dup(DataTable t)
+        {
+            return t == null ? null : t.Copy();
+        }
     }
 }

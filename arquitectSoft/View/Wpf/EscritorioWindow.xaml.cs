@@ -11,8 +11,9 @@ namespace arquitectSoft.View.Wpf
 {
     /// <summary>
     /// Shell principal en WPF: barra lateral (dock, botones circulares liquid glass) +
-    /// canvas "Escritorio" donde se irán hospedando las pantallas como ventanas contenidas.
-    /// FASE 1: piloto con el panel "Acerca de"; el resto abre por ahora como ventana flotante.
+    /// canvas "Escritorio" donde se hospedan TODAS las pantallas como ventanas contenidas
+    /// (MdiChild). Cada botón del dock abre su panel vía AbrirPanel; el liquid glass lo
+    /// aporta MdiChild.MontarGlass refractando el wallpaper del propio escritorio.
     /// </summary>
     public partial class EscritorioWindow : Window
     {
@@ -22,10 +23,14 @@ namespace arquitectSoft.View.Wpf
             SourceInitialized += OnSourceInitialized;
             Loaded += (s, e) => CargarFondo();
 
-            // Arrancar centrada en el MONITOR PRINCIPAL (área de trabajo).
+            // Tamaño "restaurado" centrado en el MONITOR PRINCIPAL (al que se vuelve si el
+            // usuario quita el maximizado con doble clic en la barra de título).
             Rect wa = SystemParameters.WorkArea;
             Left = wa.Left + Math.Max(0, (wa.Width - Width) / 2);
             Top = wa.Top + Math.Max(0, (wa.Height - Height) / 2);
+
+            // Arrancar MAXIMIZADA (respeta la barra de tareas por el hook WM_GETMINMAXINFO).
+            WindowState = WindowState.Maximized;
         }
 
         // ===== Barra de título: arrastrar entre monitores / doble clic = maximizar =====
@@ -157,22 +162,64 @@ namespace arquitectSoft.View.Wpf
             }
         }
 
-        // ===== Dock: piloto contenido =====
+        // ===== Dock: todas las pantallas contenidas en el escritorio =====
         private void Acerca_Click(object sender, RoutedEventArgs e) =>
             AbrirPanel("Acerca de", "", new AcercaPanel(), 500, 380);
 
-        // ===== Dock: resto (por ahora como ventana flotante; Fase 2 las contiene) =====
-        private void Analisis_Click(object sender, RoutedEventArgs e) => new AnalisisWindow().Show();
-        private void Puertas_Click(object sender, RoutedEventArgs e) => new PuertasWindow().Show();
-        private void Componentes_Click(object sender, RoutedEventArgs e) => new ComponenteWindow().Show();
-        private void Subcomponentes_Click(object sender, RoutedEventArgs e) => new SubComponenteWindow().Show();
+        private void Analisis_Click(object sender, RoutedEventArgs e) =>
+            AbrirPanel("Análisis de Mamparas", "", new AnalisisPanel(), 1140, 700);
+        private void Puertas_Click(object sender, RoutedEventArgs e) =>
+            AbrirPanel("Análisis de Puertas", "", new PuertasPanel(), 1040, 680);
+        private void Componentes_Click(object sender, RoutedEventArgs e) =>
+            AbrirPanel("Componentes", "", new ComponentePanel(), 1100, 700);
+        private void Subcomponentes_Click(object sender, RoutedEventArgs e) =>
+            AbrirPanel("Subcomponentes", "", new SubComponentePanel(), 900, 640);
         private void Acabados_Click(object sender, RoutedEventArgs e) =>
             AbrirPanel("Acabados", "", new AcabadosPanel(), 720, 560);
-        private void Mecanizados_Click(object sender, RoutedEventArgs e) => new MecanizadoWindow().Show();
-        private void Cortes_Click(object sender, RoutedEventArgs e) => new CorteWindow().Show();
-        private void Unidad_Click(object sender, RoutedEventArgs e) => new UnidadMedidaWindow().Show();
-        private void Respaldo_Click(object sender, RoutedEventArgs e) => new DbaBackupWindow().Show();
-        private void Importar_Click(object sender, RoutedEventArgs e) => new DbaImportWindow().Show();
+        private void Mecanizados_Click(object sender, RoutedEventArgs e) =>
+            AbrirPanel("Mecanizados", "", new MecanizadoPanel(), 720, 560);
+        private void Cortes_Click(object sender, RoutedEventArgs e) =>
+            AbrirPanel("Cortes", "", new CortePanel(), 760, 560);
+        private void Unidad_Click(object sender, RoutedEventArgs e) =>
+            AbrirPanel("Unidad de Medida", "", new UnidadMedidaPanel(), 720, 560);
+        private void Dependencias_Click(object sender, RoutedEventArgs e) =>
+            AbrirPanel("Dependencias de acabado", "", new DependenciasPanel(), 900, 600);
+        private void Respaldo_Click(object sender, RoutedEventArgs e) =>
+            AbrirPanel("Respaldo de base de datos", "", new DbaBackupPanel(), 560, 300);
+        private void Importar_Click(object sender, RoutedEventArgs e) =>
+            AbrirPanel("Importar base de datos", "", new DbaImportPanel(), 560, 360);
+
+        // ===== Toggle cristal ↔ modo rendimiento =====
+        private void Rendimiento_Click(object sender, RoutedEventArgs e)
+        {
+            LiquidGlass.ModoRendimiento = !LiquidGlass.ModoRendimiento;
+            foreach (UIElement el in Lienzo.Children)
+            {
+                var c = el as MdiChild;
+                if (c != null) c.AplicarGlass();
+            }
+            ActualizarBotonRendimiento();
+        }
+
+        private void ActualizarBotonRendimiento()
+        {
+            if (LiquidGlass.ModoRendimiento)
+            {
+                BtnRendimiento.Content = "Rendimiento";
+                BtnRendimiento.Background = new System.Windows.Media.SolidColorBrush(
+                    System.Windows.Media.Color.FromRgb(0xE0, 0x7B, 0x5B));
+                BtnRendimiento.Foreground = new System.Windows.Media.SolidColorBrush(
+                    System.Windows.Media.Color.FromRgb(0x20, 0x17, 0x12));
+            }
+            else
+            {
+                BtnRendimiento.Content = "Cristal";
+                BtnRendimiento.Background = new System.Windows.Media.SolidColorBrush(
+                    System.Windows.Media.Color.FromArgb(0x22, 0xFF, 0xFF, 0xFF));
+                BtnRendimiento.Foreground = new System.Windows.Media.SolidColorBrush(
+                    System.Windows.Media.Color.FromRgb(0xEC, 0xEC, 0xEC));
+            }
+        }
 
         // ===== Controles de la app =====
         private void MinimizarApp_Click(object sender, RoutedEventArgs e) => WindowState = WindowState.Minimized;

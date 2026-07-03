@@ -210,6 +210,17 @@ namespace arquitectSoft.Engine
                             dt = AnalisisEngine.OrdenarPorDescripcion(dt);
                         }
 
+                        // Sumar filas idénticas (mismo código, descripción, acabado, medida…)
+                        // SOLO en los apartados de HERRAJES: Perfil Metálico Herrajes (dg3) y
+                        // Puertas Herrajes (dg4). Perfil Metálico (dg1) ya se agrupa por
+                        // código+medida más arriba; Vidrios/Tubos/Mamparas/Puertas se dejan
+                        // tal cual estaban.
+                        if (Datagrid == 3 || Datagrid == 4)
+                            dt = SumarDuplicados(dt);
+
+                        // Cantidades sin decimales, redondeadas SIEMPRE hacia arriba.
+                        RedondearCantidad(dt);
+
                         if (Datagrid == 2)
                         {
                             if (PMValueFinish == 0)
@@ -377,6 +388,9 @@ namespace arquitectSoft.Engine
                         //Adjust widths of Columns.
                         wb.Worksheet(sheets).Columns().AdjustToContents();
                         wb.Worksheet(sheets).Column(wrapTextDefault ? 3 : 2).Width = 57;
+
+                        // Todas las celdas centradas (horizontal y vertical).
+                        CentrarTodo(wb.Worksheet(sheets));
                     }
                     else if (Datagrid == 9)
                     {
@@ -458,6 +472,9 @@ namespace arquitectSoft.Engine
                                         return row;
                                     })
                                     .CopyToDataTable();
+
+                        // Cantidades del albarán también sin decimales (techo).
+                        RedondearCantidad(dt1);
 
                         var ws = wb.Worksheets.Add(dt1, sheets);
                         ws.Row(1).InsertRowsAbove(18);
@@ -541,6 +558,9 @@ namespace arquitectSoft.Engine
                         //END FOOTER
 
                         wb.Worksheet(sheets).ShowGridLines = false;
+
+                        // Todas las celdas centradas (horizontal y vertical).
+                        CentrarTodo(wb.Worksheet(sheets));
                     }
                 }
 
@@ -555,6 +575,87 @@ namespace arquitectSoft.Engine
         private static int Filas(DataTable t)
         {
             return t == null ? 0 : t.Rows.Count;
+        }
+
+        /// <summary>
+        /// Suma las filas que son idénticas en todas sus columnas EXCEPTO la cantidad
+        /// (y las columnas de id, que cambian por fila). Resuelve el caso en que un mismo
+        /// código/descripción/acabado aparecía repetido y separado en vez de sumado.
+        /// </summary>
+        private static DataTable SumarDuplicados(DataTable dt)
+        {
+            if (dt == null || dt.Rows.Count == 0) return dt;
+
+            DataColumn cant = null;
+            foreach (DataColumn c in dt.Columns)
+                if (string.Equals(c.ColumnName, "cantidad", StringComparison.OrdinalIgnoreCase)) { cant = c; break; }
+            if (cant == null) return dt;   // sin columna de cantidad no hay nada que sumar
+
+            var keyCols = dt.Columns.Cast<DataColumn>()
+                .Where(c => c != cant && !c.ColumnName.StartsWith("id", StringComparison.OrdinalIgnoreCase))
+                .ToList();
+
+            DataTable result = dt.Clone();
+            DataColumn cantRes = result.Columns[cant.ColumnName];   // columna del CLON (no la de dt)
+            var map = new System.Collections.Generic.Dictionary<string, DataRow>();
+            foreach (DataRow row in dt.Rows)
+            {
+                string key = string.Join("", keyCols.Select(c => Convert.ToString(row[c])));
+                DataRow outRow;
+                if (map.TryGetValue(key, out outRow))
+                {
+                    outRow[cantRes] = AsignarNumero(cantRes, ToDouble(outRow[cantRes]) + ToDouble(row[cant]));
+                }
+                else
+                {
+                    outRow = result.NewRow();
+                    outRow.ItemArray = (object[])row.ItemArray.Clone();
+                    result.Rows.Add(outRow);
+                    map[key] = outRow;
+                }
+            }
+            return result;
+        }
+
+        /// <summary>Redondea SIEMPRE hacia arriba (techo) la columna "cantidad", sin decimales.</summary>
+        private static void RedondearCantidad(DataTable dt)
+        {
+            if (dt == null) return;
+            foreach (DataColumn c in dt.Columns)
+            {
+                if (!string.Equals(c.ColumnName, "cantidad", StringComparison.OrdinalIgnoreCase)) continue;
+                foreach (DataRow row in dt.Rows)
+                {
+                    if (row[c] == null || row[c] == DBNull.Value) continue;
+                    row[c] = AsignarNumero(c, Math.Ceiling(ToDouble(row[c])));
+                }
+            }
+        }
+
+        /// <summary>Centra todas las celdas con contenido de la hoja (horizontal y vertical).</summary>
+        private static void CentrarTodo(IXLWorksheet ws)
+        {
+            var usado = ws.RangeUsed();
+            if (usado == null) return;
+            usado.Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center)
+                       .Alignment.SetVertical(XLAlignmentVerticalValues.Center);
+        }
+
+        private static double ToDouble(object v)
+        {
+            if (v == null || v == DBNull.Value) return 0;
+            double d;
+            if (double.TryParse(Convert.ToString(v, System.Globalization.CultureInfo.InvariantCulture),
+                    System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out d))
+                return d;
+            try { return Convert.ToDouble(v); } catch { return 0; }
+        }
+
+        // Devuelve el número convertido al tipo de la columna (float/decimal/int/string).
+        private static object AsignarNumero(DataColumn col, double valor)
+        {
+            try { return Convert.ChangeType(valor, col.DataType, System.Globalization.CultureInfo.InvariantCulture); }
+            catch { return valor; }
         }
     }
 }

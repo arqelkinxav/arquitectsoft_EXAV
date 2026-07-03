@@ -2,7 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="arquitectSoft"
-        Width="1320" Height="840" MinWidth="900" MinHeight="600"
+        Width="1408" Height="770" MinWidth="900" MinHeight="600"
         WindowStyle="None" ResizeMode="CanResize" WindowStartupLocation="Manual"
         Background="#0A0A0C"
         TextOptions.TextFormattingMode="Display" UseLayoutRounding="True">
@@ -125,6 +125,24 @@
                 <TextBlock Text="arquitectSoft" FontSize="12.5" FontWeight="Bold" VerticalAlignment="Center"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,16,0">
+                <!-- Toggle cristal ↔ modo rendimiento -->
+                <Button x:Name="BtnRendimiento" Click="Rendimiento_Click" Cursor="Hand"
+                        VerticalAlignment="Center" Margin="0,0,14,0"
+                        Background="#22FFFFFF" Foreground="{StaticResource TextPrimary}"
+                        FontSize="11" FontWeight="Medium" Content="Cristal"
+                        ToolTip="Alternar cristal / modo rendimiento (apaga el efecto para ir más fluido con varias ventanas)">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="bd" CornerRadius="7" Background="{TemplateBinding Background}" Padding="12,4">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="bd" Property="Opacity" Value="0.85"/></Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
                 <Button Style="{StaticResource WinDot}" Content="&#xE921;" Click="MinimizarApp_Click" ToolTip="Minimizar"/>
                 <Button Style="{StaticResource WinDot}" Content="&#xE922;" Click="MaximizarApp_Click" ToolTip="Maximizar / Restaurar"/>
                 <Button Style="{StaticResource WinDot}" Content="&#xE8BB;" Click="CerrarApp_Click" ToolTip="Salir"/>
@@ -150,6 +168,7 @@
                         <Button Style="{StaticResource IconButton}" Tag="&#xE713;" Content="Mecaniz." Click="Mecanizados_Click"/>
                         <Button Style="{StaticResource IconButton}" Tag="&#xE73E;" Content="Cortes" Click="Cortes_Click"/>
                         <Button Style="{StaticResource IconButton}" Tag="&#xE721;" Content="U. Medida" Click="Unidad_Click"/>
+                        <Button Style="{StaticResource IconButton}" Tag="&#xE71B;" Content="Depend." Click="Dependencias_Click"/>
                         <Button Style="{StaticResource IconButton}" Tag="&#xE74E;" Content="Respaldo" Click="Respaldo_Click"/>
                         <Button Style="{StaticResource IconButton}" Tag="&#xE8B5;" Content="Importar" Click="Importar_Click"/>
                         <Button Style="{StaticResource IconButton}" Tag="&#xE946;" Content="Acerca" Click="Acerca_Click"/>

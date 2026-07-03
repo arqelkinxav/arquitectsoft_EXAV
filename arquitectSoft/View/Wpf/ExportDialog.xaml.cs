@@ -34,13 +34,33 @@ namespace arquitectSoft.View.Wpf
         public string Acabado2 { get; private set; }
         public string Albaran { get; private set; }
 
+        // Valores sugeridos (p. ej. leídos del TXT de información del proyecto).
+        // Se ponen ANTES de ShowDialog y prerellenan número/nombre.
+        public string PrefillNumero { get; set; }
+        public string PrefillNombre { get; set; }
+
+        // Acabado de perfilería sugerido: es el que YA tienen las cantidades
+        // (tras "Cambiar Acabado" o el 01 por defecto). Prerellena "Acabado Perfilería"
+        // para no tener que volver a elegirlo. Se pone ANTES de ShowDialog.
+        public string PrefillAcabado1 { get; set; }
+
         public ExportDialog()
         {
             InitializeComponent();
             TxtFecha.Text = DateTime.Now.ToString("yyyy-MM-dd");
             SourceInitialized += OnSourceInitialized;
             LiquidGlass.PrepararOculto(FrameRim, WinScale);
-            Loaded += (s, e) => { LiquidGlass.Apertura(FrameRim, WinScale); TxtNumero.Focus(); };
+            Loaded += (s, e) =>
+            {
+                if (!string.IsNullOrEmpty(PrefillNumero)) TxtNumero.Text = PrefillNumero;
+                if (!string.IsNullOrEmpty(PrefillNombre)) TxtNombre.Text = PrefillNombre;
+                if (!string.IsNullOrEmpty(PrefillAcabado1)) TxtAcabado1.Text = PrefillAcabado1;
+                LiquidGlass.Apertura(FrameRim, WinScale);
+                // Si ya viene el número, llevamos el foco al primer campo vacío.
+                if (string.IsNullOrEmpty(TxtNumero.Text)) TxtNumero.Focus();
+                else if (string.IsNullOrEmpty(TxtNombre.Text)) TxtNombre.Focus();
+                else TxtTecnico.Focus();
+            };
         }
 
         private void OnSourceInitialized(object sender, EventArgs e)

@@ -89,9 +89,36 @@ namespace arquitectSoft.View.Wpf
         // fondo a refractar es el wallpaper del propio escritorio de la app (un Visual dentro
         // de la ventana). Se recorta a la posición de la ventana hija dentro de ese fondo y
         // se le aplica el mismo shader de refracción. Así toda ventana contenida tiene cristal.
-        public static void MontarGlassMdi(FrameworkElement ventana, Rectangle backdrop, Visual fondo)
+        // MODO RENDIMIENTO: cuando está activo, las ventanas contenidas NO usan el shader ni
+        // el VisualBrush del wallpaper (que es lo caro con varias ventanas): se pintan con un
+        // panel oscuro plano. Se puede alternar en caliente reaplicando el cristal.
+        public static bool ModoRendimiento { get; set; }
+
+        // Panel oscuro plano y congelado para el modo rendimiento (opaco, tema negro).
+        private static readonly Brush FondoPlano = CrearFondoPlano();
+        private static Brush CrearFondoPlano()
         {
-            if (backdrop == null || fondo == null || ventana == null) return;
+            var b = new SolidColorBrush(Color.FromRgb(0x1B, 0x1B, 0x1E));
+            b.Freeze();
+            return b;
+        }
+
+        /// <summary>
+        /// Monta el liquid glass (o el panel plano si ModoRendimiento) sobre el backdrop y
+        /// devuelve una acción para DESMONTARLO (quita el handler y limpia fill/effect), de
+        /// modo que se pueda alternar cristal↔rendimiento en caliente.
+        /// </summary>
+        public static Action MontarGlassMdi(FrameworkElement ventana, Rectangle backdrop, Visual fondo)
+        {
+            if (backdrop == null || fondo == null || ventana == null) return delegate { };
+
+            if (ModoRendimiento)
+            {
+                // Sin refracción: panel opaco plano, barato de renderizar.
+                backdrop.Effect = null;
+                backdrop.Fill = FondoPlano;
+                return delegate { backdrop.Fill = null; };
+            }
 
             var brush = new VisualBrush(fondo)
             {
@@ -99,9 +126,22 @@ namespace arquitectSoft.View.Wpf
                 ViewboxUnits = BrushMappingMode.Absolute,
                 ViewportUnits = BrushMappingMode.RelativeToBoundingBox
             };
+            // RENDIMIENTO (1): cachear la rasterización del wallpaper. El fondo no cambia, así
+            // que se rasteriza una vez y se reutiliza en vez de re-renderizar en cada frame.
+            // Sin esto, con varias ventanas abiertas cada VisualBrush "vivo" repinta el
+            // wallpaper por frame y el PC se arrastra.
+            RenderOptions.SetCachingHint(brush, CachingHint.Cache);
+            RenderOptions.SetCacheInvalidationThresholdMinimum(brush, 0.5);
+            RenderOptions.SetCacheInvalidationThresholdMaximum(brush, 2.0);
+
             backdrop.Fill = brush;
             backdrop.Effect = new GlassyEffect();
 
+            // RENDIMIENTO (2): recalcular el recorte SOLO cuando la ventana se movió o cambió
+            // de tamaño. LayoutUpdated se dispara en cada pasada de layout (hover, spinner,
+            // scroll de grillas…); reasignar el Viewbox invalida el brush y fuerza repintado.
+            // Guardamos el último rect y salimos si no cambió de forma apreciable.
+            Rect ultimo = Rect.Empty;
             EventHandler actualizar = (s, e) =>
             {
                 try
@@ -109,13 +149,30 @@ namespace arquitectSoft.View.Wpf
                     if (ventana.ActualWidth <= 0 || ventana.ActualHeight <= 0) return;
                     GeneralTransform t = ventana.TransformToVisual(fondo);
                     Rect r = t.TransformBounds(new Rect(0, 0, ventana.ActualWidth, ventana.ActualHeight));
-                    if (r.Width > 0 && r.Height > 0) brush.Viewbox = r;
+                    if (r.Width <= 0 || r.Height <= 0) return;
+
+                    // Umbral de medio pixel: ignora reflows internos que no mueven la ventana.
+                    if (ultimo != Rect.Empty
+                        && Math.Abs(r.X - ultimo.X) < 0.5 && Math.Abs(r.Y - ultimo.Y) < 0.5
+                        && Math.Abs(r.Width - ultimo.Width) < 0.5 && Math.Abs(r.Height - ultimo.Height) < 0.5)
+                        return;
+
+                    ultimo = r;
+                    brush.Viewbox = r;
                 }
                 catch { /* aún sin layout */ }
             };
 
             // El MdiChild se mueve por Canvas.Left/Top: LayoutUpdated capta cada cambio.
             ventana.LayoutUpdated += actualizar;
+            actualizar(null, EventArgs.Empty);   // recorte inicial (importante al re-montar)
+
+            return delegate
+            {
+                ventana.LayoutUpdated -= actualizar;
+                backdrop.Effect = null;
+                backdrop.Fill = null;
+            };
         }
 
         // Cierre: encoge rápido con leve anticipación y se desvanece; llama alTerminar() al final.

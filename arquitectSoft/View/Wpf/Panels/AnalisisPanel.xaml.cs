@@ -1,64 +1,41 @@
 using System;
-using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
 using arquitectSoft.Engine;
 
-namespace arquitectSoft.View.Wpf
+namespace arquitectSoft.View.Wpf.Panels
 {
     /// <summary>
-    /// Versión WPF de la ventana "Análisis de Mamparas".
-    /// Tema oscuro "soft UI" + cálculo en segundo plano (el motor sin UI corre en
-    /// Task.Run para que la interfaz no se congele, a diferencia de WinForms).
+    /// Versión "panel" de la ventana "Análisis de Mamparas" para hospedarse dentro del
+    /// escritorio (MdiChild). Mismo comportamiento (cálculo en 2º plano, spinner, drag-drop,
+    /// previsualizador, exportar, cambiar acabado) SIN chrome de ventana ni liquid glass:
+    /// de eso se encarga la ventana hija que lo contiene. Reutiliza AnalisisEngine.
     /// </summary>
-    public partial class AnalisisWindow : Window
+    public partial class AnalisisPanel : UserControl
     {
         private const int MedidaMin = 0;
         private const int MedidaMax = 99999;
         private const int DesperdicioMin = 0;
         private const int DesperdicioMax = 100;
 
-        private static readonly string GlifoMaximizar = ((char)0xE922).ToString();
-        private static readonly string GlifoRestaurar = ((char)0xE923).ToString();
-
-        // ---- DWM: esquinas redondeadas nativas de Windows 11 ----
-        [DllImport("dwmapi.dll")]
-        private static extern int DwmSetWindowAttribute(IntPtr hwnd, int attribute, ref int value, int size);
-        private const int DWMWA_USE_IMMERSIVE_DARK_MODE = 20;
-        private const int DWMWA_BORDER_COLOR = 34;
-        private const int DWMWA_WINDOW_CORNER_PREFERENCE = 33;
-        private const int DWMWA_SYSTEMBACKDROP_TYPE = 38;
-        private const int DWMWCP_ROUND = 2;
-        private const int DWMSBT_TRANSIENTWINDOW = 3;   // material acrílico (cristal)
-        private const uint DWMWA_COLOR_NONE = 0xFFFFFFFE;   // sin borde
-
         // ---- Motor de cálculo (sin UI) + control de recálculo ----
         private readonly AnalisisEngine _engine = new AnalisisEngine();
         private DispatcherTimer _recalcTimer;
         private int _generacion = 0;        // descarta resultados de cálculos obsoletos
-        private bool _cerrando;             // evita reentrar al cerrar mientras corre la animación
 
-        public AnalisisWindow()
+        public AnalisisPanel()
         {
-            ScreenCaptureHelper.CaptureFullScreen();   // foto del escritorio antes de mostrarse
             InitializeComponent();
-            // Ventana modeless lanzada desde WinForms: habilita el enrutado de teclado
-            // hacia los controles WPF (TextBox, edición de grillas, etc.).
-            System.Windows.Forms.Integration.ElementHost.EnableModelessKeyboardInterop(this);
-            this.SourceInitialized += AnalisisWindow_SourceInitialized;
-            this.StateChanged += AnalisisWindow_StateChanged;
 
             // Debounce: recalcula 0,25 s después del último cambio de Medida/Desperdicio.
             _recalcTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(250) };
@@ -70,138 +47,30 @@ namespace arquitectSoft.View.Wpf
             foreach (var dg in TodasLasGrillas())
                 dg.AutoGeneratingColumn += Dg_AutoGeneratingColumn;
             DgPreview.AutoGeneratingColumn += Dg_AutoGeneratingColumn;
-
-            // Animación de apertura "Jelly Pop" (cristal que rebota al aparecer).
-            LiquidGlass.PrepararOculto(FrameRim, WinScale);
-            LiquidGlass.MontarGlass(this, GlassBackdrop);
-            this.Loaded += (s, e) => LiquidGlass.Apertura(FrameRim, WinScale);
         }
 
-        protected override void OnClosing(CancelEventArgs e)
-        {
-            if (!_cerrando)
-            {
-                e.Cancel = true;
-                _cerrando = true;
-                LiquidGlass.Cierre(FrameRim, WinScale, Close);
-                return;
-            }
-            base.OnClosing(e);
-        }
+        // Ventana que hospeda el panel (para que los diálogos cristal tengan owner).
+        private Window Owner { get { return Window.GetWindow(this); } }
 
         // Último resultado, para el previsualizador (acceso a tablas crudas por pestaña).
         private ResultadoAnalisis _ultimo;
+
+        // Acabado de perfilería que tienen HOY las cantidades (el "01" por defecto, o el
+        // último aplicado con "Cambiar Acabado"). Sirve para amarrar el campo "Acabado
+        // Perfilería" del export en los dos sentidos. Se resiembra desde los datos.
+        private string _acabadoPerfil = "";
+
+        // Copia intacta del último análisis fresco (con los placeholders MOD… y la perfilería
+        // por defecto). Al cambiar la perfilería se reconstruye desde aquí para re-resolver
+        // las dependencias. _resolver trae las reglas MOD… → acabado real de la base.
+        private ResultadoAnalisis _base;
+        private DependenciaResolver _resolver;
 
         private DataGrid[] TodasLasGrillas() => new[]
         {
             DgPerfilMetalico, DgPerfilMetalicoHerraje, DgVidrioPaneles, DgPuertas,
             DgPuertasHerrajes, DgPuertasCantidad, DgTubos, DgMamparas
         };
-
-        private void AnalisisWindow_SourceInitialized(object sender, EventArgs e)
-        {
-            IntPtr hwnd = new WindowInteropHelper(this).Handle;
-            try
-            {
-                int pref = DWMWCP_ROUND;
-                DwmSetWindowAttribute(hwnd, DWMWA_WINDOW_CORNER_PREFERENCE, ref pref, sizeof(int));
-
-                // Tema oscuro en la decoración nativa + material acrílico (cristal)
-                // de fondo, estilo "vidrio esmerilado" de Windows 11.
-                int dark = 1;
-                DwmSetWindowAttribute(hwnd, DWMWA_USE_IMMERSIVE_DARK_MODE, ref dark, sizeof(int));
-                int backdrop = DWMSBT_TRANSIENTWINDOW;
-                DwmSetWindowAttribute(hwnd, DWMWA_SYSTEMBACKDROP_TYPE, ref backdrop, sizeof(int));
-                // Quita el borde claro que Windows 11 dibuja alrededor de la ventana.
-                int sinBorde = unchecked((int)DWMWA_COLOR_NONE);
-                DwmSetWindowAttribute(hwnd, DWMWA_BORDER_COLOR, ref sinBorde, sizeof(int));
-            }
-            catch { /* Windows 10 o anterior: esquinas rectas, sin acrílico */ }
-
-            // Hook para que al maximizar la ventana sin bordes NO tape la barra de tareas.
-            HwndSource src = HwndSource.FromHwnd(hwnd);
-            if (src != null)
-            {
-                src.AddHook(WndProc);
-                // Para que el material acrílico se vea a través del fondo translúcido,
-                // el lienzo de composición de WPF debe ser transparente.
-                if (src.CompositionTarget != null)
-                    src.CompositionTarget.BackgroundColor = Colors.Transparent;
-            }
-        }
-
-        // ---- Maximizar respetando el área de trabajo del monitor ----
-        private const int WM_GETMINMAXINFO = 0x0024;
-        private const int MONITOR_DEFAULTTONEAREST = 2;
-
-        private static IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
-        {
-            if (msg == WM_GETMINMAXINFO)
-            {
-                MINMAXINFO mmi = (MINMAXINFO)Marshal.PtrToStructure(lParam, typeof(MINMAXINFO));
-                IntPtr monitor = MonitorFromWindow(hwnd, MONITOR_DEFAULTTONEAREST);
-                if (monitor != IntPtr.Zero)
-                {
-                    MONITORINFO mi = new MONITORINFO();
-                    GetMonitorInfo(monitor, mi);
-                    RECT work = mi.rcWork;
-                    RECT mon = mi.rcMonitor;
-                    mmi.ptMaxPosition.X = work.Left - mon.Left;
-                    mmi.ptMaxPosition.Y = work.Top - mon.Top;
-                    mmi.ptMaxSize.X = work.Right - work.Left;
-                    mmi.ptMaxSize.Y = work.Bottom - work.Top;
-                    Marshal.StructureToPtr(mmi, lParam, true);
-                }
-                handled = true;
-            }
-            return IntPtr.Zero;
-        }
-
-        [DllImport("user32.dll")] private static extern IntPtr MonitorFromWindow(IntPtr handle, int flags);
-        [DllImport("user32.dll")] private static extern bool GetMonitorInfo(IntPtr hMonitor, MONITORINFO lpmi);
-
-        [StructLayout(LayoutKind.Sequential)]
-        private struct POINT { public int X; public int Y; }
-        [StructLayout(LayoutKind.Sequential)]
-        private struct RECT { public int Left; public int Top; public int Right; public int Bottom; }
-        [StructLayout(LayoutKind.Sequential)]
-        private struct MINMAXINFO
-        {
-            public POINT ptReserved;
-            public POINT ptMaxSize;
-            public POINT ptMaxPosition;
-            public POINT ptMinTrackSize;
-            public POINT ptMaxTrackSize;
-        }
-        [StructLayout(LayoutKind.Sequential)]
-        private class MONITORINFO
-        {
-            public int cbSize = Marshal.SizeOf(typeof(MONITORINFO));
-            public RECT rcMonitor;
-            public RECT rcWork;
-            public int dwFlags;
-        }
-
-        private void AnalisisWindow_StateChanged(object sender, EventArgs e)
-        {
-            bool max = this.WindowState == WindowState.Maximized;
-            BtnMax.Content = max ? GlifoRestaurar : GlifoMaximizar;
-            // Sin esquinas redondeadas ni filo cuando está maximizada (si no, asoma el
-            // acrílico en las 4 esquinas de pantalla).
-            FrameRim.CornerRadius = new CornerRadius(max ? 0 : 8);
-            FrameRim.BorderThickness = new Thickness(max ? 0 : 1.1);
-        }
-
-        // ===== Barra de título =====
-        private void Minimizar_Click(object sender, RoutedEventArgs e) => this.WindowState = WindowState.Minimized;
-
-        private void Maximizar_Click(object sender, RoutedEventArgs e)
-        {
-            this.WindowState = (this.WindowState == WindowState.Maximized)
-                ? WindowState.Normal : WindowState.Maximized;
-        }
-
-        private void Cerrar_Click(object sender, RoutedEventArgs e) => this.Close();
 
         // ===== Validación: solo dígitos =====
         private void SoloEnteros(object sender, TextCompositionEventArgs e)
@@ -235,7 +104,7 @@ namespace arquitectSoft.View.Wpf
                 Filter = "Archivos TXT (*.txt)|*.txt",
                 Title = "Seleccionar despieces (.txt)"
             };
-            if (dlg.ShowDialog(this) != true) return;
+            if (dlg.ShowDialog(Owner) != true) return;
             await CargarArchivos(dlg.FileNames);
         }
 
@@ -256,7 +125,7 @@ namespace arquitectSoft.View.Wpf
                 return;
             }
 
-            bool segmentar = GlassDialog.Pregunta(this, "Análisis de Mamparas",
+            bool segmentar = GlassDialog.Pregunta(Owner, "Análisis de Mamparas",
                 "¿Quieres segmentar el análisis de los Perfiles Metálicos por Ubicación?",
                 si: "Sí, por ubicación", no: "No");
 
@@ -274,7 +143,7 @@ namespace arquitectSoft.View.Wpf
             await RecalcularAsync(seleccionarPestana: true);
         }
 
-        // ===== Arrastrar y soltar archivos sobre la ventana =====
+        // ===== Arrastrar y soltar archivos sobre el panel =====
         private static bool TraeArchivos(DragEventArgs e) =>
             e.Data != null && e.Data.GetDataPresent(DataFormats.FileDrop);
 
@@ -288,7 +157,7 @@ namespace arquitectSoft.View.Wpf
 
         private void Ventana_DragLeave(object sender, DragEventArgs e)
         {
-            // Ocultar sólo cuando el cursor sale de verdad de la ventana
+            // Ocultar sólo cuando el cursor sale de verdad del panel
             // (DragLeave también burbujea desde los controles internos).
             var p = e.GetPosition(this);
             if (p.X <= 0 || p.Y <= 0 || p.X >= ActualWidth || p.Y >= ActualHeight)
@@ -354,7 +223,13 @@ namespace arquitectSoft.View.Wpf
                 return;
             }
 
-            MostrarResultado(res, seleccionarPestana);
+            // Cálculo fresco: guarda la base intacta (con placeholders MOD… y perfilería 01),
+            // carga las reglas de dependencia y muestra ya resuelto para la perfilería 01.
+            _base = res.Copiar();
+            _resolver = DependenciaResolver.Cargar();
+            _acabadoPerfil = AcabadoPorDefecto(res.PerfilMetalico);
+            RefrescarDesdeBase(seleccionarPestana);
+
             LblEstado.Text = res.TieneDatos
                 ? string.Format("Listo · {0:0.0} s", sw.ElapsedMilliseconds / 1000.0)
                 : "No se encontraron datos para analizar.";
@@ -412,6 +287,72 @@ namespace arquitectSoft.View.Wpf
                 new Duration(TimeSpan.FromSeconds(0.2)));
             fade.Completed += (s, e) => SpinnerOverlay.Visibility = Visibility.Collapsed;
             SpinnerOverlay.BeginAnimation(OpacityProperty, fade);
+        }
+
+        /// <summary>
+        /// Acabado POR DEFECTO de la perfilería = el del CÓDIGO "01" (el sufijo "-01" del
+        /// código del perfil), NO por descripción/homologación. Devuelve "CÓDIGO - DESC"
+        /// como el buscador. Recorre las filas de perfil (no separador, no cabecera "Puerta"):
+        /// el código va en la col 1 ("BASE-ACAB") y la descripción del acabado en la col 3.
+        /// Si no hay ninguna fila con código de acabado "01", cae a la primera fila válida.
+        /// </summary>
+        private static string AcabadoPorDefecto(DataTable perfil)
+        {
+            if (perfil == null || perfil.Columns.Count < 4) return "";
+            string primera = "";
+            foreach (DataRow row in perfil.Rows)
+            {
+                string c0 = Convert.ToString(row[0]);
+                if (string.IsNullOrEmpty(c0) || c0.Contains("Puerta")) continue;
+                string desc = Convert.ToString(row[3]);
+                if (string.IsNullOrEmpty(desc)) continue;
+                string cod = Convert.ToString(row[1]);
+                string codAcab = cod.Contains("-") ? cod.Split('-')[1].Trim() : "";
+                string full = codAcab != "" ? codAcab + " - " + desc : desc;
+                if (primera == "") primera = full;
+                if (codAcab == "01") return full;
+            }
+            return primera;
+        }
+
+        /// <summary>Código de acabado de una cadena "CÓDIGO - DESCRIPCIÓN".</summary>
+        private static string CodigoAcabado(string acabado)
+        {
+            if (string.IsNullOrEmpty(acabado)) return "";
+            return acabado.Contains("-") ? acabado.Split('-')[0].Trim() : acabado.Trim();
+        }
+
+        /// <summary>
+        /// Reconstruye el resultado mostrado desde la copia base intacta: parte de los
+        /// placeholders MOD… y la perfilería por defecto, aplica el cambio a la perfilería
+        /// vigente (_acabadoPerfil) y resuelve las dependencias para ese valor. Al partir
+        /// SIEMPRE de la base, se puede re-resolver cuantas veces cambie la perfilería.
+        /// </summary>
+        private void RefrescarDesdeBase(bool seleccionarPestana)
+        {
+            if (_base == null) return;
+
+            ResultadoAnalisis vista = _base.Copiar();
+
+            // 1) Lleva la perfilería del valor por defecto al vigente (si cambió).
+            string defecto = AcabadoPorDefecto(_base.PerfilMetalico);
+            if (!string.IsNullOrWhiteSpace(_acabadoPerfil) &&
+                CodigoAcabado(_acabadoPerfil) != CodigoAcabado(defecto))
+                AcabadoChanger.Aplicar(vista, defecto, _acabadoPerfil);
+
+            // 2) Resuelve los acabados dependientes (MOD…) según la perfilería vigente.
+            //    Recarga las reglas cada vez, para tomar cambios hechos en la pantalla de
+            //    Dependencias sin tener que re-analizar.
+            _resolver = DependenciaResolver.Cargar();
+            if (_resolver != null && _resolver.HayReglas)
+            {
+                var sinRegla = _resolver.Resolver(vista, CodigoAcabado(_acabadoPerfil));
+                if (sinRegla.Count > 0)
+                    LblEstado.Text = "Aviso: sin regla de dependencia para " + string.Join(", ", sinRegla)
+                                   + " con esta perfilería.";
+            }
+
+            MostrarResultado(vista, seleccionarPestana);
         }
 
         private void MostrarResultado(ResultadoAnalisis r, bool seleccionarPestana)
@@ -514,8 +455,6 @@ namespace arquitectSoft.View.Wpf
 
             if (esDescripcion)
             {
-                // Ancho inicial acotado; el texto largo hace wrap (la fila crece).
-                // Redimensionable a mano si se quiere ver completo.
                 e.Column.Width = new DataGridLength(250);
                 e.Column.MinWidth = 140;
             }
@@ -525,8 +464,7 @@ namespace arquitectSoft.View.Wpf
             }
         }
 
-        // ===== Coloreado de filas del grid de Puertas (equivale al CellFormatting
-        //       de WinForms: separador / título de puerta / variante "~"). =====
+        // ===== Coloreado de filas del grid de Puertas =====
         private static readonly Brush PuertaSeparador = Congelar(Color.FromRgb(0x2A, 0x2A, 0x2A));
         private static readonly Brush PuertaTitulo    = Congelar(Color.FromArgb(0x4D, 0xE0, 0x7B, 0x5B)); // peach
         private static readonly Brush PuertaVariante  = Congelar(Color.FromArgb(0x4D, 0x53, 0xC5, 0x6E)); // verde
@@ -583,20 +521,31 @@ namespace arquitectSoft.View.Wpf
         {
             if (_ultimo == null || !_ultimo.TieneDatos)
             {
-                GlassDialog.Informar(this, "Exportar", "No existen datos analizados para exportar.");
+                GlassDialog.Informar(Owner, "Exportar", "No existen datos analizados para exportar.");
                 return;
             }
 
-            // Ventana WPF (tema cristal) que recoge nº proyecto, nombre, técnico, etc.
-            // Si se cargó un TXT de información del proyecto, prerellenamos nº y nombre.
             var bsc = new ExportDialog
             {
-                Owner = this,
+                Owner = Owner,
                 PrefillNumero = _engine.ProyectoCodigo,
-                PrefillNombre = _engine.ProyectoNombre
+                PrefillNombre = _engine.ProyectoNombre,
+                PrefillAcabado1 = _acabadoPerfil   // Sentido A: precarga el acabado ya aplicado
             };
             bsc.ShowDialog();
             if (bsc.Numero == null) return;   // canceló
+
+            // Sentido B: si en el diálogo se eligió un acabado de perfilería distinto al
+            // que tienen las cantidades, aplícalo antes de exportar (así se pasa el "01" —o el
+            // vigente— al escogido, sin usar "Cambiar Acabado"). Va por el pipeline base para
+            // que también se re-resuelvan las dependencias MOD… para la nueva perfilería.
+            if (!string.IsNullOrWhiteSpace(bsc.Acabado1) &&
+                !string.IsNullOrWhiteSpace(_acabadoPerfil) &&
+                bsc.Acabado1.Trim() != _acabadoPerfil.Trim())
+            {
+                _acabadoPerfil = bsc.Acabado1;   // el vigente pasa a ser el elegido
+                RefrescarDesdeBase(false);
+            }
 
             string[] param = { bsc.Numero, bsc.Nombre, bsc.Tecnico, bsc.Fecha,
                                bsc.Acabado1, bsc.Acabado2, bsc.Albaran };
@@ -618,45 +567,55 @@ namespace arquitectSoft.View.Wpf
                     .Exportar(_ultimo, param, folder, _ultimo.SwSegmentadoUbiFinal);
 
                 LblEstado.Text = "Exportado: " + archivo;
-                if (GlassDialog.Pregunta(this, "Exportar",
+                if (GlassDialog.Pregunta(Owner, "Exportar",
                         "Se exportó correctamente. ¿Deseas abrirlo ahora?", si: "Abrir", no: "Ahora no"))
                     Process.Start(archivo);
                 else
-                    GlassDialog.Informar(this, "Exportar", "El archivo está en:\n" + archivo);
+                    GlassDialog.Informar(Owner, "Exportar", "El archivo está en:\n" + archivo);
             }
             catch (IOException)
             {
-                GlassDialog.Informar(this, "Exportar",
+                GlassDialog.Informar(Owner, "Exportar",
                     "Un archivo se encontraba abierto. Ciérralo e inténtalo nuevamente.");
                 LblEstado.Text = "Exportación cancelada (archivo abierto).";
             }
             catch (Exception ex)
             {
-                GlassDialog.Informar(this, "Exportar", "Error al exportar: " + ex.Message);
+                GlassDialog.Informar(Owner, "Exportar", "Error al exportar: " + ex.Message);
                 LblEstado.Text = "Error al exportar.";
             }
         }
 
-        // ===== Cambiar Acabado (global): busca un acabado y lo reemplaza en
-        //       TODAS las tablas calculadas (equivale a BtnChange_Click + FnChangeInfo). =====
+        // ===== Cambiar Acabado (global) =====
         private void CambiarAcabado_Click(object sender, RoutedEventArgs e)
         {
             if (_ultimo == null || !_ultimo.TieneDatos)
             {
-                GlassDialog.Informar(this, "Cambiar Acabado", "Primero carga y analiza unos archivos.");
+                GlassDialog.Informar(Owner, "Cambiar Acabado", "Primero carga y analiza unos archivos.");
                 return;
             }
 
             string a1, a2;
-            if (!GlassDialog.PedirAcabado(this, out a1, out a2)) return;
+            if (!GlassDialog.PedirAcabado(Owner, out a1, out a2)) return;
             if (string.IsNullOrWhiteSpace(a1))
             {
-                GlassDialog.Informar(this, "Cambiar Acabado", "Indica el acabado a buscar (origen).");
+                GlassDialog.Informar(Owner, "Cambiar Acabado", "Indica el acabado a buscar (origen).");
                 return;
             }
 
-            AcabadoChanger.Aplicar(_ultimo, a1, a2 ?? "");
-            MostrarResultado(_ultimo, false);   // re-enlaza los grids con las tablas ya modificadas
+            // ¿Se está cambiando la PERFILERÍA (el acabado del slot por defecto vigente)?
+            if (CodigoAcabado(a1) == CodigoAcabado(_acabadoPerfil) && !string.IsNullOrWhiteSpace(a2))
+            {
+                // Va por el pipeline base: re-aplica perfilería + re-resuelve dependencias MOD…
+                _acabadoPerfil = a2;
+                RefrescarDesdeBase(false);
+            }
+            else
+            {
+                // Cambio de un acabado cualquiera (no perfilería): edición directa, como antes.
+                AcabadoChanger.Aplicar(_ultimo, a1, a2 ?? "");
+                MostrarResultado(_ultimo, false);
+            }
             LblEstado.Text = "Acabado actualizado: \"" + a1 + "\" → \"" + a2 + "\".";
         }
 
@@ -673,11 +632,11 @@ namespace arquitectSoft.View.Wpf
             var row = FilaPerfilSeleccionada();
             if (row == null)
             {
-                GlassDialog.Informar(this, "Remplazar SubComponente", "Selecciona primero una fila de Perfil Metálico.");
+                GlassDialog.Informar(Owner, "Remplazar SubComponente", "Selecciona primero una fila de Perfil Metálico.");
                 return;
             }
 
-            var bsc = new BuscarDialog { Consulta = "SubComp", Owner = this };
+            var bsc = new BuscarDialog { Consulta = "SubComp", Owner = Owner };
             if (bsc.ShowDialog() != true) return;
 
             string codigo = bsc.ReturnItem1.Trim();
@@ -697,13 +656,13 @@ namespace arquitectSoft.View.Wpf
             var row = FilaPerfilSeleccionada();
             if (row == null)
             {
-                GlassDialog.Informar(this, "Cambiar Acabado", "Selecciona primero una fila de Perfil Metálico.");
+                GlassDialog.Informar(Owner, "Cambiar Acabado", "Selecciona primero una fila de Perfil Metálico.");
                 return;
             }
 
             string acabadoActual = row.ItemArray.Length > 3 ? Convert.ToString(row[3]) : "";
             string a1, a2;
-            if (!GlassDialog.PedirAcabado(this, out a1, out a2, acabadoActual)) return;
+            if (!GlassDialog.PedirAcabado(Owner, out a1, out a2, acabadoActual)) return;
             if (string.IsNullOrWhiteSpace(a2)) return;
 
             AcabadoChanger.CambiarFilaPerfil(row, a2);

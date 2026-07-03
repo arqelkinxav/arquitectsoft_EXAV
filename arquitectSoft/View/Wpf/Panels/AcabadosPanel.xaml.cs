@@ -221,8 +221,28 @@ namespace arquitectSoft.View.Wpf.Panels
             }
             else
             {
-                // Edición: el DTO actualiza la descripción del registro por Id.
+                // Edición: valida que NINGÚN otro acabado use ya ese código.
+                if (!dto.CodigoLibre(codigo, id.ToString()))
+                {
+                    GlassDialog.Informar(Owner, "Acabados", "Ya existe otro acabado con el código \"" + codigo + "\".");
+                    CargarLista();
+                    return;
+                }
+
+                // Código anterior (para propagar a las reglas si cambió).
+                string codigoViejo = row.HasVersion(DataRowVersion.Original)
+                    ? Convert.ToString(row["Codigo_Homologacion", DataRowVersion.Original]).Trim()
+                    : codigo;
+
+                // Actualiza código + descripción del MISMO registro (por Id): no rompe relaciones.
                 resul = dto.SaveAcabado(codigo, desc, "Editar", id.ToString());
+
+                // Si el código cambió, propágalo a las reglas de dependencia que lo usen.
+                if (codigoViejo != codigo)
+                {
+                    try { new Dto.DependenciaDto().RenombrarCodigo(codigoViejo, codigo); }
+                    catch { /* el acabado ya quedó guardado; las reglas se pueden ajustar aparte */ }
+                }
             }
 
             CargarLista();

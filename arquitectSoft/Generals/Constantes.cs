@@ -64,8 +64,37 @@ namespace arquitectSoft.Generals
 
         public static String QUERY_INSERT_ACABADO = "INSERT acabados (Codigo_Homologacion, descripcion)VALUES(?,?)";
         public static String QUERY_DELETE_ACABADO = "DELETE FROM acabados WHERE Id_Acabado = ?";
-        public static String QUERY_UPDATE_ACABADO = "UPDATE acabados SET descripcion = ? WHERE Id_Acabado = ?";
+        public static String QUERY_UPDATE_ACABADO = "UPDATE acabados SET Codigo_Homologacion = ?, descripcion = ? WHERE Id_Acabado = ?";
         public static String QUERY_EXITS_ACABADO = "SELECT Id_Acabado FROM acabados where Codigo_Homologacion = ? or Descripcion = ?;";
+        // ¿OTRO acabado (distinto del actual) ya usa este código? (para validar la edición de código)
+        public static String QUERY_ACABADO_COD_OTRO = "SELECT Id_Acabado FROM acabados WHERE Codigo_Homologacion = ? AND Id_Acabado <> ? LIMIT 1;";
+
+        // ===== Dependencias de acabado (BETA) =====
+        // Placeholders MOD… (acabados "variables" que dependen de la perfilería).
+        public static String QUERY_ACABADOS_MOD = "SELECT Codigo_Homologacion, Descripcion FROM acabados WHERE Codigo_Homologacion LIKE 'MOD%' ORDER BY Codigo_Homologacion";
+        // Acabados REALES (sin los MOD…) para elegir el resultado y para los selectores de análisis/export.
+        public static String QUERY_ACABADOS_REALES = "SELECT Id_Acabado, Codigo_Homologacion, CONCAT(Codigo_Homologacion,' - ',Descripcion) Descripcion FROM acabados WHERE Codigo_Homologacion NOT LIKE 'MOD%' ORDER BY Codigo_Homologacion";
+        // Mapa código→descripción de TODOS los acabados (para resolver el resultado).
+        public static String QUERY_ACABADOS_DESC = "SELECT Codigo_Homologacion, Descripcion FROM acabados";
+        // Reglas de dependencia: (placeholder, valor de perfilería) → acabado resultante.
+        public static String QUERY_DEPENDENCIAS = "SELECT Id, Cod_Placeholder, Cod_Perfileria, Cod_Resultado FROM beta_dependencias_acabado";
+        // Reglas con descripciones (para la pantalla de configuración).
+        public static String QUERY_DEPENDENCIAS_DETALLE =
+            "SELECT d.Cod_Placeholder, IFNULL(ph.Descripcion, d.Cod_Placeholder) Placeholder, " +
+            "d.Cod_Perfileria, IFNULL(pf.Descripcion, d.Cod_Perfileria) Perfileria, " +
+            "d.Cod_Resultado, IFNULL(rs.Descripcion, d.Cod_Resultado) Resultado " +
+            "FROM beta_dependencias_acabado d " +
+            "LEFT JOIN acabados ph ON ph.Codigo_Homologacion = d.Cod_Placeholder " +
+            "LEFT JOIN acabados pf ON pf.Codigo_Homologacion = d.Cod_Perfileria " +
+            "LEFT JOIN acabados rs ON rs.Codigo_Homologacion = d.Cod_Resultado " +
+            "ORDER BY d.Cod_Placeholder, d.Cod_Perfileria";
+        public static String QUERY_UPSERT_DEPENDENCIA = "INSERT beta_dependencias_acabado (Cod_Placeholder, Cod_Perfileria, Cod_Resultado) VALUES (?,?,?) ON DUPLICATE KEY UPDATE Cod_Resultado = VALUES(Cod_Resultado)";
+        // Al renombrar el código de un acabado, propaga el cambio a las reglas que lo usen
+        // (para que la dependencia no se rompa). Uno por columna.
+        public static String QUERY_REN_DEP_PLACEHOLDER = "UPDATE beta_dependencias_acabado SET Cod_Placeholder = ? WHERE Cod_Placeholder = ?";
+        public static String QUERY_REN_DEP_PERFILERIA  = "UPDATE beta_dependencias_acabado SET Cod_Perfileria = ? WHERE Cod_Perfileria = ?";
+        public static String QUERY_REN_DEP_RESULTADO   = "UPDATE beta_dependencias_acabado SET Cod_Resultado = ? WHERE Cod_Resultado = ?";
+        public static String QUERY_DELETE_DEPENDENCIA = "DELETE FROM beta_dependencias_acabado WHERE Cod_Placeholder = ? AND Cod_Perfileria = ?";
 
         //Corte
         public static String QUERY_CORTE = "SELECT Id_Corte,Descripcion,Corte_Derecho,Corte_Izquierdo FROM cortes";
