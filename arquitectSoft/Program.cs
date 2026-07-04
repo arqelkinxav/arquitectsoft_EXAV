@@ -26,7 +26,9 @@ namespace arquitectSoft
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FrmLogin());
+            // Login en WPF (cristal). Su ShowDialog corre el bucle modal; al cerrarse
+            // (tras cerrar el escritorio, o al cancelar) Main retorna y la app termina.
+            new View.Wpf.LoginWindow().ShowDialog();
         }
     }
 }

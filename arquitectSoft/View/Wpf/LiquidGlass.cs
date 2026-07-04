@@ -1,6 +1,8 @@
 using arquitectSoft.View.Wpf.Shaders;
 using System;
+using System.Runtime.InteropServices;
 using System.Windows;
+using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
@@ -15,6 +17,22 @@ namespace arquitectSoft.View.Wpf
     /// </summary>
     internal static class LiquidGlass
     {
+        private const int WM_WINDOWPOSCHANGING = 0x0046;
+        private const uint SWP_NOSIZE = 0x0001;
+        private const uint SWP_NOMOVE = 0x0002;
+
+        [StructLayout(LayoutKind.Sequential)]
+        private struct WINDOWPOS
+        {
+            public IntPtr hwnd;
+            public IntPtr hwndInsertAfter;
+            public int x;
+            public int y;
+            public int cx;
+            public int cy;
+            public uint flags;
+        }
+
         // Deja el marco listo para "saltar": invisible, encogido y con leve desenfoque.
         public static void PrepararOculto(UIElement frame, ScaleTransform scale)
         {
@@ -82,6 +100,110 @@ namespace arquitectSoft.View.Wpf
             w.LocationChanged += (s, e) => actualizar();
             w.SizeChanged += (s, e) => actualizar();
             w.Loaded += (s, e) => actualizar();
+        }
+
+        // ===== Fondo "lente" sobre una IMAGEN propia estirada a pantalla completa =====
+        // Igual que MontarGlass, pero en vez de la captura de la pantalla usa 'img' como si
+        // fuese un wallpaper que cubre TODO el escritorio virtual. La ventana solo revela la
+        // porción de la imagen bajo su posición; al mover la ventana, "panea" sobre la imagen
+        // (efecto: el fondo está ahí aunque no se dibuje, solo se ve a través de la ventana).
+        // El llamador aplica el GlassyEffect que quiera sobre 'backdrop'.
+        public static void MontarGlassImagen(Window w, Rectangle backdrop, System.Windows.Media.ImageSource img)
+        {
+            if (backdrop == null || img == null) return;
+            ScreenCaptureHelper.EnsureMetrics();
+
+            // Se mapea a la pantalla PRINCIPAL (un monitor, origen 0,0), NO al escritorio
+            // virtual de varios monitores (si no, la imagen se estira a lo ancho de todas).
+            double psw = ScreenCaptureHelper.PrimaryScreenWidth;
+            double psh = ScreenCaptureHelper.PrimaryScreenHeight;
+            if (psw <= 0 || psh <= 0) return;
+
+            // Escala: unidades de la imagen por píxel de la pantalla principal (la imagen se
+            // estira a ese monitor). El Viewbox va en el espacio de coordenadas de la imagen.
+            double scaleX = img.Width / psw;
+            double scaleY = img.Height / psh;
+
+            var brush = new ImageBrush(img)
+            {
+                Stretch = Stretch.Fill,
+                ViewboxUnits = BrushMappingMode.Absolute,
+                ViewportUnits = BrushMappingMode.RelativeToBoundingBox
+            };
+            // Cachea la rasterización (la imagen no cambia): al mover la ventana solo se
+            // remapea el Viewbox, sin re-renderizar la imagen → paneo fluido, sin flicks.
+            RenderOptions.SetCachingHint(brush, CachingHint.Cache);
+            RenderOptions.SetCacheInvalidationThresholdMinimum(brush, 0.5);
+            RenderOptions.SetCacheInvalidationThresholdMaximum(brush, 2.0);
+            backdrop.Fill = brush;
+
+            // Se recalcula el recorte POR FRAME (sincronizado con el compositor), no por el
+            // evento LocationChanged (que llega un frame tarde y produce el "flick"). Con un
+            // umbral de medio píxel se sale enseguida cuando la ventana está quieta (sin costo).
+            Rect ultimo = Rect.Empty;
+            EventHandler porFrame = (s, e) =>
+            {
+                try
+                {
+                    if (w.ActualWidth <= 0 || w.ActualHeight <= 0) return;
+                    Point tl = w.PointToScreen(new Point(0, 0));
+                    Point br = w.PointToScreen(new Point(w.ActualWidth, w.ActualHeight));
+                    double ww = br.X - tl.X;
+                    double hh = br.Y - tl.Y;
+                    if (ww <= 0 || hh <= 0) return;
+
+                    // Origen de la pantalla principal = (0,0); la posición de la ventana se
+                    // mapea directo al espacio de la imagen.
+                    Rect r = new Rect(tl.X * scaleX, tl.Y * scaleY, ww * scaleX, hh * scaleY);
+                    if (ultimo != Rect.Empty
+                        && Math.Abs(r.X - ultimo.X) < 0.5 && Math.Abs(r.Y - ultimo.Y) < 0.5
+                        && Math.Abs(r.Width - ultimo.Width) < 0.5 && Math.Abs(r.Height - ultimo.Height) < 0.5)
+                        return;
+                    ultimo = r;
+                    brush.Viewbox = r;
+                }
+                catch { /* sin HWND todavía */ }
+            };
+
+            CompositionTarget.Rendering += porFrame;
+            w.Closed += (s, e) => CompositionTarget.Rendering -= porFrame;   // no dejar el handler vivo
+
+            // Además, engancha WM_WINDOWPOSCHANGING: Windows manda la posición FUTURA de la
+            // ventana ANTES de repintarla. Reposicionamos el fondo hacia ahí, así al pintarse
+            // ya está en su sitio (mata el desfase de un frame que causa el "flick" al arrastrar).
+            HwndSourceHook hook = (IntPtr h, int msg, IntPtr wParam, IntPtr lParam, ref bool handled) =>
+            {
+                if (msg == WM_WINDOWPOSCHANGING)
+                {
+                    WINDOWPOS wp = (WINDOWPOS)Marshal.PtrToStructure(lParam, typeof(WINDOWPOS));
+                    if ((wp.flags & SWP_NOMOVE) == 0)
+                    {
+                        double ww, hh;
+                        if ((wp.flags & SWP_NOSIZE) != 0)
+                        {
+                            try
+                            {
+                                Point tl = w.PointToScreen(new Point(0, 0));
+                                Point br = w.PointToScreen(new Point(w.ActualWidth, w.ActualHeight));
+                                ww = br.X - tl.X; hh = br.Y - tl.Y;
+                            }
+                            catch { ww = wp.cx; hh = wp.cy; }
+                        }
+                        else { ww = wp.cx; hh = wp.cy; }
+
+                        if (ww > 0 && hh > 0)
+                            brush.Viewbox = new Rect(wp.x * scaleX, wp.y * scaleY, ww * scaleX, hh * scaleY);
+                    }
+                }
+                return IntPtr.Zero;
+            };
+            Action engancharHook = () =>
+            {
+                HwndSource src = HwndSource.FromHwnd(new WindowInteropHelper(w).Handle);
+                if (src != null) src.AddHook(hook);
+            };
+            if (new WindowInteropHelper(w).Handle != IntPtr.Zero) engancharHook();
+            else w.SourceInitialized += (s, e) => engancharHook();
         }
 
         // ===== Liquid glass para ventanas CONTENIDAS (MdiChild) =====

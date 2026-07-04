@@ -17,6 +17,8 @@ namespace arquitectSoft.View.Wpf
     internal static class ScreenCaptureHelper
     {
         private const int SrcCopy = 0x00CC0020;
+        private const int SmCxScreen = 0;
+        private const int SmCyScreen = 1;
         private const int SmXVirtualScreen = 76;
         private const int SmYVirtualScreen = 77;
         private const int SmCxVirtualScreen = 78;
@@ -27,13 +29,26 @@ namespace arquitectSoft.View.Wpf
         public static int VirtualScreenY { get; private set; }
         public static int VirtualScreenWidth { get; private set; }
         public static int VirtualScreenHeight { get; private set; }
+        // Pantalla PRINCIPAL (un solo monitor, origen 0,0), no todo el escritorio virtual.
+        public static int PrimaryScreenWidth { get; private set; }
+        public static int PrimaryScreenHeight { get; private set; }
 
-        public static void CaptureFullScreen()
+        // Solo lee las métricas del escritorio virtual (sin hacer la costosa captura).
+        // Útil cuando el fondo a refractar NO es la pantalla sino una imagen propia
+        // (p. ej. el login usa FondoApp.png como wallpaper virtual de pantalla completa).
+        public static void EnsureMetrics()
         {
             VirtualScreenX = GetSystemMetrics(SmXVirtualScreen);
             VirtualScreenY = GetSystemMetrics(SmYVirtualScreen);
             VirtualScreenWidth = GetSystemMetrics(SmCxVirtualScreen);
             VirtualScreenHeight = GetSystemMetrics(SmCyVirtualScreen);
+            PrimaryScreenWidth = GetSystemMetrics(SmCxScreen);
+            PrimaryScreenHeight = GetSystemMetrics(SmCyScreen);
+        }
+
+        public static void CaptureFullScreen()
+        {
+            EnsureMetrics();
 
             BitmapSource bmp = CaptureScreen(VirtualScreenX, VirtualScreenY, VirtualScreenWidth, VirtualScreenHeight);
             if (bmp != null) FullScreenSnapshot = bmp;
