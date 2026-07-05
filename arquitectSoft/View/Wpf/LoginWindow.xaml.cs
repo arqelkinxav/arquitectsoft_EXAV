@@ -57,6 +57,8 @@ namespace arquitectSoft.View.Wpf
             Generals.Conexion con = new Generals.Conexion();
             string fail = "";
             string nombreDesc = "";
+            int rol = Generals.Global.ROL_TECNICO_BASICO;
+            int idUsuario = 0;
 
             try
             {
@@ -66,7 +68,11 @@ namespace arquitectSoft.View.Wpf
                 if (row != null && row.HasRows)
                 {
                     while (row.Read())
+                    {
                         nombreDesc = row["usuario"].ToString() + "-" + row["Nombre"].ToString();
+                        int.TryParse(Convert.ToString(row["rol"]), out rol);
+                        int.TryParse(Convert.ToString(row["id"]), out idUsuario);
+                    }
                 }
                 else
                 {
@@ -83,6 +89,9 @@ namespace arquitectSoft.View.Wpf
             if (fail == "" && nombreDesc != "")
             {
                 Generals.Global.NameConnect = nombreDesc;
+                Generals.Global.Rol = rol;
+                Generals.Global.Usuario = usuario;
+                Generals.Global.UsuarioId = idUsuario;
                 // Abre el escritorio WPF; al cerrarlo, termina la app (cerramos el login).
                 Hide();
                 new EscritorioWindow().ShowDialog();

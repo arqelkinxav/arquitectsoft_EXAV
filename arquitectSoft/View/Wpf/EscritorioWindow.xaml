@@ -160,18 +160,20 @@
                     BorderBrush="{StaticResource PanelBorder}" BorderThickness="1" Margin="0,0,10,0">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <StackPanel Margin="0,12,0,12">
-                        <Button Style="{StaticResource IconButton}" Tag="&#xE8F1;" Content="Análisis" Click="Analisis_Click"/>
-                        <Button Style="{StaticResource IconButton}" Tag="&#xE8B7;" Content="Puertas" Click="Puertas_Click"/>
-                        <Button Style="{StaticResource IconButton}" Tag="&#xE8C8;" Content="Compon." Click="Componentes_Click"/>
-                        <Button Style="{StaticResource IconButton}" Tag="&#xE71D;" Content="Subcomp." Click="Subcomponentes_Click"/>
-                        <Button Style="{StaticResource IconButton}" Tag="&#xE70F;" Content="Acabados" Click="Acabados_Click"/>
-                        <Button Style="{StaticResource IconButton}" Tag="&#xE713;" Content="Mecaniz." Click="Mecanizados_Click"/>
-                        <Button Style="{StaticResource IconButton}" Tag="&#xE73E;" Content="Cortes" Click="Cortes_Click"/>
-                        <Button Style="{StaticResource IconButton}" Tag="&#xE721;" Content="U. Medida" Click="Unidad_Click"/>
-                        <Button Style="{StaticResource IconButton}" Tag="&#xE71B;" Content="Depend." Click="Dependencias_Click"/>
-                        <Button Style="{StaticResource IconButton}" Tag="&#xE74E;" Content="Respaldo" Click="Respaldo_Click"/>
-                        <Button Style="{StaticResource IconButton}" Tag="&#xE8B5;" Content="Importar" Click="Importar_Click"/>
-                        <Button Style="{StaticResource IconButton}" Tag="&#xE946;" Content="Acerca" Click="Acerca_Click"/>
+                        <Button x:Name="BtnAnalisis" Style="{StaticResource IconButton}" Tag="&#xE8F1;" Content="Análisis" Click="Analisis_Click"/>
+                        <Button x:Name="BtnPuertas" Style="{StaticResource IconButton}" Tag="&#xE8B7;" Content="Puertas" Click="Puertas_Click"/>
+                        <Button x:Name="BtnComponentes" Style="{StaticResource IconButton}" Tag="&#xE8C8;" Content="Compon." Click="Componentes_Click"/>
+                        <Button x:Name="BtnSubcomp" Style="{StaticResource IconButton}" Tag="&#xE71D;" Content="Subcomp." Click="Subcomponentes_Click"/>
+                        <Button x:Name="BtnAcabados" Style="{StaticResource IconButton}" Tag="&#xE70F;" Content="Acabados" Click="Acabados_Click"/>
+                        <Button x:Name="BtnMecanizados" Style="{StaticResource IconButton}" Tag="&#xE713;" Content="Mecaniz." Click="Mecanizados_Click"/>
+                        <Button x:Name="BtnCortes" Style="{StaticResource IconButton}" Tag="&#xE73E;" Content="Cortes" Click="Cortes_Click"/>
+                        <Button x:Name="BtnUnidad" Style="{StaticResource IconButton}" Tag="&#xE721;" Content="U. Medida" Click="Unidad_Click"/>
+                        <Button x:Name="BtnDependencias" Style="{StaticResource IconButton}" Tag="&#xE71B;" Content="Depend." Click="Dependencias_Click"/>
+                        <Button x:Name="BtnRespaldo" Style="{StaticResource IconButton}" Tag="&#xE74E;" Content="Respaldo" Click="Respaldo_Click"/>
+                        <Button x:Name="BtnImportar" Style="{StaticResource IconButton}" Tag="&#xE8B5;" Content="Importar" Click="Importar_Click"/>
+                        <Button x:Name="BtnUsuarios" Style="{StaticResource IconButton}" Tag="&#xE716;" Content="Usuarios" Click="Usuarios_Click"/>
+                        <Button x:Name="BtnMiCuenta" Style="{StaticResource IconButton}" Tag="&#xE77B;" Content="Mi cuenta" Click="MiCuenta_Click"/>
+                        <Button x:Name="BtnAcerca" Style="{StaticResource IconButton}" Tag="&#xE946;" Content="Acerca" Click="Acerca_Click"/>
                     </StackPanel>
                 </ScrollViewer>
             </Border>

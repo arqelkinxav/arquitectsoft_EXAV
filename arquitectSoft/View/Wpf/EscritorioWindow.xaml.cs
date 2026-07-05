@@ -21,7 +21,7 @@ namespace arquitectSoft.View.Wpf
         {
             InitializeComponent();
             SourceInitialized += OnSourceInitialized;
-            Loaded += (s, e) => CargarFondo();
+            Loaded += (s, e) => { CargarFondo(); AplicarPermisos(); };
 
             // Tamaño "restaurado" centrado en el MONITOR PRINCIPAL (al que se vuelve si el
             // usuario quita el maximizado con doble clic en la barra de título).
@@ -189,6 +189,39 @@ namespace arquitectSoft.View.Wpf
             AbrirPanel("Respaldo de base de datos", "", new DbaBackupPanel(), 560, 300);
         private void Importar_Click(object sender, RoutedEventArgs e) =>
             AbrirPanel("Importar base de datos", "", new DbaImportPanel(), 560, 360);
+        private void Usuarios_Click(object sender, RoutedEventArgs e) =>
+            AbrirPanel("Usuarios", "", new UsuariosPanel(), 940, 560);
+        private void MiCuenta_Click(object sender, RoutedEventArgs e) =>
+            AbrirPanel("Mi cuenta", "", new MiCuentaPanel(), 460, 460);
+
+        // ===== Permisos: muestra/oculta botones del dock según el rol del usuario =====
+        //   Básico  -> Análisis, Puertas, Mi cuenta, Acerca
+        //   Edición -> todo MENOS Respaldo, Importar y Usuarios
+        //   Admin   -> todo
+        private void AplicarPermisos()
+        {
+            bool admin = Generals.Global.EsAdmin;
+            bool editar = Generals.Global.PuedeEditar;   // admin o técnico edición
+
+            // Solo administrador
+            BtnRespaldo.Visibility = Ver(admin);
+            BtnImportar.Visibility = Ver(admin);
+            BtnUsuarios.Visibility = Ver(admin);
+
+            // Edición (catálogo): admin + técnico edición
+            BtnComponentes.Visibility = Ver(editar);
+            BtnSubcomp.Visibility = Ver(editar);
+            BtnAcabados.Visibility = Ver(editar);
+            BtnMecanizados.Visibility = Ver(editar);
+            BtnCortes.Visibility = Ver(editar);
+            BtnUnidad.Visibility = Ver(editar);
+            BtnDependencias.Visibility = Ver(editar);
+
+            // Análisis, Puertas, Mi cuenta y Acerca quedan visibles para todos.
+        }
+
+        private static Visibility Ver(bool visible) =>
+            visible ? Visibility.Visible : Visibility.Collapsed;
 
         // ===== Toggle cristal ↔ modo rendimiento =====
         private void Rendimiento_Click(object sender, RoutedEventArgs e)

@@ -142,6 +142,7 @@
     <Compile Include="Class\Sub_Component.cs" />
     <Compile Include="Class\Sub_ComponentEspecial.cs" />
     <Compile Include="Dto\AcabadoDto.cs" />
+    <Compile Include="Dto\UsuarioDto.cs" />
     <Compile Include="Dto\AnalisisDatosDto.cs" />
     <Compile Include="Dto\DependenciaDto.cs" />
     <Compile Include="Engine\AcabadoChanger.cs" />
@@ -373,6 +374,20 @@
     </Page>
     <Compile Include="View\Wpf\Panels\AcabadosPanel.xaml.cs">
       <DependentUpon>AcabadosPanel.xaml</DependentUpon>
+    </Compile>
+    <Page Include="View\Wpf\Panels\UsuariosPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Compile Include="View\Wpf\Panels\UsuariosPanel.xaml.cs">
+      <DependentUpon>UsuariosPanel.xaml</DependentUpon>
+    </Compile>
+    <Page Include="View\Wpf\Panels\MiCuentaPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Compile Include="View\Wpf\Panels\MiCuentaPanel.xaml.cs">
+      <DependentUpon>MiCuentaPanel.xaml</DependentUpon>
     </Compile>
     <Page Include="View\Wpf\Panels\DependenciasPanel.xaml">
       <SubType>Designer</SubType>

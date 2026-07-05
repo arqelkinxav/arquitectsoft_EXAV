@@ -9,8 +9,19 @@ namespace arquitectSoft.Generals
     class Constantes
     {
         
-        public static String QUERY_EXITS_USUARIO = "SELECT Nombre,usuario FROM usuario where usuario = ? and contrasena = ?;";
-        
+        public static String QUERY_EXITS_USUARIO = "SELECT id,Nombre,usuario,rol FROM usuario where usuario = ? and contrasena = ?;";
+
+        //Usuarios (gestión de cuentas y permisos)
+        public static String QUERY_USUARIOS = "SELECT id,usuario,Nombre,contrasena,rol FROM usuario ORDER BY rol,usuario;";
+        // Existe otro usuario con el mismo login (excluyendo el id indicado; para alta usar id = 0).
+        public static String QUERY_USUARIO_LOGIN_OTRO = "SELECT id FROM usuario WHERE usuario = ? AND id <> ? LIMIT 1;";
+        public static String QUERY_INSERT_USUARIO = "INSERT INTO usuario(usuario,contrasena,Nombre,rol,estado) VALUES (?,?,?,?,1);";
+        public static String QUERY_UPDATE_USUARIO = "UPDATE usuario SET usuario = ?, contrasena = ?, Nombre = ?, rol = ? WHERE id = ?;";
+        public static String QUERY_DELETE_USUARIO = "DELETE FROM usuario WHERE id = ?;";
+        // Cambio de la propia clave: verifica la actual y actualiza por id.
+        public static String QUERY_VERIFICAR_CLAVE = "SELECT id FROM usuario WHERE id = ? AND contrasena = ? LIMIT 1;";
+        public static String QUERY_CAMBIAR_CLAVE = "UPDATE usuario SET contrasena = ? WHERE id = ?;";
+
         //Componentes
         public static String QUERY_EXITS_COMPONENTES = "SELECT Id_Componente FROM componentes where (Codigo = ? or Descripcion = ?) and AcabadoPrincipal = ? LIMIT 1;";
         public static String QUERY_INSERT_COMPONENTES = "INSERT componentes(codigo, descripcion, Especial,AcabadoPrincipal) VALUES (?,?,?,?);";

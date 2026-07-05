@@ -55,6 +55,13 @@ namespace arquitectSoft.View.Wpf
                 if (!string.IsNullOrEmpty(PrefillNumero)) TxtNumero.Text = PrefillNumero;
                 if (!string.IsNullOrEmpty(PrefillNombre)) TxtNombre.Text = PrefillNombre;
                 if (!string.IsNullOrEmpty(PrefillAcabado1)) TxtAcabado1.Text = PrefillAcabado1;
+                // Técnico a cargo: precarga el NOMBRE del usuario que inició sesión
+                // (Global.NameConnect = "usuario-Nombre"; tomamos la parte del Nombre).
+                if (string.IsNullOrEmpty(TxtTecnico.Text))
+                {
+                    var partes = (Generals.Global.NameConnect ?? "").Split('-');
+                    if (partes.Length > 1) TxtTecnico.Text = partes[1];
+                }
                 LiquidGlass.Apertura(FrameRim, WinScale);
                 // Si ya viene el número, llevamos el foco al primer campo vacío.
                 if (string.IsNullOrEmpty(TxtNumero.Text)) TxtNumero.Focus();
