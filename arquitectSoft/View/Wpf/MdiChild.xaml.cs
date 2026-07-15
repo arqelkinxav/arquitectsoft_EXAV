@@ -3,6 +3,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Animation;
 
 namespace arquitectSoft.View.Wpf
 {
@@ -21,6 +23,10 @@ namespace arquitectSoft.View.Wpf
         private Estado _estado = Estado.Normal;
         private Rect _restaurar;            // geometría a la que vuelve al restaurar
         private bool _arrastrando;
+        private bool _cerrando;             // evita re-disparar el cierre durante su animación
+
+        // Escala para las animaciones de abrir/cerrar (pop elástico, como el login).
+        private readonly ScaleTransform _winScale = new ScaleTransform(1, 1);
 
         // Vista previa de snap: la pinta el escritorio (callback) durante el arrastre.
         public Action<Rect?> MostrarPreviewSnap;
@@ -31,6 +37,11 @@ namespace arquitectSoft.View.Wpf
         public MdiChild()
         {
             InitializeComponent();
+
+            // La ventana escala desde su centro; arranca oculta y la anima AnimarApertura().
+            RenderTransformOrigin = new Point(0.5, 0.5);
+            RenderTransform = _winScale;
+            Opacity = 0;
 
             DragThumb.DragStarted += DragThumb_DragStarted;
             DragThumb.DragDelta += DragThumb_DragDelta;
@@ -50,6 +61,40 @@ namespace arquitectSoft.View.Wpf
             RzBR.DragDelta += (s, e) => Redimensionar(e, false, false, true, true);
 
             PreviewMouseLeftButtonDown += (s, e) => TraerAlFrente();
+        }
+
+        // ===================== Animaciones abrir / cerrar =====================
+        // Mismo lenguaje que el login: entra con un "pop" elástico (gelatina) y sale
+        // encogiendo con leve anticipación + desvanecido. Sólo toca escala y opacidad,
+        // así se conserva la sombra de flotado del marco.
+
+        /// <summary>Anima la aparición de la ventana. La llama el escritorio tras montarla.</summary>
+        public void AnimarApertura()
+        {
+            var jelly = new ElasticEase { EasingMode = EasingMode.EaseOut, Oscillations = 2, Springiness = 5 };
+            var fade = new DoubleAnimation(0, 1, new Duration(TimeSpan.FromMilliseconds(160)));
+            var sx = new DoubleAnimation(0.7, 1, new Duration(TimeSpan.FromMilliseconds(480))) { EasingFunction = jelly };
+            var sy = new DoubleAnimation(0.7, 1, new Duration(TimeSpan.FromMilliseconds(480))) { EasingFunction = jelly };
+
+            BeginAnimation(OpacityProperty, fade);
+            _winScale.BeginAnimation(ScaleTransform.ScaleXProperty, sx);
+            _winScale.BeginAnimation(ScaleTransform.ScaleYProperty, sy);
+        }
+
+        /// <summary>Anima el cierre y ejecuta <paramref name="alTerminar"/> al acabar.</summary>
+        private void AnimarCierre(Action alTerminar)
+        {
+            var easeIn = new BackEase { EasingMode = EasingMode.EaseIn, Amplitude = 0.5 };
+            var dur = new Duration(TimeSpan.FromMilliseconds(180));
+            var fade = new DoubleAnimation(0, new Duration(TimeSpan.FromMilliseconds(170)));
+            var sx = new DoubleAnimation(0.82, dur) { EasingFunction = easeIn };
+            var sy = new DoubleAnimation(0.82, dur) { EasingFunction = easeIn };
+
+            fade.Completed += (s, e) => { if (alTerminar != null) alTerminar(); };
+
+            BeginAnimation(OpacityProperty, fade);
+            _winScale.BeginAnimation(ScaleTransform.ScaleXProperty, sx);
+            _winScale.BeginAnimation(ScaleTransform.ScaleYProperty, sy);
         }
 
         public string Titulo { get { return LblTitulo.Text; } set { LblTitulo.Text = value; } }
@@ -292,9 +337,14 @@ namespace arquitectSoft.View.Wpf
 
         private void Cerrar_Click(object sender, RoutedEventArgs e)
         {
-            var c = Lienzo;
-            if (c != null) c.Children.Remove(this);
-            if (Cerrada != null) Cerrada(this, EventArgs.Empty);
+            if (_cerrando) return;
+            _cerrando = true;
+            AnimarCierre(() =>
+            {
+                var c = Lienzo;
+                if (c != null) c.Children.Remove(this);
+                if (Cerrada != null) Cerrada(this, EventArgs.Empty);
+            });
         }
 
         // ===================== Ajuste al cambiar el canvas =====================

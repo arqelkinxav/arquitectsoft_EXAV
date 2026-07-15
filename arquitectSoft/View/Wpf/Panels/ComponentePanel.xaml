@@ -535,9 +535,10 @@
 
         <!-- ===== Grilla genérica ===== -->
         <Grid Grid.Row="1" Margin="0,12,0,0">
-            <Border CornerRadius="14" Background="#FF0E0E10" IsHitTestVisible="False">
-                <Border.Effect><DropShadowEffect Color="Black" BlurRadius="30" ShadowDepth="0" Opacity="0.6"/></Border.Effect>
-            </Border>
+            <!-- Sombra pre-renderizada (9-slice) en vez de DropShadowEffect: coste ~0 al maximizar -->
+            <vw:SoftShadow Margin="-30" Opacity="0.6"/>
+            <!-- Base opaca (la tarjeta es semi-transparente y necesita fondo solido) -->
+            <Border CornerRadius="14" Background="#FF0E0E10" IsHitTestVisible="False"/>
             <Border CornerRadius="14" Background="#B0151515" BorderThickness="1.1" Padding="6">
                 <Border.BorderBrush>
                     <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">

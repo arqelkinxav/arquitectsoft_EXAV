@@ -242,6 +242,14 @@
     <Resource Include="Resources\Fonts\PlusJakartaSans-Medium.ttf" />
     <Resource Include="Resources\Fonts\PlusJakartaSans-SemiBold.ttf" />
     <Resource Include="Resources\Fonts\PlusJakartaSans-Bold.ttf" />
+    <Resource Include="Resources\CardShadow.png" />
+    <Page Include="View\Wpf\SoftShadow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Compile Include="View\Wpf\SoftShadow.xaml.cs">
+      <DependentUpon>SoftShadow.xaml</DependentUpon>
+    </Compile>
     <Page Include="View\Wpf\AnalisisWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

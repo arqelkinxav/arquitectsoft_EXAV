@@ -1,6 +1,7 @@
 <UserControl x:Class="arquitectSoft.View.Wpf.MdiChild"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vw="clr-namespace:arquitectSoft.View.Wpf"
              MinWidth="320" MinHeight="200">
     <UserControl.Resources>
         <FontFamily x:Key="Jakarta">pack://application:,,,/Resources/Fonts/#Plus Jakarta Sans</FontFamily>
@@ -34,7 +35,9 @@
         </ControlTemplate>
     </UserControl.Resources>
 
-    <!-- Marco de cristal: borde con rim-light + sombra de flotado -->
+    <!-- Root: halo pre-renderizado (9-slice) detras + marco de cristal (ya sin DropShadowEffect) -->
+    <Grid>
+    <vw:SoftShadow Margin="-22" Opacity="0.55"/>
     <Border x:Name="Frame" CornerRadius="12" Background="Transparent" BorderThickness="1.2"
             TextElement.FontFamily="{StaticResource Jakarta}" TextElement.Foreground="{StaticResource TextPrimary}">
         <Border.BorderBrush>
@@ -43,7 +46,6 @@
                 <GradientStop Color="#05FFFFFF" Offset="0.6"/><GradientStop Color="#26FFFFFF" Offset="1"/>
             </LinearGradientBrush>
         </Border.BorderBrush>
-        <Border.Effect><DropShadowEffect Color="Black" BlurRadius="24" ShadowDepth="0" Opacity="0.55"/></Border.Effect>
 
         <!-- Recorte redondeado: evita que el shader del cristal rellene las esquinas
              y asome por fuera del marco. El Clip se ajusta por código al tamaño. -->
@@ -109,4 +111,5 @@
             </Grid>
         </Grid>
     </Border>
+    </Grid>
 </UserControl>

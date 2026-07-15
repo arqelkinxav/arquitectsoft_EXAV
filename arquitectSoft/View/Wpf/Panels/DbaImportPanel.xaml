@@ -64,52 +64,31 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Grid>
-                            <Border x:Name="bd" CornerRadius="11" Padding="16,0" RenderTransformOrigin="0.5,0.5">
-                                <Border.RenderTransform><ScaleTransform x:Name="sc" ScaleX="1" ScaleY="1"/></Border.RenderTransform>
-                                <Border.Background>
-                                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                                        <GradientStop Color="#F2966D" Offset="0"/><GradientStop Color="#E67E5C" Offset="0.5"/><GradientStop Color="#C9684A" Offset="1"/>
-                                    </LinearGradientBrush>
-                                </Border.Background>
-                                <Grid>
-                                    <Border x:Name="gloss" CornerRadius="10" Margin="1.2" IsHitTestVisible="False">
-                                        <Border.Background>
-                                            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                                                <GradientStop Color="#42FFFFFF" Offset="0"/><GradientStop Color="#0CFFFFFF" Offset="0.5"/><GradientStop Color="#00FFFFFF" Offset="1"/>
-                                            </LinearGradientBrush>
-                                        </Border.Background>
-                                    </Border>
-                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                </Grid>
-                            </Border>
-                            <Border CornerRadius="11" BorderThickness="1" IsHitTestVisible="False">
-                                <Border.BorderBrush>
-                                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                                        <GradientStop Color="#66FFFFFF" Offset="0"/><GradientStop Color="#22FFFFFF" Offset="1"/>
-                                    </LinearGradientBrush>
-                                </Border.BorderBrush>
-                            </Border>
-                        </Grid>
+                        <Border x:Name="bd" CornerRadius="12" Padding="16,0" RenderTransformOrigin="0.5,0.5">
+                            <Border.RenderTransform><ScaleTransform x:Name="sc" ScaleX="1" ScaleY="1"/></Border.RenderTransform>
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                    <GradientStop Color="#F2966D" Offset="0"/><GradientStop Color="#E67E5C" Offset="0.5"/><GradientStop Color="#C9684A" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Border.Background>
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter TargetName="bd" Property="Effect">
-                                    <Setter.Value><DropShadowEffect Color="#E07B5B" BlurRadius="16" ShadowDepth="0" Opacity="0.6"/></Setter.Value>
-                                </Setter>
+                                    <Setter.Value><DropShadowEffect Color="#E07B5B" BlurRadius="16" ShadowDepth="0" Opacity="0.6"/></Setter.Value></Setter>
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
                                 <Trigger.EnterActions><BeginStoryboard><Storyboard>
-                                    <DoubleAnimation Storyboard.TargetName="sc" Storyboard.TargetProperty="ScaleX" To="0.93" Duration="0:0:0.09"/>
-                                    <DoubleAnimation Storyboard.TargetName="sc" Storyboard.TargetProperty="ScaleY" To="0.86" Duration="0:0:0.09"/>
-                                    <DoubleAnimation Storyboard.TargetName="gloss" Storyboard.TargetProperty="Opacity" To="0.35" Duration="0:0:0.09"/>
+                                    <DoubleAnimation Storyboard.TargetName="sc" Storyboard.TargetProperty="ScaleX" To="0.94" Duration="0:0:0.07"/>
+                                    <DoubleAnimation Storyboard.TargetName="sc" Storyboard.TargetProperty="ScaleY" To="0.94" Duration="0:0:0.07"/>
                                 </Storyboard></BeginStoryboard></Trigger.EnterActions>
                                 <Trigger.ExitActions><BeginStoryboard><Storyboard>
-                                    <DoubleAnimation Storyboard.TargetName="sc" Storyboard.TargetProperty="ScaleX" To="1" Duration="0:0:0.5"><DoubleAnimation.EasingFunction><ElasticEase Oscillations="2" Springiness="5" EasingMode="EaseOut"/></DoubleAnimation.EasingFunction></DoubleAnimation>
-                                    <DoubleAnimation Storyboard.TargetName="sc" Storyboard.TargetProperty="ScaleY" To="1" Duration="0:0:0.5"><DoubleAnimation.EasingFunction><ElasticEase Oscillations="2" Springiness="5" EasingMode="EaseOut"/></DoubleAnimation.EasingFunction></DoubleAnimation>
-                                    <DoubleAnimation Storyboard.TargetName="gloss" Storyboard.TargetProperty="Opacity" To="1" Duration="0:0:0.3"/>
+                                    <DoubleAnimation Storyboard.TargetName="sc" Storyboard.TargetProperty="ScaleX" To="1" Duration="0:0:0.28"><DoubleAnimation.EasingFunction><BackEase EasingMode="EaseOut" Amplitude="0.4"/></DoubleAnimation.EasingFunction></DoubleAnimation>
+                                    <DoubleAnimation Storyboard.TargetName="sc" Storyboard.TargetProperty="ScaleY" To="1" Duration="0:0:0.28"><DoubleAnimation.EasingFunction><BackEase EasingMode="EaseOut" Amplitude="0.4"/></DoubleAnimation.EasingFunction></DoubleAnimation>
                                 </Storyboard></BeginStoryboard></Trigger.ExitActions>
                             </Trigger>
-                            <Trigger Property="IsEnabled" Value="False"><Setter Property="Opacity" Value="0.4"/></Trigger>
+                            <Trigger Property="IsEnabled" Value="False"><Setter Property="Opacity" Value="0.35"/></Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
