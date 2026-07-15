@@ -21,6 +21,8 @@ namespace arquitectSoft.Generals
         // Cambio de la propia clave: verifica la actual y actualiza por id.
         public static String QUERY_VERIFICAR_CLAVE = "SELECT id FROM usuario WHERE id = ? AND contrasena = ? LIMIT 1;";
         public static String QUERY_CAMBIAR_CLAVE = "UPDATE usuario SET contrasena = ? WHERE id = ?;";
+        // Cambio del propio nombre legible (no del login) por id.
+        public static String QUERY_CAMBIAR_NOMBRE = "UPDATE usuario SET Nombre = ? WHERE id = ?;";
 
         //Componentes
         public static String QUERY_EXITS_COMPONENTES = "SELECT Id_Componente FROM componentes where (Codigo = ? or Descripcion = ?) and AcabadoPrincipal = ? LIMIT 1;";

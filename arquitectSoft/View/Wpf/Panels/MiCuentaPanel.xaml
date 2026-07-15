@@ -11,6 +11,62 @@
         <SolidColorBrush x:Key="TextPrimary" Color="#ECECEC"/>
         <SolidColorBrush x:Key="TextMuted"   Color="#8C8C8C"/>
 
+        <!-- Caja de texto oscura (para el Nombre) -->
+        <Style x:Key="TextField" TargetType="TextBox">
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Background" Value="{StaticResource InputDark}"/>
+            <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+            <Setter Property="CaretBrush" Value="{StaticResource Accent}"/>
+            <Setter Property="SelectionBrush" Value="{StaticResource Accent}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource PanelBorder}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="13,0"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border x:Name="bd" CornerRadius="10" Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                            <ScrollViewer x:Name="PART_ContentHost" Margin="{TemplateBinding Padding}" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsKeyboardFocused" Value="True">
+                                <Setter TargetName="bd" Property="BorderBrush" Value="{StaticResource Accent}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Botón secundario (contorno) para "Guardar nombre" -->
+        <Style x:Key="Secondary" TargetType="Button">
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Height" Value="42"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="bd" CornerRadius="12" Padding="16,0" BorderThickness="1"
+                                BorderBrush="{StaticResource PanelBorder}" Background="#12FFFFFF">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="bd" Property="BorderBrush" Value="{StaticResource Accent}"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" Value="0.35"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
         <!-- Caja de contraseña oscura (mismo look que las cajas de texto) -->
         <Style x:Key="Field" TargetType="PasswordBox">
             <Setter Property="Height" Value="40"/>
@@ -56,12 +112,11 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border x:Name="bd" CornerRadius="12" Padding="16,0">
+                        <Border x:Name="bd" CornerRadius="12" Padding="16,0" RenderTransformOrigin="0.5,0.5">
+                            <Border.RenderTransform><ScaleTransform x:Name="sc" ScaleX="1" ScaleY="1"/></Border.RenderTransform>
                             <Border.Background>
                                 <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                                    <GradientStop Color="#F2966D" Offset="0"/>
-                                    <GradientStop Color="#E67E5C" Offset="0.5"/>
-                                    <GradientStop Color="#C9684A" Offset="1"/>
+                                    <GradientStop Color="#F2966D" Offset="0"/><GradientStop Color="#E67E5C" Offset="0.5"/><GradientStop Color="#C9684A" Offset="1"/>
                                 </LinearGradientBrush>
                             </Border.Background>
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
@@ -69,14 +124,19 @@
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter TargetName="bd" Property="Effect">
-                                    <Setter.Value>
-                                        <DropShadowEffect Color="#E07B5B" BlurRadius="16" ShadowDepth="0" Opacity="0.6"/>
-                                    </Setter.Value>
-                                </Setter>
+                                    <Setter.Value><DropShadowEffect Color="#E07B5B" BlurRadius="16" ShadowDepth="0" Opacity="0.6"/></Setter.Value></Setter>
                             </Trigger>
-                            <Trigger Property="IsEnabled" Value="False">
-                                <Setter Property="Opacity" Value="0.35"/>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Trigger.EnterActions><BeginStoryboard><Storyboard>
+                                    <DoubleAnimation Storyboard.TargetName="sc" Storyboard.TargetProperty="ScaleX" To="0.94" Duration="0:0:0.07"/>
+                                    <DoubleAnimation Storyboard.TargetName="sc" Storyboard.TargetProperty="ScaleY" To="0.94" Duration="0:0:0.07"/>
+                                </Storyboard></BeginStoryboard></Trigger.EnterActions>
+                                <Trigger.ExitActions><BeginStoryboard><Storyboard>
+                                    <DoubleAnimation Storyboard.TargetName="sc" Storyboard.TargetProperty="ScaleX" To="1" Duration="0:0:0.28"><DoubleAnimation.EasingFunction><BackEase EasingMode="EaseOut" Amplitude="0.4"/></DoubleAnimation.EasingFunction></DoubleAnimation>
+                                    <DoubleAnimation Storyboard.TargetName="sc" Storyboard.TargetProperty="ScaleY" To="1" Duration="0:0:0.28"><DoubleAnimation.EasingFunction><BackEase EasingMode="EaseOut" Amplitude="0.4"/></DoubleAnimation.EasingFunction></DoubleAnimation>
+                                </Storyboard></BeginStoryboard></Trigger.ExitActions>
                             </Trigger>
+                            <Trigger Property="IsEnabled" Value="False"><Setter Property="Opacity" Value="0.35"/></Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
@@ -87,38 +147,42 @@
     <Grid TextElement.FontFamily="{StaticResource Jakarta}"
           TextElement.Foreground="{StaticResource TextPrimary}"
           Margin="22,18,22,18">
-        <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Width="360">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="360">
 
-            <TextBlock Grid.Row="0" Text="Mi cuenta" FontSize="19" FontWeight="Bold" Margin="0,0,0,2"/>
-            <TextBlock Grid.Row="1" x:Name="LblUsuario" Foreground="{StaticResource TextMuted}"
+            <TextBlock Text="Mi cuenta" FontSize="19" FontWeight="Bold" Margin="0,0,0,2"/>
+            <TextBlock x:Name="LblUsuario" Foreground="{StaticResource TextMuted}"
                        FontSize="12" Margin="0,0,0,18"/>
 
-            <TextBlock Grid.Row="2" Style="{StaticResource Cap}" Text="Contraseña actual"/>
-            <PasswordBox Grid.Row="3" x:Name="TxtActual" Style="{StaticResource Field}" Margin="0,0,0,12"/>
+            <!-- ===== Nombre ===== -->
+            <TextBlock Text="NOMBRE" Foreground="{StaticResource Accent}" FontSize="11"
+                       FontWeight="SemiBold" Margin="0,0,0,8"/>
+            <TextBlock Style="{StaticResource Cap}" Text="Tu nombre para mostrar"/>
+            <TextBox x:Name="TxtNombre" Style="{StaticResource TextField}" MaxLength="60"/>
+            <TextBlock x:Name="LblEstadoNombre" Foreground="{StaticResource Accent}" FontSize="11.5"
+                       TextWrapping="Wrap" Margin="2,8,0,0" Visibility="Collapsed"/>
+            <Button x:Name="BtnGuardarNombre" Style="{StaticResource Secondary}" Content="Guardar nombre"
+                    Margin="0,12,0,0" Click="GuardarNombre_Click"/>
 
-            <TextBlock Grid.Row="4" Style="{StaticResource Cap}" Text="Nueva contraseña"/>
-            <PasswordBox Grid.Row="5" x:Name="TxtNueva" Style="{StaticResource Field}" Margin="0,0,0,12"/>
+            <!-- separador -->
+            <Border Height="1" Background="{StaticResource PanelBorder}" Margin="0,22,0,20"/>
 
-            <StackPanel Grid.Row="6">
-                <TextBlock Style="{StaticResource Cap}" Text="Repetir nueva contraseña"/>
-                <PasswordBox x:Name="TxtConfirmar" Style="{StaticResource Field}"/>
-            </StackPanel>
+            <!-- ===== Contraseña ===== -->
+            <TextBlock Text="CONTRASEÑA" Foreground="{StaticResource Accent}" FontSize="11"
+                       FontWeight="SemiBold" Margin="0,0,0,8"/>
 
-            <StackPanel Grid.Row="7" Margin="0,18,0,0">
-                <TextBlock x:Name="LblEstado" Foreground="{StaticResource Accent}" FontSize="11.5"
-                           TextWrapping="Wrap" Margin="2,0,0,10" Visibility="Collapsed"/>
-                <Button x:Name="BtnGuardar" Style="{StaticResource Primary}" Content="Cambiar contraseña" Click="Guardar_Click"/>
-            </StackPanel>
-        </Grid>
+            <TextBlock Style="{StaticResource Cap}" Text="Contraseña actual"/>
+            <PasswordBox x:Name="TxtActual" Style="{StaticResource Field}" Margin="0,0,0,12"/>
+
+            <TextBlock Style="{StaticResource Cap}" Text="Nueva contraseña"/>
+            <PasswordBox x:Name="TxtNueva" Style="{StaticResource Field}" Margin="0,0,0,12"/>
+
+            <TextBlock Style="{StaticResource Cap}" Text="Repetir nueva contraseña"/>
+            <PasswordBox x:Name="TxtConfirmar" Style="{StaticResource Field}"/>
+
+            <TextBlock x:Name="LblEstado" Foreground="{StaticResource Accent}" FontSize="11.5"
+                       TextWrapping="Wrap" Margin="2,18,0,10" Visibility="Collapsed"/>
+            <Button x:Name="BtnGuardar" Style="{StaticResource Primary}" Content="Cambiar contraseña"
+                    Margin="0,10,0,0" Click="Guardar_Click"/>
+        </StackPanel>
     </Grid>
 </UserControl>

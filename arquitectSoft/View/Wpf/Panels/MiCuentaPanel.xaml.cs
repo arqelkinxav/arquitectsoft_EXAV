@@ -15,22 +15,61 @@ namespace arquitectSoft.View.Wpf.Panels
             InitializeComponent();
             Loaded += (s, e) =>
             {
-                string nombre = "";
-                var partes = (Generals.Global.NameConnect ?? "").Split('-');
-                if (partes.Length > 1) nombre = partes[1];
-                LblUsuario.Text = "Usuario: " + Generals.Global.Usuario +
-                                  (nombre != "" ? "  ·  " + nombre : "") +
-                                  "   ·   " + Generals.Global.NombreRol(Generals.Global.Rol);
-                TxtActual.Focus();
+                RefrescarCabecera();
+                TxtNombre.Text = Generals.Global.Nombre ?? "";
+                TxtNombre.Focus();
+                TxtNombre.SelectAll();
             };
         }
 
         private Window Owner { get { return Window.GetWindow(this); } }
 
+        /// <summary>Rótulo "Usuario · Nombre · Rol" con los datos actuales de la sesión.</summary>
+        private void RefrescarCabecera()
+        {
+            string nombre = Generals.Global.Nombre ?? "";
+            LblUsuario.Text = "Usuario: " + Generals.Global.Usuario +
+                              (nombre != "" ? "  ·  " + nombre : "") +
+                              "   ·   " + Generals.Global.NombreRol(Generals.Global.Rol);
+        }
+
         private void Mostrar(string msg)
         {
             LblEstado.Text = msg;
             LblEstado.Visibility = Visibility.Visible;
+        }
+
+        private void MostrarNombre(string msg)
+        {
+            LblEstadoNombre.Text = msg;
+            LblEstadoNombre.Visibility = Visibility.Visible;
+        }
+
+        private void GuardarNombre_Click(object sender, RoutedEventArgs e)
+        {
+            string nuevo = (TxtNombre.Text ?? "").Trim();
+
+            if (nuevo.Length == 0)
+            {
+                MostrarNombre("Escribe un nombre.");
+                return;
+            }
+            if (nuevo == (Generals.Global.Nombre ?? "").Trim())
+            {
+                MostrarNombre("El nombre no ha cambiado.");
+                return;
+            }
+
+            var dto = new Dto.UsuarioDto();
+            string resul = dto.CambiarNombre(Generals.Global.UsuarioId, nuevo);
+
+            // Refleja el cambio en la sesión en curso (rótulos, saludo, export…).
+            Generals.Global.Nombre = nuevo;
+            Generals.Global.NameConnect = Generals.Global.Usuario + "-" + nuevo;
+            RefrescarCabecera();
+
+            GlassDialog.Informar(Owner, "Mi cuenta", resul);
+            LblEstadoNombre.Visibility = Visibility.Collapsed;
         }
 
         private void Guardar_Click(object sender, RoutedEventArgs e)

@@ -29,6 +29,9 @@ namespace arquitectSoft.View.Wpf
 
         private bool _cerrando;
 
+        /// <summary>true si el usuario se autenticó (el escritorio debe abrirse). Lo lee Program.Main.</summary>
+        public bool LoginOk { get; private set; }
+
         public LoginWindow()
         {
             InitializeComponent();
@@ -39,8 +42,71 @@ namespace arquitectSoft.View.Wpf
             Loaded += (s, e) =>
             {
                 LiquidGlass.Apertura(FrameRim, WinScale);
-                TxtUser.Focus();
+                PrecargarRecordado();
             };
+        }
+
+        // ===== "Recordar mis datos" =====
+        // El usuario se guarda en claro; la contraseña se cifra con DPAPI (atada a la
+        // cuenta de Windows), de modo que el user.config no la expone en texto plano.
+
+        private void PrecargarRecordado()
+        {
+            try
+            {
+                var cfg = Properties.Settings.Default;
+                if (cfg.RecordarLogin && !string.IsNullOrEmpty(cfg.LoginUsuario))
+                {
+                    TxtUser.Text = cfg.LoginUsuario;
+                    TxtPass.Password = Desproteger(cfg.LoginClaveProt);
+                    ChkRecordar.IsChecked = true;
+                    // Datos ya puestos: el foco va al botón para entrar de una.
+                    BtnIngresar.Focus();
+                    return;
+                }
+            }
+            catch { /* si el settings está corrupto, arranca en limpio */ }
+            TxtUser.Focus();
+        }
+
+        private void GuardarRecordado(string usuario, string clave)
+        {
+            var cfg = Properties.Settings.Default;
+            if (ChkRecordar.IsChecked == true)
+            {
+                cfg.RecordarLogin = true;
+                cfg.LoginUsuario = usuario;
+                cfg.LoginClaveProt = Proteger(clave);
+            }
+            else
+            {
+                cfg.RecordarLogin = false;
+                cfg.LoginUsuario = "";
+                cfg.LoginClaveProt = "";
+            }
+            cfg.Save();
+        }
+
+        private static string Proteger(string texto)
+        {
+            if (string.IsNullOrEmpty(texto)) return "";
+            byte[] datos = System.Text.Encoding.UTF8.GetBytes(texto);
+            byte[] cif = System.Security.Cryptography.ProtectedData.Protect(
+                datos, null, System.Security.Cryptography.DataProtectionScope.CurrentUser);
+            return Convert.ToBase64String(cif);
+        }
+
+        private static string Desproteger(string protegido)
+        {
+            if (string.IsNullOrEmpty(protegido)) return "";
+            try
+            {
+                byte[] cif = Convert.FromBase64String(protegido);
+                byte[] datos = System.Security.Cryptography.ProtectedData.Unprotect(
+                    cif, null, System.Security.Cryptography.DataProtectionScope.CurrentUser);
+                return System.Text.Encoding.UTF8.GetString(datos);
+            }
+            catch { return ""; }
         }
 
         private void Ingresar_Click(object sender, RoutedEventArgs e)
@@ -57,6 +123,7 @@ namespace arquitectSoft.View.Wpf
             Generals.Conexion con = new Generals.Conexion();
             string fail = "";
             string nombreDesc = "";
+            string nombre = "";
             int rol = Generals.Global.ROL_TECNICO_BASICO;
             int idUsuario = 0;
 
@@ -69,7 +136,8 @@ namespace arquitectSoft.View.Wpf
                 {
                     while (row.Read())
                     {
-                        nombreDesc = row["usuario"].ToString() + "-" + row["Nombre"].ToString();
+                        nombre = row["Nombre"].ToString();
+                        nombreDesc = row["usuario"].ToString() + "-" + nombre;
                         int.TryParse(Convert.ToString(row["rol"]), out rol);
                         int.TryParse(Convert.ToString(row["id"]), out idUsuario);
                     }
@@ -91,11 +159,12 @@ namespace arquitectSoft.View.Wpf
                 Generals.Global.NameConnect = nombreDesc;
                 Generals.Global.Rol = rol;
                 Generals.Global.Usuario = usuario;
+                Generals.Global.Nombre = nombre;
                 Generals.Global.UsuarioId = idUsuario;
-                // Abre el escritorio WPF; al cerrarlo, termina la app (cerramos el login).
-                Hide();
-                new EscritorioWindow().ShowDialog();
-                _cerrando = true;   // salta la animación de cierre (la ventana ya está oculta)
+                GuardarRecordado(usuario, clave);
+                // Autenticado: cierra el login; Program.Main abre el escritorio. Si desde
+                // allí se "Cierra sesión", el bucle de Main vuelve a crear un login nuevo.
+                LoginOk = true;
                 Close();
             }
             else

@@ -17,11 +17,17 @@ namespace arquitectSoft.View.Wpf
     /// </summary>
     public partial class EscritorioWindow : Window
     {
+        /// <summary>
+        /// Queda en true si el usuario eligió "Cerrar sesión" (en vez de salir del
+        /// programa). El login lo lee tras ShowDialog para volver a la pantalla de acceso.
+        /// </summary>
+        public bool CerrarSesion { get; private set; }
+
         public EscritorioWindow()
         {
             InitializeComponent();
             SourceInitialized += OnSourceInitialized;
-            Loaded += (s, e) => { CargarFondo(); AplicarPermisos(); };
+            Loaded += (s, e) => { CargarFondo(); AplicarPermisos(); MostrarSesion(); };
 
             // Tamaño "restaurado" centrado en el MONITOR PRINCIPAL (al que se vuelve si el
             // usuario quita el maximizado con doble clic en la barra de título).
@@ -99,6 +105,7 @@ namespace arquitectSoft.View.Wpf
             child.TraerAlFrente();
             child.UpdateLayout();
             child.AjustarAlCanvas();
+            child.AnimarApertura();   // pop elástico de entrada
             RefrescarBarra();
         }
 
@@ -192,7 +199,7 @@ namespace arquitectSoft.View.Wpf
         private void Usuarios_Click(object sender, RoutedEventArgs e) =>
             AbrirPanel("Usuarios", "", new UsuariosPanel(), 940, 560);
         private void MiCuenta_Click(object sender, RoutedEventArgs e) =>
-            AbrirPanel("Mi cuenta", "", new MiCuentaPanel(), 460, 460);
+            AbrirPanel("Mi cuenta", "", new MiCuentaPanel(), 460, 650);
 
         // ===== Permisos: muestra/oculta botones del dock según el rol del usuario =====
         //   Básico  -> Análisis, Puertas, Mi cuenta, Acerca
@@ -260,6 +267,27 @@ namespace arquitectSoft.View.Wpf
         private void CerrarApp_Click(object sender, RoutedEventArgs e)
         {
             if (GlassDialog.Pregunta(this, "arquitectSoft", "¿Cerrar el programa?")) Close();
+        }
+
+        // Muestra en la barra de título quién tiene la sesión abierta.
+        private void MostrarSesion()
+        {
+            string quien = !string.IsNullOrEmpty(Generals.Global.Nombre)
+                ? Generals.Global.Nombre : Generals.Global.Usuario;
+            LblSesion.Text = quien ?? "";
+        }
+
+        // Cierra la sesión (no el programa) y vuelve al login. El bucle lo cierra LoginWindow.
+        private void CerrarSesion_Click(object sender, RoutedEventArgs e)
+        {
+            string quien = !string.IsNullOrEmpty(Generals.Global.Nombre)
+                ? Generals.Global.Nombre : Generals.Global.Usuario;
+            if (GlassDialog.Pregunta(this, "arquitectSoft",
+                    "¿Cerrar la sesión de " + quien + " y volver al inicio de sesión?"))
+            {
+                CerrarSesion = true;
+                Close();
+            }
         }
 
         // ===== Maximizar sin tapar la barra de tareas =====

@@ -108,6 +108,41 @@
             </Setter>
         </Style>
 
+        <!-- Casilla "Recordar mis datos" on-theme (marca peach) -->
+        <Style x:Key="Recordar" TargetType="CheckBox">
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Foreground" Value="{StaticResource TextMuted}"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="CheckBox">
+                        <StackPanel Orientation="Horizontal" Background="Transparent">
+                            <Border x:Name="box" Width="17" Height="17" CornerRadius="5"
+                                    Background="{StaticResource InputDark}" BorderThickness="1"
+                                    BorderBrush="{StaticResource PanelBorder}" VerticalAlignment="Center">
+                                <TextBlock x:Name="tick" Text="&#xE73E;" FontFamily="Segoe MDL2 Assets"
+                                           FontSize="10" Foreground="#201712" Opacity="0"
+                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <ContentPresenter Margin="9,0,0,0" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="box" Property="Background" Value="{StaticResource Accent}"/>
+                                <Setter TargetName="box" Property="BorderBrush" Value="{StaticResource Accent}"/>
+                                <Setter TargetName="tick" Property="Opacity" Value="1"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="box" Property="BorderBrush" Value="{StaticResource Accent}"/>
+                                <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
         <Style x:Key="Ghost" TargetType="Button">
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="Foreground" Value="{StaticResource TextMuted}"/>
@@ -142,60 +177,31 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Grid>
-                            <Border x:Name="bd" CornerRadius="11" Padding="16,0" RenderTransformOrigin="0.5,0.5">
-                                <Border.RenderTransform><ScaleTransform x:Name="sc" ScaleX="1" ScaleY="1"/></Border.RenderTransform>
-                                <Border.Background>
-                                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                                        <GradientStop Color="#F2966D" Offset="0"/>
-                                        <GradientStop Color="#E67E5C" Offset="0.5"/>
-                                        <GradientStop Color="#C9684A" Offset="1"/>
-                                    </LinearGradientBrush>
-                                </Border.Background>
-                                <Grid>
-                                    <Border x:Name="gloss" CornerRadius="10" Margin="1.2" IsHitTestVisible="False">
-                                        <Border.Background>
-                                            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                                                <GradientStop Color="#42FFFFFF" Offset="0"/>
-                                                <GradientStop Color="#0CFFFFFF" Offset="0.5"/>
-                                                <GradientStop Color="#00FFFFFF" Offset="1"/>
-                                            </LinearGradientBrush>
-                                        </Border.Background>
-                                    </Border>
-                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                </Grid>
-                            </Border>
-                            <Border CornerRadius="11" BorderThickness="1" IsHitTestVisible="False">
-                                <Border.BorderBrush>
-                                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                                        <GradientStop Color="#66FFFFFF" Offset="0"/>
-                                        <GradientStop Color="#22FFFFFF" Offset="1"/>
-                                    </LinearGradientBrush>
-                                </Border.BorderBrush>
-                            </Border>
-                        </Grid>
+                        <Border x:Name="bd" CornerRadius="12" Padding="16,0" RenderTransformOrigin="0.5,0.5">
+                            <Border.RenderTransform><ScaleTransform x:Name="sc" ScaleX="1" ScaleY="1"/></Border.RenderTransform>
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                    <GradientStop Color="#F2966D" Offset="0"/><GradientStop Color="#E67E5C" Offset="0.5"/><GradientStop Color="#C9684A" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Border.Background>
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter TargetName="bd" Property="Effect">
-                                    <Setter.Value><DropShadowEffect Color="#E07B5B" BlurRadius="16" ShadowDepth="0" Opacity="0.6"/></Setter.Value>
-                                </Setter>
+                                    <Setter.Value><DropShadowEffect Color="#E07B5B" BlurRadius="16" ShadowDepth="0" Opacity="0.6"/></Setter.Value></Setter>
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
-                                <Trigger.EnterActions>
-                                    <BeginStoryboard><Storyboard>
-                                        <DoubleAnimation Storyboard.TargetName="sc" Storyboard.TargetProperty="ScaleX" To="0.93" Duration="0:0:0.09"/>
-                                        <DoubleAnimation Storyboard.TargetName="sc" Storyboard.TargetProperty="ScaleY" To="0.86" Duration="0:0:0.09"/>
-                                        <DoubleAnimation Storyboard.TargetName="gloss" Storyboard.TargetProperty="Opacity" To="0.35" Duration="0:0:0.09"/>
-                                    </Storyboard></BeginStoryboard>
-                                </Trigger.EnterActions>
-                                <Trigger.ExitActions>
-                                    <BeginStoryboard><Storyboard>
-                                        <DoubleAnimation Storyboard.TargetName="sc" Storyboard.TargetProperty="ScaleX" To="1" Duration="0:0:0.5"><DoubleAnimation.EasingFunction><ElasticEase Oscillations="2" Springiness="5" EasingMode="EaseOut"/></DoubleAnimation.EasingFunction></DoubleAnimation>
-                                        <DoubleAnimation Storyboard.TargetName="sc" Storyboard.TargetProperty="ScaleY" To="1" Duration="0:0:0.5"><DoubleAnimation.EasingFunction><ElasticEase Oscillations="2" Springiness="5" EasingMode="EaseOut"/></DoubleAnimation.EasingFunction></DoubleAnimation>
-                                        <DoubleAnimation Storyboard.TargetName="gloss" Storyboard.TargetProperty="Opacity" To="1" Duration="0:0:0.3"/>
-                                    </Storyboard></BeginStoryboard>
-                                </Trigger.ExitActions>
+                                <Trigger.EnterActions><BeginStoryboard><Storyboard>
+                                    <DoubleAnimation Storyboard.TargetName="sc" Storyboard.TargetProperty="ScaleX" To="0.94" Duration="0:0:0.07"/>
+                                    <DoubleAnimation Storyboard.TargetName="sc" Storyboard.TargetProperty="ScaleY" To="0.94" Duration="0:0:0.07"/>
+                                </Storyboard></BeginStoryboard></Trigger.EnterActions>
+                                <Trigger.ExitActions><BeginStoryboard><Storyboard>
+                                    <DoubleAnimation Storyboard.TargetName="sc" Storyboard.TargetProperty="ScaleX" To="1" Duration="0:0:0.28"><DoubleAnimation.EasingFunction><BackEase EasingMode="EaseOut" Amplitude="0.4"/></DoubleAnimation.EasingFunction></DoubleAnimation>
+                                    <DoubleAnimation Storyboard.TargetName="sc" Storyboard.TargetProperty="ScaleY" To="1" Duration="0:0:0.28"><DoubleAnimation.EasingFunction><BackEase EasingMode="EaseOut" Amplitude="0.4"/></DoubleAnimation.EasingFunction></DoubleAnimation>
+                                </Storyboard></BeginStoryboard></Trigger.ExitActions>
                             </Trigger>
+                            <Trigger Property="IsEnabled" Value="False"><Setter Property="Opacity" Value="0.35"/></Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
@@ -277,6 +283,10 @@
 
             <TextBlock x:Name="LblError" Grid.Row="5" Foreground="#E86A5A" FontSize="12"
                        TextWrapping="Wrap" Margin="2,10,0,0" Visibility="Collapsed"/>
+
+            <CheckBox x:Name="ChkRecordar" Grid.Row="6" Style="{StaticResource Recordar}"
+                      Content="Recordar mis datos" HorizontalAlignment="Left"
+                      VerticalAlignment="Top" Margin="2,16,0,0"/>
 
             <!-- Botones -->
             <StackPanel Grid.Row="7" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,16,0,0">

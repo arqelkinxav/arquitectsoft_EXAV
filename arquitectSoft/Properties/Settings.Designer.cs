@@ -32,5 +32,41 @@ namespace arquitectSoft.Properties {
                 return ((string)(this["arquitectdb"]));
             }
         }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool RecordarLogin {
+            get {
+                return ((bool)(this["RecordarLogin"]));
+            }
+            set {
+                this["RecordarLogin"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string LoginUsuario {
+            get {
+                return ((string)(this["LoginUsuario"]));
+            }
+            set {
+                this["LoginUsuario"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string LoginClaveProt {
+            get {
+                return ((string)(this["LoginClaveProt"]));
+            }
+            set {
+                this["LoginClaveProt"] = value;
+            }
+        }
     }
 }

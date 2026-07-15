@@ -22,6 +22,7 @@ namespace arquitectSoft.Generals
         private static string _SwSegmentadoUbi = "";
         private static int _rol = ROL_TECNICO_BASICO;
         private static string _usuario = "";
+        private static string _nombre = "";
         private static int _usuarioId = 0;
 
         public static string NameConnect
@@ -42,6 +43,13 @@ namespace arquitectSoft.Generals
         {
             get { return _usuario; }
             set { _usuario = value; }
+        }
+
+        /// <summary>Nombre legible (columna `Nombre`) del usuario que inició sesión.</summary>
+        public static string Nombre
+        {
+            get { return _nombre; }
+            set { _nombre = value; }
         }
 
         /// <summary>Id (PK) del usuario que inició sesión.</summary>

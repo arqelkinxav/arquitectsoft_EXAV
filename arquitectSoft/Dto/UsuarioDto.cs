@@ -115,6 +115,28 @@ namespace arquitectSoft.Dto
             return ok;
         }
 
+        /// <summary>Cambia el nombre legible (no el login) del usuario indicado. Devuelve mensaje de resultado.</summary>
+        public string CambiarNombre(int id, string nuevoNombre)
+        {
+            string resul = "";
+            Generals.Conexion con = new Generals.Conexion();
+            string fail = "";
+            try
+            {
+                con.Open(out fail);
+                string[] param = { nuevoNombre, id.ToString() };
+                con.ExecuteNonQuery(Generals.Constantes.QUERY_CAMBIAR_NOMBRE, out fail, param, 1);
+                con.Close();
+                resul = fail == "" ? "Nombre actualizado correctamente" : fail;
+            }
+            catch (Exception ex)
+            {
+                resul = ex.Message;
+                try { con.Close(); } catch { }
+            }
+            return resul;
+        }
+
         /// <summary>Cambia la clave del usuario indicado. Devuelve mensaje de resultado.</summary>
         public string CambiarClave(int id, string nuevaClave)
         {

@@ -26,9 +26,22 @@ namespace arquitectSoft
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            // Login en WPF (cristal). Su ShowDialog corre el bucle modal; al cerrarse
-            // (tras cerrar el escritorio, o al cancelar) Main retorna y la app termina.
-            new View.Wpf.LoginWindow().ShowDialog();
+
+            // Bucle de sesión: login → escritorio → (si "Cerrar sesión") vuelve al login.
+            //   - Login cancelado/cerrado  => salir del programa.
+            //   - Escritorio cerrado con "Salir" => salir del programa.
+            //   - Escritorio cerrado con "Cerrar sesión" => repetir (nuevo login).
+            while (true)
+            {
+                var login = new View.Wpf.LoginWindow();
+                login.ShowDialog();
+                if (!login.LoginOk) break;                 // no se autenticó -> fin
+
+                var esc = new View.Wpf.EscritorioWindow();
+                esc.ShowDialog();
+                if (!esc.CerrarSesion) break;              // cerró el programa -> fin
+                // CerrarSesion == true -> otra vuelta al login
+            }
         }
     }
 }
