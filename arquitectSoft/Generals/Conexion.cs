@@ -7,21 +7,40 @@ using System.Text;
 using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
 using System.IO;
+using System.Configuration;
 
 namespace arquitectSoft.Generals
 {
     public class Conexion
     {
 
-   
+
         MySqlConnection conn;
-        //static string host = "10.11.0.254";
-        static string host = "localhost";
-        static string database = "arquitectdb";
-        static string userDB = "remote";
-        //static string userDB = "root";
-        static string password = "poseidon";
+
+        // La conexion se lee de App.config (seccion <appSettings>). Si el archivo
+        // no existe o falta una clave, se usa el valor por defecto de aqui abajo
+        // (asi el programa nunca queda sin poder conectar). Para apuntar la BETA a
+        // su base aparte, editar el App.config junto al .exe: no hace falta recompilar.
+        static string host = Cfg("DbHost", "localhost");
+        static string database = Cfg("DbDatabase", "arquitectdb");
+        static string userDB = Cfg("DbUser", "remote");
+        static string password = Cfg("DbPassword", "poseidon");
         public static string strProvider = "server=" + host + ";Database=" + database + ";User ID=" + userDB + ";Password=" + password;
+
+        // Lee una clave de <appSettings>; devuelve el valor por defecto si esta
+        // ausente, vacia o si falla la lectura del config.
+        private static string Cfg(string clave, string porDefecto)
+        {
+            try
+            {
+                string valor = ConfigurationManager.AppSettings[clave];
+                return string.IsNullOrWhiteSpace(valor) ? porDefecto : valor.Trim();
+            }
+            catch
+            {
+                return porDefecto;
+            }
+        }
 
         public bool Open(out string fail)
         {            
