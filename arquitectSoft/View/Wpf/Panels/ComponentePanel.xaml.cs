@@ -159,7 +159,10 @@ namespace arquitectSoft.View.Wpf.Panels
                 Width = width,
                 ItemsSource = source,
                 SelectedValuePath = valuePath,
-                SelectedValueBinding = new Binding(prop),
+                // PropertyChanged: el valor elegido se vuelca al objeto en el acto, sin
+                // depender de que la celda/fila confirme la edición (CommitEdit). Así el
+                // combo "Cortes" (y los demás) nunca se pierde al pulsar Guardar directo.
+                SelectedValueBinding = new Binding(prop) { UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged },
                 ElementStyle = st,
                 EditingElementStyle = st
             };
@@ -337,6 +340,7 @@ namespace arquitectSoft.View.Wpf.Panels
 
         private void Check_Click(object sender, RoutedEventArgs e)
         {
+            ConfirmarEdiciones();
             string resul = new Dto.ComponenteDto().ExistComponent(TxtCodigo.Text, TxtDescripcion.Text, AcabadoSeleccionado());
             GlassDialog.Informar(Owner, "Componente",
                 resul != "0" ? "El componente ya existe." : "Componente disponible para guardar.");
@@ -414,8 +418,20 @@ namespace arquitectSoft.View.Wpf.Panels
             }
         }
 
+        // Confirma la edición pendiente de las grillas: si el usuario cambia una celda
+        // (p.ej. el combo "Cortes") y pulsa Guardar sin salir de la celda/fila, WPF aún
+        // no ha volcado el valor al objeto enlazado. Sin esto se guardaría el valor viejo.
+        private void ConfirmarEdiciones()
+        {
+            GridComponente.CommitEdit(DataGridEditingUnit.Cell, true);
+            GridComponente.CommitEdit(DataGridEditingUnit.Row, true);
+            GridComponenteEsp.CommitEdit(DataGridEditingUnit.Cell, true);
+            GridComponenteEsp.CommitEdit(DataGridEditingUnit.Row, true);
+        }
+
         private void Guardar_Click(object sender, RoutedEventArgs e)
         {
+            ConfirmarEdiciones();
             var dto = new Dto.ComponenteDto();
             int acabado; int.TryParse(AcabadoSeleccionado(), out acabado);
             string fail;
