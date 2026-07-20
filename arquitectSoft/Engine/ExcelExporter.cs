@@ -551,17 +551,41 @@ namespace arquitectSoft.Engine
                         wb.Worksheet(sheets).Range(Rangeheaderfooter).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
                         wb.Worksheet(sheets).Range(Rangeheaderfooter).Style.Border.InsideBorder = XLBorderStyleValues.Thin;
 
-                        wb.Worksheet(sheets).Cell(string.Format("A{0}", indexfooter + 3)).Value = "SISTEMAS ARQUIMART S.L. c/ Aitzgorri 6 - Pol.Ind. Ansoleta 01006 Vitoria-Gasteiz";
-                        wb.Worksheet(sheets).Cell(string.Format("A{0}", indexfooter + 4)).Value = "Tfno:945 29 14 89  e-mail: arquimart@arquimart.es CIF B 01472216";
+                        // Cuadro "REVISADO Y CONFORME" + espacio de firma (petición de
+                        // administración jul 2026: documentan la salida de fábrica por
+                        // los palets golpeados en logística).
+                        int indexRevisado = indexfooter + 3;
+                        wb.Worksheet(sheets).Cell(string.Format("A{0}", indexRevisado)).Value = "REVISADO Y CONFORME CON EL TRANSPORTISTA";
+                        wb.Worksheet(sheets).Range(string.Format("A{0}:E{0}", indexRevisado)).Merge().Style.Font.SetBold();
+                        wb.Worksheet(sheets).Range(string.Format("A{0}:E{0}", indexRevisado)).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center).Alignment.SetVertical(XLAlignmentVerticalValues.Center);
 
-                        wb.Worksheet(sheets).Range(string.Format("A{0}:E{0}", indexfooter + 3)).Merge().Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center).Alignment.SetVertical(XLAlignmentVerticalValues.Center);
-                        wb.Worksheet(sheets).Range(string.Format("A{0}:E{0}", indexfooter + 4)).Merge().Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center).Alignment.SetVertical(XLAlignmentVerticalValues.Center);
+                        wb.Worksheet(sheets).Cell(string.Format("A{0}", indexRevisado + 1)).Value = "Firma:";
+                        wb.Worksheet(sheets).Range(string.Format("A{0}:E{1}", indexRevisado + 1, indexRevisado + 3)).Merge();
+                        wb.Worksheet(sheets).Range(string.Format("A{0}:E{1}", indexRevisado + 1, indexRevisado + 3)).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Left).Alignment.SetVertical(XLAlignmentVerticalValues.Top);
+                        for (int fila = indexRevisado + 1; fila <= indexRevisado + 3; fila++)
+                            wb.Worksheet(sheets).Row(fila).Height = 22; // hueco cómodo para firmar
+
+                        string RangeRevisado = string.Format("A{0}:E{1}", indexRevisado, indexRevisado + 3);
+                        wb.Worksheet(sheets).Range(RangeRevisado).Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                        wb.Worksheet(sheets).Range(string.Format("A{0}:E{0}", indexRevisado)).Style.Border.BottomBorder = XLBorderStyleValues.Thin;
+
+                        wb.Worksheet(sheets).Cell(string.Format("A{0}", indexRevisado + 5)).Value = "SISTEMAS ARQUIMART S.L. c/ Aitzgorri 6 - Pol.Ind. Ansoleta 01006 Vitoria-Gasteiz";
+                        wb.Worksheet(sheets).Cell(string.Format("A{0}", indexRevisado + 6)).Value = "Tfno:945 29 14 89  e-mail: arquimart@arquimart.es CIF B 01472216";
+
+                        wb.Worksheet(sheets).Range(string.Format("A{0}:E{0}", indexRevisado + 5)).Merge().Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center).Alignment.SetVertical(XLAlignmentVerticalValues.Center);
+                        wb.Worksheet(sheets).Range(string.Format("A{0}:E{0}", indexRevisado + 6)).Merge().Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center).Alignment.SetVertical(XLAlignmentVerticalValues.Center);
                         //END FOOTER
 
                         wb.Worksheet(sheets).ShowGridLines = false;
 
                         // Todas las celdas centradas (horizontal y vertical).
                         CentrarTodo(wb.Worksheet(sheets));
+
+                        // El "Firma:" va arriba-izquierda (CentrarTodo lo centraría en
+                        // mitad del hueco de firma).
+                        wb.Worksheet(sheets).Range(string.Format("A{0}:E{1}", indexRevisado + 1, indexRevisado + 3))
+                          .Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Left)
+                          .Alignment.SetVertical(XLAlignmentVerticalValues.Top);
                     }
                 }
 

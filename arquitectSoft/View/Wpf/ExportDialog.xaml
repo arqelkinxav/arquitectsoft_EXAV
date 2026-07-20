@@ -262,7 +262,8 @@
                 <TextBlock x:Name="LblAlbaran" Text="DATOS PARA ALBARÁN" Style="{StaticResource Cap}" Margin="3,18,0,6"/>
                 <StackPanel x:Name="PanelAlbaran">
                     <CheckBox x:Name="ChkPerfiles" Content="Perfiles Metálicos" IsChecked="True"/>
-                    <CheckBox x:Name="ChkVidrios" Content="Vidrios y Paneles" IsChecked="True"/>
+                    <!-- Vidrios SIN premarcar: casi nunca van en el albarán (petición Elkin jul 2026) -->
+                    <CheckBox x:Name="ChkVidrios" Content="Vidrios y Paneles"/>
                     <CheckBox x:Name="ChkPuertas" Content="Puertas" IsChecked="True"/>
                 </StackPanel>
 
