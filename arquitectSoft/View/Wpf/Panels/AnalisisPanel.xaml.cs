@@ -148,7 +148,7 @@ namespace arquitectSoft.View.Wpf.Panels
         // (mismo formato que el nombre del Excel). Si no hay info, deja el título por defecto.
         private void ActualizarTituloVentana()
         {
-            string t = AnalisisEngine.NombreProyecto(_engine.ProyectoCodigo, _engine.ProyectoNombre);
+            string t = AnalisisEngine.NombreProyecto(_engine.ProyectoCodigo, _engine.ProyectoNombre, _engine.ProyectoReferencia);
             MdiChild host = HostMdi();
             if (host != null)
                 host.CambiarTitulo(string.IsNullOrEmpty(t) ? "Análisis de Mamparas" : t);
@@ -550,6 +550,7 @@ namespace arquitectSoft.View.Wpf.Panels
                 Owner = Owner,
                 PrefillNumero = _engine.ProyectoCodigo,
                 PrefillNombre = _engine.ProyectoNombre,
+                PrefillReferencia = _engine.ProyectoReferencia,
                 PrefillAcabado1 = _acabadoPerfil   // Sentido A: precarga el acabado ya aplicado
             };
             bsc.ShowDialog();
@@ -568,7 +569,7 @@ namespace arquitectSoft.View.Wpf.Panels
             }
 
             string[] param = { bsc.Numero, bsc.Nombre, bsc.Tecnico, bsc.Fecha,
-                               bsc.Acabado1, bsc.Acabado2, bsc.Albaran };
+                               bsc.Acabado1, bsc.Acabado2, bsc.Albaran, bsc.Referencia };
 
             string folder;
             using (var fb = new System.Windows.Forms.FolderBrowserDialog())

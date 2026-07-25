@@ -593,13 +593,14 @@ namespace arquitectSoft.View.Wpf
             {
                 Owner = this,
                 PrefillNumero = _engine.ProyectoCodigo,
-                PrefillNombre = _engine.ProyectoNombre
+                PrefillNombre = _engine.ProyectoNombre,
+                PrefillReferencia = _engine.ProyectoReferencia
             };
             bsc.ShowDialog();
             if (bsc.Numero == null) return;   // canceló
 
             string[] param = { bsc.Numero, bsc.Nombre, bsc.Tecnico, bsc.Fecha,
-                               bsc.Acabado1, bsc.Acabado2, bsc.Albaran };
+                               bsc.Acabado1, bsc.Acabado2, bsc.Albaran, bsc.Referencia };
 
             string folder;
             using (var fb = new System.Windows.Forms.FolderBrowserDialog())

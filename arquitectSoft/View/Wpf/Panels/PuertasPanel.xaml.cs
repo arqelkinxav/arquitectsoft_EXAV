@@ -368,7 +368,7 @@ namespace arquitectSoft.View.Wpf.Panels
             };
 
             string[] param = { bsc.Numero, bsc.Nombre, bsc.Tecnico, bsc.Fecha,
-                               bsc.Acabado1, bsc.Acabado2, bsc.Albaran };
+                               bsc.Acabado1, bsc.Acabado2, bsc.Albaran, bsc.Referencia };
 
             string folder;
             using (var fb = new System.Windows.Forms.FolderBrowserDialog())

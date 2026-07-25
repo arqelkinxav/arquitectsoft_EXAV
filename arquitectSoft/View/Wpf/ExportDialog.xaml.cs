@@ -29,6 +29,7 @@ namespace arquitectSoft.View.Wpf
         public string Fecha { get; private set; }
         public string Numero { get; private set; }
         public string Nombre { get; private set; }
+        public string Referencia { get; private set; }
         public string Tecnico { get; private set; }
         public string Acabado1 { get; private set; }
         public string Acabado2 { get; private set; }
@@ -38,6 +39,7 @@ namespace arquitectSoft.View.Wpf
         // Se ponen ANTES de ShowDialog y prerellenan número/nombre.
         public string PrefillNumero { get; set; }
         public string PrefillNombre { get; set; }
+        public string PrefillReferencia { get; set; }
 
         // Acabado de perfilería sugerido: es el que YA tienen las cantidades
         // (tras "Cambiar Acabado" o el 01 por defecto). Prerellena "Acabado Perfilería"
@@ -54,6 +56,7 @@ namespace arquitectSoft.View.Wpf
             {
                 if (!string.IsNullOrEmpty(PrefillNumero)) TxtNumero.Text = PrefillNumero;
                 if (!string.IsNullOrEmpty(PrefillNombre)) TxtNombre.Text = PrefillNombre;
+                if (!string.IsNullOrEmpty(PrefillReferencia)) TxtReferencia.Text = PrefillReferencia;
                 if (!string.IsNullOrEmpty(PrefillAcabado1)) TxtAcabado1.Text = PrefillAcabado1;
                 // Técnico a cargo: precarga el NOMBRE del usuario que inició sesión
                 // (Global.NameConnect = "usuario-Nombre"; tomamos la parte del Nombre).
@@ -113,6 +116,7 @@ namespace arquitectSoft.View.Wpf
 
             Numero = TxtNumero.Text.Trim();
             Nombre = TxtNombre.Text.Trim();
+            Referencia = TxtReferencia.Text.Trim();
             Tecnico = TxtTecnico.Text;
             Acabado1 = TxtAcabado1.Text;
             Acabado2 = TxtAcabado2.Text;

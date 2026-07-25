@@ -241,6 +241,11 @@
                 <TextBlock Text="NOMBRE DEL PROYECTO *" Style="{StaticResource Cap}" Margin="3,14,0,5"/>
                 <TextBox x:Name="TxtNombre" Style="{StaticResource Field}"/>
 
+                <!-- Referencia del cliente: viene del TXT de info (la escribe Revit).
+                     Sale en el nombre del Excel y junto al nombre dentro de la hoja. -->
+                <TextBlock Text="REFERENCIA CLIENTE" Style="{StaticResource Cap}" Margin="3,14,0,5"/>
+                <TextBox x:Name="TxtReferencia" Style="{StaticResource Field}"/>
+
                 <TextBlock Text="TÉCNICO A CARGO" Style="{StaticResource Cap}" Margin="3,14,0,5"/>
                 <TextBox x:Name="TxtTecnico" Style="{StaticResource Field}"/>
 

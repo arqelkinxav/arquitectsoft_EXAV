@@ -43,19 +43,22 @@ namespace arquitectSoft.Engine
         // --- Información del proyecto leída de un TXT de info (ver Cargar / LeerInfoProyecto) ---
         public string ProyectoCodigo { get; private set; }
         public string ProyectoNombre { get; private set; }
+        // Referencia del cliente (etiqueta "referencia:" del TXT, la escribe EXAV_Tools
+        // desde el campo "REFERENCIA CLIENTE" de la Información del Proyecto de Revit).
+        public string ProyectoReferencia { get; private set; }
 
         /// <summary>
-        /// Formato único "código nombre" usado tanto para el título de la ventana de
-        /// análisis como para el nombre del archivo Excel, para que siempre coincidan.
-        /// Devuelve "" si no hay ni código ni nombre.
+        /// Formato único "código nombre referencia" usado tanto para el título de la
+        /// ventana de análisis como para el nombre del archivo Excel, para que siempre
+        /// coincidan. Las partes vacías se omiten; devuelve "" si no hay ninguna.
         /// </summary>
-        public static string NombreProyecto(string codigo, string nombre)
+        public static string NombreProyecto(string codigo, string nombre, string referencia = null)
         {
-            codigo = (codigo ?? "").Trim();
-            nombre = (nombre ?? "").Trim();
-            if (codigo.Length == 0) return nombre;
-            if (nombre.Length == 0) return codigo;
-            return codigo + " " + nombre;
+            var partes = new List<string>();
+            if (!string.IsNullOrWhiteSpace(codigo)) partes.Add(codigo.Trim());
+            if (!string.IsNullOrWhiteSpace(nombre)) partes.Add(nombre.Trim());
+            if (!string.IsNullOrWhiteSpace(referencia)) partes.Add(referencia.Trim());
+            return string.Join(" ", partes);
         }
 
         /// <summary>
@@ -72,6 +75,7 @@ namespace arquitectSoft.Engine
             swPMVertical = 0;
             ProyectoCodigo = null;
             ProyectoNombre = null;
+            ProyectoReferencia = null;
 
             int wantedFiles = 0;
             var file124 = new List<string>();
@@ -142,6 +146,7 @@ namespace arquitectSoft.Engine
                     if (val.Length == 0) continue;
                     if (etq.StartsWith("cod")) ProyectoCodigo = val;
                     else if (etq.StartsWith("nom") || etq.StartsWith("proy")) ProyectoNombre = val;
+                    else if (etq.StartsWith("ref")) ProyectoReferencia = val;
                 }
                 if (!string.IsNullOrEmpty(ProyectoCodigo) || !string.IsNullOrEmpty(ProyectoNombre))
                     return;

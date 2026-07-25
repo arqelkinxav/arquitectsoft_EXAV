@@ -20,13 +20,21 @@ namespace arquitectSoft.Engine
         /// Lanza excepción si no se puede guardar (p. ej. archivo abierto) → la maneja la UI.
         /// </summary>
         /// <param name="res">Resultados del análisis.</param>
-        /// <param name="param">[0]Numero [1]Nombre [2]Tecnico [3]Fecha [4]Acabado1 [5]Acabado2 [6]Albaran.</param>
+        /// <param name="param">[0]Numero [1]Nombre [2]Tecnico [3]Fecha [4]Acabado1 [5]Acabado2 [6]Albaran [7]Referencia (opcional).</param>
         /// <param name="folderPath">Carpeta destino.</param>
         /// <param name="swSegmentadoUbi">Estado de segmentación por ubicación ("0" = sin segmentar).</param>
         public string Exportar(ResultadoAnalisis res, string[] param, string folderPath, string swSegmentadoUbi)
         {
             if (!Directory.Exists(folderPath))
                 Directory.CreateDirectory(folderPath);
+
+            // Referencia del cliente: llega en el hueco 7, añadido después que el resto.
+            // Se lee defensivamente para que las pantallas antiguas, que aún mandan 7
+            // elementos, sigan funcionando sin referencia.
+            string referencia = (param != null && param.Length > 7) ? (param[7] ?? "").Trim() : "";
+            // Nombre del proyecto tal y como debe verse impreso: con la referencia al lado.
+            string nombreConRef = (param != null && param.Length > 1) ? (param[1] ?? "") : "";
+            if (referencia.Length > 0) nombreConRef = (nombreConRef + " - " + referencia).Trim(' ', '-');
 
             string filefinish;
 
@@ -346,7 +354,7 @@ namespace arquitectSoft.Engine
                         wb.Worksheet(sheets).Cell(string.Format("E{0}", valuesubheaderValue)).Style.Font.SetBold();
 
                         wb.Worksheet(sheets).Cell(string.Format("B{0}", valuesubheaderDescr)).Value = param[0];
-                        wb.Worksheet(sheets).Cell(string.Format("B{0}", valuesubheaderValue)).Value = param[1];
+                        wb.Worksheet(sheets).Cell(string.Format("B{0}", valuesubheaderValue)).Value = nombreConRef;
                         wb.Worksheet(sheets).Cell(string.Format("D{0}", valuesubheaderDescr)).Value = param[2];
                         wb.Worksheet(sheets).Cell(string.Format("D{0}", valuesubheaderValue)).Value = param[3];
                         wb.Worksheet(sheets).Cell(string.Format("F{0}", valuesubheaderDescr)).Value = param[4];
@@ -500,7 +508,7 @@ namespace arquitectSoft.Engine
                         wb.Worksheet(sheets).Cell(string.Format("A{0}", 15)).Value = "ALBARAN:";
                         wb.Worksheet(sheets).Cell(string.Format("C{0}", 15)).Value = "FECHA: " + param[3];
 
-                        wb.Worksheet(sheets).Cell(string.Format("A{0}", 16)).Value = param[0] + " - " + param[1];
+                        wb.Worksheet(sheets).Cell(string.Format("A{0}", 16)).Value = param[0] + " - " + nombreConRef;
                         wb.Worksheet(sheets).Cell(string.Format("C{0}", 16)).Value = "PEDIDO:";
 
                         wb.Worksheet(sheets).Cell(string.Format("A{0}", 17)).Value = "N CAJAS:";
@@ -589,8 +597,8 @@ namespace arquitectSoft.Engine
                     }
                 }
 
-                // Mismo formato "código nombre" que el título de la ventana de análisis.
-                string FileNameStr = AnalisisEngine.NombreProyecto(param[0], param[1]);
+                // Mismo formato "código nombre referencia" que el título de la ventana de análisis.
+                string FileNameStr = AnalisisEngine.NombreProyecto(param[0], param[1], referencia);
                 if (string.IsNullOrWhiteSpace(FileNameStr)) FileNameStr = "Presupuesto";
                 foreach (char c in System.IO.Path.GetInvalidFileNameChars())
                     FileNameStr = FileNameStr.Replace(c, '_');
