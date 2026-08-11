@@ -216,6 +216,64 @@
             </Setter>
         </Style>
 
+        <!-- ComboBox oscuro EDITABLE para la celda Mecanizado: al entrar en edición (doble
+             clic o Enter) se puede escribir directamente y la lista salta al mecanizado que
+             empieza igual. Necesita la parte PART_EditableTextBox, que GridCombo no tiene. -->
+        <Style x:Key="GridComboEdit" TargetType="ComboBox">
+            <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="IsEditable" Value="True"/>
+            <Setter Property="IsTextSearchEnabled" Value="True"/>
+            <Setter Property="IsTextSearchCaseSensitive" Value="False"/>
+            <Setter Property="StaysOpenOnEdit" Value="True"/>
+            <!-- DisplayMemberPath (no ItemTemplate): un combo editable saca el texto de aquí. -->
+            <Setter Property="DisplayMemberPath" Value="Descripcion"/>
+            <Setter Property="ItemContainerStyle" Value="{StaticResource DarkComboItem}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBox">
+                        <Grid>
+                            <Border x:Name="bd" CornerRadius="6" Background="{StaticResource InputDark}"
+                                    BorderBrush="{StaticResource Accent}" BorderThickness="1"/>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="22"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBox x:Name="PART_EditableTextBox" Grid.Column="0"
+                                         Margin="8,0,0,0" Padding="0" BorderThickness="0"
+                                         Background="Transparent" Foreground="{StaticResource TextPrimary}"
+                                         CaretBrush="{StaticResource Accent}" SelectionBrush="{StaticResource Accent}"
+                                         VerticalContentAlignment="Center"/>
+                                <ToggleButton x:Name="tb" Grid.Column="1" Focusable="False" ClickMode="Press"
+                                              IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}">
+                                    <ToggleButton.Template>
+                                        <ControlTemplate TargetType="ToggleButton">
+                                            <Border Background="Transparent">
+                                                <TextBlock Text="&#xE70D;" FontFamily="Segoe MDL2 Assets" FontSize="7"
+                                                           Foreground="{StaticResource TextMuted}"
+                                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </ToggleButton.Template>
+                                </ToggleButton>
+                            </Grid>
+                            <Popup IsOpen="{TemplateBinding IsDropDownOpen}" Placement="Bottom" AllowsTransparency="True"
+                                   Focusable="False" PopupAnimation="Slide">
+                                <Border Background="#1F1F1F" BorderBrush="{StaticResource PanelBorder}" BorderThickness="1"
+                                        CornerRadius="8" Padding="3" MaxHeight="260"
+                                        MinWidth="{Binding ActualWidth, RelativeSource={RelativeSource TemplatedParent}}">
+                                    <Border.Effect><DropShadowEffect Color="Black" BlurRadius="12" ShadowDepth="0" Opacity="0.5"/></Border.Effect>
+                                    <ScrollViewer><ItemsPresenter/></ScrollViewer>
+                                </Border>
+                            </Popup>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
         <!-- CheckBox cristal para celdas de grilla (solo la casilla, centrada) -->
         <Style x:Key="GridCheck" TargetType="CheckBox">
             <Setter Property="HorizontalAlignment" Value="Center"/>
@@ -557,6 +615,8 @@
                           RowStyle="{StaticResource FilaGenerica}"
                           ContextMenu="{StaticResource MenuGenerico}"
                           ContextMenuOpening="GridComponente_ContextMenuOpening"
+                          PreparingCellForEdit="GridComponente_PreparingCellForEdit"
+                          CellEditEnding="GridComponente_CellEditEnding"
                           Foreground="{StaticResource TextPrimary}"/>
             </Border>
         </Grid>

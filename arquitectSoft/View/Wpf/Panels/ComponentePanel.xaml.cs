@@ -28,7 +28,7 @@ namespace arquitectSoft.View.Wpf.Panels
         private readonly ObservableCollection<Sub_Component> _items = new ObservableCollection<Sub_Component>();
         private readonly ObservableCollection<Sub_ComponentEspecial> _itemsEsp = new ObservableCollection<Sub_ComponentEspecial>();
 
-        private DataView _dtUnidad, _dtCorte, _dtMedida, _dtColumna;
+        private DataView _dtUnidad, _dtCorte, _dtMedida, _dtColumna, _dtMecanizado;
 
         public ComponentePanel()
         {
@@ -94,6 +94,19 @@ namespace arquitectSoft.View.Wpf.Panels
             med.Rows.Add(0, ""); med.Rows.Add(1, "Altura"); med.Rows.Add(2, "Anchura");
             _dtMedida = med.DefaultView;
 
+            // Mecanizados: catálogo de la celda editable. La BD guarda el id (componentes_detalle.Mecanizado
+            // es int), así que necesito un id int garantizado para enlazar con Sub_Component.Cod_Mecanizado;
+            // el union de MecanizadoDto puede devolverlo como Int64. La fila 0 ("sin mecanizado") viene con
+            // un espacio por descripción: lo dejo vacío para que la celda se vea limpia.
+            DataTable mec = new Dto.MecanizadoDto().GetMecanizado();
+            if (!mec.Columns.Contains("IdInt")) mec.Columns.Add("IdInt", typeof(int));
+            foreach (DataRow r in mec.Rows)
+            {
+                int n; int.TryParse(Convert.ToString(r["Id_mecanizado"]), out n); r["IdInt"] = n;
+                r["Descripcion"] = Convert.ToString(r["Descripcion"]).Trim();
+            }
+            _dtMecanizado = mec.DefaultView;
+
             // Columnas (estático): 1..5 + columna string para Sub_ComponentEspecial.Columna (string)
             DataTable col = new DataTable();
             col.Columns.Add("IdStr", typeof(string));
@@ -114,7 +127,7 @@ namespace arquitectSoft.View.Wpf.Panels
             g.Columns.Add(Combo("Cortes", "Cortes", _dtCorte, "IdInt", 120));
             g.Columns.Add(Chk("Extra", "Extra"));
             g.Columns.Add(Combo("Sel. Medida", "Medida", _dtMedida, "Codigo", 120));
-            g.Columns.Add(Texto("Mecanizado", "Mecanizado", 150, true));
+            g.Columns.Add(ComboMecanizado());
         }
 
         private void ConstruirColumnasEspecial()
@@ -166,6 +179,67 @@ namespace arquitectSoft.View.Wpf.Panels
                 ElementStyle = st,
                 EditingElementStyle = st
             };
+        }
+
+        // Mecanizado: combo EDITABLE. El enlace va a Cod_Mecanizado (el id que espera la BD),
+        // no al texto: componentes_detalle.Mecanizado es int con FK a mecanizados. El texto de
+        // Sub_Component.Mecanizado se mantiene sincronizado al confirmar (SincronizarMecanizado).
+        private DataGridComboBoxColumn ComboMecanizado()
+        {
+            return new DataGridComboBoxColumn
+            {
+                Header = "Mecanizado",
+                Width = 180,
+                ItemsSource = _dtMecanizado,
+                SelectedValuePath = "IdInt",
+                SelectedValueBinding = new Binding("Cod_Mecanizado") { UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged },
+                ElementStyle = (Style)FindResource("GridCombo"),
+                EditingElementStyle = (Style)FindResource("GridComboEdit")
+            };
+        }
+
+        // Al entrar en edición en un combo escribible: foco en la caja de texto con todo
+        // seleccionado y lista desplegada, para poder teclear el mecanizado de una vez.
+        private void GridComponente_PreparingCellForEdit(object sender, DataGridPreparingCellForEditEventArgs e)
+        {
+            var cb = e.EditingElement as ComboBox;
+            if (cb == null || !cb.IsEditable) return;
+
+            cb.Dispatcher.BeginInvoke(new Action(delegate
+            {
+                var caja = cb.Template.FindName("PART_EditableTextBox", cb) as TextBox;
+                if (caja != null) { caja.Focus(); caja.SelectAll(); }
+                cb.IsDropDownOpen = true;
+            }), System.Windows.Threading.DispatcherPriority.Input);
+        }
+
+        // Si al cerrar la edición el texto tecleado no corresponde a ningún mecanizado, el combo
+        // queda sin selección y el enlace intentaría escribir null en Cod_Mecanizado (int), lo que
+        // deja la celda en error de validación. En ese caso se restaura lo que ya tenía la fila.
+        private void GridComponente_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+        {
+            if (e.EditAction != DataGridEditAction.Commit) return;
+
+            var cb = e.EditingElement as ComboBox;
+            if (cb == null || !cb.IsEditable || cb.SelectedItem != null) return;
+
+            var fila = e.Row.Item as Sub_Component;
+            if (fila != null) cb.SelectedValue = fila.Cod_Mecanizado;
+        }
+
+        // Descripción de catálogo para un id de mecanizado (vacío si no tiene).
+        private string DescripcionMecanizado(int cod)
+        {
+            if (cod <= 0 || _dtMecanizado == null) return "";
+            foreach (DataRowView r in _dtMecanizado)
+                if (Convert.ToInt32(r["IdInt"]) == cod) return Convert.ToString(r["Descripcion"]);
+            return "";
+        }
+
+        // Deja el texto de cada fila acorde al id elegido en el combo.
+        private void SincronizarMecanizado()
+        {
+            foreach (var s in _items) s.Mecanizado = DescripcionMecanizado(s.Cod_Mecanizado);
         }
 
         // ===== Acabado (combo del encabezado), filtrado por los acabados de los subcomponentes =====
@@ -427,6 +501,7 @@ namespace arquitectSoft.View.Wpf.Panels
             GridComponente.CommitEdit(DataGridEditingUnit.Row, true);
             GridComponenteEsp.CommitEdit(DataGridEditingUnit.Cell, true);
             GridComponenteEsp.CommitEdit(DataGridEditingUnit.Row, true);
+            SincronizarMecanizado();
         }
 
         private void Guardar_Click(object sender, RoutedEventArgs e)

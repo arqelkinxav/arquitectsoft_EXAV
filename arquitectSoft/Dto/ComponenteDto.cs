@@ -93,7 +93,10 @@ namespace arquitectSoft.Dto
 
                 string[] param = { idComponente.ToString(), row.IdSubcomponente.ToString(), row.UnidadCalculada
                         ,row.Cxdefecto.ToString(),row.CAdicional.ToString(),adecre.ToString(),row.Elevado.ToString()
-                        ,row.Cortes.ToString(),extra.ToString(),row.Medida.ToString(),cantAnch,adecreAnch,row.Mecanizado.ToString(),row.Asignacion_puertas.ToString() };
+                        // componentes_detalle.Mecanizado es int (FK a mecanizados): va el id, nunca la
+                        // descripción. WinForms ya mandaba el id en ambos campos; el panel WPF guarda la
+                        // descripción en Mecanizado y el id en Cod_Mecanizado, así que se usa este.
+                        ,row.Cortes.ToString(),extra.ToString(),row.Medida.ToString(),cantAnch,adecreAnch,row.Cod_Mecanizado.ToString(),row.Asignacion_puertas.ToString() };
 
                 int var = con.ExecuteNonQuery(Generals.Constantes.QUERY_INSERT_COMPONENTE_DETALLE, out fail, param, 0);
             }
