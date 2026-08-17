@@ -11,6 +11,35 @@ namespace arquitectSoft.Dto
 {
     class AnalisisDatosDto
     {
+        /// <summary>
+        /// Sustitución de piezas por el TIPO DE VIDRIO elegido para cada sistema. Lo pone el
+        /// motor (<see cref="Engine.AnalisisEngine"/>) antes de calcular; si queda en null el
+        /// cálculo es exactamente el de siempre.
+        /// </summary>
+        public Engine.VidrioResolver Vidrio { get; set; }
+
+        /// <summary>
+        /// Aplica, si toca, la sustitución de la pieza de una fila recién devuelta por un SP de
+        /// cálculo. <paramref name="colId"/> es la posición del id de subcomponente dentro de
+        /// <paramref name="data"/>; <paramref name="colCodigo"/> y <paramref name="colDesc"/>
+        /// las del código y la descripción (-1 si esa tabla no los trae todavía).
+        /// </summary>
+        private void SustituirPorVidrio(object[] data, int colId, int colCodigo, int colDesc,
+                                        string codigoComponente, string ubicacion)
+        {
+            if (Vidrio == null) return;
+
+            int idActual;
+            if (!int.TryParse(Convert.ToString(data[colId]).Trim(), out idActual)) return;
+
+            int idNuevo; string codigoNuevo, descripcionNueva;
+            if (!Vidrio.TrySustituir(codigoComponente, ubicacion, idActual,
+                                     out idNuevo, out codigoNuevo, out descripcionNueva)) return;
+
+            data[colId] = idNuevo.ToString();
+            if (colCodigo >= 0 && codigoNuevo != null) data[colCodigo] = codigoNuevo;
+            if (colDesc >= 0 && descripcionNueva != null) data[colDesc] = descripcionNueva;
+        }
 
         public char ValidationSplit(string file)
         {
@@ -727,6 +756,13 @@ namespace arquitectSoft.Dto
                         data[2] = rowResult[2].ToString();
                         data[3] = "";
                         data[4] = rowResult[3].ToString();
+
+                        // Tipo de vidrio: aquí todavía se sabe de qué componente y ubicación
+                        // viene la pieza, así que la sustitución se puede repartir por sistema
+                        // (más abajo las filas se agrupan de todo el proyecto y ya no se podría).
+                        // Del subcomponente solo salen id, código y descripción; cantidades,
+                        // medidas, corte y mecanizado son del componente y no se tocan.
+                        SustituirPorVidrio(data, 0, 2, 4, codigo, ubicacion);
                         data[5] = rowResult[4].ToString();
                         data[6] = rowResult[5].ToString();
                         data[7] = rowResult[6].ToString();
@@ -877,6 +913,10 @@ namespace arquitectSoft.Dto
                         data[2] = "";
                         data[3] = "";
                         data[4] = rowResult[1].ToString();
+
+                        // Tipo de vidrio (ver getSubComponenteCalc). Aquí basta con cambiar el
+                        // id: el código y la descripción se releen luego por id al agrupar.
+                        SustituirPorVidrio(data, 0, -1, -1, codigo, Ubicacion);
                         data[5] = rowResult[2].ToString();
                         data[6] = rowResult[3].ToString();
                         data[7] = rowResult[4].ToString();

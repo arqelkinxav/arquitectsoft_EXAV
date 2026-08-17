@@ -46,6 +46,18 @@ namespace arquitectSoft.View.Wpf
         // para no tener que volver a elegirlo. Se pone ANTES de ShowDialog.
         public string PrefillAcabado1 { get; set; }
 
+        // ---- Tipo de vidrio por sistema ----
+        // El panel de análisis pasa los sistemas del proyecto y el resolver ANTES de ShowDialog:
+        // el bloque aparece precargado con lo que ya se esté aplicando y se puede cambiar desde
+        // aquí, igual que el acabado de perfilería. Si no se pasan, el bloque no se muestra
+        // (es lo que ocurre al exportar puertas).
+        public IList<Engine.SistemaVidrio> VidrioSistemas { get; set; }
+        public Engine.VidrioResolver VidrioResolver { get; set; }
+        /// <summary>Entra con lo aplicado y sale con lo elegido (prefijo → id de tipo).</summary>
+        public IDictionary<string, int> VidrioSeleccion { get; set; }
+        /// <summary>True si en este diálogo se cambió el tipo de vidrio (hay que recalcular).</summary>
+        public bool VidrioCambiado { get; private set; }
+
         public ExportDialog()
         {
             InitializeComponent();
@@ -58,6 +70,11 @@ namespace arquitectSoft.View.Wpf
                 if (!string.IsNullOrEmpty(PrefillNombre)) TxtNombre.Text = PrefillNombre;
                 if (!string.IsNullOrEmpty(PrefillReferencia)) TxtReferencia.Text = PrefillReferencia;
                 if (!string.IsNullOrEmpty(PrefillAcabado1)) TxtAcabado1.Text = PrefillAcabado1;
+                if (VidrioSistemas != null && VidrioSistemas.Count > 0 && VidrioResolver != null)
+                {
+                    PanelVidrio.Visibility = Visibility.Visible;
+                    MostrarVidrio();
+                }
                 // Técnico a cargo: precarga el NOMBRE del usuario que inició sesión
                 // (Global.NameConnect = "usuario-Nombre"; tomamos la parte del Nombre).
                 if (string.IsNullOrEmpty(TxtTecnico.Text))
@@ -107,6 +124,43 @@ namespace arquitectSoft.View.Wpf
             var bsc = new BuscarDialog { Consulta = "Acaba", Owner = this };
             if (bsc.ShowDialog() != true) return;
             destino.Text = bsc.ReturnItem2;
+        }
+
+        // ===== Tipo de vidrio =====
+        // Reutiliza el mismo diálogo que el botón "Vidrio" del análisis. Aquí solo se recoge la
+        // elección: quien exporta se encarga de recalcular antes de generar el Excel.
+        private void CambiarVidrio_Click(object sender, RoutedEventArgs e)
+        {
+            var dlg = new VidrioDialog { Owner = this };
+            dlg.Cargar(VidrioSistemas, VidrioResolver, VidrioSeleccion);
+            if (dlg.ShowDialog() != true) return;
+
+            VidrioSeleccion = dlg.Seleccion;
+            VidrioCambiado = true;
+            MostrarVidrio();
+        }
+
+        // Resumen legible de lo que se está aplicando; los sistemas que sigan como en la base
+        // se muestran como "estándar" para que se vea que están contemplados.
+        private void MostrarVidrio()
+        {
+            var partes = new List<string>();
+            foreach (Engine.SistemaVidrio s in VidrioSistemas)
+            {
+                if (!s.Configurado) continue;
+
+                int elegido;
+                if (VidrioSeleccion == null || !VidrioSeleccion.TryGetValue(s.Prefijo, out elegido) || elegido <= 0)
+                    elegido = s.IdTipoEstandar;
+
+                string nombre = VidrioResolver.NombreTipo(elegido);
+                if (string.IsNullOrEmpty(nombre)) nombre = "sin definir";
+                if (elegido == s.IdTipoEstandar) nombre += " (estándar)";
+                partes.Add(s.Prefijo + ": " + nombre);
+            }
+            TxtVidrio.Text = partes.Count == 0
+                ? "Ningún sistema configurado"
+                : string.Join("   ·   ", partes);
         }
 
         private void Exportar_Click(object sender, RoutedEventArgs e)

@@ -146,9 +146,11 @@
     <Compile Include="Dto\UsuarioDto.cs" />
     <Compile Include="Dto\AnalisisDatosDto.cs" />
     <Compile Include="Dto\DependenciaDto.cs" />
+    <Compile Include="Dto\VidrioDto.cs" />
     <Compile Include="Engine\AcabadoChanger.cs" />
     <Compile Include="Engine\AnalisisEngine.cs" />
     <Compile Include="Engine\DependenciaResolver.cs" />
+    <Compile Include="Engine\VidrioResolver.cs" />
     <Compile Include="Engine\ExcelExporter.cs" />
     <Compile Include="Engine\ResultadoAnalisis.cs" />
     <Compile Include="Dto\ComponenteDto.cs" />
@@ -404,6 +406,20 @@
     </Page>
     <Compile Include="View\Wpf\Panels\DependenciasPanel.xaml.cs">
       <DependentUpon>DependenciasPanel.xaml</DependentUpon>
+    </Compile>
+    <Page Include="View\Wpf\VidrioDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Compile Include="View\Wpf\VidrioDialog.xaml.cs">
+      <DependentUpon>VidrioDialog.xaml</DependentUpon>
+    </Compile>
+    <Page Include="View\Wpf\Panels\VidriosPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Compile Include="View\Wpf\Panels\VidriosPanel.xaml.cs">
+      <DependentUpon>VidriosPanel.xaml</DependentUpon>
     </Compile>
     <Page Include="View\Wpf\Panels\MecanizadoPanel.xaml">
       <SubType>Designer</SubType>

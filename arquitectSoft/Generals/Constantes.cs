@@ -109,6 +109,56 @@ namespace arquitectSoft.Generals
         public static String QUERY_REN_DEP_RESULTADO   = "UPDATE beta_dependencias_acabado SET Cod_Resultado = ? WHERE Cod_Resultado = ?";
         public static String QUERY_DELETE_DEPENDENCIA = "DELETE FROM beta_dependencias_acabado WHERE Cod_Placeholder = ? AND Cod_Perfileria = ?";
 
+        // ===== Dependencias de vidrio (BETA) =====
+        // Cada sistema (prefijo del código del componente: DV, IT, AV…) tiene en la base sus
+        // subcomponentes cargados como su tipo de vidrio ESTÁNDAR. Al pedir otro tipo, las
+        // reglas dicen qué subcomponente pasa a ser cuál dentro de ese sistema.
+        // Ver db/migrations/005_dependencias_vidrio.sql.
+        public static String QUERY_VIDRIO_TIPOS = "SELECT Id, Nombre FROM beta_vidrio_tipo ORDER BY Orden, Nombre";
+        public static String QUERY_VIDRIO_SISTEMAS =
+            "SELECT s.Id, s.Prefijo, IFNULL(s.Descripcion,'') Descripcion, IFNULL(s.Id_Tipo_Estandar,0) Id_Tipo_Estandar, " +
+            "IFNULL(t.Nombre,'(sin estándar)') Estandar " +
+            "FROM beta_vidrio_sistema s LEFT JOIN beta_vidrio_tipo t ON t.Id = s.Id_Tipo_Estandar " +
+            "ORDER BY s.Prefijo";
+        public static String QUERY_INSERT_VIDRIO_SISTEMA =
+            "INSERT beta_vidrio_sistema (Prefijo, Descripcion, Id_Tipo_Estandar) VALUES (?,?,?) " +
+            "ON DUPLICATE KEY UPDATE Descripcion = VALUES(Descripcion), Id_Tipo_Estandar = VALUES(Id_Tipo_Estandar)";
+        public static String QUERY_UPDATE_VIDRIO_SISTEMA =
+            "UPDATE beta_vidrio_sistema SET Prefijo = ?, Descripcion = ?, Id_Tipo_Estandar = ? WHERE Id = ?";
+        public static String QUERY_DELETE_VIDRIO_SISTEMA = "DELETE FROM beta_vidrio_sistema WHERE Id = ?";
+        public static String QUERY_DELETE_VIDRIO_REGLAS_SISTEMA = "DELETE FROM beta_vidrio_regla WHERE Id_Sistema = ?";
+        // Reglas de un (sistema, tipo) con el código y la descripción de cada subcomponente.
+        // El filtro se concatena en el Dto (Conexion.ExecuteDataSet no admite parámetros).
+        public static String QUERY_VIDRIO_REGLAS_DETALLE =
+            "SELECT r.Id, r.Id_Sub_Origen, r.Id_Sub_Destino, " +
+            "CONCAT(IFNULL(so.Codigo_Homologacion,'?'),'-',IFNULL(ao.Codigo_Homologacion,'?')) CodOrigen, " +
+            "IFNULL(so.Descripcion,'(subcomponente borrado)') DescOrigen, " +
+            "CONCAT(IFNULL(sd.Codigo_Homologacion,'?'),'-',IFNULL(ad.Codigo_Homologacion,'?')) CodDestino, " +
+            "IFNULL(sd.Descripcion,'(subcomponente borrado)') DescDestino " +
+            "FROM beta_vidrio_regla r " +
+            "LEFT JOIN subcomponentes so ON so.Id_SubComponente = r.Id_Sub_Origen " +
+            "LEFT JOIN acabados ao ON ao.Id_Acabado = so.Id_Acabado " +
+            "LEFT JOIN subcomponentes sd ON sd.Id_SubComponente = r.Id_Sub_Destino " +
+            "LEFT JOIN acabados ad ON ad.Id_Acabado = sd.Id_Acabado ";
+        public static String QUERY_UPSERT_VIDRIO_REGLA =
+            "INSERT beta_vidrio_regla (Id_Sistema, Id_Tipo, Id_Sub_Origen, Id_Sub_Destino) VALUES (?,?,?,?) " +
+            "ON DUPLICATE KEY UPDATE Id_Sub_Destino = VALUES(Id_Sub_Destino)";
+        public static String QUERY_DELETE_VIDRIO_REGLA = "DELETE FROM beta_vidrio_regla WHERE Id = ?";
+        // Sistemas en plano (aunque no tengan reglas), para el motor y el diálogo del análisis.
+        public static String QUERY_VIDRIO_SISTEMAS_MOTOR =
+            "SELECT Prefijo, IFNULL(Descripcion,'') Descripcion, IFNULL(Id_Tipo_Estandar,0) Id_Tipo_Estandar " +
+            "FROM beta_vidrio_sistema ORDER BY LENGTH(Prefijo) DESC, Prefijo";
+        // Código y descripción de cada subcomponente, con el mismo formato que devuelven los SP
+        // de cálculo (código + '-' + acabado, descripción cruda): al sustituir una pieza hay que
+        // dejar esos dos campos como los habría escrito el SP.
+        public static String QUERY_VIDRIO_SUBCOMPONENTES_MAPA =
+            "SELECT s.Id_SubComponente, CONCAT(s.Codigo_Homologacion,'-',a.Codigo_Homologacion) Codigo, s.Descripcion " +
+            "FROM subcomponentes s JOIN acabados a ON a.Id_Acabado = s.Id_Acabado";
+        // Todas las reglas en plano (prefijo + tipo), para el motor.
+        public static String QUERY_VIDRIO_REGLAS_MOTOR =
+            "SELECT s.Prefijo, IFNULL(s.Id_Tipo_Estandar,0) Id_Tipo_Estandar, r.Id_Tipo, r.Id_Sub_Origen, r.Id_Sub_Destino " +
+            "FROM beta_vidrio_regla r JOIN beta_vidrio_sistema s ON s.Id = r.Id_Sistema";
+
         //Corte
         public static String QUERY_CORTE = "SELECT Id_Corte,Descripcion,Corte_Derecho,Corte_Izquierdo FROM cortes";
         public static String QUERY_INSERT_CORTE = "INSERT cortes (descripcion,Corte_Derecho,Corte_Izquierdo) VALUES(?,?,?)";

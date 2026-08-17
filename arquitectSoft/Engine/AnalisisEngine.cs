@@ -40,6 +40,19 @@ namespace arquitectSoft.Engine
         public bool DatosCargados { get; private set; }
         public string DirectorioActual { get; private set; }
 
+        // --- Tipo de vidrio por sistema (ver VidrioResolver) ---
+        // Ubicación → código de la mampara que hay en ella (una ubicación = una mampara). Es lo
+        // que permite saber a qué sistema pertenece un perfil o una goma, que por su propio
+        // código no lo dicen. Se lee del TXT de mamparas ANTES de calcular, porque en el orden
+        // normal ese archivo se procesa el último.
+        private readonly Dictionary<string, string> _ubicacionMampara =
+            new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        // Códigos de mampara distintos del proyecto (para listar sus sistemas).
+        private readonly List<string> _codigosMampara = new List<string>();
+
+        /// <summary>Tipo de vidrio elegido para cada sistema (prefijo → id de tipo).</summary>
+        public IDictionary<string, int> SeleccionVidrio { get; set; }
+
         // --- Información del proyecto leída de un TXT de info (ver Cargar / LeerInfoProyecto) ---
         public string ProyectoCodigo { get; private set; }
         public string ProyectoNombre { get; private set; }
@@ -76,11 +89,14 @@ namespace arquitectSoft.Engine
             ProyectoCodigo = null;
             ProyectoNombre = null;
             ProyectoReferencia = null;
+            _ubicacionMampara.Clear();
+            _codigosMampara.Clear();
 
             int wantedFiles = 0;
             var file124 = new List<string>();
             var file35 = new List<string>();
             string directorio = "";
+            string fileMamparas = null, fileVidrios = null;
 
             foreach (string file in archivos)
             {
@@ -98,6 +114,8 @@ namespace arquitectSoft.Engine
                 }
 
                 if (idDocumento == 0) { swPMVertical = 1; }
+                if (idDocumento == 5) fileMamparas = file;
+                if (idDocumento == 2) fileVidrios = file;
 
                 if (idDocumento == 0 || idDocumento == 1 || idDocumento == 2 || idDocumento == 4)
                 {
@@ -115,6 +133,79 @@ namespace arquitectSoft.Engine
             _wantedFiles = wantedFiles;
             DirectorioActual = directorio;
             DatosCargados = true;
+
+            // Mapa ubicación → mampara. Se prefiere el TXT de mamparas (que es el que lleva el
+            // código del sistema); si no se cargó, sirve el de vidrios, que también trae código
+            // y ubicación.
+            if (fileMamparas != null) LeerUbicaciones(fileMamparas, 0, 3);
+            else if (fileVidrios != null) LeerUbicaciones(fileVidrios, 0, 7);
+        }
+
+        /// <summary>
+        /// Lee de un TXT la pareja (código, ubicación) de cada línea y arma el mapa que dice qué
+        /// mampara —y por tanto qué sistema— hay en cada ubicación.
+        /// </summary>
+        private void LeerUbicaciones(string ruta, int colCodigo, int colUbicacion)
+        {
+            try
+            {
+                var dto = new AnalisisDatosDto();
+                foreach (object[] fila in dto.readFileTxt(ruta, dto.ValidationSplit(ruta)))
+                {
+                    if (fila.Length <= colUbicacion || fila.Length <= colCodigo) continue;
+                    string cod = Limpiar(fila[colCodigo]);
+                    string ubi = Limpiar(fila[colUbicacion]);
+                    if (cod.Length == 0 || ubi.Length == 0) continue;
+
+                    if (!_ubicacionMampara.ContainsKey(ubi)) _ubicacionMampara[ubi] = cod;
+                    if (!_codigosMampara.Contains(cod)) _codigosMampara.Add(cod);
+                }
+            }
+            catch { /* TXT ilegible: se sigue sin mapa (se usará el prefijo del propio código) */ }
+        }
+
+        private static string Limpiar(object valor)
+        {
+            return Convert.ToString(valor).Replace("\"", "").Trim();
+        }
+
+        /// <summary>
+        /// Sistemas presentes en el proyecto, para el diálogo "Tipo de vidrio". Los que no estén
+        /// dados de alta salen igual, marcados como NO configurados, para que se note el olvido
+        /// en vez de pasar en silencio.
+        /// </summary>
+        public List<SistemaVidrio> SistemasDelProyecto(VidrioResolver resolver)
+        {
+            var lista = new List<SistemaVidrio>();
+            if (resolver == null) return lista;
+
+            foreach (string codigo in _codigosMampara)
+            {
+                SistemaVidrio s = resolver.SistemaDeCodigo(codigo);
+                string prefijo = s != null ? s.Prefijo : PrefijoLibre(codigo);
+                if (prefijo.Length == 0) continue;
+                if (lista.Exists(x => string.Equals(x.Prefijo, prefijo, StringComparison.OrdinalIgnoreCase)))
+                    continue;
+
+                lista.Add(s ?? new SistemaVidrio
+                {
+                    Prefijo = prefijo,
+                    Descripcion = "",
+                    IdTipoEstandar = 0,
+                    TipoEstandar = "",
+                    Configurado = false
+                });
+            }
+
+            lista.Sort((a, b) => string.Compare(a.Prefijo, b.Prefijo, StringComparison.OrdinalIgnoreCase));
+            return lista;
+        }
+
+        // Sistema no configurado: se muestra por las 2 primeras letras de su código.
+        private static string PrefijoLibre(string codigo)
+        {
+            codigo = (codigo ?? "").Trim();
+            return codigo.Length >= 2 ? codigo.Substring(0, 2).ToUpperInvariant() : codigo.ToUpperInvariant();
         }
 
         /// <summary>
@@ -191,6 +282,16 @@ namespace arquitectSoft.Engine
 
             decimal desperdicio = ((decimal)desperdicioPct / 100m) + 1m;
             var dto = new AnalisisDatosDto();
+
+            // Tipo de vidrio por sistema. Se recargan las reglas en cada corrida (así entra lo
+            // que se acabe de configurar) y solo se engancha si hay algo distinto del estándar.
+            if (SeleccionVidrio != null && SeleccionVidrio.Count > 0)
+            {
+                VidrioResolver vidrio = VidrioResolver.Cargar();
+                vidrio.FijarUbicaciones(_ubicacionMampara);
+                vidrio.FijarSeleccion(SeleccionVidrio);
+                if (vidrio.HaySeleccion) dto.Vidrio = vidrio;
+            }
 
             if (_file124 != null && _file124.Count > 0)
                 SetDataAll(dto, _wantedFiles, _file124, medidaBase, desperdicio, r);

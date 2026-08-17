@@ -198,6 +198,7 @@
                         <Button x:Name="BtnCortes" Style="{StaticResource IconButton}" Tag="&#xE73E;" Content="Cortes" Click="Cortes_Click"/>
                         <Button x:Name="BtnUnidad" Style="{StaticResource IconButton}" Tag="&#xE721;" Content="U. Medida" Click="Unidad_Click"/>
                         <Button x:Name="BtnDependencias" Style="{StaticResource IconButton}" Tag="&#xE71B;" Content="Depend." Click="Dependencias_Click"/>
+                        <Button x:Name="BtnVidrios" Style="{StaticResource IconButton}" Tag="&#xE799;" Content="Vidrios" Click="Vidrios_Click"/>
                         <Button x:Name="BtnRespaldo" Style="{StaticResource IconButton}" Tag="&#xE74E;" Content="Respaldo" Click="Respaldo_Click"/>
                         <Button x:Name="BtnImportar" Style="{StaticResource IconButton}" Tag="&#xE8B5;" Content="Importar" Click="Importar_Click"/>
                         <Button x:Name="BtnUsuarios" Style="{StaticResource IconButton}" Tag="&#xE716;" Content="Usuarios" Click="Usuarios_Click"/>

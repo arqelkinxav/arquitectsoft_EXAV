@@ -473,6 +473,9 @@
                         <Button x:Name="BtnChange" Style="{StaticResource IconButton}"
                                 Tag="&#xE70F;" Content="Acabado" Click="CambiarAcabado_Click"
                                 ToolTip="Cambiar acabado" Visibility="Collapsed"/>
+                        <Button x:Name="BtnVidrio" Style="{StaticResource IconButton}"
+                                Tag="&#xE799;" Content="Vidrio" Click="TipoVidrio_Click"
+                                ToolTip="Tipo de vidrio por sistema" Visibility="Collapsed"/>
                     </StackPanel>
 
                     <!-- Cajas de texto oscuras (Medida Base / % Desperdicio) -->

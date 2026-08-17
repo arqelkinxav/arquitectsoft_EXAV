@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.IO;
@@ -388,6 +389,7 @@ namespace arquitectSoft.View.Wpf.Panels
             DgMamparas.ItemsSource = Vista(r.Mamparas);
 
             BtnChange.Visibility = r.TieneDatos ? Visibility.Visible : Visibility.Collapsed;
+            BtnVidrio.Visibility = r.TieneDatos ? Visibility.Visible : Visibility.Collapsed;
             HintVacio.Visibility = r.TieneDatos ? Visibility.Collapsed : Visibility.Visible;
 
             if (seleccionarPestana && r.PestanaSugerida >= 0 && r.PestanaSugerida < Tabs.Items.Count)
@@ -531,13 +533,15 @@ namespace arquitectSoft.View.Wpf.Panels
             _ultimo = null;
             DgPreview.ItemsSource = null;
             BtnChange.Visibility = Visibility.Collapsed;
+            BtnVidrio.Visibility = Visibility.Collapsed;
+            _engine.SeleccionVidrio = null;
             HintVacio.Visibility = Visibility.Visible;
             LblEstado.Text = "Listo. Carga uno o varios archivos TXT para analizar.";
             LblRuta.Text = "";
         }
 
         // ===== Exportar a Excel (mismo formato que WinForms) =====
-        private void Exportar_Click(object sender, RoutedEventArgs e)
+        private async void Exportar_Click(object sender, RoutedEventArgs e)
         {
             if (_ultimo == null || !_ultimo.TieneDatos)
             {
@@ -545,16 +549,37 @@ namespace arquitectSoft.View.Wpf.Panels
                 return;
             }
 
+            // Tipo de vidrio: se muestra en el diálogo precargado con lo que ya se está
+            // aplicando, y desde ahí se puede cambiar (igual que el acabado de perfilería).
+            VidrioResolver vidrio = VidrioResolver.Cargar();
+            var sistemas = vidrio.HayConfiguracion ? _engine.SistemasDelProyecto(vidrio) : null;
+
             var bsc = new ExportDialog
             {
                 Owner = Owner,
                 PrefillNumero = _engine.ProyectoCodigo,
                 PrefillNombre = _engine.ProyectoNombre,
                 PrefillReferencia = _engine.ProyectoReferencia,
-                PrefillAcabado1 = _acabadoPerfil   // Sentido A: precarga el acabado ya aplicado
+                PrefillAcabado1 = _acabadoPerfil,  // Sentido A: precarga el acabado ya aplicado
+                VidrioSistemas = sistemas,
+                VidrioResolver = vidrio,
+                VidrioSeleccion = _engine.SeleccionVidrio
             };
             bsc.ShowDialog();
             if (bsc.Numero == null) return;   // canceló
+
+            // Si se cambió el tipo de vidrio hay que REHACER el cálculo antes de exportar: la
+            // sustitución se aplica dentro del análisis, no sobre el resultado.
+            if (bsc.VidrioCambiado)
+            {
+                _engine.SeleccionVidrio = bsc.VidrioSeleccion;
+                await RecalcularAsync(seleccionarPestana: false);
+                if (_ultimo == null || !_ultimo.TieneDatos)
+                {
+                    GlassDialog.Informar(Owner, "Exportar", "El recálculo no devolvió datos: no se exportó nada.");
+                    return;
+                }
+            }
 
             // Sentido B: si en el diálogo se eligió un acabado de perfilería distinto al
             // que tienen las cantidades, aplícalo antes de exportar (así se pasa el "01" —o el
@@ -638,6 +663,57 @@ namespace arquitectSoft.View.Wpf.Panels
                 MostrarResultado(_ultimo, false);
             }
             LblEstado.Text = "Acabado actualizado: \"" + a1 + "\" → \"" + a2 + "\".";
+        }
+
+        // ===== Tipo de vidrio por sistema =====
+        // A diferencia de "Cambiar Acabado" (que retoca el resultado ya calculado), aquí hay que
+        // VOLVER A CALCULAR: la sustitución se aplica dentro del cálculo, componente a componente,
+        // que es donde todavía se sabe de qué sistema viene cada pieza.
+        private async void TipoVidrio_Click(object sender, RoutedEventArgs e)
+        {
+            if (!_engine.DatosCargados)
+            {
+                GlassDialog.Informar(Owner, "Tipo de vidrio", "Primero carga los archivos del proyecto.");
+                return;
+            }
+
+            VidrioResolver resolver = VidrioResolver.Cargar();
+            if (!resolver.HayConfiguracion)
+            {
+                GlassDialog.Informar(Owner, "Tipo de vidrio",
+                    "Todavía no hay sistemas dados de alta. Configúralos en la pantalla Vidrios.");
+                return;
+            }
+
+            var sistemas = _engine.SistemasDelProyecto(resolver);
+            if (sistemas.Count == 0)
+            {
+                GlassDialog.Informar(Owner, "Tipo de vidrio",
+                    "No se pudo identificar ningún sistema en este proyecto. Suele faltar el TXT de mamparas (5-…).");
+                return;
+            }
+
+            var dlg = new VidrioDialog { Owner = Owner };
+            dlg.Cargar(sistemas, resolver, _engine.SeleccionVidrio);
+            if (dlg.ShowDialog() != true) return;
+
+            _engine.SeleccionVidrio = dlg.Seleccion;
+            await RecalcularAsync(seleccionarPestana: false);
+
+            LblEstado.Text = "Tipo de vidrio aplicado: " + Resumen(dlg.Seleccion, resolver) + ".";
+        }
+
+        // "DV → 6+6 · AV → 5+5" (solo lo que se aparta del estándar del sistema).
+        private static string Resumen(IDictionary<string, int> seleccion, VidrioResolver resolver)
+        {
+            var partes = new List<string>();
+            foreach (var par in seleccion)
+            {
+                SistemaVidrio s = resolver.SistemaDeCodigo(par.Key);
+                if (s != null && par.Value == s.IdTipoEstandar) continue;   // sigue como en la base
+                partes.Add(par.Key + " → " + resolver.NombreTipo(par.Value));
+            }
+            return partes.Count == 0 ? "todo como está en la base" : string.Join(" · ", partes);
         }
 
         // ===== Menú clic-derecho sobre Perfil Metálico =====

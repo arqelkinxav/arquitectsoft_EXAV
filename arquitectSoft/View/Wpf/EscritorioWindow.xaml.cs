@@ -192,6 +192,8 @@ namespace arquitectSoft.View.Wpf
             AbrirPanel("Unidad de Medida", "", new UnidadMedidaPanel(), 720, 560);
         private void Dependencias_Click(object sender, RoutedEventArgs e) =>
             AbrirPanel("Dependencias de acabado", "", new DependenciasPanel(), 900, 600);
+        private void Vidrios_Click(object sender, RoutedEventArgs e) =>
+            AbrirPanel("Dependencias de vidrio", "", new VidriosPanel(), 1080, 640);
         private void Respaldo_Click(object sender, RoutedEventArgs e) =>
             AbrirPanel("Respaldo de base de datos", "", new DbaBackupPanel(), 560, 300);
         private void Importar_Click(object sender, RoutedEventArgs e) =>
@@ -223,6 +225,7 @@ namespace arquitectSoft.View.Wpf
             BtnCortes.Visibility = Ver(editar);
             BtnUnidad.Visibility = Ver(editar);
             BtnDependencias.Visibility = Ver(editar);
+            BtnVidrios.Visibility = Ver(editar);
 
             // Análisis, Puertas, Mi cuenta y Acerca quedan visibles para todos.
         }

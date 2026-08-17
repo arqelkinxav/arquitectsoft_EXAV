@@ -256,6 +256,17 @@
                     <TextBox x:Name="TxtAcabado1" Style="{StaticResource Field}" Margin="0,0,8,0"/>
                 </DockPanel>
 
+                <!-- Tipo de vidrio por sistema. Solo aparece si el panel que abre el diálogo pasa
+                     los sistemas del proyecto (mamparas); en puertas queda oculto. -->
+                <StackPanel x:Name="PanelVidrio" Visibility="Collapsed">
+                    <TextBlock Text="TIPO DE VIDRIO" Style="{StaticResource Cap}" Margin="3,14,0,5"/>
+                    <DockPanel>
+                        <Button DockPanel.Dock="Right" Style="{StaticResource PickBtn}"
+                                Content="&#xE799;" Click="CambiarVidrio_Click" ToolTip="Cambiar el tipo de vidrio por sistema"/>
+                        <TextBox x:Name="TxtVidrio" Style="{StaticResource Field}" Margin="0,0,8,0" IsReadOnly="True"/>
+                    </DockPanel>
+                </StackPanel>
+
                 <TextBlock Text="ACABADO DE MELAMINA" Style="{StaticResource Cap}" Margin="3,14,0,5"/>
                 <DockPanel>
                     <Button DockPanel.Dock="Right" Style="{StaticResource PickBtn}"
