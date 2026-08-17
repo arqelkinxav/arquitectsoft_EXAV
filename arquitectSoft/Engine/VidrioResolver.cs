@@ -28,8 +28,10 @@ namespace arquitectSoft.Engine
     /// cada pieza (ver los enganches en <c>Dto.AnalisisDatosDto</c>).
     ///
     /// El sistema de una fila se averigua por su UBICACIÓN (una ubicación = una mampara, y el
-    /// código de la mampara lleva el prefijo del sistema) y, si no hay ubicación o no se cargó
-    /// el TXT de mamparas, por el prefijo del código del propio componente.
+    /// TIPO —nombre de familia— de esa mampara lleva el prefijo del sistema: MV, DV…) y, si no
+    /// hay ubicación o no se cargó el TXT de mamparas, por el prefijo del código del propio
+    /// componente. Ese respaldo NO distingue monovidrio de doble vidrio, porque el código es el
+    /// mismo para los dos (ITA01 / ITA05): sin el TXT de mamparas la distinción se pierde.
     /// </summary>
     public class VidrioResolver
     {
@@ -43,7 +45,9 @@ namespace arquitectSoft.Engine
         // Nombre de cada tipo (para la pantalla del análisis).
         private readonly Dictionary<int, string> _tipos = new Dictionary<int, string>();
 
-        // Ubicación → código de la mampara de esa ubicación (del TXT 5-).
+        // Ubicación → TIPO (nombre de familia) de la mampara de esa ubicación (col 1 del TXT 5-).
+        // Es el nombre el que distingue monovidrio de doble vidrio (empieza por MV o DV); el
+        // código de la mampara NO sirve, mono y doble comparten prefijo (ITA01 / ITA05).
         private Dictionary<string, string> _ubicaciones =
             new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
         // Prefijo → tipo elegido por el usuario para este análisis.

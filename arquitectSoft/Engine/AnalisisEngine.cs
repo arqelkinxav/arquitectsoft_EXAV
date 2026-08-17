@@ -41,14 +41,18 @@ namespace arquitectSoft.Engine
         public string DirectorioActual { get; private set; }
 
         // --- Tipo de vidrio por sistema (ver VidrioResolver) ---
-        // Ubicación → código de la mampara que hay en ella (una ubicación = una mampara). Es lo
-        // que permite saber a qué sistema pertenece un perfil o una goma, que por su propio
-        // código no lo dicen. Se lee del TXT de mamparas ANTES de calcular, porque en el orden
-        // normal ese archivo se procesa el último.
-        private readonly Dictionary<string, string> _ubicacionMampara =
+        // Ubicación → TIPO (nombre de familia) de la mampara que hay en ella; una ubicación =
+        // una mampara. Es lo que permite saber a qué sistema pertenece un perfil o una goma,
+        // que por su propio código no lo dicen. Se lee del TXT de mamparas ANTES de calcular,
+        // porque en el orden normal ese archivo se procesa el último.
+        //
+        // OJO: se usa el TIPO y NO el código de la mampara. El código NO distingue monovidrio
+        // de doble vidrio: ambos comparten prefijo (ITA01 = mono, ITA05 = doble, los dos "IT").
+        // El que sí lo distingue es el nombre de familia, que empieza por MV o DV.
+        private readonly Dictionary<string, string> _sistemaDeUbicacion =
             new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-        // Códigos de mampara distintos del proyecto (para listar sus sistemas).
-        private readonly List<string> _codigosMampara = new List<string>();
+        // Tipos de mampara distintos del proyecto (para listar sus sistemas).
+        private readonly List<string> _tiposMampara = new List<string>();
 
         /// <summary>Tipo de vidrio elegido para cada sistema (prefijo → id de tipo).</summary>
         public IDictionary<string, int> SeleccionVidrio { get; set; }
@@ -89,8 +93,8 @@ namespace arquitectSoft.Engine
             ProyectoCodigo = null;
             ProyectoNombre = null;
             ProyectoReferencia = null;
-            _ubicacionMampara.Clear();
-            _codigosMampara.Clear();
+            _sistemaDeUbicacion.Clear();
+            _tiposMampara.Clear();
 
             int wantedFiles = 0;
             var file124 = new List<string>();
@@ -134,31 +138,36 @@ namespace arquitectSoft.Engine
             DirectorioActual = directorio;
             DatosCargados = true;
 
-            // Mapa ubicación → mampara. Se prefiere el TXT de mamparas (que es el que lleva el
-            // código del sistema); si no se cargó, sirve el de vidrios, que también trae código
-            // y ubicación.
-            if (fileMamparas != null) LeerUbicaciones(fileMamparas, 0, 3);
+            // Mapa ubicación → sistema. El TXT de mamparas (5-) trae las columnas
+            // Codigo(0) | Tipo(1) | Area(2) | Ubicacion(3): el TIPO es el nombre de familia y es
+            // el ÚNICO que distingue monovidrio de doble vidrio (el código no: ITA01 e ITA05
+            // comparten prefijo).
+            //
+            // Respaldo: el TXT de vidrios (2-) es Codigo(0) … Ubicación(7) y NO trae el tipo, así
+            // que si falta el 5- se cae al código de la pieza y la distinción MV/DV se pierde.
+            if (fileMamparas != null) LeerUbicaciones(fileMamparas, 1, 3);
             else if (fileVidrios != null) LeerUbicaciones(fileVidrios, 0, 7);
         }
 
         /// <summary>
-        /// Lee de un TXT la pareja (código, ubicación) de cada línea y arma el mapa que dice qué
-        /// mampara —y por tanto qué sistema— hay en cada ubicación.
+        /// Lee de un TXT la pareja (sistema, ubicación) de cada línea y arma el mapa que dice qué
+        /// mampara —y por tanto qué sistema— hay en cada ubicación. En el TXT de mamparas el
+        /// sistema es el TIPO (nombre de familia, columna 1), no el código.
         /// </summary>
-        private void LeerUbicaciones(string ruta, int colCodigo, int colUbicacion)
+        private void LeerUbicaciones(string ruta, int colSistema, int colUbicacion)
         {
             try
             {
                 var dto = new AnalisisDatosDto();
                 foreach (object[] fila in dto.readFileTxt(ruta, dto.ValidationSplit(ruta)))
                 {
-                    if (fila.Length <= colUbicacion || fila.Length <= colCodigo) continue;
-                    string cod = Limpiar(fila[colCodigo]);
+                    if (fila.Length <= colUbicacion || fila.Length <= colSistema) continue;
+                    string sis = Limpiar(fila[colSistema]);
                     string ubi = Limpiar(fila[colUbicacion]);
-                    if (cod.Length == 0 || ubi.Length == 0) continue;
+                    if (sis.Length == 0 || ubi.Length == 0) continue;
 
-                    if (!_ubicacionMampara.ContainsKey(ubi)) _ubicacionMampara[ubi] = cod;
-                    if (!_codigosMampara.Contains(cod)) _codigosMampara.Add(cod);
+                    if (!_sistemaDeUbicacion.ContainsKey(ubi)) _sistemaDeUbicacion[ubi] = sis;
+                    if (!_tiposMampara.Contains(sis)) _tiposMampara.Add(sis);
                 }
             }
             catch { /* TXT ilegible: se sigue sin mapa (se usará el prefijo del propio código) */ }
@@ -179,10 +188,10 @@ namespace arquitectSoft.Engine
             var lista = new List<SistemaVidrio>();
             if (resolver == null) return lista;
 
-            foreach (string codigo in _codigosMampara)
+            foreach (string tipo in _tiposMampara)
             {
-                SistemaVidrio s = resolver.SistemaDeCodigo(codigo);
-                string prefijo = s != null ? s.Prefijo : PrefijoLibre(codigo);
+                SistemaVidrio s = resolver.SistemaDeCodigo(tipo);
+                string prefijo = s != null ? s.Prefijo : PrefijoLibre(tipo);
                 if (prefijo.Length == 0) continue;
                 if (lista.Exists(x => string.Equals(x.Prefijo, prefijo, StringComparison.OrdinalIgnoreCase)))
                     continue;
@@ -201,11 +210,11 @@ namespace arquitectSoft.Engine
             return lista;
         }
 
-        // Sistema no configurado: se muestra por las 2 primeras letras de su código.
-        private static string PrefijoLibre(string codigo)
+        // Sistema no configurado: se muestra por las 2 primeras letras del tipo (MV, DV, IT…).
+        private static string PrefijoLibre(string texto)
         {
-            codigo = (codigo ?? "").Trim();
-            return codigo.Length >= 2 ? codigo.Substring(0, 2).ToUpperInvariant() : codigo.ToUpperInvariant();
+            texto = (texto ?? "").Trim();
+            return texto.Length >= 2 ? texto.Substring(0, 2).ToUpperInvariant() : texto.ToUpperInvariant();
         }
 
         /// <summary>
@@ -288,7 +297,7 @@ namespace arquitectSoft.Engine
             if (SeleccionVidrio != null && SeleccionVidrio.Count > 0)
             {
                 VidrioResolver vidrio = VidrioResolver.Cargar();
-                vidrio.FijarUbicaciones(_ubicacionMampara);
+                vidrio.FijarUbicaciones(_sistemaDeUbicacion);
                 vidrio.FijarSeleccion(SeleccionVidrio);
                 if (vidrio.HaySeleccion) dto.Vidrio = vidrio;
             }
