@@ -34,6 +34,20 @@ namespace arquitectSoft.Engine
         // --- Archivos cargados ---
         private List<string> _file124;
         private List<string> _file35;
+
+        // Id del despiece de TECHOS (tabla "6- ..."). Sus lamas NO son un documento nuevo:
+        // el TXT es una copia del de perfiles metalicos, asi que se tratan como filas mas
+        // de ese despiece. Ver 'Cargar' para por que no puede entrar en 'wantedFiles'.
+        private const int ID_TECHOS = 6;
+        private List<string> _fileTechos;
+        private int _idPerfilTechos = -1;
+
+        /// <summary>
+        /// Se cargo una tabla de techos pero no habia ningun despiece de perfiles (ni 1- ni
+        /// 0-) donde meter sus lamas, asi que se quedaron fuera. Caso raro: un proyecto con
+        /// techos y sin un solo perfil de mampara.
+        /// </summary>
+        public bool TechosIgnorados { get; private set; }
         private int _wantedFiles;
         private string _swSegmentadoUbiInicial = "1";
 
@@ -99,6 +113,8 @@ namespace arquitectSoft.Engine
             int wantedFiles = 0;
             var file124 = new List<string>();
             var file35 = new List<string>();
+            var fileTechos = new List<string>();
+            var idsVistos = new HashSet<int>();
             string directorio = "";
             string fileMamparas = null, fileVidrios = null;
 
@@ -116,6 +132,19 @@ namespace arquitectSoft.Engine
                     LeerInfoProyecto(file);
                     continue;
                 }
+
+                // TECHOS (6-): no es un documento nuevo, son FILAS MAS del despiece de
+                // perfiles (mismo formato de columnas). Se apartan aqui y se inyectan al
+                // procesar el 1-.
+                //
+                // OJO, y por esto no se puede hacer de la forma obvia: 'wantedFiles' NO es
+                // un contador, es una SUMA que el resto del codigo lee como CODIGO DE
+                // COMBINACION (1+2=3, 1+4=5, 2+4=6, 1+2+4=7) para saber que archivos
+                // cargaste. Meter aqui un id nuevo -o repetir uno existente- corrompe esos
+                // totales y el programa se va por ramas equivocadas SIN dar ningun error.
+                if (idDocumento == ID_TECHOS) { fileTechos.Add(file); continue; }
+
+                idsVistos.Add(idDocumento);
 
                 if (idDocumento == 0) { swPMVertical = 1; }
                 if (idDocumento == 5) fileMamparas = file;
@@ -135,6 +164,13 @@ namespace arquitectSoft.Engine
             _file124 = file124.OrderByDescending(x => x).ToList();
             _file35 = file35;
             _wantedFiles = wantedFiles;
+
+            // Las lamas se enganchan al despiece de perfiles: al 1- y, si esa tabla no se
+            // cargo, al 0-. Si no hay ninguno de los dos no hay donde meterlas y se quedan
+            // fuera; 'TechosIgnorados' lo deja dicho por si se quiere avisar por pantalla.
+            _fileTechos = fileTechos;
+            _idPerfilTechos = idsVistos.Contains(1) ? 1 : (idsVistos.Contains(0) ? 0 : -1);
+            TechosIgnorados = fileTechos.Count > 0 && _idPerfilTechos < 0;
             DirectorioActual = directorio;
             DatosCargados = true;
 
@@ -364,6 +400,14 @@ namespace arquitectSoft.Engine
 
                 listColumns = dto.setCreateColumns(idDocumento);
                 listData = dto.readFileTxt(file, dto.ValidationSplit(file));
+
+                // Las lamas de techo se suman aqui, como filas mas de este despiece: mismo
+                // esquema de columnas y misma tuberia de calculo. Salen en Perfileria
+                // distinguidas por su ubicacion (T1, T2...), sin duplicar el documento y sin
+                // tocar 'wantedFiles'. Un 6- vacio no aporta filas y no molesta.
+                if (idDocumento == _idPerfilTechos && _fileTechos != null)
+                    foreach (string fileTecho in _fileTechos)
+                        listData.AddRange(dto.readFileTxt(fileTecho, dto.ValidationSplit(fileTecho)));
 
                 DataTable dtResul = new DataTable();
                 DataTable dtcalculate = new DataTable();

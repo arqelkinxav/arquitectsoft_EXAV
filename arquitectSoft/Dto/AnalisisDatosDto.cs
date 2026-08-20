@@ -46,9 +46,16 @@ namespace arquitectSoft.Dto
             char resul;
             using (var sr = new StreamReader(file))
             {
+                // ReadLine() devuelve null cuando el archivo se acaba, y el .Split() de un
+                // null tumbaba la carga ENTERA con un NullReferenceException. Pasa con
+                // cualquier TXT que salga vacio o con una sola linea, y va a pasar a menudo
+                // con la tabla de techos: la mayoria de proyectos no llevan techo y esa
+                // tabla se exporta sin filas. Sin lineas que medir, el separador da igual.
+                string linea1 = sr.ReadLine();
+                string linea2 = sr.ReadLine();
 
-                int colcoma = sr.ReadLine().Split(',').Length;
-                int coltab = sr.ReadLine().Split('\t').Length;
+                int colcoma = (linea1 ?? "").Split(',').Length;
+                int coltab = (linea2 ?? "").Split('\t').Length;
 
                 resul = colcoma >= coltab ? ',' : '\t';
             }
