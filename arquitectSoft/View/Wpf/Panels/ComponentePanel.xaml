@@ -2,6 +2,7 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:vw="clr-namespace:arquitectSoft.View.Wpf"
+             xmlns:pn="clr-namespace:arquitectSoft.View.Wpf.Panels"
              Background="Transparent">
 
     <UserControl.Resources>
@@ -224,7 +225,9 @@
             <Setter Property="FontSize" Value="12"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="IsEditable" Value="True"/>
-            <Setter Property="IsTextSearchEnabled" Value="True"/>
+            <!-- Búsqueda por subcadena hecha a mano (AplicarFiltroMecanizado): la de WPF es por
+                 prefijo y además reescribe lo tecleado. -->
+            <Setter Property="IsTextSearchEnabled" Value="False"/>
             <Setter Property="IsTextSearchCaseSensitive" Value="False"/>
             <Setter Property="StaysOpenOnEdit" Value="True"/>
             <!-- DisplayMemberPath (no ItemTemplate): un combo editable saca el texto de aquí. -->
@@ -273,6 +276,26 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
+        <!-- Celda Mecanizado (sin edición): combo de solo lectura sobre el catálogo COMPLETO.
+             No es hit-testable para que el clic lo reciba la celda y arranque la edición. -->
+        <DataTemplate x:Key="MecCelda">
+            <ComboBox Style="{StaticResource GridCombo}" IsHitTestVisible="False" Focusable="False"
+                      ItemsSource="{Binding MecanizadosTodos, RelativeSource={RelativeSource AncestorType=pn:ComponentePanel}}"
+                      SelectedValuePath="Id"
+                      SelectedValue="{Binding Cod_Mecanizado, Mode=OneWay}"/>
+        </DataTemplate>
+
+        <!-- Celda Mecanizado en edición: combo buscador. Va contra una vista APARTE del catálogo
+             (MecanizadosFiltrados) para que el filtro que se aplica al teclear no vacíe los combos
+             de las demás filas, que miran la lista completa. -->
+        <DataTemplate x:Key="MecEdicion">
+            <ComboBox Style="{StaticResource GridComboEdit}"
+                      ItemsSource="{Binding MecanizadosFiltrados, RelativeSource={RelativeSource AncestorType=pn:ComponentePanel}}"
+                      SelectedValuePath="Id"
+                      SelectedValue="{Binding Cod_Mecanizado, UpdateSourceTrigger=PropertyChanged}"
+                      Loaded="MecanizadoCombo_Loaded" Unloaded="MecanizadoCombo_Unloaded"/>
+        </DataTemplate>
 
         <!-- CheckBox cristal para celdas de grilla (solo la casilla, centrada) -->
         <Style x:Key="GridCheck" TargetType="CheckBox">
@@ -615,7 +638,6 @@
                           RowStyle="{StaticResource FilaGenerica}"
                           ContextMenu="{StaticResource MenuGenerico}"
                           ContextMenuOpening="GridComponente_ContextMenuOpening"
-                          PreparingCellForEdit="GridComponente_PreparingCellForEdit"
                           CellEditEnding="GridComponente_CellEditEnding"
                           Foreground="{StaticResource TextPrimary}"/>
             </Border>

@@ -1,10 +1,15 @@
 using arquitectSoft.Class;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Data;
+using System.Globalization;
 using System.Linq;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
 
@@ -28,7 +33,21 @@ namespace arquitectSoft.View.Wpf.Panels
         private readonly ObservableCollection<Sub_Component> _items = new ObservableCollection<Sub_Component>();
         private readonly ObservableCollection<Sub_ComponentEspecial> _itemsEsp = new ObservableCollection<Sub_ComponentEspecial>();
 
-        private DataView _dtUnidad, _dtCorte, _dtMedida, _dtColumna, _dtMecanizado;
+        private DataView _dtUnidad, _dtCorte, _dtMedida, _dtColumna;
+
+        // Catálogo de mecanizados: la lista completa (celdas sin editar) y una vista APARTE
+        // sobre una copia, que es la que se filtra mientras se teclea en la celda en edición.
+        private List<MecItem> _mecTodos = new List<MecItem>();
+        private ListCollectionView _mecVista;
+        private bool _mecFiltrando;   // evita reentrar al restaurar el texto de la caja
+        private ComboBox _mecCombo;   // combo buscador de la celda que se está editando
+        private DataGridColumn _colMecanizado;
+
+        /// <summary>Catálogo completo de mecanizados (enlace de la celda sin editar).</summary>
+        public IList<MecItem> MecanizadosTodos { get { return _mecTodos; } }
+
+        /// <summary>Vista filtrable del catálogo (enlace del combo buscador en edición).</summary>
+        public ICollectionView MecanizadosFiltrados { get { return _mecVista; } }
 
         public ComponentePanel()
         {
@@ -99,13 +118,15 @@ namespace arquitectSoft.View.Wpf.Panels
             // el union de MecanizadoDto puede devolverlo como Int64. La fila 0 ("sin mecanizado") viene con
             // un espacio por descripción: lo dejo vacío para que la celda se vea limpia.
             DataTable mec = new Dto.MecanizadoDto().GetMecanizado();
-            if (!mec.Columns.Contains("IdInt")) mec.Columns.Add("IdInt", typeof(int));
+            _mecTodos = new List<MecItem>();
             foreach (DataRow r in mec.Rows)
             {
-                int n; int.TryParse(Convert.ToString(r["Id_mecanizado"]), out n); r["IdInt"] = n;
-                r["Descripcion"] = Convert.ToString(r["Descripcion"]).Trim();
+                int n; int.TryParse(Convert.ToString(r["Id_mecanizado"]), out n);
+                _mecTodos.Add(new MecItem(n, Convert.ToString(r["Descripcion"]).Trim()));
             }
-            _dtMecanizado = mec.DefaultView;
+            // Orden alfanumérico natural (M2 antes que M10) dejando arriba el "sin mecanizado".
+            _mecTodos.Sort(MecItem.PorDescripcion);
+            _mecVista = new ListCollectionView(new List<MecItem>(_mecTodos));
 
             // Columnas (estático): 1..5 + columna string para Sub_ComponentEspecial.Columna (string)
             DataTable col = new DataTable();
@@ -181,58 +202,184 @@ namespace arquitectSoft.View.Wpf.Panels
             };
         }
 
-        // Mecanizado: combo EDITABLE. El enlace va a Cod_Mecanizado (el id que espera la BD),
-        // no al texto: componentes_detalle.Mecanizado es int con FK a mecanizados. El texto de
+        // Mecanizado: columna de plantilla (celda = combo de solo lectura, edición = combo
+        // buscador). El enlace va a Cod_Mecanizado (el id que espera la BD), no al texto:
+        // componentes_detalle.Mecanizado es int con FK a mecanizados. El texto de
         // Sub_Component.Mecanizado se mantiene sincronizado al confirmar (SincronizarMecanizado).
-        private DataGridComboBoxColumn ComboMecanizado()
+        private DataGridTemplateColumn ComboMecanizado()
         {
-            return new DataGridComboBoxColumn
+            var col = new DataGridTemplateColumn
             {
                 Header = "Mecanizado",
                 Width = 180,
-                ItemsSource = _dtMecanizado,
-                SelectedValuePath = "IdInt",
-                SelectedValueBinding = new Binding("Cod_Mecanizado") { UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged },
-                ElementStyle = (Style)FindResource("GridCombo"),
-                EditingElementStyle = (Style)FindResource("GridComboEdit")
+                SortMemberPath = "Cod_Mecanizado",
+                CellTemplate = (DataTemplate)FindResource("MecCelda"),
+                CellEditingTemplate = (DataTemplate)FindResource("MecEdicion")
             };
+            _colMecanizado = col;
+            return col;
         }
 
-        // Al entrar en edición en un combo escribible: foco en la caja de texto con todo
-        // seleccionado y lista desplegada, para poder teclear el mecanizado de una vez.
-        private void GridComponente_PreparingCellForEdit(object sender, DataGridPreparingCellForEditEventArgs e)
+        // El combo buscador se engancha desde su propio Loaded y NO desde PreparingCellForEdit:
+        // en una columna de plantilla, DataGrid entrega en EditingElement el ContentPresenter que
+        // envuelve la plantilla, no el ComboBox, así que "EditingElement as ComboBox" daba null y
+        // se perdían filtro, foco y la restauración del valor al salir de la celda.
+        private void MecanizadoCombo_Loaded(object sender, RoutedEventArgs e)
         {
-            var cb = e.EditingElement as ComboBox;
-            if (cb == null || !cb.IsEditable) return;
+            var cb = sender as ComboBox;
+            if (cb == null) return;
 
+            _mecCombo = cb;
+            QuitarFiltroMecanizado();
+
+            // TextChanged burbujea desde la caja de texto interna hasta el ComboBox.
+            cb.RemoveHandler(TextBoxBase.TextChangedEvent, new TextChangedEventHandler(Mecanizado_TextChanged));
+            cb.AddHandler(TextBoxBase.TextChangedEvent, new TextChangedEventHandler(Mecanizado_TextChanged), true);
+
+            cb.ApplyTemplate();   // la caja de texto no existe hasta que se aplica el template
             cb.Dispatcher.BeginInvoke(new Action(delegate
             {
-                var caja = cb.Template.FindName("PART_EditableTextBox", cb) as TextBox;
-                if (caja != null) { caja.Focus(); caja.SelectAll(); }
+                var caja = CajaDe(cb);
+                if (caja != null) { caja.Focus(); caja.SelectAll(); } else cb.Focus();
                 cb.IsDropDownOpen = true;
             }), System.Windows.Threading.DispatcherPriority.Input);
         }
 
-        // Si al cerrar la edición el texto tecleado no corresponde a ningún mecanizado, el combo
-        // queda sin selección y el enlace intentaría escribir null en Cod_Mecanizado (int), lo que
-        // deja la celda en error de validación. En ese caso se restaura lo que ya tenía la fila.
+        private void MecanizadoCombo_Unloaded(object sender, RoutedEventArgs e)
+        {
+            var cb = sender as ComboBox;
+            if (cb != null) cb.RemoveHandler(TextBoxBase.TextChangedEvent, new TextChangedEventHandler(Mecanizado_TextChanged));
+            if (ReferenceEquals(_mecCombo, cb)) _mecCombo = null;
+            QuitarFiltroMecanizado();
+        }
+
+        // Caja de texto del combo editable (no existe hasta que se aplica el template).
+        private static TextBox CajaDe(ComboBox cb)
+        {
+            return cb.Template == null ? null : cb.Template.FindName("PART_EditableTextBox", cb) as TextBox;
+        }
+
+        // Solo se filtra con lo que ESCRIBE el usuario: al recorrer la lista con las flechas el
+        // combo también reescribe la caja, y refiltrar ahí dejaría un único elemento y bloquearía
+        // el recorrido. Se distingue porque en ese caso el texto es exactamente el del elegido.
+        private void Mecanizado_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (_mecFiltrando) return;
+
+            var cb = sender as ComboBox;
+            if (cb == null) return;
+
+            var elegido = cb.SelectedItem as MecItem;
+            if (elegido != null && string.Equals(elegido.Descripcion, cb.Text ?? "", StringComparison.Ordinal)) return;
+
+            // Al filtrar, el elemento seleccionado puede quedar fuera: entonces el combo se queda
+            // sin selección y vacía la caja, así que hay que devolver texto y cursor a su sitio.
+            cb.Dispatcher.BeginInvoke(new Action(delegate
+            {
+                var caja = CajaDe(cb);
+                string t = caja != null ? caja.Text : (cb.Text ?? "");
+                int cursor = caja != null ? caja.CaretIndex : t.Length;
+
+                _mecFiltrando = true;
+                try
+                {
+                    AplicarFiltroMecanizado(t);
+                    if (caja != null && caja.Text != t)
+                    {
+                        caja.Text = t;
+                        caja.CaretIndex = Math.Min(cursor, t.Length);
+                    }
+                }
+                finally { _mecFiltrando = false; }
+
+                cb.IsDropDownOpen = true;
+            }), System.Windows.Threading.DispatcherPriority.Background);
+        }
+
+        // Deja en la vista de edición solo los mecanizados que contienen todos los trozos escritos.
+        private void AplicarFiltroMecanizado(string texto)
+        {
+            if (_mecVista == null) return;
+
+            string[] trozos = Normalizar(texto).Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            if (trozos.Length == 0) { QuitarFiltroMecanizado(); return; }
+
+            _mecVista.Filter = delegate(object o)
+            {
+                var m = o as MecItem;
+                if (m == null) return false;
+                string d = Normalizar(m.Descripcion);
+                foreach (string t in trozos)
+                    if (d.IndexOf(t, StringComparison.Ordinal) < 0) return false;
+                return true;
+            };
+        }
+
+        private void QuitarFiltroMecanizado()
+        {
+            if (_mecVista != null && _mecVista.Filter != null) _mecVista.Filter = null;
+        }
+
+        // Texto comparable: sin tildes, sin mayúsculas y sin espacios de sobra.
+        private static string Normalizar(string s)
+        {
+            if (string.IsNullOrEmpty(s)) return "";
+            string d = s.Trim().ToUpperInvariant().Normalize(NormalizationForm.FormD);
+            var sb = new StringBuilder(d.Length);
+            foreach (char c in d)
+                if (CharUnicodeInfo.GetUnicodeCategory(c) != UnicodeCategory.NonSpacingMark) sb.Append(c);
+            return sb.ToString();
+        }
+
+        // Qué mecanizado quiso decir el texto tecleado: coincidencia exacta, o el único que quedó
+        // en la lista filtrada. Vacío = sin mecanizado (id 0). null = no se pudo resolver.
+        private MecItem ResolverMecanizado(string texto)
+        {
+            if (_mecVista == null) return null;
+            if (string.IsNullOrEmpty((texto ?? "").Trim())) return new MecItem(0, "");
+
+            string buscado = Normalizar(texto);
+            foreach (MecItem m in _mecTodos)
+                if (Normalizar(m.Descripcion) == buscado) return m;
+
+            var visibles = _mecVista.Cast<MecItem>().ToList();
+            return visibles.Count == 1 ? visibles[0] : null;
+        }
+
+        // Al cerrar la edición se quita el filtro (si no, la lista quedaría recortada para la
+        // siguiente celda). Si se escribió sin llegar a elegir de la lista, se intenta resolver el
+        // texto; si no corresponde a ningún mecanizado, el combo quedaría sin selección y el enlace
+        // escribiría null en Cod_Mecanizado (int), dejando la celda en error de validación: en ese
+        // caso se restaura lo que ya tenía la fila.
         private void GridComponente_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
-            if (e.EditAction != DataGridEditAction.Commit) return;
+            if (e.Column != _colMecanizado) return;
 
-            var cb = e.EditingElement as ComboBox;
-            if (cb == null || !cb.IsEditable || cb.SelectedItem != null) return;
+            // EditingElement es el ContentPresenter de la plantilla, no el combo: se usa el que
+            // se guardó al cargarse la celda en edición.
+            ComboBox cb = e.EditingElement as ComboBox;
+            if (cb == null) cb = _mecCombo;
+            if (cb == null) { QuitarFiltroMecanizado(); return; }
 
-            var fila = e.Row.Item as Sub_Component;
-            if (fila != null) cb.SelectedValue = fila.Cod_Mecanizado;
+            if (e.EditAction == DataGridEditAction.Commit && cb.SelectedItem == null)
+            {
+                var fila = e.Row.Item as Sub_Component;
+                MecItem m = ResolverMecanizado(cb.Text);   // mira la lista ya filtrada
+
+                QuitarFiltroMecanizado();                  // ...y se asigna sin filtro
+                if (m != null) cb.SelectedValue = m.Id;
+                else if (fila != null) cb.SelectedValue = fila.Cod_Mecanizado;
+            }
+
+            QuitarFiltroMecanizado();
         }
 
         // Descripción de catálogo para un id de mecanizado (vacío si no tiene).
         private string DescripcionMecanizado(int cod)
         {
-            if (cod <= 0 || _dtMecanizado == null) return "";
-            foreach (DataRowView r in _dtMecanizado)
-                if (Convert.ToInt32(r["IdInt"]) == cod) return Convert.ToString(r["Descripcion"]);
+            if (cod <= 0) return "";
+            foreach (MecItem m in _mecTodos)
+                if (m.Id == cod) return m.Descripcion;
             return "";
         }
 
@@ -667,6 +814,63 @@ namespace arquitectSoft.View.Wpf.Panels
             if (!r.Table.Columns.Contains(col)) return "";
             object v = r[col];
             return v == null || v == DBNull.Value ? "" : v.ToString();
+        }
+    }
+
+    /// <summary>
+    /// Entrada del catálogo de mecanizados para los combos de la grilla. Es un objeto simple (no
+    /// un DataRowView) porque la vista de edición necesita filtrarse y la vista por defecto de un
+    /// DataView (BindingListCollectionView) no admite Filter.
+    /// </summary>
+    public sealed class MecItem
+    {
+        public MecItem(int id, string descripcion)
+        {
+            Id = id;
+            Descripcion = descripcion ?? "";
+        }
+
+        public int Id { get; private set; }
+        public string Descripcion { get; private set; }
+
+        public override string ToString() { return Descripcion; }
+
+        /// <summary>
+        /// Orden alfanumérico natural: los tramos de dígitos se comparan como números, así que
+        /// "M2" va antes que "M10". El vacío ("sin mecanizado") queda siempre el primero.
+        /// </summary>
+        public static int PorDescripcion(MecItem a, MecItem b)
+        {
+            bool va = string.IsNullOrEmpty(a.Descripcion), vb = string.IsNullOrEmpty(b.Descripcion);
+            if (va || vb) return va && vb ? 0 : (va ? -1 : 1);
+            return ComparaNatural(a.Descripcion, b.Descripcion);
+        }
+
+        private static int ComparaNatural(string x, string y)
+        {
+            int i = 0, j = 0;
+            while (i < x.Length && j < y.Length)
+            {
+                if (char.IsDigit(x[i]) && char.IsDigit(y[j]))
+                {
+                    int i0 = i, j0 = j;
+                    while (i < x.Length && char.IsDigit(x[i])) i++;
+                    while (j < y.Length && char.IsDigit(y[j])) j++;
+
+                    string nx = x.Substring(i0, i - i0).TrimStart('0');
+                    string ny = y.Substring(j0, j - j0).TrimStart('0');
+                    if (nx.Length != ny.Length) return nx.Length - ny.Length;   // más dígitos = mayor
+                    int cn = string.CompareOrdinal(nx, ny);
+                    if (cn != 0) return cn;
+                }
+                else
+                {
+                    int c = char.ToUpperInvariant(x[i]).CompareTo(char.ToUpperInvariant(y[j]));
+                    if (c != 0) return c;
+                    i++; j++;
+                }
+            }
+            return (x.Length - i) - (y.Length - j);
         }
     }
 }
