@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Windows;
 using System.Windows.Controls;
@@ -33,6 +34,13 @@ namespace arquitectSoft.View.Wpf.Panels
         // re-resolver las dependencias MOD… → acabado real.
         private DataTable _basePerfil, _baseHerraje;
         private Engine.DependenciaResolver _resolver;
+
+        // Filas cuya nomenclatura escribió el usuario a mano: no se renumeran al quitar filas
+        // ni las pisa el automático "Pn". Se vacía la celda para devolverla al automático.
+        private readonly HashSet<DataRow> _nomenManual = new HashSet<DataRow>();
+
+        // Columna oculta con la clave de orden natural de la nomenclatura (P2 < P2A < P10).
+        private const string ColOrden = "_Orden";
 
         public PuertasPanel()
         {
@@ -77,15 +85,16 @@ namespace arquitectSoft.View.Wpf.Panels
                 _dtAddRows.Columns.Add("Cantidad");
                 _dtAddRows.Columns.Add("Ubicación");
                 _dtAddRows.Columns.Add("Area");
+                _dtAddRows.Columns.Add(ColOrden);   // siempre la última: las altas son posicionales
             }
 
             int n; if (!int.TryParse(TxtCantidad.Text, out n) || n < 1) n = 1;
             for (int i = 0; i < n; i++)
             {
-                string nomen = "P-" + (_dtAddRows.Rows.Count + 1);
-                _dtAddRows.Rows.Add(nomen, TxtCodigo.Text, "", _acabado, TxtDescripcion.Text, "", "", "No", "No", "1");
+                _dtAddRows.Rows.Add(SiguienteNomenLibre(), TxtCodigo.Text, "", _acabado, TxtDescripcion.Text, "", "", "No", "No", "1");
             }
 
+            ReordenarPorNomenclatura();
             DgNuevas.ItemsSource = _dtAddRows.DefaultView;
             LblEstado.Text = _dtAddRows.Rows.Count + " puerta(s). Completa altura/anchura en la tabla y pulsa Analizar.";
         }
@@ -100,8 +109,9 @@ namespace arquitectSoft.View.Wpf.Panels
                 case "Cantidad":
                 case "Ubicación":
                 case "Area":
+                case ColOrden:                  // clave de orden interna: no se muestra
                     e.Cancel = true; break;
-                case "Nomenclatura": e.Column.Header = "Nomen."; e.Column.IsReadOnly = true; break;
+                case "Nomenclatura": e.Column.Header = "Nomen."; e.Column.Width = 100; break;   // editable
                 case "Codigo": e.Column.Header = "Código"; break;               // editable
                 case "Acabado Perfileria Puertas": e.Column.Header = "Acabado"; e.Column.IsReadOnly = true; break;
                 case "Item": e.Column.Header = "Descripción"; e.Column.IsReadOnly = true;
@@ -112,10 +122,15 @@ namespace arquitectSoft.View.Wpf.Panels
         }
 
         // Al editar el CÓDIGO en la tabla: busca la descripción de ese código; si no existe, avisa.
+        // Al editar la NOMENCLATURA: se respeta tal cual (no se renumera), salvo que se deje
+        // vacía —vuelve al automático Pn— o que repita la de otra puerta —se rechaza—.
         private void DgNuevas_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
             if (e.EditAction != DataGridEditAction.Commit) return;
-            if (e.Column == null || Convert.ToString(e.Column.Header) != "Código") return;
+            if (e.Column == null) return;
+            string cabecera = Convert.ToString(e.Column.Header);
+            if (cabecera == "Nomen.") { NomenclaturaEditada(e); return; }
+            if (cabecera != "Código") return;
             var drv = e.Row.Item as DataRowView; if (drv == null) return;
             var tb = e.EditingElement as TextBox;
             string nuevo = tb != null ? tb.Text : Convert.ToString(drv.Row["Codigo"]);
@@ -128,6 +143,122 @@ namespace arquitectSoft.View.Wpf.Panels
                 else
                     drv.Row["Item"] = desc;
             }), DispatcherPriority.Background);
+        }
+
+        private void NomenclaturaEditada(DataGridCellEditEndingEventArgs e)
+        {
+            var drv = e.Row.Item as DataRowView; if (drv == null) return;
+            var tb = e.EditingElement as TextBox;
+            string anterior = Convert.ToString(drv.Row["Nomenclatura"]);
+            string nuevo = (tb != null ? tb.Text : anterior ?? "").Trim();
+
+            // Vacía => vuelve a la numeración automática.
+            if (nuevo == "")
+            {
+                _nomenManual.Remove(drv.Row);
+                if (tb != null) tb.Text = SiguienteNomenLibre(drv.Row);
+                ReordenarTrasCommit();
+                return;
+            }
+
+            // La coma separa las nomenclaturas del mismo grupo en el análisis, y las comillas
+            // rompen los filtros DataTable.Select del DTO: no se admiten.
+            if (nuevo.IndexOfAny(new[] { ',', '\'', '"' }) >= 0)
+            {
+                RechazarNomen("La nomenclatura no puede llevar comas ni comillas.");
+                e.Cancel = true; return;
+            }
+
+            // Larga de más: acaba concatenada con las del grupo en el parámetro del análisis.
+            if (nuevo.Length > 20)
+            {
+                RechazarNomen("La nomenclatura no puede pasar de 20 caracteres.");
+                e.Cancel = true; return;
+            }
+
+            // Repetida => se rechaza; la nomenclatura identifica la puerta en el análisis.
+            if (NomenOcupada(nuevo, drv.Row))
+            {
+                RechazarNomen("Ya hay otra puerta con la nomenclatura \"" + nuevo + "\". Usa una distinta.");
+                e.Cancel = true; return;
+            }
+
+            _nomenManual.Add(drv.Row);
+            if (tb != null) tb.Text = nuevo;   // guarda sin espacios sobrantes
+            ReordenarTrasCommit();
+        }
+
+        // Deshace la edición de la celda y explica por qué (fuera del CellEditEnding).
+        private void RechazarNomen(string motivo)
+        {
+            Dispatcher.BeginInvoke(new Action(() =>
+            {
+                DgNuevas.CancelEdit(DataGridEditingUnit.Cell);
+                GlassDialog.Informar(Owner, "Puertas", motivo);
+            }), DispatcherPriority.Background);
+        }
+
+        // La celda aún no está confirmada dentro de CellEditEnding: se reordena después.
+        private void ReordenarTrasCommit()
+        {
+            Dispatcher.BeginInvoke(new Action(ReordenarPorNomenclatura), DispatcherPriority.Background);
+        }
+
+        // Recalcula la clave oculta y deja la tabla ordenada por nomenclatura.
+        private void ReordenarPorNomenclatura()
+        {
+            if (_dtAddRows == null || !_dtAddRows.Columns.Contains(ColOrden)) return;
+            foreach (DataRow r in _dtAddRows.Rows)
+            {
+                if (r.RowState == DataRowState.Deleted) continue;
+                r[ColOrden] = ClaveOrden(Convert.ToString(r["Nomenclatura"]));
+            }
+            _dtAddRows.AcceptChanges();
+            if (_dtAddRows.DefaultView.Sort != ColOrden) _dtAddRows.DefaultView.Sort = ColOrden;
+        }
+
+        // Orden natural: los tramos de dígitos se comparan como números, no como texto,
+        // así P-2 va antes que P-2A y P-2A antes que P-10.
+        private static string ClaveOrden(string nomen)
+        {
+            string s = (nomen ?? "").Trim().ToUpperInvariant();
+            var sb = new System.Text.StringBuilder();
+            for (int i = 0; i < s.Length; )
+            {
+                if (char.IsDigit(s[i]))
+                {
+                    int j = i;
+                    while (j < s.Length && char.IsDigit(s[j])) j++;
+                    sb.Append(s.Substring(i, j - i).TrimStart('0').PadLeft(8, '0'));
+                    i = j;
+                }
+                else { sb.Append(s[i]); i++; }
+            }
+            return sb.ToString();
+        }
+
+        // ¿La usa ya otra fila? (comparación sin distinguir mayúsculas ni espacios)
+        private bool NomenOcupada(string nomen, DataRow excepto)
+        {
+            if (_dtAddRows == null || !_dtAddRows.Columns.Contains("Nomenclatura")) return false;
+            foreach (DataRow r in _dtAddRows.Rows)
+            {
+                if (r == excepto || r.RowState == DataRowState.Deleted) continue;
+                if (string.Equals(Convert.ToString(r["Nomenclatura"]).Trim(), nomen,
+                                  StringComparison.OrdinalIgnoreCase)) return true;
+            }
+            return false;
+        }
+
+        // Nomenclatura automática: P1, P2, P3… (sin guion; así sale tal cual en el análisis).
+        private static string NomenAuto(int n) { return "P" + n; }
+
+        // Primer "Pn" que no esté ocupado (las manuales pueden haberse llevado algún número).
+        private string SiguienteNomenLibre(DataRow excepto = null)
+        {
+            int n = 1;
+            while (NomenOcupada(NomenAuto(n), excepto)) n++;
+            return NomenAuto(n);
         }
 
         private string DescDeCodigo(string codigo)
@@ -470,6 +601,7 @@ namespace arquitectSoft.View.Wpf.Panels
         {
             _dtAddRows.Rows.Clear();
             _dtAddRows.Columns.Clear();
+            _nomenManual.Clear();
             DgNuevas.ItemsSource = null;
             DgPerfil.ItemsSource = null;
             DgHerraje.ItemsSource = null;
@@ -515,12 +647,26 @@ namespace arquitectSoft.View.Wpf.Panels
                 { row.Delete(); n++; }
             _dtAddRows.AcceptChanges();
 
-            // Renumera la nomenclatura (P-1, P-2, …) para que quede consecutiva.
+            foreach (var row in filas) _nomenManual.Remove(row);
+
+            // Renumera la nomenclatura automática (P-1, P-2, …) para que quede consecutiva,
+            // saltando las filas que el usuario renombró a mano y los números que ya ocupan.
             if (_dtAddRows.Columns.Contains("Nomenclatura"))
             {
-                for (int i = 0; i < _dtAddRows.Rows.Count; i++)
-                    _dtAddRows.Rows[i]["Nomenclatura"] = "P-" + (i + 1);
+                // En el orden en que se ven en la tabla, no en el de inserción.
+                var enOrden = new List<DataRow>();
+                foreach (DataRowView v in _dtAddRows.DefaultView) enOrden.Add(v.Row);
+
+                int auto = 1;
+                foreach (DataRow r in enOrden)
+                {
+                    if (_nomenManual.Contains(r)) continue;
+                    while (NomenOcupada(NomenAuto(auto), r)) auto++;
+                    r["Nomenclatura"] = NomenAuto(auto);
+                    auto++;
+                }
                 _dtAddRows.AcceptChanges();
+                ReordenarPorNomenclatura();
             }
 
             DgNuevas.ItemsSource = _dtAddRows.DefaultView;

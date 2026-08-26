@@ -426,7 +426,13 @@ namespace arquitectSoft.Dto
                         bool rowaddExtra = rowaddExtraCant > 0 ? true : false;
                     
 
-                        Nomenclatura = rowM["Nomenclatura"].ToString().Replace("\"", "").Trim().Replace("P", "Puerta ");
+                        // Las nomenclaturas del grupo se listan tal cual se escribieron en la tabla
+                        // (P1, COCINA, PUERTA REUNIONES), solo separadas para que se lean bien.
+                        // Antes un Replace("P", "Puerta ") a secas destrozaba los nombres propios:
+                        // "PUERTA COCINA" salía "Puerta UERTA COCINA".
+                        Nomenclatura = string.Join(", ",
+                            rowM["Nomenclatura"].ToString().Replace("\"", "").Trim()
+                                .Split(',').Select(x => x.Trim()).Where(x => x != ""));
                         Nomenclatura2 = rowM["Nomenclatura"].ToString().Replace("\"", "").Trim();
 
                         if (dtresulPuerta.Rows.Count > 0)

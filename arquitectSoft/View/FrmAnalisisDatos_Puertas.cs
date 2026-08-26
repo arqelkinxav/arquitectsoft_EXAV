@@ -1042,7 +1042,7 @@ namespace arquitectSoft.View
                 {
                     int rowscount = dtAddRowsP.Rows.Count +1;
                     string rows = rowscount.ToString();
-                    string Nomen = "P-" + rows;
+                    string Nomen = "P" + rows;
                     dtAddRowsP.Rows.Add(Nomen, txtCodigo.Text, "", txtacabado.Text, txtDescripcion.Text, txtAltura.Text, txtAnchura.Text, "No", "No","1");
                     i++;
                 }

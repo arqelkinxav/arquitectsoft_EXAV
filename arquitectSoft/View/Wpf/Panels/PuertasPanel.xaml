@@ -303,7 +303,7 @@
             <Grid>
                 <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/></Grid.RowDefinitions>
                 <Grid Grid.Row="0" Margin="6,4,6,6">
-                    <TextBlock Text="Puertas a analizar  ·  edita altura, anchura o código directamente en la tabla"
+                    <TextBlock Text="Puertas a analizar  ·  edita nomenclatura, altura, anchura o código directamente en la tabla"
                                Style="{StaticResource Cap}" VerticalAlignment="Center"/>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                         <Button x:Name="BtnAnalizar" Style="{StaticResource Primary}" Content="Analizar" Height="32" MinWidth="100" Margin="0,0,8,0" Click="Analizar_Click"/>

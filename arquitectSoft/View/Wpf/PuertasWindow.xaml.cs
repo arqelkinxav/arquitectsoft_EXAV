@@ -120,7 +120,7 @@ namespace arquitectSoft.View.Wpf
             int n; if (!int.TryParse(TxtCantidad.Text, out n) || n < 1) n = 1;
             for (int i = 0; i < n; i++)
             {
-                string nomen = "P-" + (_dtAddRows.Rows.Count + 1);
+                string nomen = "P" + (_dtAddRows.Rows.Count + 1);
                 _dtAddRows.Rows.Add(nomen, TxtCodigo.Text, "", _acabado, TxtDescripcion.Text, "", "", "No", "No", "1");
             }
 
