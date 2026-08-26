@@ -87,6 +87,10 @@ namespace arquitectSoft.View.Wpf
                     LblTitulo.Text = "Buscar subcomponente";
                     ChkEspecial.Visibility = Visibility.Visible;
                     break;
+                case "Comp-Puerta":
+                    LblTitulo.Text = "Buscar puerta";
+                    ChkEspecial.Visibility = Visibility.Visible;
+                    break;
                 case "Mecan": LblTitulo.Text = "Buscar mecanizado"; break;
                 case "Corte": LblTitulo.Text = "Buscar corte"; break;
                 case "Umed": LblTitulo.Text = "Buscar unidad de medida"; break;
@@ -141,6 +145,16 @@ namespace arquitectSoft.View.Wpf
                         condicion = ConstruirLike("CONCAT(subcomponentes.Codigo_Homologacion,' - ',subcomponentes.Descripcion)",
                                                   terminos, " WHERE Especial = " + fil + " AND ");
                         sql = Generals.Constantes.QUERY_SUBCOMPONENTES + condicion;
+                        break;
+                    // Componentes, pero solo los que SON una puerta: los que empiezan por esa
+                    // palabra. Deja fuera los perfiles y módulos de mampara del tipo
+                    // "PERFIL DE IT UNION A PUERTA", que no se agregan al análisis de puertas.
+                    case "Comp-Puerta":
+                        condicion = ConstruirLike(
+                            "CONCAT(CONCAT(Codigo , IFNULL(concat('-',acabados.Codigo_Homologacion),'')),' - ',componentes.Descripcion)",
+                            terminos, " WHERE Especial = " + fil +
+                                      " AND componentes.Descripcion LIKE 'PUERTA%' AND ");
+                        sql = Generals.Constantes.QUERY_COMPONENTES + condicion;
                         break;
                     default:
                         condicion = ConstruirLike(

@@ -83,7 +83,7 @@ namespace arquitectSoft.View.Wpf
         // ===== Buscar código de puerta =====
         private void BuscarCodigo_Click(object sender, RoutedEventArgs e)
         {
-            var bsc = new BuscarDialog { Owner = this };
+            var bsc = new BuscarDialog { Consulta = "Comp-Puerta", Owner = this };
             bsc.ShowDialog();
             if (bsc.ReturnItem1 == null) return;
             string code = bsc.ReturnItem1;

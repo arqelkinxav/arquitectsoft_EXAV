@@ -42,6 +42,12 @@ namespace arquitectSoft.View.Wpf.Panels
         // Columna oculta con la clave de orden natural de la nomenclatura (P2 < P2A < P10).
         private const string ColOrden = "_Orden";
 
+        // Apertura de la puerta: son los dos últimos dígitos del código (AVS03·01), no el
+        // acabado que va tras el guion. Se edita con un desplegable en cada fila para poder
+        // agregar el mismo tipo varias veces y cambiarle el lado ahí mismo.
+        private const string ColApertura = "Apertura";
+        private static readonly string[] Aperturas = { "01 - DERECHA", "02 - IZQUIERDA" };
+
         public PuertasPanel()
         {
             InitializeComponent();
@@ -53,7 +59,7 @@ namespace arquitectSoft.View.Wpf.Panels
         // ===== Buscar código de puerta =====
         private void BuscarCodigo_Click(object sender, RoutedEventArgs e)
         {
-            var bsc = new BuscarDialog { Owner = Owner };
+            var bsc = new BuscarDialog { Consulta = "Comp-Puerta", Owner = Owner };
             bsc.ShowDialog();
             if (bsc.ReturnItem1 == null) return;
             string code = bsc.ReturnItem1;
@@ -85,13 +91,26 @@ namespace arquitectSoft.View.Wpf.Panels
                 _dtAddRows.Columns.Add("Cantidad");
                 _dtAddRows.Columns.Add("Ubicación");
                 _dtAddRows.Columns.Add("Area");
-                _dtAddRows.Columns.Add(ColOrden);   // siempre la última: las altas son posicionales
+                _dtAddRows.Columns.Add(ColOrden);
+                _dtAddRows.Columns.Add(ColApertura);
+                _dtAddRows.Columns[ColApertura].SetOrdinal(2);   // el desplegable, junto al código
             }
 
             int n; if (!int.TryParse(TxtCantidad.Text, out n) || n < 1) n = 1;
             for (int i = 0; i < n; i++)
             {
-                _dtAddRows.Rows.Add(SiguienteNomenLibre(), TxtCodigo.Text, "", _acabado, TxtDescripcion.Text, "", "", "No", "No", "1");
+                DataRow nr = _dtAddRows.NewRow();
+                nr["Nomenclatura"] = SiguienteNomenLibre();
+                nr["Codigo"] = TxtCodigo.Text;
+                nr[ColApertura] = AperturaDeCodigo(TxtCodigo.Text);
+                nr["Apertura de Puerta"] = "";
+                nr["Acabado Perfileria Puertas"] = _acabado;
+                nr["Item"] = TxtDescripcion.Text;
+                nr["Altura"] = ""; nr["Anchura"] = "";
+                nr["Conectado/pared Tubo L1"] = "No";
+                nr["Conectado/pared Tubo L2"] = "No";
+                nr["Cantidad"] = "1";
+                _dtAddRows.Rows.Add(nr);
             }
 
             ReordenarPorNomenclatura();
@@ -113,6 +132,15 @@ namespace arquitectSoft.View.Wpf.Panels
                     e.Cancel = true; break;
                 case "Nomenclatura": e.Column.Header = "Nomen."; e.Column.Width = 100; break;   // editable
                 case "Codigo": e.Column.Header = "Código"; break;               // editable
+                case ColApertura:
+                    e.Column = new DataGridComboBoxColumn
+                    {
+                        Header = "Apertura",
+                        Width = 140,
+                        ItemsSource = Aperturas,
+                        SelectedItemBinding = new System.Windows.Data.Binding(ColApertura)
+                    };
+                    break;
                 case "Acabado Perfileria Puertas": e.Column.Header = "Acabado"; e.Column.IsReadOnly = true; break;
                 case "Item": e.Column.Header = "Descripción"; e.Column.IsReadOnly = true;
                     e.Column.Width = new DataGridLength(1, DataGridLengthUnitType.Star); break;
@@ -130,6 +158,7 @@ namespace arquitectSoft.View.Wpf.Panels
             if (e.Column == null) return;
             string cabecera = Convert.ToString(e.Column.Header);
             if (cabecera == "Nomen.") { NomenclaturaEditada(e); return; }
+            if (cabecera == "Apertura") { AperturaEditada(e); return; }
             if (cabecera != "Código") return;
             var drv = e.Row.Item as DataRowView; if (drv == null) return;
             var tb = e.EditingElement as TextBox;
@@ -137,12 +166,69 @@ namespace arquitectSoft.View.Wpf.Panels
 
             Dispatcher.BeginInvoke(new Action(() =>
             {
+                // El código manda: la apertura del desplegable se relee de sus dos últimos dígitos.
+                drv.Row[ColApertura] = AperturaDeCodigo(nuevo);
+
                 string desc = DescDeCodigo(nuevo);
                 if (desc == null)
                     GlassDialog.Informar(Owner, "Puertas", "No existe ningún código que coincida. Revisa el código ingresado.");
                 else
                     drv.Row["Item"] = desc;
             }), DispatcherPriority.Background);
+        }
+
+        // Al cambiar el desplegable: se reescriben los dos últimos dígitos del código y se
+        // trae la descripción de la puerta resultante.
+        private void AperturaEditada(DataGridCellEditEndingEventArgs e)
+        {
+            var drv = e.Row.Item as DataRowView; if (drv == null) return;
+            var cb = e.EditingElement as ComboBox;
+            string apertura = cb != null ? Convert.ToString(cb.SelectedItem) : "";
+            if (apertura == "") return;
+
+            string codigo = CodigoConApertura(Convert.ToString(drv.Row["Codigo"]), apertura);
+
+            Dispatcher.BeginInvoke(new Action(() =>
+            {
+                drv.Row["Codigo"] = codigo;
+                string desc = DescDeCodigo(codigo);
+                if (desc == null)
+                    GlassDialog.Informar(Owner, "Puertas",
+                        "El código " + codigo + " no está en el catálogo. La fila queda con ese código, " +
+                        "pero el análisis no encontrará sus componentes.");
+                else
+                    drv.Row["Item"] = desc;
+            }), DispatcherPriority.Background);
+        }
+
+        // "AVS0301" => "01 - DERECHA".  Si no acaba en 01/02, se deja sin apertura.
+        private static string AperturaDeCodigo(string codigo)
+        {
+            string cod = (codigo ?? "").Trim();
+            if (cod.Contains("-")) cod = cod.Split('-')[0].Trim();
+            if (cod.Length < 2) return "";
+            string fin = cod.Substring(cod.Length - 2);
+            foreach (string a in Aperturas)
+                if (a.StartsWith(fin)) return a;
+            return "";
+        }
+
+        // "AVS0301" + "02 - IZQUIERDA" => "AVS0302". Si el código no termina en dos dígitos
+        // (las que aún no siguen la convención), el sufijo se añade en vez de sustituir.
+        private static string CodigoConApertura(string codigo, string apertura)
+        {
+            string cod = (codigo ?? "").Trim();
+
+            // Si viniera con el acabado pegado (AVS0301-01), solo se toca la parte de delante:
+            // los dos dígitos de después del guion son el acabado, no la apertura.
+            string resto = "";
+            int g = cod.IndexOf('-');
+            if (g >= 0) { resto = cod.Substring(g); cod = cod.Substring(0, g).Trim(); }
+
+            string suf = apertura.Substring(0, 2);
+            if (cod.Length >= 2 && char.IsDigit(cod[cod.Length - 1]) && char.IsDigit(cod[cod.Length - 2]))
+                return cod.Substring(0, cod.Length - 2) + suf + resto;
+            return cod + suf + resto;
         }
 
         private void NomenclaturaEditada(DataGridCellEditEndingEventArgs e)
