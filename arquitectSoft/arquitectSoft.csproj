@@ -150,6 +150,8 @@
     <Compile Include="Engine\AcabadoChanger.cs" />
     <Compile Include="Engine\AnalisisEngine.cs" />
     <Compile Include="Engine\DependenciaResolver.cs" />
+    <Compile Include="Engine\DumpSql.cs" />
+    <Compile Include="Engine\RespaldoDiff.cs" />
     <Compile Include="Engine\VidrioResolver.cs" />
     <Compile Include="Engine\ExcelExporter.cs" />
     <Compile Include="Engine\ResultadoAnalisis.cs" />
@@ -406,6 +408,13 @@
     </Page>
     <Compile Include="View\Wpf\Panels\DependenciasPanel.xaml.cs">
       <DependentUpon>DependenciasPanel.xaml</DependentUpon>
+    </Compile>
+    <Page Include="View\Wpf\RevisionImportDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Compile Include="View\Wpf\RevisionImportDialog.xaml.cs">
+      <DependentUpon>RevisionImportDialog.xaml</DependentUpon>
     </Compile>
     <Page Include="View\Wpf\VidrioDialog.xaml">
       <SubType>Designer</SubType>

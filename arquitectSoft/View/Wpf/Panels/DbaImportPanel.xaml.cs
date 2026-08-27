@@ -1,8 +1,11 @@
-using System;
+﻿using System;
 using System.Data;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
+using arquitectSoft.Engine;
 
 namespace arquitectSoft.View.Wpf.Panels
 {
@@ -37,22 +40,62 @@ namespace arquitectSoft.View.Wpf.Panels
             }
         }
 
-        private void Importar_Click(object sender, RoutedEventArgs e)
+        private async void Importar_Click(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrWhiteSpace(TxtPath.Text))
             {
                 GlassDialog.Informar(Owner, "Importar", "Debes seleccionar un archivo .sql.");
                 return;
             }
+            if (!File.Exists(TxtPath.Text))
+            {
+                GlassDialog.Informar(Owner, "Importar", "El archivo ya no esta en esa ruta.");
+                return;
+            }
 
-            if (!GlassDialog.Pregunta(Owner, "Importar",
-                "Esto REEMPLAZA el contenido actual de la base con el del archivo.\n¿Continuar?")) return;
+            // 1. REVISION. El import reemplaza tabla por tabla, asi que lo que haya aqui y no
+            //    venga en el archivo se pierde. Antes de tocar nada se compara y se enseña.
+            string ruta = TxtPath.Text;
+            InformeImport informe;
 
+            BtnImportar.IsEnabled = false;
+            LblFecha.Text = "Revisando el respaldo…";
+            Mouse.OverrideCursor = Cursors.Wait;
+            try
+            {
+                informe = await Task.Run(() => RespaldoDiff.Comparar(ruta));
+            }
+            catch (Exception ex)
+            {
+                informe = new InformeImport { Error = "No se pudo revisar el respaldo:\n" + ex.Message };
+            }
+            finally
+            {
+                Mouse.OverrideCursor = null;
+                BtnImportar.IsEnabled = true;
+                CargarUltima();
+            }
+
+            var revision = new RevisionImportDialog { Owner = Owner };
+            revision.Cargar(informe, Path.GetFileName(ruta));
+            if (revision.ShowDialog() != true) return;
+
+            // 2. IMPORT. Ojo: ImportBackupMysql NO lanza, devuelve el fallo en el retorno.
+            //    Si se ignora, un import a medias pasa por bueno.
             try
             {
                 LblFecha.Text = "Importando…";
                 var con = new Generals.Conexion();
-                con.ImportBackupMysql(TxtPath.Text);
+                string error = con.ImportBackupMysql(ruta);
+
+                if (!string.IsNullOrEmpty(error))
+                {
+                    CargarUltima();
+                    GlassDialog.Informar(Owner, "Importar",
+                        "El import FALLO y la base puede haber quedado a medias:\n\n" + error +
+                        "\n\nRevisa la base antes de seguir trabajando.");
+                    return;
+                }
 
                 // Registra la importación en dbmanagments.
                 string fail = "";
@@ -66,6 +109,7 @@ namespace arquitectSoft.View.Wpf.Panels
             }
             catch (Exception ex)
             {
+                CargarUltima();
                 GlassDialog.Informar(Owner, "Importar", "No se pudo importar:\n" + ex.Message);
             }
         }

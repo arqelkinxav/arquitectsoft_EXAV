@@ -27,6 +27,9 @@ namespace arquitectSoft.Generals
         static string password = Cfg("DbPassword", "poseidon");
         public static string strProvider = "server=" + host + ";Database=" + database + ";User ID=" + userDB + ";Password=" + password;
 
+        /// <summary>"base @ servidor", para poder decir en pantalla sobre que base se va a actuar.</summary>
+        public static string Destino { get { return database + " @ " + host; } }
+
         // Lee una clave de <appSettings>; devuelve el valor por defecto si esta
         // ausente, vacia o si falla la lectura del config.
         private static string Cfg(string clave, string porDefecto)
