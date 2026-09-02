@@ -115,6 +115,12 @@ namespace arquitectSoft.Dto
                     listColumns.Add("Largo");
                     listColumns.Add("Count");
                     listColumns.Add("Acabado");
+                    // Ubicación = Comentarios del modelo genérico, ultima columna de la tabla
+                    // de Revit. En los genéricos HORIZONTALES trae la lista de muros que la
+                    // pieza abarca ("M1-M2-M3"), que a proposito NO agrupa con "M1".
+                    // Los TXT antiguos (6 columnas) siguen entrando: la fila se añade con los
+                    // valores que traiga y esta queda vacia, igual que antes.
+                    listColumns.Add("Ubicacion");
                     //-----------------
                     break;
                 case 5:
