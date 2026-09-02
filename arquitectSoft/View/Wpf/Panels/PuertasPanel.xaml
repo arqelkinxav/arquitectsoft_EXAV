@@ -223,6 +223,18 @@
             <Style.Triggers><Trigger Property="IsMouseOver" Value="True"><Setter Property="Background" Value="#262017"/></Trigger></Style.Triggers>
         </Style>
 
+        <!-- Celda de nomenclatura: se pinta en rojo cuando Analizar la señala por estar
+             vacía o repetida. El aviso se apaga solo en cuanto se escribe algo. -->
+        <Style x:Key="CeldaNomen" TargetType="DataGridCell" BasedOn="{StaticResource {x:Type DataGridCell}}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding _NomenMal}" Value="1">
+                    <Setter Property="Background" Value="#59D9534F"/>
+                    <Setter Property="Foreground" Value="#FFD9D2"/>
+                    <Setter Property="FontWeight" Value="SemiBold"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
         <!-- Pestañas oscuras -->
         <Style TargetType="TabControl">
             <Setter Property="Background" Value="Transparent"/><Setter Property="BorderThickness" Value="0"/>

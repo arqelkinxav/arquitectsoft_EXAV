@@ -39,6 +39,10 @@ namespace arquitectSoft.View.Wpf.Panels
         // ni las pisa el automático "Pn". Se vacía la celda para devolverla al automático.
         private readonly HashSet<DataRow> _nomenManual = new HashSet<DataRow>();
 
+        // Columna oculta: "1" en las filas cuya nomenclatura Analizar ha marcado en rojo
+        // (vacía o repetida). Se apaga sola en cuanto se escribe algo en la celda.
+        private const string ColNomenMal = "_NomenMal";
+
         // Apertura de la puerta: son los dos últimos dígitos del código (AVS03·01), no el
         // acabado que va tras el guion. Se edita con un desplegable en cada fila para poder
         // agregar el mismo tipo varias veces y cambiarle el lado ahí mismo.
@@ -88,6 +92,7 @@ namespace arquitectSoft.View.Wpf.Panels
                 _dtAddRows.Columns.Add("Cantidad");
                 _dtAddRows.Columns.Add("Ubicación");
                 _dtAddRows.Columns.Add("Area");
+                _dtAddRows.Columns.Add(ColNomenMal);
                 _dtAddRows.Columns.Add(ColApertura);
                 _dtAddRows.Columns[ColApertura].SetOrdinal(2);   // el desplegable, junto al código
             }
@@ -123,8 +128,12 @@ namespace arquitectSoft.View.Wpf.Panels
                 case "Cantidad":
                 case "Ubicación":
                 case "Area":
+                case ColNomenMal:               // marca interna del aviso: no se muestra
                     e.Cancel = true; break;
-                case "Nomenclatura": e.Column.Header = "Nomen."; e.Column.Width = 100; break;   // editable
+                case "Nomenclatura":
+                    e.Column.Header = "Nomen."; e.Column.Width = 100;   // editable
+                    e.Column.CellStyle = (Style)FindResource("CeldaNomen");
+                    break;
                 case "Codigo": e.Column.Header = "Código"; break;               // editable
                 case ColApertura:
                     e.Column = new DataGridComboBoxColumn
@@ -176,15 +185,64 @@ namespace arquitectSoft.View.Wpf.Panels
             DataRow orig = drv.Row;
             DataRow copia = _dtAddRows.NewRow();
             copia.ItemArray = orig.ItemArray;
-            copia["Nomenclatura"] = SiguienteNomenLibre();
+            // La copia sale SIN nombre a propósito: lo pone el usuario. Se marca como manual
+            // para que la renumeración automática de "Quitar" no le meta un "Pn" por su cuenta.
+            copia["Nomenclatura"] = "";
+            copia[ColNomenMal] = "";
+            _nomenManual.Add(copia);
 
             int pos = _dtAddRows.Rows.IndexOf(orig);
             if (pos < 0) _dtAddRows.Rows.Add(copia);
             else _dtAddRows.Rows.InsertAt(copia, pos + 1);
 
-            LblEstado.Text = _dtAddRows.Rows.Count + " puerta(s). Duplicada "
-                           + Convert.ToString(orig["Nomenclatura"]).Trim() + " → "
-                           + Convert.ToString(copia["Nomenclatura"]).Trim() + ".";
+            LblEstado.Text = _dtAddRows.Rows.Count + " puerta(s). Copia de "
+                           + Convert.ToString(orig["Nomenclatura"]).Trim()
+                           + " añadida: ponle nombre en la columna Nomen.";
+        }
+
+        /// <summary>
+        /// Comprueba que toda puerta tenga nomenclatura y que ninguna se repita, y pinta en
+        /// rojo las celdas que fallen. Devuelve false si hay algo que corregir.
+        /// La nomenclatura identifica la puerta en el análisis: sin ella o repetida, el
+        /// despiece saldría mal, así que se para aquí en vez de analizar a medias.
+        /// </summary>
+        private bool NomenclaturasCorrectas()
+        {
+            if (!_dtAddRows.Columns.Contains(ColNomenMal)) return true;
+
+            var vistas = new Dictionary<string, DataRow>(StringComparer.OrdinalIgnoreCase);
+            int vacias = 0, repes = 0;
+
+            foreach (DataRow r in _dtAddRows.Rows)
+            {
+                if (r.RowState == DataRowState.Deleted) continue;
+                r[ColNomenMal] = "";
+
+                string nom = Convert.ToString(r["Nomenclatura"]).Trim();
+                if (nom == "") { r[ColNomenMal] = "1"; vacias++; continue; }
+
+                DataRow previa;
+                if (vistas.TryGetValue(nom, out previa))
+                {
+                    r[ColNomenMal] = "1";
+                    previa[ColNomenMal] = "1";   // se marcan las dos, para verlas de un vistazo
+                    repes++;
+                }
+                else vistas.Add(nom, r);
+            }
+
+            if (vacias == 0 && repes == 0) return true;
+
+            var aviso = new System.Text.StringBuilder("Revisa la columna Nomen. (en rojo):\n");
+            if (vacias > 0)
+                aviso.Append("\n· " + vacias + (vacias == 1 ? " puerta sin nombre." : " puertas sin nombre."));
+            if (repes > 0)
+                aviso.Append("\n· " + repes + (repes == 1 ? " nombre repetido." : " nombres repetidos."));
+            aviso.Append("\n\nCada puerta necesita un nombre distinto: es lo que la identifica en el análisis.");
+
+            DgNuevas.Items.Refresh();
+            GlassDialog.Informar(Owner, "Puertas", aviso.ToString());
+            return false;
         }
 
         // Al editar el CÓDIGO en la tabla: busca la descripción de ese código; si no existe, avisa.
@@ -276,13 +334,16 @@ namespace arquitectSoft.View.Wpf.Panels
             string anterior = Convert.ToString(drv.Row["Nomenclatura"]);
             string nuevo = (tb != null ? tb.Text : anterior ?? "").Trim();
 
-            // Vacía => vuelve a la numeración automática.
+            // Vacía se queda vacía: las copias nacen sin nombre y Analizar es quien reclama
+            // el que falte. Rellenarla aquí con un "Pn" pisaría ese hueco a propósito.
             if (nuevo == "")
             {
-                _nomenManual.Remove(drv.Row);
-                if (tb != null) tb.Text = SiguienteNomenLibre(drv.Row);
+                if (_dtAddRows.Columns.Contains(ColNomenMal)) drv.Row[ColNomenMal] = "1";
                 return;
             }
+
+            // En cuanto hay algo escrito se apaga el aviso rojo de esa celda.
+            if (_dtAddRows.Columns.Contains(ColNomenMal)) drv.Row[ColNomenMal] = "";
 
             // La coma separa las nomenclaturas del mismo grupo en el análisis, y las comillas
             // rompen los filtros DataTable.Select del DTO: no se admiten.
@@ -371,6 +432,7 @@ namespace arquitectSoft.View.Wpf.Panels
                 GlassDialog.Informar(Owner, "Puertas", "Agrega al menos una puerta antes de analizar.");
                 return;
             }
+            if (!NomenclaturasCorrectas()) return;   // pinta en rojo las que fallan y no analiza
             try
             {
                 LblEstado.Text = "Analizando…";
