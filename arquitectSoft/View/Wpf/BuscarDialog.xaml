@@ -375,7 +375,43 @@
                 <!-- Resultados -->
                 <Border Grid.Row="2" CornerRadius="12" Background="#141414"
                         BorderBrush="{StaticResource PanelBorder}" BorderThickness="1" Padding="4">
-                    <DataGrid x:Name="Grid" MouseDoubleClick="Grid_DoubleClick"/>
+                    <DataGrid x:Name="Grid" MouseDoubleClick="Grid_DoubleClick">
+                        <!-- Celda de familia "combinada y centrada" (solo en Buscar puerta,
+                             que es la unica consulta que agrupa). La familia se dibuja UNA
+                             vez por bloque, encima del hueco que deja la primera columna, y
+                             tapa las lineas de rejilla: se lee como una celda combinada de
+                             Excel, con el nombre centrado sobre todas sus puertas. -->
+                        <DataGrid.GroupStyle>
+                            <GroupStyle>
+                                <GroupStyle.ContainerStyle>
+                                    <Style TargetType="GroupItem">
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="GroupItem">
+                                                    <Grid>
+                                                        <ItemsPresenter/>
+                                                        <Border Width="74" HorizontalAlignment="Left"
+                                                                VerticalAlignment="Stretch"
+                                                                Background="#141414"
+                                                                BorderBrush="#363636" BorderThickness="0,0,1,1">
+                                                            <StackPanel VerticalAlignment="Center">
+                                                                <TextBlock Text="{Binding Name}"
+                                                                           FontWeight="Bold" FontSize="12.5"
+                                                                           HorizontalAlignment="Center"/>
+                                                                <TextBlock Text="{Binding ItemCount}"
+                                                                           FontSize="10.5" Foreground="#8C8C8C"
+                                                                           HorizontalAlignment="Center"/>
+                                                            </StackPanel>
+                                                        </Border>
+                                                    </Grid>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </GroupStyle.ContainerStyle>
+                            </GroupStyle>
+                        </DataGrid.GroupStyle>
+                    </DataGrid>
                 </Border>
 
                 <!-- Botones -->
