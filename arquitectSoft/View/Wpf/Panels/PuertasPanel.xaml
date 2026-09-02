@@ -223,11 +223,29 @@
             <Style.Triggers><Trigger Property="IsMouseOver" Value="True"><Setter Property="Background" Value="#262017"/></Trigger></Style.Triggers>
         </Style>
 
-        <!-- Celda de nomenclatura: se pinta en rojo cuando Analizar la señala por estar
-             vacía o repetida. El aviso se apaga solo en cuanto se escribe algo. -->
+        <!-- Celdas que Analizar puede señalar en rojo por estar vacías (o el nombre repetido).
+             Cada una lee su propia marca oculta. El aviso se apaga solo al escribir. -->
         <Style x:Key="CeldaNomen" TargetType="DataGridCell" BasedOn="{StaticResource {x:Type DataGridCell}}">
             <Style.Triggers>
                 <DataTrigger Binding="{Binding _NomenMal}" Value="1">
+                    <Setter Property="Background" Value="#59D9534F"/>
+                    <Setter Property="Foreground" Value="#FFD9D2"/>
+                    <Setter Property="FontWeight" Value="SemiBold"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="CeldaAltura" TargetType="DataGridCell" BasedOn="{StaticResource {x:Type DataGridCell}}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding _AltMal}" Value="1">
+                    <Setter Property="Background" Value="#59D9534F"/>
+                    <Setter Property="Foreground" Value="#FFD9D2"/>
+                    <Setter Property="FontWeight" Value="SemiBold"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="CeldaAnchura" TargetType="DataGridCell" BasedOn="{StaticResource {x:Type DataGridCell}}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding _AnchMal}" Value="1">
                     <Setter Property="Background" Value="#59D9534F"/>
                     <Setter Property="Foreground" Value="#FFD9D2"/>
                     <Setter Property="FontWeight" Value="SemiBold"/>
@@ -321,7 +339,9 @@
                     <ColumnDefinition Width="170"/>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="90"/>
+                    <ColumnDefinition Width="95"/>
+                    <ColumnDefinition Width="95"/>
+                    <ColumnDefinition Width="70"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.Column="0" Margin="0,0,8,0">
@@ -334,11 +354,24 @@
                     <TextBlock Text="DESCRIPCIÓN" Style="{StaticResource Cap}"/>
                     <TextBox x:Name="TxtDescripcion" Style="{StaticResource Field}" IsReadOnly="True"/>
                 </StackPanel>
+                <!-- Altura y anchura aquí arriba: se escriben UNA vez y todas las puertas de
+                     esa tanda salen ya con la medida puesta. En blanco, salen sin medida y
+                     Analizar las reclama. -->
                 <StackPanel Grid.Column="3" Margin="0,0,10,0">
+                    <TextBlock Text="ALTURA" Style="{StaticResource Cap}"/>
+                    <TextBox x:Name="TxtAltura" Style="{StaticResource Field}"
+                             ToolTip="Altura en mm. Se aplica a todas las puertas que agregues."/>
+                </StackPanel>
+                <StackPanel Grid.Column="4" Margin="0,0,10,0">
+                    <TextBlock Text="ANCHURA" Style="{StaticResource Cap}"/>
+                    <TextBox x:Name="TxtAnchura" Style="{StaticResource Field}"
+                             ToolTip="Anchura en mm. Se aplica a todas las puertas que agregues."/>
+                </StackPanel>
+                <StackPanel Grid.Column="5" Margin="0,0,10,0">
                     <TextBlock Text="CANT." Style="{StaticResource Cap}"/>
                     <TextBox x:Name="TxtCantidad" Style="{StaticResource Field}" Text="1"/>
                 </StackPanel>
-                <Button Grid.Column="4" Style="{StaticResource Primary}" Content="+ Agregar" VerticalAlignment="Bottom"
+                <Button Grid.Column="6" Style="{StaticResource Primary}" Content="+ Agregar" VerticalAlignment="Bottom"
                         Click="Agregar_Click"/>
             </Grid>
         </Border>

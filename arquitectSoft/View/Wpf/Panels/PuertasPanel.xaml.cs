@@ -42,6 +42,8 @@ namespace arquitectSoft.View.Wpf.Panels
         // Columna oculta: "1" en las filas cuya nomenclatura Analizar ha marcado en rojo
         // (vacía o repetida). Se apaga sola en cuanto se escribe algo en la celda.
         private const string ColNomenMal = "_NomenMal";
+        private const string ColAltMal   = "_AltMal";
+        private const string ColAnchMal  = "_AnchMal";
 
         // Apertura de la puerta: son los dos últimos dígitos del código (AVS03·01), no el
         // acabado que va tras el guion. Se edita con un desplegable en cada fila para poder
@@ -93,6 +95,8 @@ namespace arquitectSoft.View.Wpf.Panels
                 _dtAddRows.Columns.Add("Ubicación");
                 _dtAddRows.Columns.Add("Area");
                 _dtAddRows.Columns.Add(ColNomenMal);
+                _dtAddRows.Columns.Add(ColAltMal);
+                _dtAddRows.Columns.Add(ColAnchMal);
                 _dtAddRows.Columns.Add(ColApertura);
                 _dtAddRows.Columns[ColApertura].SetOrdinal(2);   // el desplegable, junto al código
             }
@@ -107,7 +111,9 @@ namespace arquitectSoft.View.Wpf.Panels
                 nr["Apertura de Puerta"] = "";
                 nr["Acabado Perfileria Puertas"] = _acabado;
                 nr["Item"] = TxtDescripcion.Text;
-                nr["Altura"] = ""; nr["Anchura"] = "";
+                // La medida de la barra de arriba entra ya puesta en cada puerta de la tanda.
+                nr["Altura"] = TxtAltura.Text.Trim();
+                nr["Anchura"] = TxtAnchura.Text.Trim();
                 nr["Conectado/pared Tubo L1"] = "No";
                 nr["Conectado/pared Tubo L2"] = "No";
                 nr["Cantidad"] = "1";
@@ -128,7 +134,9 @@ namespace arquitectSoft.View.Wpf.Panels
                 case "Cantidad":
                 case "Ubicación":
                 case "Area":
-                case ColNomenMal:               // marca interna del aviso: no se muestra
+                case ColNomenMal:               // marcas internas de los avisos: no se muestran
+                case ColAltMal:
+                case ColAnchMal:
                     e.Cancel = true; break;
                 case "Nomenclatura":
                     e.Column.Header = "Nomen."; e.Column.Width = 100;   // editable
@@ -147,8 +155,14 @@ namespace arquitectSoft.View.Wpf.Panels
                 case "Acabado Perfileria Puertas": e.Column.Header = "Acabado"; e.Column.IsReadOnly = true; break;
                 case "Item": e.Column.Header = "Descripción"; e.Column.IsReadOnly = true;
                     e.Column.Width = new DataGridLength(1, DataGridLengthUnitType.Star); break;
-                case "Altura": e.Column.Width = 120; break;                     // editable, más ancha
-                case "Anchura": e.Column.Width = 120; break;                    // editable, más ancha
+                case "Altura":
+                    e.Column.Width = 120;                                       // editable, más ancha
+                    e.Column.CellStyle = (Style)FindResource("CeldaAltura");
+                    break;
+                case "Anchura":
+                    e.Column.Width = 120;                                       // editable, más ancha
+                    e.Column.CellStyle = (Style)FindResource("CeldaAnchura");
+                    break;
             }
         }
 
@@ -188,7 +202,7 @@ namespace arquitectSoft.View.Wpf.Panels
             // La copia sale SIN nombre a propósito: lo pone el usuario. Se marca como manual
             // para que la renumeración automática de "Quitar" no le meta un "Pn" por su cuenta.
             copia["Nomenclatura"] = "";
-            copia[ColNomenMal] = "";
+            copia[ColNomenMal] = ""; copia[ColAltMal] = ""; copia[ColAnchMal] = "";
             _nomenManual.Add(copia);
 
             int pos = _dtAddRows.Rows.IndexOf(orig);
@@ -200,49 +214,87 @@ namespace arquitectSoft.View.Wpf.Panels
                            + " añadida: ponle nombre en la columna Nomen.";
         }
 
+        // Al escribir una medida buena se apaga su aviso rojo; si se deja mal, se queda.
+        private void MedidaEditada(DataGridCellEditEndingEventArgs e, string cabecera)
+        {
+            var drv = e.Row.Item as DataRowView; if (drv == null) return;
+            if (!_dtAddRows.Columns.Contains(ColAltMal)) return;
+
+            var tb = e.EditingElement as TextBox;
+            string col = cabecera == "Altura" ? ColAltMal : ColAnchMal;
+            string valor = tb != null ? tb.Text : Convert.ToString(drv.Row[cabecera]);
+            drv.Row[col] = MedidaValida(valor) ? "" : "1";
+        }
+
         /// <summary>
         /// Comprueba que toda puerta tenga nomenclatura y que ninguna se repita, y pinta en
         /// rojo las celdas que fallen. Devuelve false si hay algo que corregir.
         /// La nomenclatura identifica la puerta en el análisis: sin ella o repetida, el
         /// despiece saldría mal, así que se para aquí en vez de analizar a medias.
         /// </summary>
-        private bool NomenclaturasCorrectas()
+        private bool DatosCorrectos()
         {
             if (!_dtAddRows.Columns.Contains(ColNomenMal)) return true;
 
             var vistas = new Dictionary<string, DataRow>(StringComparer.OrdinalIgnoreCase);
-            int vacias = 0, repes = 0;
+            int vacias = 0, repes = 0, sinAlt = 0, sinAnch = 0;
 
             foreach (DataRow r in _dtAddRows.Rows)
             {
                 if (r.RowState == DataRowState.Deleted) continue;
-                r[ColNomenMal] = "";
+                r[ColNomenMal] = ""; r[ColAltMal] = ""; r[ColAnchMal] = "";
 
+                // --- Nomenclatura: obligatoria y sin repetir ---
                 string nom = Convert.ToString(r["Nomenclatura"]).Trim();
-                if (nom == "") { r[ColNomenMal] = "1"; vacias++; continue; }
-
-                DataRow previa;
-                if (vistas.TryGetValue(nom, out previa))
+                if (nom == "") { r[ColNomenMal] = "1"; vacias++; }
+                else
                 {
-                    r[ColNomenMal] = "1";
-                    previa[ColNomenMal] = "1";   // se marcan las dos, para verlas de un vistazo
-                    repes++;
+                    DataRow previa;
+                    if (vistas.TryGetValue(nom, out previa))
+                    {
+                        r[ColNomenMal] = "1";
+                        previa[ColNomenMal] = "1";   // las dos, para ver el par de un vistazo
+                        repes++;
+                    }
+                    else vistas.Add(nom, r);
                 }
-                else vistas.Add(nom, r);
+
+                // --- Medidas: número entero mayor que cero ---
+                if (!MedidaValida(Convert.ToString(r["Altura"]))) { r[ColAltMal] = "1"; sinAlt++; }
+                if (!MedidaValida(Convert.ToString(r["Anchura"]))) { r[ColAnchMal] = "1"; sinAnch++; }
             }
 
-            if (vacias == 0 && repes == 0) return true;
+            if (vacias == 0 && repes == 0 && sinAlt == 0 && sinAnch == 0) return true;
 
-            var aviso = new System.Text.StringBuilder("Revisa la columna Nomen. (en rojo):\n");
+            var aviso = new System.Text.StringBuilder("Revisa las celdas en rojo:\n");
             if (vacias > 0)
                 aviso.Append("\n· " + vacias + (vacias == 1 ? " puerta sin nombre." : " puertas sin nombre."));
             if (repes > 0)
                 aviso.Append("\n· " + repes + (repes == 1 ? " nombre repetido." : " nombres repetidos."));
-            aviso.Append("\n\nCada puerta necesita un nombre distinto: es lo que la identifica en el análisis.");
+            if (sinAlt > 0)
+                aviso.Append("\n· " + sinAlt + (sinAlt == 1 ? " puerta sin altura." : " puertas sin altura."));
+            if (sinAnch > 0)
+                aviso.Append("\n· " + sinAnch + (sinAnch == 1 ? " puerta sin anchura." : " puertas sin anchura."));
+
+            if (vacias > 0 || repes > 0)
+                aviso.Append("\n\nCada puerta necesita un nombre distinto: es lo que la identifica en el análisis.");
+            if (sinAlt > 0 || sinAnch > 0)
+                aviso.Append("\n\nLa altura y la anchura van en milímetros, en número entero. Sin ellas el despiece sale con medidas negativas.");
 
             DgNuevas.Items.Refresh();
             GlassDialog.Informar(Owner, "Puertas", aviso.ToString());
             return false;
+        }
+
+        /// <summary>
+        /// Medida buena: un entero mayor que cero. Se descarta el vacío (el análisis lo tomaba
+        /// como 0 y sacaba longitudes negativas) y también el texto que no sea un número, que
+        /// más adelante reventaría en el Int32.Parse del cálculo.
+        /// </summary>
+        private static bool MedidaValida(string valor)
+        {
+            int n;
+            return int.TryParse((valor ?? "").Replace("\"", "").Trim(), out n) && n > 0;
         }
 
         // Al editar el CÓDIGO en la tabla: busca la descripción de ese código; si no existe, avisa.
@@ -254,6 +306,7 @@ namespace arquitectSoft.View.Wpf.Panels
             if (e.Column == null) return;
             string cabecera = Convert.ToString(e.Column.Header);
             if (cabecera == "Nomen.") { NomenclaturaEditada(e); return; }
+            if (cabecera == "Altura" || cabecera == "Anchura") { MedidaEditada(e, cabecera); return; }
             if (cabecera == "Apertura") { AperturaEditada(e); return; }
             if (cabecera != "Código") return;
             var drv = e.Row.Item as DataRowView; if (drv == null) return;
@@ -432,7 +485,7 @@ namespace arquitectSoft.View.Wpf.Panels
                 GlassDialog.Informar(Owner, "Puertas", "Agrega al menos una puerta antes de analizar.");
                 return;
             }
-            if (!NomenclaturasCorrectas()) return;   // pinta en rojo las que fallan y no analiza
+            if (!DatosCorrectos()) return;   // pinta en rojo lo que falta y no analiza
             try
             {
                 LblEstado.Text = "Analizando…";
@@ -585,7 +638,7 @@ namespace arquitectSoft.View.Wpf.Panels
                 // NO se filtra por col 0 vacía: solo se saltan las cabeceras "Puerta" y las filas
                 // sin código-acabado (separadores). El acabado se toma del sufijo del código.
                 string c0 = Convert.ToString(row[0]);
-                if (c0.Trim() != "" && !c0.StartsWith("Item", StringComparison.OrdinalIgnoreCase)) continue;
+                if (Engine.FilaPuerta.EsCabecera(c0)) continue;
                 string cod = Convert.ToString(row[1]);
                 int dash = cod.LastIndexOf('-');
                 if (dash < 0) continue;
@@ -670,22 +723,6 @@ namespace arquitectSoft.View.Wpf.Panels
             }
         }
 
-        /// <summary>
-        /// ¿Es la fila de CABECERA de una puerta? (la que lleva la nomenclatura en la col 0,
-        /// el código en la 1 y la descripción con el acabado entre paréntesis en la 2).
-        /// Antes se miraba si la col 0 contenía la palabra "Puerta", que valía cuando la
-        /// nomenclatura se escribía "Puerta 1, Puerta 2". Desde que se listan tal cual las
-        /// escribe el usuario (P1, COCINA…) esa comprobación ya no acertaba nunca, y por eso
-        /// al cambiar el acabado no se actualizaba el paréntesis del enunciado. Las filas de
-        /// detalle empiezan por "Item"; los separadores traen la col 0 vacía.
-        /// </summary>
-        private static bool EsCabeceraPuerta(DataRow row)
-        {
-            if (row == null || row.Table.Columns.Count == 0) return false;
-            string c0 = Convert.ToString(row[0]).Trim();
-            return c0 != "" && !c0.StartsWith("Item", StringComparison.OrdinalIgnoreCase);
-        }
-
         private void FnChangeInfo(string a1, string a2)
         {
             for (int dg = 1; dg <= 2; dg++)
@@ -699,7 +736,7 @@ namespace arquitectSoft.View.Wpf.Panels
                     string acabado = Convert.ToString(row[3]);
 
                     // Perfiles (no-puerta): cambia solo el sufijo de acabado del código si coincide.
-                    if (dg == 2 && !EsCabeceraPuerta(row))
+                    if (dg == 2 && !Engine.FilaPuerta.EsCabecera(row[0]))
                     {
                         string[] codeParts = Convert.ToString(row[1]).Split('-');
                         if (codeParts.Length > 1)
@@ -727,7 +764,7 @@ namespace arquitectSoft.View.Wpf.Panels
 
                     if (!string.IsNullOrEmpty(acabado) && a1.Contains(acabado))
                     {
-                        if (dg == 2 && EsCabeceraPuerta(row) && posini >= 0 && posfin > posini)
+                        if (dg == 2 && Engine.FilaPuerta.EsCabecera(row[0]) && posini >= 0 && posfin > posini)
                         {
                             string ini = acabadoDesc.Substring(0, posini + 1);
                             string fin = acabadoDesc.Substring(posfin, acabadoDesc.Length - posfin);
@@ -752,7 +789,7 @@ namespace arquitectSoft.View.Wpf.Panels
             string c0 = Convert.ToString(drv.Row[0]);
             if (string.IsNullOrEmpty(c0))
                 e.Row.Background = new SolidColorBrush(Color.FromArgb(0x55, 0x44, 0x44, 0x44));
-            else if (!c0.StartsWith("Item", StringComparison.OrdinalIgnoreCase))
+            else if (Engine.FilaPuerta.EsCabecera(c0))
                 e.Row.Background = new SolidColorBrush(Color.FromArgb(0x4D, 0xE0, 0x7B, 0x5B));
             else
                 e.Row.ClearValue(Control.BackgroundProperty);
@@ -767,6 +804,7 @@ namespace arquitectSoft.View.Wpf.Panels
             DgPerfil.ItemsSource = null;
             DgHerraje.ItemsSource = null;
             TxtCodigo.Text = ""; TxtDescripcion.Text = ""; TxtCantidad.Text = "1"; _acabado = "";
+            TxtAltura.Text = ""; TxtAnchura.Text = "";
             _dtPerfil = null; _dtHerraje = null; _acabadoPerfil = "";
             _basePerfil = null; _baseHerraje = null;
             LblEstado.Text = "Lista vaciada.";
