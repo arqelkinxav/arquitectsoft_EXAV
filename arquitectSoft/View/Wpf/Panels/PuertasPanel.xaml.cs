@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Windows;
@@ -38,9 +38,6 @@ namespace arquitectSoft.View.Wpf.Panels
         // Filas cuya nomenclatura escribió el usuario a mano: no se renumeran al quitar filas
         // ni las pisa el automático "Pn". Se vacía la celda para devolverla al automático.
         private readonly HashSet<DataRow> _nomenManual = new HashSet<DataRow>();
-
-        // Columna oculta con la clave de orden natural de la nomenclatura (P2 < P2A < P10).
-        private const string ColOrden = "_Orden";
 
         // Apertura de la puerta: son los dos últimos dígitos del código (AVS03·01), no el
         // acabado que va tras el guion. Se edita con un desplegable en cada fila para poder
@@ -91,7 +88,6 @@ namespace arquitectSoft.View.Wpf.Panels
                 _dtAddRows.Columns.Add("Cantidad");
                 _dtAddRows.Columns.Add("Ubicación");
                 _dtAddRows.Columns.Add("Area");
-                _dtAddRows.Columns.Add(ColOrden);
                 _dtAddRows.Columns.Add(ColApertura);
                 _dtAddRows.Columns[ColApertura].SetOrdinal(2);   // el desplegable, junto al código
             }
@@ -113,7 +109,6 @@ namespace arquitectSoft.View.Wpf.Panels
                 _dtAddRows.Rows.Add(nr);
             }
 
-            ReordenarPorNomenclatura();
             DgNuevas.ItemsSource = _dtAddRows.DefaultView;
             LblEstado.Text = _dtAddRows.Rows.Count + " puerta(s). Completa altura/anchura en la tabla y pulsa Analizar.";
         }
@@ -128,7 +123,6 @@ namespace arquitectSoft.View.Wpf.Panels
                 case "Cantidad":
                 case "Ubicación":
                 case "Area":
-                case ColOrden:                  // clave de orden interna: no se muestra
                     e.Cancel = true; break;
                 case "Nomenclatura": e.Column.Header = "Nomen."; e.Column.Width = 100; break;   // editable
                 case "Codigo": e.Column.Header = "Código"; break;               // editable
@@ -243,7 +237,6 @@ namespace arquitectSoft.View.Wpf.Panels
             {
                 _nomenManual.Remove(drv.Row);
                 if (tb != null) tb.Text = SiguienteNomenLibre(drv.Row);
-                ReordenarTrasCommit();
                 return;
             }
 
@@ -271,7 +264,6 @@ namespace arquitectSoft.View.Wpf.Panels
 
             _nomenManual.Add(drv.Row);
             if (tb != null) tb.Text = nuevo;   // guarda sin espacios sobrantes
-            ReordenarTrasCommit();
         }
 
         // Deshace la edición de la celda y explica por qué (fuera del CellEditEnding).
@@ -282,45 +274,6 @@ namespace arquitectSoft.View.Wpf.Panels
                 DgNuevas.CancelEdit(DataGridEditingUnit.Cell);
                 GlassDialog.Informar(Owner, "Puertas", motivo);
             }), DispatcherPriority.Background);
-        }
-
-        // La celda aún no está confirmada dentro de CellEditEnding: se reordena después.
-        private void ReordenarTrasCommit()
-        {
-            Dispatcher.BeginInvoke(new Action(ReordenarPorNomenclatura), DispatcherPriority.Background);
-        }
-
-        // Recalcula la clave oculta y deja la tabla ordenada por nomenclatura.
-        private void ReordenarPorNomenclatura()
-        {
-            if (_dtAddRows == null || !_dtAddRows.Columns.Contains(ColOrden)) return;
-            foreach (DataRow r in _dtAddRows.Rows)
-            {
-                if (r.RowState == DataRowState.Deleted) continue;
-                r[ColOrden] = ClaveOrden(Convert.ToString(r["Nomenclatura"]));
-            }
-            _dtAddRows.AcceptChanges();
-            if (_dtAddRows.DefaultView.Sort != ColOrden) _dtAddRows.DefaultView.Sort = ColOrden;
-        }
-
-        // Orden natural: los tramos de dígitos se comparan como números, no como texto,
-        // así P-2 va antes que P-2A y P-2A antes que P-10.
-        private static string ClaveOrden(string nomen)
-        {
-            string s = (nomen ?? "").Trim().ToUpperInvariant();
-            var sb = new System.Text.StringBuilder();
-            for (int i = 0; i < s.Length; )
-            {
-                if (char.IsDigit(s[i]))
-                {
-                    int j = i;
-                    while (j < s.Length && char.IsDigit(s[j])) j++;
-                    sb.Append(s.Substring(i, j - i).TrimStart('0').PadLeft(8, '0'));
-                    i = j;
-                }
-                else { sb.Append(s[i]); i++; }
-            }
-            return sb.ToString();
         }
 
         // ¿La usa ya otra fila? (comparación sin distinguir mayúsculas ni espacios)
@@ -526,7 +479,7 @@ namespace arquitectSoft.View.Wpf.Panels
                 // NO se filtra por col 0 vacía: solo se saltan las cabeceras "Puerta" y las filas
                 // sin código-acabado (separadores). El acabado se toma del sufijo del código.
                 string c0 = Convert.ToString(row[0]);
-                if (c0.Contains("Puerta")) continue;
+                if (c0.Trim() != "" && !c0.StartsWith("Item", StringComparison.OrdinalIgnoreCase)) continue;
                 string cod = Convert.ToString(row[1]);
                 int dash = cod.LastIndexOf('-');
                 if (dash < 0) continue;
@@ -611,6 +564,22 @@ namespace arquitectSoft.View.Wpf.Panels
             }
         }
 
+        /// <summary>
+        /// ¿Es la fila de CABECERA de una puerta? (la que lleva la nomenclatura en la col 0,
+        /// el código en la 1 y la descripción con el acabado entre paréntesis en la 2).
+        /// Antes se miraba si la col 0 contenía la palabra "Puerta", que valía cuando la
+        /// nomenclatura se escribía "Puerta 1, Puerta 2". Desde que se listan tal cual las
+        /// escribe el usuario (P1, COCINA…) esa comprobación ya no acertaba nunca, y por eso
+        /// al cambiar el acabado no se actualizaba el paréntesis del enunciado. Las filas de
+        /// detalle empiezan por "Item"; los separadores traen la col 0 vacía.
+        /// </summary>
+        private static bool EsCabeceraPuerta(DataRow row)
+        {
+            if (row == null || row.Table.Columns.Count == 0) return false;
+            string c0 = Convert.ToString(row[0]).Trim();
+            return c0 != "" && !c0.StartsWith("Item", StringComparison.OrdinalIgnoreCase);
+        }
+
         private void FnChangeInfo(string a1, string a2)
         {
             for (int dg = 1; dg <= 2; dg++)
@@ -624,7 +593,7 @@ namespace arquitectSoft.View.Wpf.Panels
                     string acabado = Convert.ToString(row[3]);
 
                     // Perfiles (no-puerta): cambia solo el sufijo de acabado del código si coincide.
-                    if (dg == 2 && !valuezero.Contains("Puerta"))
+                    if (dg == 2 && !EsCabeceraPuerta(row))
                     {
                         string[] codeParts = Convert.ToString(row[1]).Split('-');
                         if (codeParts.Length > 1)
@@ -652,7 +621,7 @@ namespace arquitectSoft.View.Wpf.Panels
 
                     if (!string.IsNullOrEmpty(acabado) && a1.Contains(acabado))
                     {
-                        if (dg == 2 && valuezero.Contains("Puerta") && posini >= 0 && posfin > posini)
+                        if (dg == 2 && EsCabeceraPuerta(row) && posini >= 0 && posfin > posini)
                         {
                             string ini = acabadoDesc.Substring(0, posini + 1);
                             string fin = acabadoDesc.Substring(posfin, acabadoDesc.Length - posfin);
@@ -677,7 +646,7 @@ namespace arquitectSoft.View.Wpf.Panels
             string c0 = Convert.ToString(drv.Row[0]);
             if (string.IsNullOrEmpty(c0))
                 e.Row.Background = new SolidColorBrush(Color.FromArgb(0x55, 0x44, 0x44, 0x44));
-            else if (c0.Contains("Puerta"))
+            else if (!c0.StartsWith("Item", StringComparison.OrdinalIgnoreCase))
                 e.Row.Background = new SolidColorBrush(Color.FromArgb(0x4D, 0xE0, 0x7B, 0x5B));
             else
                 e.Row.ClearValue(Control.BackgroundProperty);
@@ -752,7 +721,6 @@ namespace arquitectSoft.View.Wpf.Panels
                     auto++;
                 }
                 _dtAddRows.AcceptChanges();
-                ReordenarPorNomenclatura();
             }
 
             DgNuevas.ItemsSource = _dtAddRows.DefaultView;
