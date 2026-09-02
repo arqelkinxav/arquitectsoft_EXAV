@@ -545,7 +545,7 @@ namespace arquitectSoft.View
                 {
                     r.DefaultCellStyle.BackColor = Color.Gray;
                 }
-                else if (r.Cells[0].Value.ToString().Contains("Puerta"))
+                else if (Engine.FilaPuerta.EsCabecera(r.Cells[0].Value))
                 {
                     r.DefaultCellStyle.BackColor = Color.Orange;
                 }
@@ -994,9 +994,16 @@ namespace arquitectSoft.View
                                 string cellRange = string.Format(rangetwo, i + valueinitial);
                                 string cellIniPuertas = string.Format("A{0}", i + valueinitial);
                                 string valueP = wb.Worksheet(sheets).Cell(cellIniPuertas).Value.ToString();
-                                if (valueP.Contains("Puerta"))
+                                if (Engine.FilaPuerta.EsCabecera(valueP))
                                 {
-                                    wb.Worksheet(sheets).Cells(cellRange).Style.Fill.BackgroundColor = XLColor.LightGreen;
+                                    // Enunciado de la puerta: negrita y fondo propio (igual que
+                                    // en ExcelExporter), para separarlo de sus Items al imprimir.
+                                    var cabecera = wb.Worksheet(sheets).Cells(cellRange).Style;
+                                    cabecera.Fill.BackgroundColor = XLColor.FromArgb(0xFC, 0xE4, 0xD6);
+                                    cabecera.Font.Bold = true;
+                                    cabecera.Font.FontColor = XLColor.FromArgb(0x7B, 0x33, 0x1C);
+                                    cabecera.Border.TopBorder = XLBorderStyleValues.Thin;
+                                    cabecera.Border.TopBorderColor = XLColor.FromArgb(0xC2, 0x5A, 0x38);
                                 }
                                 else
                                 {
@@ -1348,7 +1355,7 @@ namespace arquitectSoft.View
                         if (valuezero == "")
                             continue;
                         
-                        if ((Datagrid == 2) && !valuezero.Contains("Puerta"))
+                        if ((Datagrid == 2) && !Engine.FilaPuerta.EsCabecera(valuezero))
                         {
                             // Proteger contra códigos sin guion (antes reventaba con
                             // IndexOutOfRange en Split('-')[1] y dejaba el cambio a medias).
@@ -1382,7 +1389,7 @@ namespace arquitectSoft.View
 
                         if (param[0].Contains(Acabado))
                         {
-                            if (((Datagrid == 2 || Datagrid == 4) && valuezero.Contains("Puerta")) || Datagrid == 6)
+                            if (((Datagrid == 2 || Datagrid == 4) && Engine.FilaPuerta.EsCabecera(valuezero)) || Datagrid == 6)
                             {
                                 string AcabadoFinal = (param[1].ToString().Contains("-")) ? param[1].ToString().Split('-')[1].Trim() : param[1].ToString().Trim();
                                 AcabadoDesc = AcabadoDesc.Substring(0, posini + 1) + AcabadoFinal + AcabadoDesc.Substring(posfin, AcabadoDesc.Length - posfin);

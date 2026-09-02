@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Data;
 
 namespace arquitectSoft.Engine
@@ -65,7 +65,7 @@ namespace arquitectSoft.Engine
 
                 // Datagrid 2 (Puertas) en filas que NO son cabecera de "Puerta":
                 // sólo se ajusta el sufijo del código si coincide el código de acabado.
-                if (datagrid == 2 && !valuezero.Contains("Puerta"))
+                if (datagrid == 2 && !FilaPuerta.EsCabecera(valuezero))
                 {
                     string[] partes = Texto(row[1]).Split('-');
                     if (partes.Length > 1)
@@ -100,7 +100,7 @@ namespace arquitectSoft.Engine
 
                 if (!acabado1.Contains(acabado) || acabado == "") continue;
 
-                if (((datagrid == 2 || datagrid == 4) && valuezero.Contains("Puerta")) || datagrid == 6)
+                if (((datagrid == 2 || datagrid == 4) && FilaPuerta.EsCabecera(valuezero)) || datagrid == 6)
                 {
                     string acabadoFinal = acabado2.Contains("-") ? acabado2.Split('-')[1].Trim() : acabado2.Trim();
                     acabadoDesc = acabadoDesc.Substring(0, posini + 1) + acabadoFinal

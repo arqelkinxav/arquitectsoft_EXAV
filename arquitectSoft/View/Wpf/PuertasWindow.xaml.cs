@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Data;
 using System.Runtime.InteropServices;
@@ -255,7 +255,7 @@ namespace arquitectSoft.View.Wpf
                     string acabado = Convert.ToString(row[3]);
 
                     // Perfiles (no-puerta): cambia solo el sufijo de acabado del código si coincide.
-                    if (dg == 2 && !valuezero.Contains("Puerta"))
+                    if (dg == 2 && !Engine.FilaPuerta.EsCabecera(valuezero))
                     {
                         string[] codeParts = Convert.ToString(row[1]).Split('-');
                         if (codeParts.Length > 1)
@@ -283,7 +283,7 @@ namespace arquitectSoft.View.Wpf
 
                     if (!string.IsNullOrEmpty(acabado) && a1.Contains(acabado))
                     {
-                        if (dg == 2 && valuezero.Contains("Puerta") && posini >= 0 && posfin > posini)
+                        if (dg == 2 && Engine.FilaPuerta.EsCabecera(valuezero) && posini >= 0 && posfin > posini)
                         {
                             string ini = acabadoDesc.Substring(0, posini + 1);
                             string fin = acabadoDesc.Substring(posfin, acabadoDesc.Length - posfin);
@@ -308,7 +308,7 @@ namespace arquitectSoft.View.Wpf
             string c0 = Convert.ToString(drv.Row[0]);
             if (string.IsNullOrEmpty(c0))
                 e.Row.Background = new SolidColorBrush(Color.FromArgb(0x55, 0x44, 0x44, 0x44));
-            else if (c0.Contains("Puerta"))
+            else if (Engine.FilaPuerta.EsCabecera(c0))
                 e.Row.Background = new SolidColorBrush(Color.FromArgb(0x4D, 0xE0, 0x7B, 0x5B));
             else
                 e.Row.ClearValue(Control.BackgroundProperty);

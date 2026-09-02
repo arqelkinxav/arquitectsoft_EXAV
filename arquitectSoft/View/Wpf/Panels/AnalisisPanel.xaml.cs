@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
@@ -324,7 +324,7 @@ namespace arquitectSoft.View.Wpf.Panels
             foreach (DataRow row in perfil.Rows)
             {
                 string c0 = Convert.ToString(row[0]);
-                if (string.IsNullOrEmpty(c0) || c0.Contains("Puerta")) continue;
+                if (string.IsNullOrEmpty(c0) || Engine.FilaPuerta.EsCabecera(c0)) continue;
                 string desc = Convert.ToString(row[3]);
                 if (string.IsNullOrEmpty(desc)) continue;
                 string cod = Convert.ToString(row[1]);
@@ -510,7 +510,7 @@ namespace arquitectSoft.View.Wpf.Panels
             string v = Convert.ToString(drv.Row[0]);
             if (string.IsNullOrEmpty(v))
                 e.Row.Background = PuertaSeparador;
-            else if (v.Contains("Puerta"))
+            else if (Engine.FilaPuerta.EsCabecera(v))
                 e.Row.Background = PuertaTitulo;
             else if (v.Contains("~"))
                 e.Row.Background = PuertaVariante;

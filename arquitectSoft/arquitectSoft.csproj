@@ -151,6 +151,7 @@
     <Compile Include="Engine\AnalisisEngine.cs" />
     <Compile Include="Engine\DependenciaResolver.cs" />
     <Compile Include="Engine\DumpSql.cs" />
+    <Compile Include="Engine\FilaPuerta.cs" />
     <Compile Include="Engine\RespaldoDiff.cs" />
     <Compile Include="Engine\VidrioResolver.cs" />
     <Compile Include="Engine\ExcelExporter.cs" />

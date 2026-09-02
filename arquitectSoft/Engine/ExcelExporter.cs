@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Data;
 using System.IO;
 using System.Linq;
@@ -376,9 +376,17 @@ namespace arquitectSoft.Engine
                             string cellRange = string.Format(rangetwo, i + valueinitial);
                             string cellIniPuertas = string.Format("A{0}", i + valueinitial);
                             string valueP = wb.Worksheet(sheets).Cell(cellIniPuertas).Value.ToString();
-                            if (valueP.Contains("Puerta"))
+                            if (Engine.FilaPuerta.EsCabecera(valueP))
                             {
-                                wb.Worksheet(sheets).Cells(cellRange).Style.Fill.BackgroundColor = XLColor.LightGreen;
+                                // Enunciado de la puerta (nomenclatura + código + descripción):
+                                // en negrita y sobre fondo propio, para que se separe de un
+                                // vistazo de sus Items en la hoja impresa.
+                                var cabecera = wb.Worksheet(sheets).Cells(cellRange).Style;
+                                cabecera.Fill.BackgroundColor = XLColor.FromArgb(0xFC, 0xE4, 0xD6);
+                                cabecera.Font.Bold = true;
+                                cabecera.Font.FontColor = XLColor.FromArgb(0x7B, 0x33, 0x1C);
+                                cabecera.Border.TopBorder = XLBorderStyleValues.Thin;
+                                cabecera.Border.TopBorderColor = XLColor.FromArgb(0xC2, 0x5A, 0x38);
                             }
                             else
                             {

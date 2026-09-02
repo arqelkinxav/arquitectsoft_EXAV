@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
@@ -550,7 +550,7 @@ namespace arquitectSoft.View.Wpf
             string v = Convert.ToString(drv.Row[0]);
             if (string.IsNullOrEmpty(v))
                 e.Row.Background = PuertaSeparador;
-            else if (v.Contains("Puerta"))
+            else if (Engine.FilaPuerta.EsCabecera(v))
                 e.Row.Background = PuertaTitulo;
             else if (v.Contains("~"))
                 e.Row.Background = PuertaVariante;
