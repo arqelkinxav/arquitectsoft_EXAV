@@ -375,7 +375,16 @@
                 <!-- Resultados -->
                 <Border Grid.Row="2" CornerRadius="12" Background="#141414"
                         BorderBrush="{StaticResource PanelBorder}" BorderThickness="1" Padding="4">
-                    <DataGrid x:Name="Grid" MouseDoubleClick="Grid_DoubleClick">
+                    <!-- IsVirtualizingWhenGrouping es imprescindible: al agrupar, el DataGrid
+                         deja de virtualizar por su cuenta y monta las 223 filas enteras en
+                         cada tecla, que es lo que hacía que escribir fuera a tirones. -->
+                    <DataGrid x:Name="Grid" MouseDoubleClick="Grid_DoubleClick"
+                              EnableRowVirtualization="True"
+                              EnableColumnVirtualization="False"
+                              VirtualizingPanel.IsVirtualizing="True"
+                              VirtualizingPanel.VirtualizationMode="Recycling"
+                              VirtualizingPanel.IsVirtualizingWhenGrouping="True"
+                              VirtualizingPanel.ScrollUnit="Pixel">
                         <!-- Celda de familia "combinada y centrada" (solo en Buscar puerta,
                              que es la unica consulta que agrupa). La familia se dibuja UNA
                              vez por bloque, encima del hueco que deja la primera columna, y

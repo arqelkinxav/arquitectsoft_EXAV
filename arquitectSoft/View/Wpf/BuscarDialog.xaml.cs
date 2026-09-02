@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -110,6 +111,17 @@ namespace arquitectSoft.View.Wpf
         // ===== Búsqueda (port de FrmBuscar.Buscar) =====
         private void Buscar()
         {
+            // Las puertas se leen UNA sola vez y a partir de ahí se filtran en memoria. Son
+            // 223 y el catálogo no cambia mientras el buscador está abierto, así que ir a la
+            // base en cada tecla solo servía para que escribir fuera a tirones (y contra el
+            // servidor de la empresa, mucho peor que contra localhost).
+            if (Consulta == "Comp-Puerta")
+            {
+                if (_puertas == null && !CargarPuertas()) return;
+                PintarPuertas();
+                return;
+            }
+
             var con = new Generals.Conexion();
             string fail = "";
             try
@@ -149,16 +161,6 @@ namespace arquitectSoft.View.Wpf
                                                   terminos, " WHERE Especial = " + fil + " AND ");
                         sql = Generals.Constantes.QUERY_SUBCOMPONENTES + condicion;
                         break;
-                    // Componentes, pero solo los que SON una puerta: los que empiezan por esa
-                    // palabra. Deja fuera los perfiles y módulos de mampara del tipo
-                    // "PERFIL DE IT UNION A PUERTA", que no se agregan al análisis de puertas.
-                    case "Comp-Puerta":
-                        condicion = ConstruirLike(
-                            "CONCAT(CONCAT(Codigo , IFNULL(concat('-',acabados.Codigo_Homologacion),'')),' - ',componentes.Descripcion)",
-                            terminos, " WHERE Especial = " + fil +
-                                      " AND componentes.Descripcion LIKE 'PUERTA%' AND ");
-                        sql = Generals.Constantes.QUERY_COMPONENTES + condicion;
-                        break;
                     default:
                         condicion = ConstruirLike(
                             "CONCAT(CONCAT(Codigo , IFNULL(concat('-',acabados.Codigo_Homologacion),'')),' - ',componentes.Descripcion)",
@@ -170,23 +172,8 @@ namespace arquitectSoft.View.Wpf
                 DataTable tabla = con.ExecuteDataSet(sql, out fail).Tables[0];
                 con.Close();
 
-                if (Consulta == "Comp-Puerta")
-                {
-                    // Agrupada por familia: cada bloque se pinta con la celda de familia
-                    // combinada a la izquierda (ver GroupStyle en el XAML). Sin orden en la
-                    // vista: manda el de la tabla, que ya viene puesto.
-                    var cvs = new System.Windows.Data.CollectionViewSource
-                    {
-                        Source = AgruparPorFamilia(tabla).DefaultView
-                    };
-                    cvs.GroupDescriptions.Add(new System.Windows.Data.PropertyGroupDescription(ColFamilia));
-                    Grid.ItemsSource = cvs.View;
-                }
-                else
-                {
-                    Grid.AutoGenerateColumns = true;
-                    Grid.ItemsSource = tabla.DefaultView;
-                }
+                Grid.AutoGenerateColumns = true;
+                Grid.ItemsSource = tabla.DefaultView;
             }
             catch (Exception ex)
             {
@@ -208,6 +195,72 @@ namespace arquitectSoft.View.Wpf
         }
 
         // ===== Tabla por familias (solo "Buscar puerta") =====
+
+        // Catálogo de puertas completo, leído una sola vez al abrir el buscador.
+        private DataTable _puertas;
+
+        /// <summary>
+        /// Trae de la base TODAS las puertas (las de la palabra PUERTA al principio de la
+        /// descripción: quedan fuera los perfiles y módulos de mampara del tipo "PERFIL DE IT
+        /// UNION A PUERTA", que no se agregan al análisis). Sin filtro de texto ni de
+        /// especial: eso se hace ya en memoria. Devuelve false si no se pudo leer.
+        /// </summary>
+        private bool CargarPuertas()
+        {
+            var con = new Generals.Conexion();
+            string fail = "";
+            try
+            {
+                if (!con.Open(out fail))
+                {
+                    Informar("No se pudo conectar a la base de datos.\n" + fail);
+                    return false;
+                }
+                _puertas = con.ExecuteDataSet(
+                    Generals.Constantes.QUERY_COMPONENTES +
+                    " WHERE componentes.Descripcion LIKE 'PUERTA%'", out fail).Tables[0];
+                con.Close();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                con.Close();
+                Informar("Error al leer las puertas:\n" + ex.Message);
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Filtra el catálogo ya cargado por el texto escrito y por "Sólo especiales", y lo
+        /// vuelca agrupado en la rejilla. Mismo criterio que hacía el LIKE en SQL: todas las
+        /// palabras tienen que aparecer en "código - descripción", sin distinguir mayúsculas.
+        /// </summary>
+        private void PintarPuertas()
+        {
+            string especial = (ChkEspecial.IsChecked == true) ? "1" : "0";
+            var terminos = TxtBuscar.Text.Split(' ')
+                                         .Where(t => t.Trim() != "")
+                                         .ToArray();
+
+            var filas = _puertas.AsEnumerable().Where(r =>
+            {
+                if (Convert.ToString(r["Especial"]).Trim() != especial) return false;
+                string campo = Convert.ToString(r["Codigo"]) + " - " + Convert.ToString(r["Descripcion"]);
+                foreach (string t in terminos)
+                    if (campo.IndexOf(t, StringComparison.OrdinalIgnoreCase) < 0) return false;
+                return true;
+            });
+
+            // Agrupada por familia: cada bloque se pinta con la celda de familia combinada a
+            // la izquierda (ver GroupStyle en el XAML). Sin orden en la vista: manda el de la
+            // tabla, que ya viene puesto por AgruparPorFamilia.
+            var cvs = new System.Windows.Data.CollectionViewSource
+            {
+                Source = AgruparPorFamilia(_puertas, filas).DefaultView
+            };
+            cvs.GroupDescriptions.Add(new System.Windows.Data.PropertyGroupDescription(ColFamilia));
+            Grid.ItemsSource = cvs.View;
+        }
 
         // Columna añadida al final para pintar la familia. Va AL FINAL a proposito: los
         // ReturnItem0..5 se leen por indice de columna (0=Id, 1=Codigo, 2=Descripcion...)
@@ -260,14 +313,14 @@ namespace arquitectSoft.View.Wpf
         /// celda a la izquierda con todas sus puertas al lado, sin repetir el nombre 148
         /// veces. El esquema y el orden de columnas originales se conservan intactos.
         /// </summary>
-        private static DataTable AgruparPorFamilia(DataTable dt)
+        private static DataTable AgruparPorFamilia(DataTable esquema, IEnumerable<DataRow> origen)
         {
-            DataTable orden = dt.Clone();
+            DataTable orden = esquema.Clone();
             orden.Columns.Add(ColFamilia);
             orden.Columns.Add(ColHueco);
-            if (dt == null || dt.Rows.Count == 0) return orden;
+            if (origen == null) return orden;
 
-            var filas = dt.AsEnumerable()
+            var filas = origen
                           .OrderBy(r => Familia(Convert.ToString(r["Codigo"])), StringComparer.OrdinalIgnoreCase)
                           .ThenBy(r => Bloque(Convert.ToString(r["Codigo"])))
                           .ThenBy(r => ClaveNatural(Convert.ToString(r["Codigo"])));
