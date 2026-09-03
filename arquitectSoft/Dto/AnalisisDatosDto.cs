@@ -63,6 +63,52 @@ namespace arquitectSoft.Dto
             return resul;
         }
 
+        /// <summary>
+        /// Cabecera real del TXT (linea 2, la de los nombres de campo de la tabla de Revit).
+        /// Sirve para saber CUANTAS columnas trae de verdad el archivo, que no tiene por que
+        /// coincidir con el juego de columnas declarado en <see cref="setCreateColumns"/>.
+        /// </summary>
+        public List<String> readHeaderTxt(string file, char delimeter)
+        {
+            using (var sr = new StreamReader(file))
+            {
+                sr.ReadLine();                        // titulo de la tabla
+                string cabecera = sr.ReadLine();      // nombres de campo
+                if (cabecera == null) return new List<String>();
+
+                return cabecera.Split(delimeter)
+                               .Select(c => c.Replace("\"", "").Trim())
+                               .ToList();
+            }
+        }
+
+        /// <summary>
+        /// Recoloca "Ubicacion" en la posicion que ocupa DE VERDAD en el TXT de tubos.
+        /// La tabla 4- de Revit es COD | TIPO | ALTURA | Comentarios (4 campos), pero el juego
+        /// de columnas declarado arrastra desde 2021 tres campos que la tabla nunca exporto
+        /// (Largo, Count, Acabado). Como las filas se cargan POR POSICION, el valor de
+        /// Comentarios caia en "Largo" y la ubicacion salia vacia. Aqui se mira la cabecera y
+        /// se pone "Ubicacion" justo donde esta "Comentarios"; si algun proyecto exporta la
+        /// tabla completa, la cabecera lo dice y no se mueve nada.
+        /// </summary>
+        public void AjustarUbicacionPorCabecera(List<String> listColumns, List<String> cabecera)
+        {
+            if (listColumns == null || cabecera == null || cabecera.Count == 0) return;
+
+            int destino = cabecera.FindLastIndex(c =>
+                c.IndexOf("coment", StringComparison.OrdinalIgnoreCase) >= 0 ||
+                c.IndexOf("ubica", StringComparison.OrdinalIgnoreCase) >= 0);
+            if (destino < 0 || destino >= listColumns.Count) return;
+
+            int origen = listColumns.FindIndex(c =>
+                c.IndexOf("Ubica", StringComparison.OrdinalIgnoreCase) >= 0);
+            if (origen < 0 || origen == destino) return;
+
+            string nombre = listColumns[origen];
+            listColumns.RemoveAt(origen);
+            listColumns.Insert(destino, nombre);
+        }
+
         public List<String> setCreateColumns(int index)
         {
             List<String> listColumns = new List<String>();
@@ -118,8 +164,10 @@ namespace arquitectSoft.Dto
                     // Ubicación = Comentarios del modelo genérico, ultima columna de la tabla
                     // de Revit. En los genéricos HORIZONTALES trae la lista de muros que la
                     // pieza abarca ("M1-M2-M3"), que a proposito NO agrupa con "M1".
-                    // Los TXT antiguos (6 columnas) siguen entrando: la fila se añade con los
-                    // valores que traiga y esta queda vacia, igual que antes.
+                    // OJO: la tabla 4- real solo exporta COD | TIPO | ALTURA | Comentarios;
+                    // Largo/Count/Acabado nunca llegan a llenarse. Como la carga es POR
+                    // POSICION, AjustarUbicacionPorCabecera mueve "Ubicacion" al hueco que
+                    // marque la cabecera del archivo antes de montar el DataTable.
                     listColumns.Add("Ubicacion");
                     //-----------------
                     break;
@@ -805,6 +853,32 @@ namespace arquitectSoft.Dto
             return list;
         }
 
+        /// <summary>
+        /// Ubicación con la que la pieza entra en la tabla 'proyecto'. Las de PUERTA (P1, P2...,
+        /// que pone Localizar Muros en los muros cortina de solo puertas) se unifican en
+        /// "PUERTAS": el SP de agrupar segmenta POR ubicación, así que con el nombre unificado
+        /// todas las piezas de puerta de la misma medida caen en una sola fila en vez de una
+        /// por puerta, que es puro ruido cuando las puertas son iguales.
+        ///
+        /// OJO: esto tambien borra el P# de las puertas que se salen de la medida comun (saldran
+        /// en su propia fila por medida, pero rotuladas "PUERTAS"). Distinguir esas exige tocar
+        /// el GROUP BY de spSubComponenteAgrupar y componer el rotulo con GROUP_CONCAT; queda
+        /// pendiente. Mamparas (M#) y techos (T#) no se tocan.
+        /// </summary>
+        private string UbicacionAgrupada(string ubicacion)
+        {
+            string u = (ubicacion ?? "").Replace("\"", "").Trim();
+            if (u.Length < 2) return u;
+            if (u[0] != 'P' && u[0] != 'p') return u;
+
+            // Solo P + dígitos (+ sufijo de apilado: P1A). "PUERTAS" ya unificado entra igual.
+            for (int i = 1; i < u.Length; i++)
+                if (!char.IsDigit(u[i]) && !char.IsLetter(u[i])) return u;
+            if (!char.IsDigit(u[1])) return u;
+
+            return "PUERTAS";
+        }
+
         public List<object[]> getComponenteCalc(DataTable dtmodel, decimal Desperdicio, bool swmergePM, int pSwHerraje)
         {
             List<object[]> list = new List<object[]>();
@@ -815,7 +889,8 @@ namespace arquitectSoft.Dto
                 fail = "";
                 string[] param = { row["id_subcomponente"].ToString(), row["Id_Unidad_Medida"].ToString(),
                                     row["cantidad"].ToString(), row["medida"].ToString(),
-                                    row["Medidida Calculada"].ToString(),row["Corte"].ToString(),row["Ubicación"].ToString(),row["Mecanizado"].ToString() };
+                                    row["Medidida Calculada"].ToString(),row["Corte"].ToString(),
+                                    UbicacionAgrupada(row["Ubicación"].ToString()),row["Mecanizado"].ToString() };
 
                 con.Open(out fail);
                 MySqlDataReader drResult = con.ExecuteReader(Generals.Constantes.QUERY_INSERT_PROYECTO, out fail, param);

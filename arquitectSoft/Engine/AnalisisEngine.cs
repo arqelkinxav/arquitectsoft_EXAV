@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
@@ -398,8 +398,10 @@ namespace arquitectSoft.Engine
                 List<Object[]> listData = new List<Object[]>();
                 List<String> listColumns = new List<String>();
 
+                char separador = dto.ValidationSplit(file);
                 listColumns = dto.setCreateColumns(idDocumento);
-                listData = dto.readFileTxt(file, dto.ValidationSplit(file));
+                dto.AjustarUbicacionPorCabecera(listColumns, dto.readHeaderTxt(file, separador));
+                listData = dto.readFileTxt(file, separador);
 
                 // Las lamas de techo se suman aqui, como filas mas de este despiece: mismo
                 // esquema de columnas y misma tuberia de calculo. Salen en Perfileria
@@ -544,8 +546,9 @@ namespace arquitectSoft.Engine
                 case 1: r.PestanaSugerida = 0; break;  // Perfil Metálico
                 case 2: r.PestanaSugerida = 2; break;  // Vidrio y Paneles
                 case 3: r.PestanaSugerida = 3; break;  // Puertas
-                case 4: r.PestanaSugerida = 6; break;  // Tubos Metálicos
-                case 5: r.PestanaSugerida = 7; break;  // Mamparas
+                // Los tubos no tienen pestaña propia: su despiece se fusiona en Perfilería.
+                case 4: r.PestanaSugerida = 0; break;  // Perfil Metálico
+                case 5: r.PestanaSugerida = 6; break;  // Áreas (mamparas)
             }
         }
 

@@ -238,10 +238,10 @@ namespace arquitectSoft.View
                 List<Object[]> listData = new List<Object[]>();
                 List<String> listColumns = new List<String>();
 
+                char separador = dto.ValidationSplit(file);
                 listColumns = dto.setCreateColumns(idDocumento);
-
-                
-                listData = dto.readFileTxt(file, dto.ValidationSplit(file));
+                dto.AjustarUbicacionPorCabecera(listColumns, dto.readHeaderTxt(file, separador));
+                listData = dto.readFileTxt(file, separador);
 
                 DataTable dtResul = new DataTable();
                 DataTable dtcalculate = new DataTable();

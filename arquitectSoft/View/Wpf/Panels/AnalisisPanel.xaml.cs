@@ -48,6 +48,12 @@ namespace arquitectSoft.View.Wpf.Panels
             foreach (var dg in TodasLasGrillas())
                 dg.AutoGeneratingColumn += Dg_AutoGeneratingColumn;
             DgPreview.AutoGeneratingColumn += Dg_AutoGeneratingColumn;
+
+            // Cada pestaña se renderiza la primera vez que se muestra: ahí se congelan sus
+            // anchos (ver CongelarAnchos).
+            foreach (var dg in TodasLasGrillas())
+                dg.IsVisibleChanged += (sv, ev) => CongelarAnchos((DataGrid)sv);
+            DgPreview.IsVisibleChanged += (sv, ev) => CongelarAnchos(DgPreview);
         }
 
         // Ventana que hospeda el panel (para que los diálogos cristal tengan owner).
@@ -70,7 +76,7 @@ namespace arquitectSoft.View.Wpf.Panels
         private DataGrid[] TodasLasGrillas() => new[]
         {
             DgPerfilMetalico, DgPerfilMetalicoHerraje, DgVidrioPaneles, DgPuertas,
-            DgPuertasHerrajes, DgPuertasCantidad, DgTubos, DgMamparas
+            DgPuertasHerrajes, DgPuertasCantidad, DgMamparas
         };
 
         // ===== Validación: solo dígitos =====
@@ -385,8 +391,12 @@ namespace arquitectSoft.View.Wpf.Panels
             DgPuertas.ItemsSource = Vista(r.Puertas);
             DgPuertasHerrajes.ItemsSource = Vista(r.PuertasHerraje);
             DgPuertasCantidad.ItemsSource = Vista(r.PuertasCantidad);
-            DgTubos.ItemsSource = Vista(r.Tubos);
             DgMamparas.ItemsSource = Vista(r.Mamparas);
+
+            // Las columnas se autogeneran de nuevo en cada análisis: vuelven a Auto y hay que
+            // volver a congelarlas. Solo prende en la pestaña visible; las demás lo hacen al
+            // mostrarse por primera vez (IsVisibleChanged).
+            foreach (var dg in TodasLasGrillas()) CongelarAnchos(dg);
 
             BtnChange.Visibility = r.TieneDatos ? Visibility.Visible : Visibility.Collapsed;
             BtnVidrio.Visibility = r.TieneDatos ? Visibility.Visible : Visibility.Collapsed;
@@ -445,13 +455,14 @@ namespace arquitectSoft.View.Wpf.Panels
             switch (idx)
             {
                 case 0:
-                case 1: return r.PerfilMetalicoRaw;   // Perfil Metálico (+ Herraje)
+                // Los tubos ya no tienen pestaña propia: su despiece va a Perfilería, así que
+                // el crudo del 4- se ve ahí (y es el único crudo si solo se carga el 4-).
+                case 1: return r.PerfilMetalicoRaw ?? r.TubosRaw;   // Perfil Metálico (+ Herraje)
                 case 2: return r.VidrioRaw;
                 case 3:
                 case 4:
                 case 5: return r.PuertasRaw;          // Puertas (+ Herrajes, Cantidad)
-                case 6: return r.TubosRaw;
-                case 7: return r.MamparasRaw;
+                case 6: return r.MamparasRaw;         // Áreas
                 default: return null;
             }
         }
@@ -484,6 +495,23 @@ namespace arquitectSoft.View.Wpf.Panels
             {
                 e.Column.Width = DataGridLength.Auto;
             }
+        }
+
+        // ===== Anchos de columna: medir una vez y congelar =====
+        // DataGridLength.Auto obliga a WPF a re-medir TODAS las celdas de la columna cada
+        // vez que se realizan filas nuevas; con miles de filas el scroll y el cambio de
+        // pestaña se arrastran. Se deja que midan en el primer renderizado de la pestaña y
+        // acto seguido se fija el ancho en píxeles (se sigue pudiendo arrastrar a mano).
+        private static void CongelarAnchos(DataGrid dg)
+        {
+            if (dg == null) return;
+            dg.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() =>
+            {
+                if (!dg.IsVisible || dg.ActualWidth <= 0) return;   // pestaña aún sin renderizar
+                foreach (var c in dg.Columns)
+                    if (c.Width.IsAuto)
+                        c.Width = new DataGridLength(Math.Max(c.ActualWidth, 40));
+            }));
         }
 
         // ===== Coloreado de filas del grid de Puertas =====
@@ -528,7 +556,6 @@ namespace arquitectSoft.View.Wpf.Panels
             DgPuertas.ItemsSource = null;
             DgPuertasHerrajes.ItemsSource = null;
             DgPuertasCantidad.ItemsSource = null;
-            DgTubos.ItemsSource = null;
             DgMamparas.ItemsSource = null;
             _ultimo = null;
             DgPreview.ItemsSource = null;

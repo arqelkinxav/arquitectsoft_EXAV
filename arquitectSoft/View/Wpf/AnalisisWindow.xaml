@@ -1,4 +1,4 @@
-<Window x:Class="arquitectSoft.View.Wpf.AnalisisWindow"
+﻿<Window x:Class="arquitectSoft.View.Wpf.AnalisisWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Análisis de Mamparas"
@@ -437,6 +437,18 @@
             </Setter>
         </Style>
 
+        <!-- Tarjeta de las grillas: MISMO aspecto que Card pero SIN DropShadowEffect.
+             Una sombra sobre el Border obliga a WPF a re-renderizar y re-desenfocar TODO el
+             DataGrid que lleva dentro en cada scroll; con miles de filas la pantalla se
+             arrastra. La sombra no se ve (la tarjeta ocupa toda la pestaña) y sale gratis. -->
+        <Style x:Key="CardGrid" TargetType="Border">
+            <Setter Property="CornerRadius" Value="14"/>
+            <Setter Property="Background" Value="{StaticResource Panel}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource PanelBorder}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="6"/>
+        </Style>
+
         <!-- Tarjeta que envuelve cada DataGrid -->
         <Style x:Key="Card" TargetType="Border">
             <Setter Property="CornerRadius" Value="14"/>
@@ -605,7 +617,7 @@
                 <TabControl x:Name="Tabs" Grid.Row="0" Background="Transparent" BorderThickness="0"
                             Padding="0,6,0,0" SelectionChanged="Tabs_SelectionChanged">
                     <TabItem Header="Perfilería">
-                        <Border Style="{StaticResource Card}">
+                        <Border Style="{StaticResource CardGrid}">
                             <DataGrid x:Name="DgPerfilMetalico">
                                 <DataGrid.ContextMenu>
                                     <ContextMenu>
@@ -617,25 +629,22 @@
                         </Border>
                     </TabItem>
                     <TabItem Header="Herrajes">
-                        <Border Style="{StaticResource Card}"><DataGrid x:Name="DgPerfilMetalicoHerraje"/></Border>
+                        <Border Style="{StaticResource CardGrid}"><DataGrid x:Name="DgPerfilMetalicoHerraje"/></Border>
                     </TabItem>
                     <TabItem Header="Vidrio y Paneles">
-                        <Border Style="{StaticResource Card}"><DataGrid x:Name="DgVidrioPaneles"/></Border>
+                        <Border Style="{StaticResource CardGrid}"><DataGrid x:Name="DgVidrioPaneles"/></Border>
                     </TabItem>
                     <TabItem Header="Puertas">
-                        <Border Style="{StaticResource Card}"><DataGrid x:Name="DgPuertas" LoadingRow="DgPuertas_LoadingRow"/></Border>
+                        <Border Style="{StaticResource CardGrid}"><DataGrid x:Name="DgPuertas" LoadingRow="DgPuertas_LoadingRow"/></Border>
                     </TabItem>
                     <TabItem Header="Puertas Herrajes">
-                        <Border Style="{StaticResource Card}"><DataGrid x:Name="DgPuertasHerrajes"/></Border>
+                        <Border Style="{StaticResource CardGrid}"><DataGrid x:Name="DgPuertasHerrajes"/></Border>
                     </TabItem>
                     <TabItem Header="Puertas Cantidad">
-                        <Border Style="{StaticResource Card}"><DataGrid x:Name="DgPuertasCantidad"/></Border>
-                    </TabItem>
-                    <TabItem Header="Tubos Metálicos">
-                        <Border Style="{StaticResource Card}"><DataGrid x:Name="DgTubos"/></Border>
+                        <Border Style="{StaticResource CardGrid}"><DataGrid x:Name="DgPuertasCantidad"/></Border>
                     </TabItem>
                     <TabItem Header="Áreas">
-                        <Border Style="{StaticResource Card}"><DataGrid x:Name="DgMamparas"/></Border>
+                        <Border Style="{StaticResource CardGrid}"><DataGrid x:Name="DgMamparas"/></Border>
                     </TabItem>
                 </TabControl>
 
@@ -647,7 +656,7 @@
                               ToolTip="Arrastra para cambiar el alto"/>
 
                 <!-- Previsualizador de datos cargados (crudos), redimensionable -->
-                <Border x:Name="PreviewPanel" Grid.Row="2" Style="{StaticResource Card}"
+                <Border x:Name="PreviewPanel" Grid.Row="2" Style="{StaticResource CardGrid}"
                         Margin="0,2,0,0" Visibility="Collapsed">
                     <DockPanel>
                         <Grid DockPanel.Dock="Top" Margin="6,4,6,8">
