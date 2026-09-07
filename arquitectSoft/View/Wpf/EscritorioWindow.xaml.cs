@@ -1,4 +1,4 @@
-using arquitectSoft.View.Wpf.Panels;
+﻿using arquitectSoft.View.Wpf.Panels;
 using System;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -194,6 +194,34 @@ namespace arquitectSoft.View.Wpf
             AbrirPanel("Dependencias de acabado", "", new DependenciasPanel(), 900, 600);
         private void Vidrios_Click(object sender, RoutedEventArgs e) =>
             AbrirPanel("Dependencias de vidrio", "", new VidriosPanel(), 1080, 640);
+        // Vuelca los codigos del catalogo al XML que lee la auditoria de EXAV_Tools en
+        // Revit. Va a mano y no automatico: el catalogo cambia poco, y quien lo exporta
+        // tiene que saber que a partir de ese momento eso es lo que Revit da por bueno.
+        // El archivo se escribe en %AppData%, que es de donde el respaldo de EXAV lo
+        // reparte al resto de equipos.
+        private void CodigosRevit_Click(object sender, RoutedEventArgs e)
+        {
+            string ruta = Engine.CatalogoRevitExporter.RutaPorDefecto;
+            string fail;
+
+            System.Windows.Input.Cursor anterior = this.Cursor;
+            this.Cursor = System.Windows.Input.Cursors.Wait;
+            int total;
+            try { total = Engine.CatalogoRevitExporter.Exportar(ruta, out fail); }
+            finally { this.Cursor = anterior; }
+
+            if (total < 0)
+            {
+                GlassDialog.Informar(this, "Codigos para Revit",
+                    "No se pudo exportar el catalogo." + "\n\n" + fail);
+                return;
+            }
+
+            GlassDialog.Informar(this, "Codigos para Revit",
+                total + " codigos exportados desde " + Generals.Conexion.Destino + "." + "\n\n" +
+                ruta + "\n\n" + "La auditoria de Revit ya comprueba contra esta lista.");
+        }
+
         private void Respaldo_Click(object sender, RoutedEventArgs e) =>
             AbrirPanel("Respaldo de base de datos", "", new DbaBackupPanel(), 560, 300);
         private void Importar_Click(object sender, RoutedEventArgs e) =>

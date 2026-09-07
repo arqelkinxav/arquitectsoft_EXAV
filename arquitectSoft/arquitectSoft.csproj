@@ -149,6 +149,7 @@
     <Compile Include="Dto\VidrioDto.cs" />
     <Compile Include="Engine\AcabadoChanger.cs" />
     <Compile Include="Engine\AnalisisEngine.cs" />
+    <Compile Include="Engine\CatalogoRevitExporter.cs" />
     <Compile Include="Engine\DependenciaResolver.cs" />
     <Compile Include="Engine\DumpSql.cs" />
     <Compile Include="Engine\FilaPuerta.cs" />
