@@ -123,6 +123,16 @@ namespace arquitectSoft.Engine
                 FileInfo archivo = new FileInfo(file);
                 directorio = archivo.DirectoryName;
 
+                // Los TXT "PRICES..." son despieces homologados para arquisofprices (el
+                // add-in de Revit los saca junto a los de siempre): mismos códigos pero
+                // igualados a uno solo, y SIN el detalle pieza a pieza que necesitamos aquí.
+                // No son para arquitectSoft. Se descartan de plano: si no, al no tener
+                // prefijo numérico caerían por la rama de "información del proyecto" y
+                // machacarían el código/nombre con su línea de título. No afectan a las
+                // cantidades (nunca entran al conteo), pero mejor ni mirarlos.
+                if (archivo.Name.StartsWith("PRICES", StringComparison.OrdinalIgnoreCase))
+                    continue;
+
                 // Los despieces se nombran "N-...txt" (N = id de documento). Un TXT cuyo
                 // prefijo NO sea numérico se trata como TABLA DE INFORMACIÓN DEL PROYECTO
                 // (contiene el código y el nombre del proyecto), no como un despiece.
