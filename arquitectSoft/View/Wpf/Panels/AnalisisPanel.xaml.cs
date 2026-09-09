@@ -319,9 +319,18 @@ namespace arquitectSoft.View.Wpf.Panels
         /// <summary>
         /// Acabado POR DEFECTO de la perfilería = el del CÓDIGO "01" (el sufijo "-01" del
         /// código del perfil), NO por descripción/homologación. Devuelve "CÓDIGO - DESC"
-        /// como el buscador. Recorre las filas de perfil (no separador, no cabecera "Puerta"):
-        /// el código va en la col 1 ("BASE-ACAB") y la descripción del acabado en la col 3.
-        /// Si no hay ninguna fila con código de acabado "01", cae a la primera fila válida.
+        /// como el buscador: el código va en la col 1 ("BASE-ACAB") y la descripción del
+        /// acabado en la col 3. Si no hay ninguna fila con código de acabado "01", cae a la
+        /// primera fila válida.
+        ///
+        /// OJO: aquí NO se puede preguntar <see cref="Engine.FilaPuerta.EsCabecera"/>. Esa
+        /// pregunta vale para las tablas de PUERTAS, donde la columna 0 es la nomenclatura;
+        /// en Perfil Metálico la columna 0 es el id_subcomponente ("622"), así que respondía
+        /// que sí a todo y se saltaba la tabla entera. El acabado por defecto salía vacío y
+        /// con él se caían en silencio la precarga del acabado en el diálogo de exportar, el
+        /// cambio de acabado desde ese diálogo y la resolución de los MOD…
+        /// Las filas que hay que descartar (separadores, enunciados) se reconocen porque su
+        /// código no trae el sufijo de acabado, que es lo que se mira ahora.
         /// </summary>
         private static string AcabadoPorDefecto(DataTable perfil)
         {
@@ -329,13 +338,13 @@ namespace arquitectSoft.View.Wpf.Panels
             string primera = "";
             foreach (DataRow row in perfil.Rows)
             {
-                string c0 = Convert.ToString(row[0]);
-                if (string.IsNullOrEmpty(c0) || Engine.FilaPuerta.EsCabecera(c0)) continue;
+                string cod = Convert.ToString(row[1]);
+                if (!cod.Contains("-")) continue;
                 string desc = Convert.ToString(row[3]);
                 if (string.IsNullOrEmpty(desc)) continue;
-                string cod = Convert.ToString(row[1]);
-                string codAcab = cod.Contains("-") ? cod.Split('-')[1].Trim() : "";
-                string full = codAcab != "" ? codAcab + " - " + desc : desc;
+                string codAcab = cod.Split('-')[1].Trim();
+                if (codAcab == "") continue;
+                string full = codAcab + " - " + desc;
                 if (primera == "") primera = full;
                 if (codAcab == "01") return full;
             }
