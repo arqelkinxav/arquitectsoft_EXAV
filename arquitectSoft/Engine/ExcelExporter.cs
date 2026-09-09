@@ -45,17 +45,19 @@ namespace arquitectSoft.Engine
                 int valueinitialFoot = 0;
                 int PMValueFinish = 0;
                 int PMHValueFinish = 0;
-                string Range = string.Format("A{0}:G{0}", valueinitial);
                 string Descheader = "";
                 string Rangeheader = "A2:G4";
                 string RangeSubheader = "A5:J6";
                 string Rangetopfooter;
                 string RangeSubfooter = "H5:J6";
-                string rangetwo = "A{0}:G{0}";
                 string sheets = "";
 
                 string path = Directory.GetCurrentDirectory();
                 var imagePath = @"\LOGO.jpg";
+
+                // Gris del bandeado de filas. Suficiente para verse impreso en blanco y
+                // negro, sin ensuciar la hoja como el LightGray de antes.
+                XLColor bandaFila = XLColor.FromArgb(0xEC, 0xEC, 0xEC);
 
                 DataTable tabla = new DataTable();
                 for (int Datagrid = 1; Datagrid <= 9; Datagrid++)
@@ -73,7 +75,6 @@ namespace arquitectSoft.Engine
                             sheets = "PERFIL METALICO";
                             tabla = res.PerfilMetalico;
                             PMValueFinish = Filas(res.PerfilMetalico);
-                            Range = string.Format("A{0}:H{0}", valueinitial);
                             Descheader = sheets;
                             break;
                         case 2:
@@ -85,18 +86,15 @@ namespace arquitectSoft.Engine
                                 valuesubheaderValue = valueinitial - 2;
                             }
 
-                            rangetwo = "A{0}:H{0}";
                             sheets = "PERFIL METALICO";
                             Descheader = "PUERTAS";
                             RangeSubheader = string.Format("A{0}:G{1}", valuesubheaderDescr, valuesubheaderValue);
-                            Range = string.Format("A{0}:H{0}", valueinitial);
                             tabla = res.Puertas;
                             break;
                         case 3:
                             sheets = "PERFIL METALICO HERRAJES";
                             tabla = res.PerfilMetalicoHerraje;
                             PMHValueFinish = Filas(res.PerfilMetalicoHerraje);
-                            Range = string.Format("A{0}:H{0}", valueinitial);
                             Descheader = sheets;
                             break;
                         case 4:
@@ -108,44 +106,34 @@ namespace arquitectSoft.Engine
                                 valuesubheaderValue = valueinitial - 2;
                             }
 
-                            rangetwo = "A{0}:H{0}";
                             sheets = "PERFIL METALICO HERRAJES";
                             Descheader = "PUERTAS HERRAJES";
-                            Range = string.Format("A{0}:H{0}", valueinitial);
                             RangeSubheader = string.Format("A{0}:G{1}", valuesubheaderDescr, valuesubheaderValue);
                             tabla = res.PuertasHerraje;
                             break;
                         case 5:
-                            Range = string.Format("A{0}:H{0}", valueinitial);
                             sheets = "VIDRIOS Y PANELES";
                             tabla = res.VidrioPaneles;
                             Descheader = sheets;
                             break;
                         case 6:
-                            Range = string.Format("A{0}:E{0}", valueinitial);
-                            rangetwo = "A{0}:E{0}";
                             sheets = "PUERTAS CANTIDAD";
                             Descheader = sheets;
                             tabla = res.PuertasCantidad;
                             wrapTextDefault = false;
                             break;
                         case 7:
-                            Range = string.Format("A{0}:E{0}", valueinitial);
                             sheets = "TUBO METALICOS";
                             Descheader = sheets;
                             tabla = res.Tubos;
                             break;
                         case 8:
-                            Range = string.Format("A{0}:H{0}", valueinitial);
-                            rangetwo = "A{0}:E{0}";
                             sheets = "MAMPARAS";
                             Descheader = sheets;
                             tabla = res.Mamparas;
                             wrapTextDefault = false;
                             break;
                         case 9:
-                            Range = string.Format("A{0}:H{0}", valueinitial);
-                            rangetwo = "A{0}:E{0}";
                             sheets = "ALBARAN";
                             Descheader = sheets;
                             tabla = res.PerfilMetalico;
@@ -370,30 +358,52 @@ namespace arquitectSoft.Engine
                         wb.Worksheet(sheets).Range(RangeSubheader).Style.Border.TopBorder = XLBorderStyleValues.Thin;
 
                         //Set the color of Header Row.
-                        wb.Worksheet(sheets).Cells(Range).Style.Fill.BackgroundColor = XLColor.DarkCoral;
+                        wb.Worksheet(sheets).Range(
+                                wb.Worksheet(sheets).Cell(valueinitial, 1),
+                                wb.Worksheet(sheets).Cell(valueinitial, dt.Columns.Count))
+                            .Style.Fill.BackgroundColor = XLColor.DarkCoral;
+
+                        // El enunciado de una puerta se reconoce por la columna 0 (la
+                        // nomenclatura), y eso SOLO tiene sentido en los dos bloques que
+                        // listan puertas. En Perfilería esa columna es el id_subcomponente,
+                        // en Herrajes/Vidrios/Mamparas un código: preguntarlo allí daba
+                        // siempre que sí y teñía de naranja la hoja entera.
+                        bool bloqueDePuertas = (Datagrid == 2 || Datagrid == 4);
+                        int banda = 0;
+                        var hoja = wb.Worksheet(sheets);
                         for (int i = 1; i <= dt.Rows.Count; i++)
                         {
-                            string cellRange = string.Format(rangetwo, i + valueinitial);
-                            string cellIniPuertas = string.Format("A{0}", i + valueinitial);
-                            string valueP = wb.Worksheet(sheets).Cell(cellIniPuertas).Value.ToString();
-                            if (Engine.FilaPuerta.EsCabecera(valueP))
+                            int filaExcel = i + valueinitial;
+                            // El bandeado cubre TODAS las columnas de la tabla (el rango fijo
+                            // de antes se quedaba corto en las hojas anchas y la banda salía
+                            // cortada a media fila).
+                            var celdas = hoja.Range(hoja.Cell(filaExcel, 1), hoja.Cell(filaExcel, dt.Columns.Count));
+                            string valueP = hoja.Cell(filaExcel, 1).Value.ToString();
+
+                            if (bloqueDePuertas && Engine.FilaPuerta.EsCabecera(valueP))
                             {
                                 // Enunciado de la puerta (nomenclatura + código + descripción):
                                 // en negrita y sobre fondo propio, para que se separe de un
                                 // vistazo de sus Items en la hoja impresa.
-                                var cabecera = wb.Worksheet(sheets).Cells(cellRange).Style;
+                                var cabecera = celdas.Style;
                                 cabecera.Fill.BackgroundColor = XLColor.FromArgb(0xFC, 0xE4, 0xD6);
                                 cabecera.Font.Bold = true;
                                 cabecera.Font.FontColor = XLColor.FromArgb(0x7B, 0x33, 0x1C);
                                 cabecera.Border.TopBorder = XLBorderStyleValues.Thin;
                                 cabecera.Border.TopBorderColor = XLColor.FromArgb(0xC2, 0x5A, 0x38);
+                                banda = 0;   // los Items de esta puerta empiezan a contar de cero
+                            }
+                            else if (FilaSeparadora(dt.Rows[i - 1]))
+                            {
+                                // Separador entre puertas: en blanco, que para eso está.
+                                celdas.Style.Fill.BackgroundColor = XLColor.White;
                             }
                             else
                             {
-                                if (i % 2 != 0)
-                                    wb.Worksheet(sheets).Cells(cellRange).Style.Fill.BackgroundColor = XLColor.White;
-                                else
-                                    wb.Worksheet(sheets).Cells(cellRange).Style.Fill.BackgroundColor = XLColor.LightGray;
+                                // Bandeado: una fila sí y otra no, para leer la línea de un
+                                // tirón sin tener que rejillar la hoja con bordes.
+                                celdas.Style.Fill.BackgroundColor =
+                                    (banda++ % 2 == 0) ? XLColor.White : bandaFila;
                             }
 
                             if (wrapTextDefault)
@@ -690,6 +700,23 @@ namespace arquitectSoft.Engine
         }
 
         /// <summary>Redondea SIEMPRE hacia arriba (techo) la columna "cantidad", sin decimales.</summary>
+        /// <summary>
+        /// Fila separadora: la que se mete entre puerta y puerta, sin nada dentro. Se
+        /// admite el "0" porque <see cref="RedondearCantidad"/> ya ha pasado por ahí y le
+        /// ha dejado un cero en la columna de cantidad.
+        /// </summary>
+        private static bool FilaSeparadora(DataRow row)
+        {
+            foreach (var v in row.ItemArray)
+            {
+                string s = Convert.ToString(v);
+                if (string.IsNullOrWhiteSpace(s)) continue;
+                if (s.Trim() == "0") continue;
+                return false;
+            }
+            return true;
+        }
+
         private static void RedondearCantidad(DataTable dt)
         {
             if (dt == null) return;
