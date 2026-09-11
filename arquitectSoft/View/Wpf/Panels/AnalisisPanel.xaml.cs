@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -33,16 +34,25 @@ namespace arquitectSoft.View.Wpf.Panels
         private readonly AnalisisEngine _engine = new AnalisisEngine();
         private DispatcherTimer _recalcTimer;
         private int _generacion = 0;        // descarta resultados de cálculos obsoletos
+        private readonly SemaphoreSlim _calcLock = new SemaphoreSlim(1, 1);   // un cálculo cada vez
+        private int _medidaCalc = -1, _pctCalc = -1;   // valores con los que se lanzó el último cálculo
 
         public AnalisisPanel()
         {
             InitializeComponent();
 
-            // Debounce: recalcula 0,25 s después del último cambio de Medida/Desperdicio.
-            _recalcTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(250) };
+            // Debounce de las flechitas: recalcula 0,4 s después del último clic.
+            _recalcTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(400) };
             _recalcTimer.Tick += RecalcTimer_Tick;
-            TxtMedidaBase.TextChanged += Valor_Changed;
-            TxtDesperdicio.TextChanged += Valor_Changed;
+
+            // Escrito a mano: se recalcula al pulsar Enter o al salir del cuadro, NO con cada
+            // tecla (escribiendo "1500" se calculaba con 1, 15 y 150 por el camino).
+            foreach (var tb in new[] { TxtMedidaBase, TxtDesperdicio })
+            {
+                tb.TextChanged += Valor_Changed;
+                tb.KeyDown += Valor_KeyDown;
+                tb.LostKeyboardFocus += (s, ev) => AplicarValores();
+            }
 
             // Ajuste de columnas (centrado + wrap de descripción) en todas las grillas.
             foreach (var dg in TodasLasGrillas())
@@ -87,13 +97,21 @@ namespace arquitectSoft.View.Wpf.Panels
 
         // ===== Spinners =====
         private void MedidaUp_Click(object sender, RoutedEventArgs e) =>
-            TxtMedidaBase.Text = Clamp(LeerEntero(TxtMedidaBase.Text) + 1, MedidaMin, MedidaMax).ToString();
+            Flecha(TxtMedidaBase, +1, MedidaMin, MedidaMax);
         private void MedidaDown_Click(object sender, RoutedEventArgs e) =>
-            TxtMedidaBase.Text = Clamp(LeerEntero(TxtMedidaBase.Text) - 1, MedidaMin, MedidaMax).ToString();
+            Flecha(TxtMedidaBase, -1, MedidaMin, MedidaMax);
         private void DesperdicioUp_Click(object sender, RoutedEventArgs e) =>
-            TxtDesperdicio.Text = Clamp(LeerEntero(TxtDesperdicio.Text) + 1, DesperdicioMin, DesperdicioMax).ToString();
+            Flecha(TxtDesperdicio, +1, DesperdicioMin, DesperdicioMax);
         private void DesperdicioDown_Click(object sender, RoutedEventArgs e) =>
-            TxtDesperdicio.Text = Clamp(LeerEntero(TxtDesperdicio.Text) - 1, DesperdicioMin, DesperdicioMax).ToString();
+            Flecha(TxtDesperdicio, -1, DesperdicioMin, DesperdicioMax);
+
+        private void Flecha(TextBox tb, int paso, int min, int max)
+        {
+            tb.Text = Clamp(LeerEntero(tb.Text) + paso, min, max).ToString();
+            if (!_engine.DatosCargados) return;
+            _recalcTimer.Stop();
+            _recalcTimer.Start();
+        }
 
         private static int LeerEntero(string texto)
         {
@@ -201,17 +219,48 @@ namespace arquitectSoft.View.Wpf.Panels
             await CargarArchivos(rutas);
         }
 
-        // ===== Recálculo en tiempo real (debounce) =====
+        // ===== Recálculo al confirmar Medida Base / % Desperdicio =====
+        private bool ValoresPendientes =>
+            LeerEntero(TxtMedidaBase.Text) != _medidaCalc || LeerEntero(TxtDesperdicio.Text) != _pctCalc;
+
         private void Valor_Changed(object sender, TextChangedEventArgs e)
         {
-            if (!_engine.DatosCargados) return;
-            _recalcTimer.Stop();
-            _recalcTimer.Start();
+            if (_engine.DatosCargados && ValoresPendientes)
+                LblEstado.Text = "Pulsa Enter para recalcular (Esc deshace).";
         }
 
-        private async void RecalcTimer_Tick(object sender, EventArgs e)
+        private void Valor_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter || e.Key == Key.Return)
+            {
+                e.Handled = true;
+                AplicarValores();
+            }
+            else if (e.Key == Key.Escape && _medidaCalc >= 0)
+            {
+                e.Handled = true;
+                TxtMedidaBase.Text = _medidaCalc.ToString();
+                TxtDesperdicio.Text = _pctCalc.ToString();
+                LblEstado.Text = "Valores restaurados.";
+            }
+        }
+
+        private void RecalcTimer_Tick(object sender, EventArgs e) => AplicarValores();
+
+        // Lanza el recálculo solo si los valores cambiaron respecto al último cálculo.
+        private async void AplicarValores()
         {
             _recalcTimer.Stop();
+            if (!_engine.DatosCargados || !ValoresPendientes) return;
+
+            // Medida base vacía o 0 no tiene sentido: se vuelve a la que había.
+            if (LeerEntero(TxtMedidaBase.Text) <= 0 && _medidaCalc > 0)
+            {
+                TxtMedidaBase.Text = _medidaCalc.ToString();
+                if (!ValoresPendientes) return;
+            }
+            if (TxtDesperdicio.Text.Trim() == "") TxtDesperdicio.Text = "0";
+
             await RecalcularAsync(seleccionarPestana: false);
         }
 
@@ -225,20 +274,31 @@ namespace arquitectSoft.View.Wpf.Panels
 
             int medida = LeerEntero(TxtMedidaBase.Text);
             int pct = LeerEntero(TxtDesperdicio.Text);
+            _medidaCalc = medida;
+            _pctCalc = pct;
             int gen = ++_generacion;
 
             LblEstado.Text = "Calculando…";
             SpinnerCargando();
-            var sw = Stopwatch.StartNew();
+            var sw = new Stopwatch();
 
             ResultadoAnalisis res = null;
             Exception err = null;
+
+            // UN cálculo cada vez. El motor guarda tablas en sus campos, cambia globales
+            // (Global.SwSegmentadoUbi) y usa tablas temporales de MySQL: dos corridas a la vez
+            // se pisaban y salían herrajes en Perfilería o se perdía la columna Ubicación.
+            // Si mientras espera turno llega un cálculo más nuevo, este ni siquiera corre.
+            await _calcLock.WaitAsync();
             try
             {
+                if (gen != _generacion) return;
+                sw.Start();
                 // El motor NO toca UI → seguro en hilo de fondo.
                 res = await Task.Run(() => _engine.Ejecutar(medida, pct));
             }
             catch (Exception ex) { err = ex; }
+            finally { _calcLock.Release(); }
 
             sw.Stop();
             if (gen != _generacion) return;   // ya hay un cálculo más reciente: ignorar este
@@ -559,6 +619,8 @@ namespace arquitectSoft.View.Wpf.Panels
         private void Cancelar_Click(object sender, RoutedEventArgs e)
         {
             _generacion++;   // descarta cualquier cálculo en vuelo
+            _recalcTimer.Stop();
+            SpinnerOcultar();
             DgPerfilMetalico.ItemsSource = null;
             DgPerfilMetalicoHerraje.ItemsSource = null;
             DgVidrioPaneles.ItemsSource = null;
