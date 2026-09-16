@@ -105,6 +105,7 @@ namespace arquitectSoft.View.Wpf.Panels
             string fail = _dto.GuardarSistema(_idSistema, prefijo, (TxtDescripcion.Text ?? "").Trim(), TipoEstandar);
             if (!string.IsNullOrEmpty(fail)) { LblEstado.Text = "Error al guardar el sistema: " + fail; return; }
 
+            Engine.CatalogoRevitExporter.ExportarEnSegundoPlano();   // la auditoría de Revit mira estos prefijos
             CargarSistemas();
             SeleccionarSistema(prefijo);
             LblEstado.Text = "Sistema guardado.";
@@ -125,6 +126,7 @@ namespace arquitectSoft.View.Wpf.Panels
             string fail = _dto.EliminarSistema(_idSistema);
             if (!string.IsNullOrEmpty(fail)) { LblEstado.Text = "Error al eliminar: " + fail; return; }
 
+            Engine.CatalogoRevitExporter.ExportarEnSegundoPlano();
             CargarSistemas();
             NuevoSistema_Click(null, null);
             LblEstado.Text = "Sistema eliminado.";

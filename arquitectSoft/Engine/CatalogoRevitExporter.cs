@@ -44,11 +44,49 @@ namespace arquitectSoft.Engine
             }
         }
 
+        // Det / DetEsp = cuántas piezas tiene el componente en su despiece normal (perfiles,
+        // herrajes) y en el especial (vidrios y paneles). Un código que existe pero no trae
+        // nada ahí no da error al analizar: sencillamente no saca piezas. La auditoría lo
+        // avisa aparte de "no existe".
         private const string SQL =
-            "SELECT c.Codigo, c.Descripcion, a.Codigo_Homologacion " +
+            "SELECT c.Codigo, c.Descripcion, a.Codigo_Homologacion, c.Especial, " +
+            "(SELECT COUNT(*) FROM componentes_detalle d WHERE d.Id_componente = c.Id_Componente) Det, " +
+            "(SELECT COUNT(*) FROM componentes_especial_detalle e WHERE e.Id_Componente_especial = c.Id_Componente) DetEsp " +
             "FROM componentes c " +
             "LEFT JOIN acabados a ON a.Id_Acabado = c.AcabadoPrincipal " +
             "ORDER BY c.Codigo";
+
+        // Sistemas de la pantalla Vidrios, con cuántas sustituciones tienen. Tabla beta_: en
+        // una base sin la migración 005 no existe, y eso no debe impedir exportar los códigos.
+        private const string SQL_SISTEMAS =
+            "SELECT s.Prefijo, IFNULL(s.Descripcion,'') Descripcion, " +
+            "(SELECT COUNT(*) FROM beta_vidrio_regla r WHERE r.Id_Sistema = s.Id) Reglas " +
+            "FROM beta_vidrio_sistema s ORDER BY s.Prefijo";
+
+        /// <summary>
+        /// Exporta a la ruta de siempre sin enseñar nada. Lo llaman el arranque y las pantallas
+        /// que cambian códigos o sistemas, para que la auditoría de Revit compare siempre contra
+        /// la base al día sin que nadie tenga que acordarse del botón. Un fallo aquí no puede
+        /// molestar a quien está guardando un componente: se traga y ya.
+        /// </summary>
+        public static void ExportarEnSilencio()
+        {
+            // Dos guardados seguidos lanzan dos exportaciones: sin el candado las dos
+            // escribirían el mismo .tmp a la vez.
+            lock (Candado)
+            {
+                try { string fail; Exportar(RutaPorDefecto, out fail); }
+                catch { }
+            }
+        }
+
+        private static readonly object Candado = new object();
+
+        /// <summary>Lo mismo en segundo plano, para no congelar la pantalla.</summary>
+        public static void ExportarEnSegundoPlano()
+        {
+            System.Threading.Tasks.Task.Run(() => ExportarEnSilencio());
+        }
 
         /// <summary>
         /// Vuelca los códigos del catálogo al XML. Devuelve cuántos componentes se
@@ -63,9 +101,12 @@ namespace arquitectSoft.Engine
             if (!cn.Open(out fail)) return -1;
 
             DataSet ds;
+            DataSet dsSistemas = null;
             try
             {
                 ds = cn.ExecuteDataSet(SQL, out fail);
+                string failSistemas;
+                try { dsSistemas = cn.ExecuteDataSet(SQL_SISTEMAS, out failSistemas); } catch { dsSistemas = null; }
             }
             finally
             {
@@ -100,6 +141,12 @@ namespace arquitectSoft.Engine
                     w.WriteStartElement("CatalogoCodigos");
                     w.WriteAttributeString("Generado", DateTime.Now.ToString("s", CultureInfo.InvariantCulture));
                     w.WriteAttributeString("Origen", Conexion.Destino);
+                    w.WriteAttributeString("Version", "2");
+
+                    // Sin la tabla de sistemas no se escribe el atributo: así el add-in distingue
+                    // "no hay ningún sistema dado de alta" de "este catálogo no los trae".
+                    DataTable dtSis = (dsSistemas != null && dsSistemas.Tables.Count > 0) ? dsSistemas.Tables[0] : null;
+                    if (dtSis != null) w.WriteAttributeString("ConSistemas", "1");
 
                     foreach (DataRow r in dt.Rows)
                     {
@@ -112,8 +159,25 @@ namespace arquitectSoft.Engine
                         w.WriteAttributeString("Cod", cod);
                         if (acab.Length > 0) w.WriteAttributeString("CodHom", cod + "-" + acab);
                         w.WriteAttributeString("Desc", Texto(r, "Descripcion"));
+                        w.WriteAttributeString("Esp", Texto(r, "Especial") == "1" ? "1" : "0");
+                        w.WriteAttributeString("Det", Numero(r, "Det"));
+                        w.WriteAttributeString("DetEsp", Numero(r, "DetEsp"));
                         w.WriteEndElement();
                         total++;
+                    }
+
+                    if (dtSis != null)
+                    {
+                        foreach (DataRow r in dtSis.Rows)
+                        {
+                            string prefijo = Texto(r, "Prefijo");
+                            if (prefijo.Length == 0) continue;
+                            w.WriteStartElement("S");
+                            w.WriteAttributeString("Prefijo", prefijo);
+                            w.WriteAttributeString("Desc", Texto(r, "Descripcion"));
+                            w.WriteAttributeString("Reglas", Numero(r, "Reglas"));
+                            w.WriteEndElement();
+                        }
                     }
 
                     w.WriteEndElement();
@@ -130,6 +194,12 @@ namespace arquitectSoft.Engine
             }
 
             return total;
+        }
+
+        private static string Numero(DataRow r, string columna)
+        {
+            long n;
+            return long.TryParse(Texto(r, columna), out n) ? n.ToString(CultureInfo.InvariantCulture) : "0";
         }
 
         private static string Texto(DataRow r, string columna)

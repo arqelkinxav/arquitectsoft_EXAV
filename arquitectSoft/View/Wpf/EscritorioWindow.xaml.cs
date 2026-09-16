@@ -27,7 +27,12 @@ namespace arquitectSoft.View.Wpf
         {
             InitializeComponent();
             SourceInitialized += OnSourceInitialized;
-            Loaded += (s, e) => { CargarFondo(); AplicarPermisos(); MostrarSesion(); };
+            Loaded += (s, e) =>
+            {
+                CargarFondo(); AplicarPermisos(); MostrarSesion();
+                // Catálogo para la auditoría de Revit, al día desde que se abre el programa.
+                Engine.CatalogoRevitExporter.ExportarEnSegundoPlano();
+            };
 
             // Tamaño "restaurado" centrado en el MONITOR PRINCIPAL (al que se vuelve si el
             // usuario quita el maximizado con doble clic en la barra de título).
@@ -195,10 +200,10 @@ namespace arquitectSoft.View.Wpf
         private void Vidrios_Click(object sender, RoutedEventArgs e) =>
             AbrirPanel("Dependencias de vidrio", "", new VidriosPanel(), 1080, 640);
         // Vuelca los codigos del catalogo al XML que lee la auditoria de EXAV_Tools en
-        // Revit. Va a mano y no automatico: el catalogo cambia poco, y quien lo exporta
-        // tiene que saber que a partir de ese momento eso es lo que Revit da por bueno.
-        // El archivo se escribe en %AppData%, que es de donde el respaldo de EXAV lo
-        // reparte al resto de equipos.
+        // Revit. Ya se exporta SOLO (al abrir el programa y al guardar componentes o
+        // sistemas de vidrio): la auditoria la pasa Elkin en Olimpo, que es donde vive la
+        // base final, y tener que acordarse del boton le hacia enterarse tarde. El boton
+        // queda para forzarlo y ver cuantos codigos salieron.
         private void CodigosRevit_Click(object sender, RoutedEventArgs e)
         {
             string ruta = Engine.CatalogoRevitExporter.RutaPorDefecto;

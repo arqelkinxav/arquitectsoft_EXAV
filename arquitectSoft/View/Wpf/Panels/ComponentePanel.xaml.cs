@@ -579,6 +579,7 @@ namespace arquitectSoft.View.Wpf.Panels
                 return;
             }
             resul = dto.DeleteComponent(id);
+            Engine.CatalogoRevitExporter.ExportarEnSegundoPlano();
             BloquearCancelar();
             ClearComponent();
             HabilitarEspecial(false);
@@ -687,6 +688,7 @@ namespace arquitectSoft.View.Wpf.Panels
                 Sub_ComponentEspecial[] esp = ChkEspecial.IsChecked == true ? _itemsEsp.ToArray() : new Sub_ComponentEspecial[0];
                 resul = dto.SaveComponent(TxtCodigo.Text, TxtDescripcion.Text, ChkEspecial.IsChecked == true,
                     AcabadoSeleccionado(), _opc, _items.ToArray(), esp, resul);
+                Engine.CatalogoRevitExporter.ExportarEnSegundoPlano();
                 ClearComponent();
                 BloquearCancelar();
                 HabilitarEspecial(false);
