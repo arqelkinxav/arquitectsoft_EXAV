@@ -154,6 +154,7 @@
     <Compile Include="View\Wpf\SelectorCarpeta.cs" />
     <Compile Include="Engine\CatalogoRevitExporter.cs" />
     <Compile Include="Engine\DependenciaResolver.cs" />
+    <Compile Include="Engine\Novedades.cs" />
     <Compile Include="Engine\DumpSql.cs" />
     <Compile Include="Engine\FilaPuerta.cs" />
     <Compile Include="Engine\RespaldoDiff.cs" />
@@ -759,4 +760,13 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- WPF: habilita la compilacion de XAML (markup compile) en este proyecto WinForms -->
   <Import Project="$(MSBuildToolsPath)\Microsoft.WinFx.targets" />
+  <!-- Novedades: la lista de commits va dentro del .exe para el aviso de "Actualización
+       instalada" (Engine\Novedades.cs). Si no hay git, se compila sin ella y no sale aviso. -->
+  <Target Name="GenerarNovedades" BeforeTargets="BeforeBuild">
+    <Exec Command="git -C &quot;$(MSBuildProjectDirectory)&quot; log -n 80 --pretty=reference &gt; &quot;$(IntermediateOutputPath)Novedades.txt&quot;"
+          ContinueOnError="true" StandardOutputImportance="low" />
+    <ItemGroup Condition="Exists('$(IntermediateOutputPath)Novedades.txt')">
+      <EmbeddedResource Include="$(IntermediateOutputPath)Novedades.txt" LogicalName="arquitectSoft.Novedades.txt" />
+    </ItemGroup>
+  </Target>
 </Project>

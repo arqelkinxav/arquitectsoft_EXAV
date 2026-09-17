@@ -134,6 +134,19 @@ namespace arquitectSoft.View.Wpf
             return ok;
         }
 
+        /// <summary>"Actualización instalada": mensaje + lista de cambios, con un botón.</summary>
+        public static void Novedades(Window owner, string titulo, string mensaje,
+                                     System.Collections.IEnumerable cambios)
+        {
+            var d = Crear(owner, titulo, mensaje);
+            d.Width = 640;
+            d.PanelLista.Visibility = Visibility.Visible;
+            d.ListaCambios.ItemsSource = cambios;
+            d.BtnPrimario.Content = "Entendido";
+            d.BtnSecundario.Visibility = Visibility.Collapsed;
+            d.ShowDialog();
+        }
+
         private static GlassDialog Crear(Window owner, string titulo, string mensaje)
         {
             var d = new GlassDialog();

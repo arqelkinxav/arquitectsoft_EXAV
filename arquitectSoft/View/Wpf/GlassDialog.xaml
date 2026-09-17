@@ -216,6 +216,32 @@
                            Foreground="#7A7A7A" FontSize="10" Margin="3,8,0,0" TextWrapping="Wrap"/>
             </StackPanel>
 
+            <!-- Lista de cambios (sólo modo novedades) -->
+            <Border x:Name="PanelLista" Grid.Row="2" Margin="0,14,0,0" Visibility="Collapsed"
+                    CornerRadius="10" Background="#66000000" BorderBrush="{StaticResource PanelBorder}" BorderThickness="1">
+                <ScrollViewer MaxHeight="380" VerticalScrollBarVisibility="Auto" Padding="4,6">
+                    <ItemsControl x:Name="ListaCambios">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="10,6">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="18"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="&#xE73E;" FontFamily="Segoe MDL2 Assets" FontSize="11"
+                                               Foreground="{StaticResource Accent}" Margin="0,3,0,0"/>
+                                    <TextBlock Grid.Column="1" Text="{Binding Titulo}" TextWrapping="Wrap" FontSize="12.5"
+                                               Foreground="{StaticResource TextPrimary}" LineHeight="18"/>
+                                    <TextBlock Grid.Column="2" Text="{Binding FechaTexto}" FontSize="11"
+                                               Foreground="{StaticResource TextMuted}" Margin="12,2,0,0"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Border>
+
             <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,22,0,0">
                 <Button x:Name="BtnSecundario" Style="{StaticResource Ghost}" Content="Cancelar"
                         Margin="0,0,10,0" Click="Secundario_Click"/>

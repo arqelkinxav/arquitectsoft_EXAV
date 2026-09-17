@@ -33,6 +33,9 @@ namespace arquitectSoft.View.Wpf
                 CargarFondo(); AplicarPermisos(); MostrarSesion();
                 // Catálogo para la auditoría de Revit, al día desde que se abre el programa.
                 Engine.CatalogoRevitExporter.ExportarEnSegundoPlano();
+                // Versión nueva: se enseñan los cambios, una vez por usuario.
+                Dispatcher.BeginInvoke(new Action(MostrarNovedades),
+                                       System.Windows.Threading.DispatcherPriority.ApplicationIdle);
             };
 
             // Tamaño "restaurado" centrado en el MONITOR PRINCIPAL (al que se vuelve si el
@@ -43,6 +46,24 @@ namespace arquitectSoft.View.Wpf
 
             // Arrancar MAXIMIZADA (respeta la barra de tareas por el hook WM_GETMINMAXINFO).
             WindowState = WindowState.Maximized;
+        }
+
+        private void MostrarNovedades()
+        {
+            try
+            {
+                string usuario = Generals.Global.Usuario;
+                var cambios = Engine.Novedades.Pendientes(usuario);
+                if (cambios.Count == 0) return;
+                string nombre = string.IsNullOrWhiteSpace(Generals.Global.Nombre) ? usuario : Generals.Global.Nombre;
+                GlassDialog.Novedades(this, "Actualización instalada",
+                    "Hola " + nombre + ", arquitectSoft se ha actualizado. "
+                    + (cambios.Count == 1 ? "Este es el cambio" : "Estos son los " + cambios.Count + " cambios")
+                    + " desde la última vez que lo abriste:",
+                    cambios);
+                Engine.Novedades.MarcarVisto(usuario);
+            }
+            catch { /* un aviso nunca puede impedir trabajar */ }
         }
 
         // ===== Barra de título: arrastrar entre monitores / doble clic = maximizar =====
