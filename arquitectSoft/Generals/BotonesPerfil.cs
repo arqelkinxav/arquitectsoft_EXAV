@@ -36,6 +36,7 @@ namespace arquitectSoft.Generals
         public static readonly Boton[] Catalogo =
         {
             new Boton("Analisis", "Análisis"),
+            new Boton("AnalisisBeta", "Análisis beta (optimizador, en pruebas)"),
             new Boton("Puertas", "Puertas"),
             new Boton("Componentes", "Componentes"),
             new Boton("Subcomponentes", "Subcomponentes"),
@@ -52,7 +53,7 @@ namespace arquitectSoft.Generals
         };
 
         /// <summary>Los que antes eran solo del administrador: por defecto nadie más los ve.</summary>
-        private static readonly string[] SoloAdminPorDefecto = { "Respaldo", "Importar", "Usuarios", "CodRevit" };
+        private static readonly string[] SoloAdminPorDefecto = { "AnalisisBeta", "Respaldo", "Importar", "Usuarios", "CodRevit" };
 
         /// <summary>Lo que veía cada rol antes de existir los perfiles editables.</summary>
         public static bool PorDefecto(int rol, string clave)

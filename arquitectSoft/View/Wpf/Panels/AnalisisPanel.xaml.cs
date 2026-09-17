@@ -37,9 +37,21 @@ namespace arquitectSoft.View.Wpf.Panels
         private readonly SemaphoreSlim _calcLock = new SemaphoreSlim(1, 1);   // un cálculo cada vez
         private int _medidaCalc = -1, _pctCalc = -1;   // valores con los que se lanzó el último cálculo
 
-        public AnalisisPanel()
+        /// <summary>
+        /// Análisis beta: al exportar saca, además del Excel de siempre, el optimizado para
+        /// fábrica y la guía de montaje. Lo abre su propio botón de la barra (quién lo ve se
+        /// decide en los perfiles); el Análisis normal nunca lo hace.
+        /// </summary>
+        private readonly bool _beta;
+
+        public AnalisisPanel() : this(false) { }
+
+        public AnalisisPanel(bool beta)
         {
+            _beta = beta;
             InitializeComponent();
+            if (_beta)
+                LblEstado.Text = "ANÁLISIS BETA: al exportar salen también el Excel optimizado y la guía de montaje. Carga uno o varios TXT.";
 
             // Debounce de las flechitas: recalcula 0,4 s después del último clic.
             _recalcTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(400) };
@@ -701,11 +713,54 @@ namespace arquitectSoft.View.Wpf.Panels
             try
             {
                 LblEstado.Text = "Exportando…";
+                var reloj = Stopwatch.StartNew();
                 string archivo = new ExcelExporter()
                     .Exportar(_ultimo, param, folder, _ultimo.SwSegmentadoUbiFinal);
 
-                LblEstado.Text = "Exportado: " + archivo;
-                if (GlassDialog.Pregunta(Owner, "Exportar",
+                LblEstado.Text = "Exportado en " + Segundos(reloj) + ".";
+
+                // ANÁLISIS BETA (solo desde su botón): Excel optimizado para fábrica y guía de montaje
+                // para la obra, al lado del de siempre. Va aparte: si falla, el Excel normal ya está hecho.
+                List<string> archivosBeta = null;
+                if (_beta)
+                {
+                    LblEstado.Text = "Exportado. Generando el análisis beta…";
+                    await Task.Yield();
+                    var res = _ultimo;
+                    var txts = _engine.ArchivosDespiece.ToList();
+                    int medida = _medidaCalc, pct = _pctCalc;
+                    string proyecto = AnalisisEngine.NombreProyecto(bsc.Numero, bsc.Nombre, bsc.Referencia);
+                    try
+                    {
+                        archivosBeta = await Task.Run(() =>
+                            new Engine.Beta.ExcelBetaExporter().Exportar(res, txts, medida, pct, archivo, proyecto, param));
+                        LblEstado.Text = "Exportados los 3 Excel en " + Segundos(reloj) + ".";
+                    }
+                    catch (IOException)
+                    {
+                        GlassDialog.Informar(Owner, "Análisis beta",
+                            "El Excel de siempre se exportó bien, pero uno de los Excel beta estaba abierto. Ciérralo y vuelve a exportar.");
+                    }
+                    catch (Exception exBeta)
+                    {
+                        GlassDialog.Informar(Owner, "Análisis beta",
+                            "El Excel de siempre se exportó bien, pero el análisis beta falló:\n" + exBeta.Message);
+                    }
+                }
+
+                if (archivosBeta != null)
+                {
+                    if (GlassDialog.Pregunta(Owner, "Exportar",
+                            "Se exportaron el Excel de siempre y el análisis beta (optimizado para fábrica y guía de montaje para la obra). ¿Deseas abrirlos ahora?",
+                            si: "Abrir", no: "Ahora no"))
+                    {
+                        Process.Start(archivo);
+                        foreach (string b in archivosBeta) Process.Start(b);
+                    }
+                    else
+                        GlassDialog.Informar(Owner, "Exportar", "Los archivos están en:\n" + archivo + "\n" + string.Join("\n", archivosBeta));
+                }
+                else if (GlassDialog.Pregunta(Owner, "Exportar",
                         "Se exportó correctamente. ¿Deseas abrirlo ahora?", si: "Abrir", no: "Ahora no"))
                     Process.Start(archivo);
                 else
@@ -722,6 +777,11 @@ namespace arquitectSoft.View.Wpf.Panels
                 GlassDialog.Informar(Owner, "Exportar", "Error al exportar: " + ex.Message);
                 LblEstado.Text = "Error al exportar.";
             }
+        }
+
+        private static string Segundos(Stopwatch reloj)
+        {
+            return reloj.Elapsed.TotalSeconds.ToString("0.0", System.Globalization.CultureInfo.GetCultureInfo("es-ES")) + " s";
         }
 
         // ===== Cambiar Acabado (global) =====

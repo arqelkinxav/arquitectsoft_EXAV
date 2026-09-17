@@ -182,6 +182,8 @@ namespace arquitectSoft.View.Wpf
 
         private void Analisis_Click(object sender, RoutedEventArgs e) =>
             AbrirPanel("Análisis de Mamparas", "", new AnalisisPanel(), 1140, 700);
+        private void AnalisisBeta_Click(object sender, RoutedEventArgs e) =>
+            AbrirPanel("Análisis de Mamparas (BETA)", "", new AnalisisPanel(beta: true), 1140, 700);
         private void Puertas_Click(object sender, RoutedEventArgs e) =>
             AbrirPanel("Análisis de Puertas", "", new PuertasPanel(), 1040, 680);
         private void Componentes_Click(object sender, RoutedEventArgs e) =>
@@ -256,6 +258,7 @@ namespace arquitectSoft.View.Wpf
             return new Dictionary<string, Button>
             {
                 { "Analisis", BtnAnalisis },
+                { "AnalisisBeta", BtnAnalisisBeta },
                 { "Puertas", BtnPuertas },
                 { "Componentes", BtnComponentes },
                 { "Subcomponentes", BtnSubcomp },

@@ -52,6 +52,17 @@ namespace arquitectSoft.Engine
         private string _swSegmentadoUbiInicial = "1";
 
         public bool DatosCargados { get; private set; }
+
+        /// <summary>TXT de despiece cargados (para el análisis beta, que los relee por su cuenta).</summary>
+        public IEnumerable<string> ArchivosDespiece
+        {
+            get
+            {
+                return (_file124 ?? new List<string>())
+                    .Concat(_file35 ?? new List<string>())
+                    .Concat(_fileTechos ?? new List<string>());
+            }
+        }
         public string DirectorioActual { get; private set; }
 
         // --- Tipo de vidrio por sistema (ver VidrioResolver) ---

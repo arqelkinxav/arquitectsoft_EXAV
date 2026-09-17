@@ -190,6 +190,7 @@
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <StackPanel Margin="0,12,0,12">
                         <Button x:Name="BtnAnalisis" Style="{StaticResource IconButton}" Tag="&#xE8F1;" Content="Análisis" Click="Analisis_Click"/>
+                        <Button x:Name="BtnAnalisisBeta" Style="{StaticResource IconButton}" Tag="&#xE9D9;" Content="Análisis β" Click="AnalisisBeta_Click"/>
                         <Button x:Name="BtnPuertas" Style="{StaticResource IconButton}" Tag="&#xE8B7;" Content="Puertas" Click="Puertas_Click"/>
                         <Button x:Name="BtnComponentes" Style="{StaticResource IconButton}" Tag="&#xE8C8;" Content="Compon." Click="Componentes_Click"/>
                         <Button x:Name="BtnSubcomp" Style="{StaticResource IconButton}" Tag="&#xE71D;" Content="Subcomp." Click="Subcomponentes_Click"/>

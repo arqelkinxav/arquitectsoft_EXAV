@@ -529,9 +529,14 @@
 
             <!-- ===== Estado ===== -->
             <Grid Grid.Row="1" Margin="6,12,6,4">
-                <TextBlock x:Name="LblEstado" Text="Listo. Carga uno o varios archivos TXT para analizar."
-                           Foreground="{StaticResource TextMuted}" FontSize="12" VerticalAlignment="Center"/>
-                <TextBlock x:Name="LblRuta" Text="" HorizontalAlignment="Right"
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock x:Name="LblEstado" Grid.Column="0" Text="Listo. Carga uno o varios archivos TXT para analizar."
+                           Foreground="{StaticResource TextMuted}" FontSize="12" VerticalAlignment="Center"
+                           TextTrimming="CharacterEllipsis" Margin="0,0,16,0"/>
+                <TextBlock x:Name="LblRuta" Grid.Column="1" Text="" HorizontalAlignment="Right"
                            Foreground="#6A6A6A" FontSize="11" VerticalAlignment="Center"
                            TextTrimming="CharacterEllipsis" MaxWidth="540"/>
             </Grid>

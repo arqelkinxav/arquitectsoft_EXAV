@@ -149,6 +149,8 @@
     <Compile Include="Dto\VidrioDto.cs" />
     <Compile Include="Engine\AcabadoChanger.cs" />
     <Compile Include="Engine\AnalisisEngine.cs" />
+    <Compile Include="Engine\Beta\ExcelBetaExporter.cs" />
+    <Compile Include="Engine\Beta\OptimizadorPerfileria.cs" />
     <Compile Include="View\Wpf\SelectorCarpeta.cs" />
     <Compile Include="Engine\CatalogoRevitExporter.cs" />
     <Compile Include="Engine\DependenciaResolver.cs" />
