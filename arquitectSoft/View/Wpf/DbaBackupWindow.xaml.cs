@@ -67,11 +67,8 @@ namespace arquitectSoft.View.Wpf
 
         private void Examinar_Click(object sender, RoutedEventArgs e)
         {
-            using (var dlg = new System.Windows.Forms.FolderBrowserDialog())
-            {
-                if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-                    TxtPath.Text = dlg.SelectedPath;
-            }
+            string carpeta = SelectorCarpeta.Elegir(this, "Carpeta del respaldo", TxtPath.Text);
+            if (!string.IsNullOrEmpty(carpeta)) TxtPath.Text = carpeta;
         }
 
         private void Backup_Click(object sender, RoutedEventArgs e)

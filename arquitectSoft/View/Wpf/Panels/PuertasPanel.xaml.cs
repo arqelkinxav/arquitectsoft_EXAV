@@ -700,11 +700,7 @@ namespace arquitectSoft.View.Wpf.Panels
                                bsc.Acabado1, bsc.Acabado2, bsc.Albaran, bsc.Referencia };
 
             string folder;
-            using (var fb = new System.Windows.Forms.FolderBrowserDialog())
-            {
-                if (fb.ShowDialog() != System.Windows.Forms.DialogResult.OK) return;
-                folder = fb.SelectedPath;
-            }
+            folder = SelectorCarpeta.Elegir(Owner, "Carpeta donde guardar el Excel", null);
             if (string.IsNullOrEmpty(folder)) return;
 
             try
