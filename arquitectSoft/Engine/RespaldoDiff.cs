@@ -97,6 +97,11 @@ namespace arquitectSoft.Engine
                 Comparar = new[] { "Descripcion", "Especial" } },
 
             new Sensible {
+                Tabla = "cortes", Singular = "corte",
+                Clave = new[] { "Descripcion" },
+                Comparar = new[] { "Corte_Derecho", "Corte_Izquierdo" } },
+
+            new Sensible {
                 Tabla = "beta_vidrio_tipo", Singular = "tipo de vidrio",
                 Clave = new[] { "Nombre" },
                 Comparar = new[] { "Orden" } },
@@ -141,6 +146,7 @@ namespace arquitectSoft.Engine
 
                 foreach (Sensible s in SENSIBLES) CompararTabla(con, s, dump, inf);
                 CompararReglasVidrio(con, dump, inf);
+                CompararDespieces(con, dump, inf);
                 ResumenPorTabla(con, dump, inf);
 
                 inf.Titular = Titular(inf);
@@ -387,6 +393,261 @@ namespace arquitectSoft.Engine
         }
 
         // ==================================================================
+        // DESPIECE DE LOS COMPONENTES (se lee en claro, no por id)
+        //
+        // La cabecera va aparte (bloque "componentes"); aqui va lo de dentro: que
+        // piezas lleva cada componente y con que cantidades, cortes, unidad... Todo
+        // va por ids (componente, subcomponente, corte, mecanizado, unidad), asi que
+        // cada lado se traduce con SUS catalogos y se comparan los textos. Un
+        // componente puede llevar la misma pieza varias veces (p. ej. con dos
+        // cortes): por eso se compara como lista de lineas y no por pieza.
+        // ==================================================================
+
+        /// <summary>Una columna del despiece y como se enseña.</summary>
+        private class CampoDespiece
+        {
+            public string Col;
+            public string Etiqueta;
+            public string Catalogo;   // null = se muestra el valor tal cual
+            public CampoDespiece(string col, string etiqueta, string catalogo = null)
+            { Col = col; Etiqueta = etiqueta; Catalogo = catalogo; }
+        }
+
+        private static readonly CampoDespiece[] CAMPOS_DETALLE =
+        {
+            new CampoDespiece("Id_Unidad_Calculada", "unidad", "unidad"),
+            new CampoDespiece("Medida", "medida", "medida"),
+            new CampoDespiece("Cantidad_Default", "cantidad"),
+            new CampoDespiece("Cantidad_Adicional", "C. adicional"),
+            new CampoDespiece("Aplica_Decremento", "decremento"),
+            new CampoDespiece("Cantidad_Adicional_Anch", "C. adicional anch."),
+            new CampoDespiece("Aplica_Decremento_Anch", "decremento anch."),
+            new CampoDespiece("elevado", "elevado"),
+            new CampoDespiece("idCorte", "corte", "corte"),
+            new CampoDespiece("Mecanizado", "mecanizado", "mecanizado"),
+            new CampoDespiece("extra", "extra"),
+            new CampoDespiece("Asignacion_puertas", "asig. puertas"),
+        };
+
+        private static readonly CampoDespiece[] CAMPOS_ESPECIAL =
+        {
+            new CampoDespiece("select_Columna", "columna"),
+            new CampoDespiece("Cantidad_Default", "cantidad"),
+            new CampoDespiece("Cantidad_Adicional", "C. adicional"),
+            new CampoDespiece("Aplica_Decremento", "decremento"),
+            new CampoDespiece("elevado", "elevado"),
+            new CampoDespiece("idCorte", "corte", "corte"),
+        };
+
+        /// <summary>Catalogos para traducir ids a texto, de UN lado (base o respaldo).</summary>
+        private class Catalogos
+        {
+            public Dictionary<string, string> Componente, Sub, Corte, Mecanizado, Unidad;
+
+            public string Traduce(string catalogo, string v)
+            {
+                if (string.IsNullOrEmpty(v)) return "";
+                Dictionary<string, string> d;
+                switch (catalogo)
+                {
+                    case "corte": if (v == "0") return "sin corte"; d = Corte; break;
+                    case "mecanizado": if (v == "0") return "sin mecanizado"; d = Mecanizado; break;
+                    case "unidad": d = Unidad; break;
+                    case "medida": return v == "1" ? "altura" : v == "2" ? "anchura" : v;
+                    default: return v;
+                }
+                return Busca(d, v);
+            }
+        }
+
+        private static Catalogos CatalogosVivos(Generals.Conexion con)
+        {
+            Dictionary<string, string> acab = Diccionario(LeerTabla(con, "acabados"), "Id_Acabado", "Codigo_Homologacion");
+            var sub = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            DataTable subs = LeerTabla(con, "subcomponentes");
+            if (subs != null)
+                foreach (DataRow r in subs.Rows)
+                    sub[Texto(r["Id_Subcomponente"])] = CodigoSub(Texto(r["Codigo_Homologacion"]), Texto(r["Id_Acabado"]), acab);
+
+            return new Catalogos
+            {
+                Componente = Diccionario(LeerTabla(con, "componentes"), "Id_Componente", "Codigo"),
+                Sub = sub,
+                Corte = Diccionario(LeerTabla(con, "cortes"), "Id_Corte", "Descripcion"),
+                Mecanizado = Diccionario(LeerTabla(con, "mecanizados"), "Id_Mecanizado", "Codigo_Homologacion"),
+                Unidad = Diccionario(LeerTabla(con, "unidades_calculadas"), "Id_Unidad_Calculada", "Descripcion"),
+            };
+        }
+
+        private static Catalogos CatalogosDump(Dictionary<string, TablaDump> dump)
+        {
+            Dictionary<string, string> acab = DiccionarioDump(dump, "acabados", "Id_Acabado", "Codigo_Homologacion");
+            var sub = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            TablaDump subs;
+            if (dump.TryGetValue("subcomponentes", out subs))
+                foreach (string[] f in subs.Filas)
+                {
+                    string id = subs.Valor(f, "Id_Subcomponente");
+                    if (id != null)
+                        sub[id] = CodigoSub(subs.Valor(f, "Codigo_Homologacion"), subs.Valor(f, "Id_Acabado"), acab);
+                }
+
+            return new Catalogos
+            {
+                Componente = DiccionarioDump(dump, "componentes", "Id_Componente", "Codigo"),
+                Sub = sub,
+                Corte = DiccionarioDump(dump, "cortes", "Id_Corte", "Descripcion"),
+                Mecanizado = DiccionarioDump(dump, "mecanizados", "Id_Mecanizado", "Codigo_Homologacion"),
+                Unidad = DiccionarioDump(dump, "unidades_calculadas", "Id_Unidad_Calculada", "Descripcion"),
+            };
+        }
+
+        private static string CodigoSub(string codigo, string idAcabado, Dictionary<string, string> acab)
+        {
+            string a;
+            bool conAcabado = idAcabado != null && acab.TryGetValue(idAcabado, out a) && !string.IsNullOrEmpty(a);
+            return (codigo ?? "") + (conAcabado ? "-" + acab[idAcabado] : "");
+        }
+
+        /// <summary>Linea de despiece ya traducida.</summary>
+        private class LineaDespiece
+        {
+            public string Pieza;
+            public string[] Valores;   // en el orden de los campos
+            public string Firma { get { return Pieza + " | " + string.Join(" | ", Valores); } }
+        }
+
+        private static void CompararDespieces(Generals.Conexion con, Dictionary<string, TablaDump> dump, InformeImport inf)
+        {
+            bool hayDetalle = dump.ContainsKey("componentes_detalle");
+            bool hayEspecial = dump.ContainsKey("componentes_especial_detalle");
+            if (!hayDetalle && !hayEspecial) return;
+
+            Catalogos cv = CatalogosVivos(con);
+            Catalogos cd = CatalogosDump(dump);
+
+            if (hayDetalle)
+                CompararDespiece(con, dump, inf, "componentes_detalle", "Id_Componente", CAMPOS_DETALLE,
+                                 cv, cd, "despiece de componente");
+            if (hayEspecial)
+                CompararDespiece(con, dump, inf, "componentes_especial_detalle", "Id_Componente_especial", CAMPOS_ESPECIAL,
+                                 cv, cd, "despiece especial (vidrios y paneles)");
+        }
+
+        private static void CompararDespiece(Generals.Conexion con, Dictionary<string, TablaDump> dump, InformeImport inf,
+                                             string tabla, string colComp, CampoDespiece[] campos,
+                                             Catalogos cv, Catalogos cd, string singular)
+        {
+            DataTable viva = LeerTabla(con, tabla);
+            TablaDump t = dump[tabla];
+            if (viva == null) return;   // tabla nueva: ya la cuenta el resumen
+
+            // componente -> lineas, en los dos lados
+            var aqui = new Dictionary<string, List<LineaDespiece>>(StringComparer.OrdinalIgnoreCase);
+            foreach (DataRow r in viva.Rows)
+            {
+                DataRow fila = r;
+                Anotar(aqui, cv, c => viva.Columns.Contains(c) ? Texto(fila[c]) : null, colComp, campos);
+            }
+            var alla = new Dictionary<string, List<LineaDespiece>>(StringComparer.OrdinalIgnoreCase);
+            foreach (string[] f in t.Filas)
+            {
+                string[] fila = f;
+                Anotar(alla, cd, c => t.IndiceDe(c) < 0 ? null : t.Valor(fila, c), colComp, campos);
+            }
+
+            var lineas = new List<string>();
+            int componentes = 0;
+            foreach (var par in aqui)
+            {
+                // Componente que desaparece o que entra entero: ya lo dice el bloque "componentes".
+                List<LineaDespiece> otras;
+                if (!alla.TryGetValue(par.Key, out otras)) continue;
+
+                List<string> dif = DiferenciasDespiece(par.Value, otras, campos);
+                if (dif.Count == 0) continue;
+                componentes++;
+                foreach (string d in dif) lineas.Add(par.Key + ": " + d);
+            }
+
+            if (componentes > 0)
+                Agregar(inf, NivelDif.Cambio, TituloCambio(componentes, singular), lineas, 0, componentes, 0);
+        }
+
+        private static void Anotar(Dictionary<string, List<LineaDespiece>> destino, Catalogos cat,
+                                   Func<string, string> val, string colComp, CampoDespiece[] campos)
+        {
+            string comp = Busca(cat.Componente, val(colComp));
+            var l = new LineaDespiece
+            {
+                Pieza = Busca(cat.Sub, val("Id_Subcomponente")),
+                Valores = campos.Select(c => Normal(cat.Traduce(c.Catalogo, val(c.Col)))).ToArray()
+            };
+            List<LineaDespiece> lista;
+            if (!destino.TryGetValue(comp, out lista)) destino[comp] = lista = new List<LineaDespiece>();
+            lista.Add(l);
+        }
+
+        /// <summary>Quita ceros de formato (1.00 -> 1) para no ver cambios que no lo son.</summary>
+        private static string Normal(string v)
+        {
+            v = (v ?? "").Trim();
+            decimal d;
+            if (decimal.TryParse(v, NumberStyles.Number, CultureInfo.InvariantCulture, out d))
+                return d.ToString("0.####", CultureInfo.InvariantCulture);
+            return v;
+        }
+
+        /// <summary>
+        /// Lo que quita y lo que pone el respaldo en un componente. Si una pieza sale una
+        /// vez y entra otra vez, se cuenta como cambio de esa pieza y se dice qué campo.
+        /// </summary>
+        private static List<string> DiferenciasDespiece(List<LineaDespiece> aqui, List<LineaDespiece> alla,
+                                                        CampoDespiece[] campos)
+        {
+            // Se tachan las lineas identicas de los dos lados (cuentan las repetidas).
+            var quita = new List<LineaDespiece>(aqui);
+            var pone = new List<LineaDespiece>();
+            foreach (var l in alla)
+            {
+                int i = quita.FindIndex(x => x.Firma == l.Firma);
+                if (i >= 0) quita.RemoveAt(i); else pone.Add(l);
+            }
+
+            var r = new List<string>();
+            foreach (var q in quita.ToList())
+            {
+                var mismas = pone.Where(x => x.Pieza == q.Pieza).ToList();
+                if (quita.Count(x => x.Pieza == q.Pieza) != 1 || mismas.Count != 1) continue;
+
+                var p = mismas[0];
+                var trozos = new List<string>();
+                for (int k = 0; k < campos.Length; k++)
+                    if (q.Valores[k] != p.Valores[k])
+                        trozos.Add(campos[k].Etiqueta + " \"" + Corto(q.Valores[k]) + "\" -> \"" + Corto(p.Valores[k]) + "\"");
+                r.Add(q.Pieza + " cambia: " + string.Join("; ", trozos));
+                quita.Remove(q);
+                pone.Remove(p);
+            }
+            foreach (var q in quita) r.Add("se QUITA " + q.Pieza + " (" + Resumen(q, campos) + ")");
+            foreach (var p in pone) r.Add("se AÑADE " + p.Pieza + " (" + Resumen(p, campos) + ")");
+            return r;
+        }
+
+        private static string Resumen(LineaDespiece l, CampoDespiece[] campos)
+        {
+            var partes = new List<string>();
+            for (int k = 0; k < campos.Length; k++)
+            {
+                // Los ceros y los "sin ..." no dicen nada en un resumen.
+                string v = l.Valores[k];
+                if (v == "" || v == "0" || v.StartsWith("sin ")) continue;
+                partes.Add(campos[k].Etiqueta + " " + Corto(v));
+            }
+            return string.Join(", ", partes);
+        }
+
+        // ==================================================================
         // RESUMEN DE TODAS LAS TABLAS
         // ==================================================================
         private static void ResumenPorTabla(Generals.Conexion con,
@@ -571,6 +832,8 @@ namespace arquitectSoft.Engine
                 case "nosubcomponente": return "nº de subcomponentes";
                 case "acabadoprincipal": return "acabado principal";
                 case "cod_resultado": return "resultado";
+                case "corte_derecho": return "corte derecho";
+                case "corte_izquierdo": return "corte izquierdo";
                 default: return columna;
             }
         }
