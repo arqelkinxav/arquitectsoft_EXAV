@@ -571,7 +571,7 @@ namespace arquitectSoft.View.Wpf.Panels
             if (_resolver != null && _resolver.HayReglas)
             {
                 var res = new Engine.ResultadoAnalisis { Puertas = _dtPerfil, PuertasHerraje = _dtHerraje };
-                var sinRegla = _resolver.Resolver(res, CodigoAcabado(_acabadoPerfil));
+                var sinRegla = _resolver.Resolver(res, Engine.DependenciaResolver.CodigoPerfileria(_acabadoPerfil));
                 if (sinRegla.Count > 0)
                     LblEstado.Text = "Aviso: sin regla de dependencia para " + string.Join(", ", sinRegla)
                                    + " con esta perfilería.";
@@ -771,6 +771,13 @@ namespace arquitectSoft.View.Wpf.Panels
                         }
                         else
                         {
+                            // Herraje con el acabado de la perfilería (01…): va con ella, código Y
+                            // texto, igual que en Análisis. Los que no deben seguirla llevan MOD.
+                            if (dg == 1)
+                            {
+                                string acNew = a2.Contains("-") ? a2.Split('-')[0].Trim() : "XX";
+                                row[1] = Convert.ToString(row[1]).Split('-')[0].Trim() + "-" + acNew;
+                            }
                             row[3] = a2.Contains("-") ? a2.Split('-')[1].Trim() : a2;
                         }
                     }

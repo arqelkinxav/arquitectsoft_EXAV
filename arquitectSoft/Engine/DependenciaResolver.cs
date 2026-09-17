@@ -55,6 +55,17 @@ namespace arquitectSoft.Engine
         }
 
         /// <summary>
+        /// Código de perfilería con el que se buscan las reglas, a partir de "CÓDIGO - DESCRIPCIÓN".
+        /// Un acabado especial escrito a mano ("RAL 2009") no trae código: cuenta como XX
+        /// (POR CONFIRMAR), que es lo que lleva en los códigos y para lo que se crean las reglas.
+        /// </summary>
+        public static string CodigoPerfileria(string acabado)
+        {
+            if (string.IsNullOrWhiteSpace(acabado)) return "";
+            return acabado.Contains("-") ? acabado.Split('-')[0].Trim() : "XX";
+        }
+
+        /// <summary>
         /// Resuelve en <paramref name="res"/> los placeholders según el código de perfilería
         /// vigente. Devuelve los placeholders que quedaron SIN resolver (presentes pero sin
         /// regla para esa perfilería), para poder avisar al usuario.

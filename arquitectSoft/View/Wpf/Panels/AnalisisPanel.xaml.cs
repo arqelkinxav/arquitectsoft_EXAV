@@ -442,7 +442,7 @@ namespace arquitectSoft.View.Wpf.Panels
             _resolver = DependenciaResolver.Cargar();
             if (_resolver != null && _resolver.HayReglas)
             {
-                var sinRegla = _resolver.Resolver(vista, CodigoAcabado(_acabadoPerfil));
+                var sinRegla = _resolver.Resolver(vista, DependenciaResolver.CodigoPerfileria(_acabadoPerfil));
                 if (sinRegla.Count > 0)
                     LblEstado.Text = "Aviso: sin regla de dependencia para " + string.Join(", ", sinRegla)
                                    + " con esta perfilería.";
