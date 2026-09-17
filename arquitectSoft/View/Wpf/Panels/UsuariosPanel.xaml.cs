@@ -1,27 +1,59 @@
 using System;
+using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using Perfil = arquitectSoft.Generals.BotonesPerfil.Perfil;
 
 namespace arquitectSoft.View.Wpf.Panels
 {
     /// <summary>
-    /// Panel SOLO para administradores: crear, editar y eliminar usuarios, fijar su
-    /// contraseña y su nivel de permiso (rol). Lista a la izquierda + formulario a la
-    /// derecha. Reutiliza Dto.UsuarioDto.
+    /// Panel del administrador (o de un perfil al que se le dé, con límites): usuarios (lista + formulario) y perfiles de permiso
+    /// (qué botones de la barra ve cada uno). El perfil de un usuario es su columna `rol`:
+    /// 0 = Administrador, el resto sale de beta_perfil (ver Generals.BotonesPerfil).
     /// </summary>
     public partial class UsuariosPanel : UserControl
     {
         private DataTable _tabla;
         private int _id;            // 0 = formulario en modo "nuevo"
+        private List<Perfil> _perfiles = new List<Perfil>();
 
         public UsuariosPanel()
         {
             InitializeComponent();
-            Loaded += (s, e) => { if (_tabla == null) { CargarLista(); Nuevo(); } };
+            Loaded += (s, e) =>
+            {
+                if (_tabla != null) return;
+                AplicarLimites();
+                CargarPerfiles(Generals.Global.ROL_TECNICO_BASICO);
+                CargarLista();
+                Nuevo();
+            };
         }
 
         private Window Owner { get { return Window.GetWindow(this); } }
+
+        // Quien entra sin ser administrador (un "asistente" al que se le dio el botón Usuarios)
+        // gestiona usuarios y perfiles, pero no elimina nada ni da o toca el perfil Administrador:
+        // si pudiera, se haría administrador él mismo.
+        private static bool EsAdmin { get { return Generals.Global.EsAdmin; } }
+
+        private void AplicarLimites()
+        {
+            if (EsAdmin) return;
+            BtnEliminar.Visibility = Visibility.Collapsed;
+            BtnEliminarPerfil.Visibility = Visibility.Collapsed;
+        }
+
+        private bool _editandoAdmin;   // el usuario cargado en el formulario es administrador
+
+        private string NombrePerfil(int rol)
+        {
+            if (rol == Generals.Global.ROL_ADMIN) return "Administrador";
+            var p = _perfiles.FirstOrDefault(x => x.Id == rol);
+            return p != null ? p.Nombre : "(perfil " + rol + " no existe)";
+        }
 
         // ===== Carga de la lista =====
         private void CargarLista()
@@ -34,7 +66,7 @@ namespace arquitectSoft.View.Wpf.Panels
                 {
                     int rol;
                     int.TryParse(Convert.ToString(r["rol"]), out rol);
-                    r["RolTexto"] = Generals.Global.NombreRol(rol);
+                    r["RolTexto"] = NombrePerfil(rol);
                 }
                 dt.AcceptChanges();
                 _tabla = dt;
@@ -52,6 +84,32 @@ namespace arquitectSoft.View.Wpf.Panels
             LblEstado.Visibility = string.IsNullOrEmpty(msg) ? Visibility.Collapsed : Visibility.Visible;
         }
 
+        /// <summary>Combo del usuario: Administrador + los perfiles de la base.</summary>
+        private void LlenarComboUsuario()
+        {
+            int actual = RolElegido();
+            var items = new List<Perfil>();
+            if (EsAdmin) items.Add(new Perfil { Id = Generals.Global.ROL_ADMIN, Nombre = "Administrador" });
+            items.AddRange(_perfiles);
+            CmbRol.ItemsSource = items;
+            ElegirRol(actual);
+        }
+
+        private int RolElegido()
+        {
+            var p = CmbRol.SelectedItem as Perfil;
+            return p != null ? p.Id : Generals.Global.ROL_TECNICO_BASICO;
+        }
+
+        private void ElegirRol(int rol)
+        {
+            var items = CmbRol.ItemsSource as List<Perfil>;
+            if (items == null) return;
+            CmbRol.SelectedItem = items.FirstOrDefault(x => x.Id == rol)
+                ?? items.FirstOrDefault(x => x.Id == Generals.Global.ROL_TECNICO_BASICO)
+                ?? items.LastOrDefault();
+        }
+
         // ===== Selección de la lista → carga el formulario =====
         private void Grid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -64,10 +122,11 @@ namespace arquitectSoft.View.Wpf.Panels
             TxtClave.Text = Convert.ToString(drv.Row["contrasena"]);
             int rol;
             int.TryParse(Convert.ToString(drv.Row["rol"]), out rol);
-            CmbRol.SelectedIndex = (rol >= 0 && rol <= 2) ? rol : 2;
+            ElegirRol(rol);
 
+            _editandoAdmin = rol == Generals.Global.ROL_ADMIN;
             LblTitulo.Text = "Editar usuario";
-            Mostrar("");
+            Mostrar(_editandoAdmin && !EsAdmin ? "Los administradores solo los puede cambiar un administrador." : "");
         }
 
         // ===== Nuevo =====
@@ -76,11 +135,12 @@ namespace arquitectSoft.View.Wpf.Panels
         private void Nuevo()
         {
             _id = 0;
+            _editandoAdmin = false;
             GridUsuarios.SelectedItem = null;
             TxtUsuario.Text = "";
             TxtNombre.Text = "";
             TxtClave.Text = "";
-            CmbRol.SelectedIndex = 2;   // técnico básico por defecto
+            ElegirRol(Generals.Global.ROL_TECNICO_BASICO);   // técnico básico por defecto
             LblTitulo.Text = "Nuevo usuario";
             Mostrar("");
             TxtUsuario.Focus();
@@ -92,8 +152,13 @@ namespace arquitectSoft.View.Wpf.Panels
             string login = TxtUsuario.Text.Trim();
             string nombre = TxtNombre.Text.Trim();
             string clave = TxtClave.Text;
-            int rol = CmbRol.SelectedIndex < 0 ? Generals.Global.ROL_TECNICO_BASICO : CmbRol.SelectedIndex;
+            int rol = RolElegido();
 
+            if (!EsAdmin && (_editandoAdmin || rol == Generals.Global.ROL_ADMIN))
+            {
+                Mostrar("Los administradores solo los puede crear o cambiar un administrador.");
+                return;
+            }
             if (login == "") { Mostrar("Escribe el usuario para iniciar sesión."); return; }
             if (clave == "") { Mostrar("Escribe una contraseña."); return; }
             if (nombre == "") nombre = login;
@@ -106,7 +171,7 @@ namespace arquitectSoft.View.Wpf.Panels
             }
 
             // Evita que un admin se quite a sí mismo el rol de administrador y se bloquee.
-            if (_id != 0 && _id == Generals.Global.UsuarioId && rol != Generals.Global.ROL_ADMIN)
+            if (EsAdmin && _id != 0 && _id == Generals.Global.UsuarioId && rol != Generals.Global.ROL_ADMIN)
             {
                 if (!GlassDialog.Pregunta(Owner, "Usuarios",
                     "Estás quitándote a ti mismo el permiso de Administrador. Perderás el acceso a esta pantalla al volver a entrar. ¿Continuar?"))
@@ -122,6 +187,7 @@ namespace arquitectSoft.View.Wpf.Panels
         // ===== Eliminar =====
         private void Eliminar_Click(object sender, RoutedEventArgs e)
         {
+            if (!EsAdmin) return;
             if (_id == 0) { Mostrar("Selecciona un usuario de la lista para eliminar."); return; }
 
             if (_id == Generals.Global.UsuarioId)
@@ -131,8 +197,7 @@ namespace arquitectSoft.View.Wpf.Panels
             }
 
             // No dejar la base sin ningún administrador.
-            int rolSel = CmbRol.SelectedIndex;
-            if (rolSel == Generals.Global.ROL_ADMIN && ContarAdmins() <= 1)
+            if (RolElegido() == Generals.Global.ROL_ADMIN && ContarAdmins() <= 1)
             {
                 Mostrar("No puedes eliminar el único administrador que queda.");
                 return;
@@ -158,6 +223,120 @@ namespace arquitectSoft.View.Wpf.Panels
                 if (rol == Generals.Global.ROL_ADMIN) n++;
             }
             return n;
+        }
+
+        // ===== Perfiles =====
+        private readonly Dictionary<string, CheckBox> _casillas = new Dictionary<string, CheckBox>();
+        private bool _perfilNuevo;
+
+        /// <summary>Relee los perfiles y deja elegido <paramref name="elegir"/>.</summary>
+        private void CargarPerfiles(int elegir)
+        {
+            _perfiles = Generals.BotonesPerfil.GetPerfiles();
+            CmbPerfil.ItemsSource = _perfiles;
+            CmbPerfil.SelectedItem = _perfiles.FirstOrDefault(x => x.Id == elegir) ?? _perfiles.FirstOrDefault();
+            LlenarComboUsuario();
+        }
+
+        private void CmbPerfil_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var p = CmbPerfil.SelectedItem as Perfil;
+            if (p == null) return;
+            _perfilNuevo = false;
+            TxtPerfil.Text = p.Nombre;
+            PintarBotones(p.Id);
+            BtnEliminarPerfil.IsEnabled = EsAdmin;
+            MostrarPerfiles("");
+        }
+
+        private void PintarBotones(int rol)
+        {
+            var guardado = Generals.BotonesPerfil.Cargar();
+            PanelBotones.Children.Clear();
+            _casillas.Clear();
+            foreach (var b in Generals.BotonesPerfil.Catalogo)
+            {
+                var ck = new CheckBox
+                {
+                    Content = b.Texto,
+                    Style = (Style)FindResource("DarkCheck"),
+                    IsChecked = Generals.BotonesPerfil.Visible(guardado, rol, b.Clave)
+                };
+                PanelBotones.Children.Add(ck);
+                _casillas[b.Clave] = ck;
+            }
+        }
+
+        private void NuevoPerfil_Click(object sender, RoutedEventArgs e)
+        {
+            // Parte de lo que tenga marcado el perfil que se está viendo.
+            _perfilNuevo = true;
+            CmbPerfil.SelectedItem = null;
+            TxtPerfil.Text = "";
+            BtnEliminarPerfil.IsEnabled = false;
+            MostrarPerfiles("Perfil nuevo: ponle nombre, marca sus botones y guarda.");
+            TxtPerfil.Focus();
+        }
+
+        private void GuardarPerfil_Click(object sender, RoutedEventArgs e)
+        {
+            string nombre = TxtPerfil.Text.Trim();
+            if (nombre == "") { MostrarPerfiles("Escribe el nombre del perfil."); return; }
+            if (nombre.Equals("Administrador", StringComparison.OrdinalIgnoreCase))
+            {
+                MostrarPerfiles("\"Administrador\" es el perfil fijo; usa otro nombre.");
+                return;
+            }
+
+            var actual = CmbPerfil.SelectedItem as Perfil;
+            if (!_perfilNuevo && actual == null) { MostrarPerfiles("Elige un perfil o crea uno nuevo."); return; }
+
+            string fail;
+            int id = Generals.BotonesPerfil.GuardarPerfil(_perfilNuevo ? 0 : actual.Id, nombre,
+                Generals.Global.ROL_TECNICO_BASICO, out fail);
+            if (id <= 0) { MostrarPerfiles(fail); return; }
+
+            var visibles = _casillas.ToDictionary(kv => kv.Key, kv => kv.Value.IsChecked == true);
+            fail = Generals.BotonesPerfil.Guardar(id, visibles);
+            if (fail != "") { MostrarPerfiles(fail); return; }
+
+            bool eraNuevo = _perfilNuevo;
+            CargarPerfiles(id);
+            CargarLista();
+            MostrarPerfiles(eraNuevo
+                ? "Perfil \"" + nombre + "\" creado. Ya se puede asignar a los usuarios."
+                : "Perfil guardado. Sus usuarios lo verán al volver a iniciar sesión.");
+        }
+
+        private void EliminarPerfil_Click(object sender, RoutedEventArgs e)
+        {
+            var p = CmbPerfil.SelectedItem as Perfil;
+            if (p == null || !EsAdmin) return;
+
+            int n = Generals.BotonesPerfil.UsuariosConPerfil(p.Id);
+            if (n > 0)
+            {
+                MostrarPerfiles("No se puede eliminar: " + n + (n == 1 ? " usuario lo tiene" : " usuarios lo tienen")
+                    + " asignado. Cámbiales el perfil primero.");
+                return;
+            }
+            if (_perfiles.Count <= 1)
+            {
+                MostrarPerfiles("Tiene que quedar al menos un perfil además del administrador.");
+                return;
+            }
+            if (!GlassDialog.Pregunta(Owner, "Perfiles", "¿Eliminar el perfil \"" + p.Nombre + "\"?")) return;
+
+            string fail = Generals.BotonesPerfil.EliminarPerfil(p.Id);
+            if (fail != "") { MostrarPerfiles(fail); return; }
+            CargarPerfiles(Generals.Global.ROL_TECNICO_BASICO);
+            MostrarPerfiles("Perfil \"" + p.Nombre + "\" eliminado.");
+        }
+
+        private void MostrarPerfiles(string msg)
+        {
+            LblEstadoPerfiles.Text = msg;
+            LblEstadoPerfiles.Visibility = string.IsNullOrEmpty(msg) ? Visibility.Collapsed : Visibility.Visible;
         }
     }
 }

@@ -85,6 +85,9 @@ namespace arquitectSoft.Engine
         /// <summary>Lo mismo en segundo plano, para no congelar la pantalla.</summary>
         public static void ExportarEnSegundoPlano()
         {
+            // Solo en las sesiones que tienen el botón Cód. Revit (el administrador y los
+            // perfiles a los que se lo dé): en los demás equipos no se escribe nada.
+            if (!Generals.BotonesPerfil.VisibleEnSesion("CodRevit")) return;
             System.Threading.Tasks.Task.Run(() => ExportarEnSilencio());
         }
 

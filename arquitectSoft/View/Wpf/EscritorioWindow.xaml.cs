@@ -1,5 +1,6 @@
 ﻿using arquitectSoft.View.Wpf.Panels;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows;
@@ -232,7 +233,7 @@ namespace arquitectSoft.View.Wpf
         private void Importar_Click(object sender, RoutedEventArgs e) =>
             AbrirPanel("Importar base de datos", "", new DbaImportPanel(), 560, 360);
         private void Usuarios_Click(object sender, RoutedEventArgs e) =>
-            AbrirPanel("Usuarios", "", new UsuariosPanel(), 940, 560);
+            AbrirPanel("Usuarios", "", new UsuariosPanel(), 1240, 600);
         private void MiCuenta_Click(object sender, RoutedEventArgs e) =>
             AbrirPanel("Mi cuenta", "", new MiCuentaPanel(), 460, 650);
 
@@ -242,25 +243,33 @@ namespace arquitectSoft.View.Wpf
         //   Admin   -> todo
         private void AplicarPermisos()
         {
-            bool admin = Generals.Global.EsAdmin;
-            bool editar = Generals.Global.PuedeEditar;   // admin o técnico edición
+            // Lo que ve cada perfil lo decide el administrador en Usuarios; él lo ve todo.
+            // Mi cuenta y Acerca quedan visibles para todos.
+            Generals.BotonesPerfil.OlvidarSesion();
+            foreach (var kv in BotonesConfigurables())
+                kv.Value.Visibility = Ver(Generals.BotonesPerfil.VisibleEnSesion(kv.Key));
+        }
 
-            // Solo administrador
-            BtnRespaldo.Visibility = Ver(admin);
-            BtnImportar.Visibility = Ver(admin);
-            BtnUsuarios.Visibility = Ver(admin);
-
-            // Edición (catálogo): admin + técnico edición
-            BtnComponentes.Visibility = Ver(editar);
-            BtnSubcomp.Visibility = Ver(editar);
-            BtnAcabados.Visibility = Ver(editar);
-            BtnMecanizados.Visibility = Ver(editar);
-            BtnCortes.Visibility = Ver(editar);
-            BtnUnidad.Visibility = Ver(editar);
-            BtnDependencias.Visibility = Ver(editar);
-            BtnVidrios.Visibility = Ver(editar);
-
-            // Análisis, Puertas, Mi cuenta y Acerca quedan visibles para todos.
+        /// <summary>Clave de Generals.BotonesPerfil.Catalogo → botón de la barra.</summary>
+        private Dictionary<string, Button> BotonesConfigurables()
+        {
+            return new Dictionary<string, Button>
+            {
+                { "Analisis", BtnAnalisis },
+                { "Puertas", BtnPuertas },
+                { "Componentes", BtnComponentes },
+                { "Subcomponentes", BtnSubcomp },
+                { "Acabados", BtnAcabados },
+                { "Mecanizados", BtnMecanizados },
+                { "Cortes", BtnCortes },
+                { "Unidad", BtnUnidad },
+                { "Dependencias", BtnDependencias },
+                { "Vidrios", BtnVidrios },
+                { "Respaldo", BtnRespaldo },
+                { "Importar", BtnImportar },
+                { "Usuarios", BtnUsuarios },
+                { "CodRevit", BtnCodigosRevit },
+            };
         }
 
         private static Visibility Ver(bool visible) =>

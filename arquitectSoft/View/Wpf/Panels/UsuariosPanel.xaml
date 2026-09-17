@@ -277,6 +277,39 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
+        <!-- Casilla oscura (qué ve cada perfil) -->
+        <Style x:Key="DarkCheck" TargetType="CheckBox">
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+            <Setter Property="FontSize" Value="12.5"/>
+            <Setter Property="Margin" Value="2,5"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="CheckBox">
+                        <StackPanel Orientation="Horizontal" Background="Transparent">
+                        <Border x:Name="box" Width="20" Height="20" CornerRadius="6"
+                                Background="{StaticResource InputDark}" BorderBrush="{StaticResource PanelBorder}" BorderThickness="1">
+                            <TextBlock x:Name="ck" Text="&#xE73E;" FontFamily="Segoe MDL2 Assets" FontSize="11"
+                                       Foreground="#201712" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                       Visibility="Collapsed"/>
+                        </Border>
+                        <ContentPresenter Margin="10,0,0,0" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="box" Property="Background" Value="{StaticResource Accent}"/>
+                                <Setter TargetName="box" Property="BorderBrush" Value="{StaticResource Accent}"/>
+                                <Setter TargetName="ck" Property="Visibility" Value="Visible"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="box" Property="BorderBrush" Value="{StaticResource Accent}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
     </UserControl.Resources>
 
     <Grid TextElement.FontFamily="{StaticResource Jakarta}"
@@ -285,6 +318,7 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="320"/>
+            <ColumnDefinition Width="300"/>
         </Grid.ColumnDefinitions>
 
         <!-- ===== Lista de usuarios ===== -->
@@ -307,7 +341,7 @@
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Usuario" Binding="{Binding usuario}" Width="140"/>
                         <DataGridTextColumn Header="Nombre" Binding="{Binding Nombre}" Width="*"/>
-                        <DataGridTextColumn Header="Permiso" Binding="{Binding RolTexto}" Width="150"/>
+                        <DataGridTextColumn Header="Perfil" Binding="{Binding RolTexto}" Width="150"/>
                     </DataGrid.Columns>
                 </DataGrid>
             </Border>
@@ -328,14 +362,10 @@
                 <TextBlock Style="{StaticResource Cap}" Text="Contraseña"/>
                 <TextBox x:Name="TxtClave" Style="{StaticResource Field}" Margin="0,0,0,12"/>
 
-                <TextBlock Style="{StaticResource Cap}" Text="Permiso"/>
-                <ComboBox x:Name="CmbRol" Style="{StaticResource DarkCombo}" Margin="0,0,0,4">
-                    <ComboBoxItem Content="Administrador" Tag="0"/>
-                    <ComboBoxItem Content="Técnico (edición)" Tag="1"/>
-                    <ComboBoxItem Content="Técnico (básico)" Tag="2"/>
-                </ComboBox>
+                <TextBlock Style="{StaticResource Cap}" Text="Perfil"/>
+                <ComboBox x:Name="CmbRol" Style="{StaticResource DarkCombo}" Margin="0,0,0,4"/>
                 <TextBlock Foreground="{StaticResource TextMuted}" FontSize="10.5" TextWrapping="Wrap" Margin="2,4,0,0"
-                           Text="Básico: Análisis, Puertas y Acerca.  Edición: todo menos Respaldo, Importar y Usuarios.  Administrador: todo."/>
+                           Text="Administrador lo ve todo. Los demás perfiles se editan en la columna de la derecha."/>
 
                 <TextBlock x:Name="LblEstado" Foreground="{StaticResource Accent}" FontSize="11.5"
                            TextWrapping="Wrap" Margin="2,12,0,0" Visibility="Collapsed"/>
@@ -350,6 +380,53 @@
                 </Grid>
                 <Button x:Name="BtnNuevo" Style="{StaticResource Ghost}" Content="+  Nuevo" Margin="0,10,0,0" Click="Nuevo_Click"/>
             </StackPanel>
+        </Border>
+        <!-- ===== Perfiles ===== -->
+        <Border Grid.Column="2" Margin="14,0,0,0" CornerRadius="14" Background="#CC161616"
+                BorderBrush="{StaticResource PanelBorder}" BorderThickness="1" Padding="18">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <TextBlock Text="Perfiles" FontSize="16" FontWeight="Bold" Margin="0,0,0,12"/>
+
+                <StackPanel Grid.Row="1">
+                    <TextBlock Style="{StaticResource Cap}" Text="Perfil a editar"/>
+                    <ComboBox x:Name="CmbPerfil" Style="{StaticResource DarkCombo}" Margin="0,0,0,12"
+                              SelectionChanged="CmbPerfil_SelectionChanged"/>
+                    <TextBlock Style="{StaticResource Cap}" Text="Nombre del perfil"/>
+                    <TextBox x:Name="TxtPerfil" Style="{StaticResource Field}" Margin="0,0,0,12"/>
+                </StackPanel>
+
+                <TextBlock Grid.Row="2" Style="{StaticResource Cap}" Text="Botones que ve"/>
+                <ScrollViewer Grid.Row="3" VerticalScrollBarVisibility="Auto">
+                    <StackPanel x:Name="PanelBotones"/>
+                </ScrollViewer>
+
+                <TextBlock Grid.Row="4" Foreground="{StaticResource TextMuted}" FontSize="10.5" TextWrapping="Wrap" Margin="2,8,0,0"
+                           Text="Mi cuenta y Acerca los ven todos. Quien entra a Usuarios sin ser administrador no puede eliminar ni dar el perfil Administrador. Los cambios se ven al volver a iniciar sesión."/>
+                <TextBlock x:Name="LblEstadoPerfiles" Grid.Row="5" Foreground="{StaticResource Accent}" FontSize="11.5"
+                           TextWrapping="Wrap" Margin="2,10,0,0" Visibility="Collapsed"/>
+
+                <StackPanel Grid.Row="6" Margin="0,12,0,0">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Button Grid.Column="0" Style="{StaticResource Primary}" Content="Guardar perfil" Click="GuardarPerfil_Click"/>
+                        <Button x:Name="BtnEliminarPerfil" Grid.Column="1" Style="{StaticResource Ghost}" Content="Eliminar"
+                                Margin="10,0,0,0" Click="EliminarPerfil_Click"/>
+                    </Grid>
+                    <Button x:Name="BtnNuevoPerfil" Style="{StaticResource Ghost}" Content="+  Nuevo perfil" Margin="0,10,0,0" Click="NuevoPerfil_Click"/>
+                </StackPanel>
+            </Grid>
         </Border>
     </Grid>
 </UserControl>

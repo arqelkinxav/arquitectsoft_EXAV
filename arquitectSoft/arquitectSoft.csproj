@@ -224,6 +224,7 @@
     <Compile Include="FrmMDIPrincipal.Designer.cs">
       <DependentUpon>FrmMDIPrincipal.cs</DependentUpon>
     </Compile>
+    <Compile Include="Generals\BotonesPerfil.cs" />
     <Compile Include="Generals\Conexion.cs" />
     <Compile Include="Generals\Constantes.cs" />
     <Compile Include="Generals\DGV_Handler.cs" />

@@ -8,11 +8,10 @@ namespace arquitectSoft.Generals
 {
     static class Global
     {
-        // Niveles de permiso (columna `rol` de la tabla usuario).
-        //   0 = Administrador   -> todos los botones + gestión de usuarios
-        //   1 = Técnico edición -> todos MENOS Respaldo, Importar y Usuarios
-        //   2 = Técnico básico  -> solo Análisis, Puertas y Acerca
-        // Todos los roles tienen además "Mi cuenta" para cambiar su clave.
+        // Perfil de permiso (columna `rol` de la tabla usuario).
+        //   0 = Administrador -> todo, fijo
+        //   1, 2, 3... = perfiles de beta_perfil (1 y 2 son los técnicos de siempre);
+        //   qué botones ve cada uno lo decide el administrador (ver BotonesPerfil).
         public const int ROL_ADMIN = 0;
         public const int ROL_TECNICO_EDICION = 1;
         public const int ROL_TECNICO_BASICO = 2;
@@ -65,12 +64,7 @@ namespace arquitectSoft.Generals
         /// <summary>Nombre legible del rol (para mostrar en pantallas).</summary>
         public static string NombreRol(int rol)
         {
-            switch (rol)
-            {
-                case ROL_ADMIN: return "Administrador";
-                case ROL_TECNICO_EDICION: return "Técnico (edición)";
-                default: return "Técnico (básico)";
-            }
+            return BotonesPerfil.Nombre(rol);
         }
 
         public static string AnalisisType
