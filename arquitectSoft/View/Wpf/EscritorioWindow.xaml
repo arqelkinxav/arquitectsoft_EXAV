@@ -125,6 +125,17 @@
                 <TextBlock Text="arquitectSoft" FontSize="12.5" FontWeight="Bold" VerticalAlignment="Center"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,16,0">
+                <!-- Último cambio de la base (beta_ultimo_cambio, migración 008). Oculto si no hay dato. -->
+                <StackPanel x:Name="PanelUltimoCambio" Orientation="Horizontal" VerticalAlignment="Center"
+                            Margin="0,0,18,0" Visibility="Collapsed" Background="Transparent"
+                            ToolTipService.InitialShowDelay="200" ToolTipService.ShowDuration="30000">
+                    <TextBlock Text="&#xE81C;" FontFamily="Segoe MDL2 Assets" FontSize="12"
+                               Foreground="{StaticResource TextMuted}" VerticalAlignment="Center" Margin="0,0,7,0"/>
+                    <TextBlock Text="Base actualizada: " FontSize="11.5"
+                               Foreground="{StaticResource TextMuted}" VerticalAlignment="Center"/>
+                    <TextBlock x:Name="LblUltimoCambio" FontSize="11.5" FontWeight="Medium"
+                               Foreground="{StaticResource TextPrimary}" VerticalAlignment="Center"/>
+                </StackPanel>
                 <!-- Sesión actual + cerrar sesión -->
                 <TextBlock Text="&#xE77B;" FontFamily="Segoe MDL2 Assets" FontSize="13"
                            Foreground="{StaticResource TextMuted}" VerticalAlignment="Center" Margin="0,0,7,0"/>

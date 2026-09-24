@@ -31,6 +31,7 @@ namespace arquitectSoft.View.Wpf
             Loaded += (s, e) =>
             {
                 CargarFondo(); AplicarPermisos(); MostrarSesion();
+                IniciarUltimoCambio();
                 // Catálogo para la auditoría de Revit, al día desde que se abre el programa.
                 Engine.CatalogoRevitExporter.ExportarEnSegundoPlano();
                 // Versión nueva: se enseñan los cambios, una vez por usuario.
@@ -344,6 +345,46 @@ namespace arquitectSoft.View.Wpf
             string quien = !string.IsNullOrEmpty(Generals.Global.Nombre)
                 ? Generals.Global.Nombre : Generals.Global.Usuario;
             LblSesion.Text = quien ?? "";
+        }
+
+        // ===== Último cambio de la base =====
+        // Se lee al abrir y cada minuto (lo puede cambiar otro técnico), fuera del hilo de la UI.
+        private System.Windows.Threading.DispatcherTimer _timerCambio;
+
+        private void IniciarUltimoCambio()
+        {
+            RefrescarUltimoCambio();
+            _timerCambio = new System.Windows.Threading.DispatcherTimer { Interval = TimeSpan.FromMinutes(1) };
+            _timerCambio.Tick += (s, e) => RefrescarUltimoCambio();
+            _timerCambio.Start();
+            Closed += (s, e) => _timerCambio.Stop();
+        }
+
+        private async void RefrescarUltimoCambio()
+        {
+            List<Generals.CambioBase> cambios;
+            try { cambios = await System.Threading.Tasks.Task.Run(() => Generals.RegistroCambios.Ultimos(6)); }
+            catch { cambios = null; }
+
+            if (cambios == null || cambios.Count == 0) { PanelUltimoCambio.Visibility = Visibility.Collapsed; return; }
+
+            var es = new System.Globalization.CultureInfo("es-ES");
+            var u = cambios[0];
+            LblUltimoCambio.Text = u.Fecha.ToString("d-MMM-yyyy HH:mm", es).Replace(".", "")
+                                 + " · " + u.QueLegible;
+
+            var sb = new System.Text.StringBuilder();
+            sb.AppendLine(Generals.Conexion.Destino);
+            sb.AppendLine();
+            sb.Append("Últimos cambios:");
+            foreach (var c in cambios)
+            {
+                sb.AppendLine();
+                sb.Append(c.Fecha.ToString("dd/MM/yyyy HH:mm:ss", es) + "   " + c.QueLegible + " (" + c.AccionLegible + ")");
+                if (!string.IsNullOrEmpty(c.Usuario)) sb.Append(" · " + c.Usuario);
+            }
+            PanelUltimoCambio.ToolTip = sb.ToString();
+            PanelUltimoCambio.Visibility = Visibility.Visible;
         }
 
         // Cierra la sesión (no el programa) y vuelve al login. El bucle lo cierra LoginWindow.

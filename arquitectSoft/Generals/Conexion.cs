@@ -25,7 +25,9 @@ namespace arquitectSoft.Generals
         static string database = Cfg("DbDatabase", "arquitectdb");
         static string userDB = Cfg("DbUser", "remote");
         static string password = Cfg("DbPassword", "poseidon");
-        public static string strProvider = "server=" + host + ";Database=" + database + ";User ID=" + userDB + ";Password=" + password;
+        // AllowUserVariables: deja escribir @arq_usuario en el SQL (sin eso el conector lo
+        // toma por un parametro sin definir).
+        public static string strProvider = "server=" + host + ";Database=" + database + ";User ID=" + userDB + ";Password=" + password + ";AllowUserVariables=True";
 
         /// <summary>"base @ servidor", para poder decir en pantalla sobre que base se va a actuar.</summary>
         public static string Destino { get { return database + " @ " + host; } }
@@ -51,6 +53,7 @@ namespace arquitectSoft.Generals
             {                
                 conn = new MySqlConnection(strProvider);
                 conn.Open();
+                MarcarUsuario();
                 fail = "";
                 return true;
             }
@@ -59,6 +62,21 @@ namespace arquitectSoft.Generals
                 fail = "Conexion Error ! " + er.Message;
             }
             return false;
+        }
+
+        // Deja en la sesion de MySQL quien usa el programa: los triggers del registro de
+        // cambios (db/migrations/008_registro_cambios.sql) lo apuntan en beta_ultimo_cambio.
+        // Se pone en cada Open porque la conexion viene del pool y pudo ser de otra sesion.
+        private void MarcarUsuario()
+        {
+            try
+            {
+                string quien = !string.IsNullOrEmpty(Global.Nombre) ? Global.Nombre : Global.Usuario;
+                var cmd = new MySqlCommand("SET @arq_usuario = @u", conn);
+                cmd.Parameters.AddWithValue("@u", string.IsNullOrEmpty(quien) ? (object)DBNull.Value : quien);
+                cmd.ExecuteNonQuery();
+            }
+            catch { /* apuntar quien fue nunca puede impedir conectar */ }
         }
 
         public void Close()
