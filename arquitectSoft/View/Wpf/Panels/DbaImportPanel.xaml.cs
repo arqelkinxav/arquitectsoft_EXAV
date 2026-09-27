@@ -57,19 +57,17 @@ namespace arquitectSoft.View.Wpf.Panels
             //    cuentas de esta base. Con la casilla se revisa e importa una copia en %TEMP% sin
             //    ese bloque (se borra al acabar); el original no se toca.
             string original = TxtPath.Text;
-            string temporal = null;
-            if (ChkSinUsuarios.IsChecked == true)
+            //    El historial de novedades del catálogo se quita SIEMPRE: es de esta base.
+            string temporal;
+            try
             {
-                try
-                {
-                    temporal = RespaldoSinUsuarios.CopiaTemporal(original);
-                }
-                catch (Exception ex)
-                {
-                    GlassDialog.Informar(Owner, "Importar",
-                        "No se pudo preparar la copia sin usuarios, así que no se importa nada:\n\n" + ex.Message);
-                    return;
-                }
+                temporal = RespaldoSinUsuarios.CopiaTemporal(original, ChkSinUsuarios.IsChecked == true);
+            }
+            catch (Exception ex)
+            {
+                GlassDialog.Informar(Owner, "Importar",
+                    "No se pudo preparar el archivo para importar, así que no se importa nada:\n\n" + ex.Message);
+                return;
             }
 
             try
@@ -108,7 +106,8 @@ namespace arquitectSoft.View.Wpf.Panels
             }
 
             var revision = new RevisionImportDialog { Owner = Owner };
-            revision.Cargar(informe, Path.GetFileName(original) + (ruta != original ? "  (sin la tabla usuario)" : ""));
+            revision.Cargar(informe, Path.GetFileName(original) +
+                (ruta != original && ChkSinUsuarios.IsChecked == true ? "  (sin la tabla usuario)" : ""));
             if (revision.ShowDialog() != true) return;
 
             // 2. IMPORT. Ojo: ImportBackupMysql NO lanza, devuelve el fallo en el retorno.
@@ -135,8 +134,15 @@ namespace arquitectSoft.View.Wpf.Panels
                 con.ExecuteReader(Generals.Constantes.QUERY_INSERT_dbmanagmet, out fail, param);
                 con.Close();
 
+                // Lo que ha cambiado en el catálogo, para el aviso de novedades de cada usuario.
+                NovedadesDatos.Registrar(informe.Novedades, Path.GetFileName(original));
+
                 CargarUltima();
-                GlassDialog.Informar(Owner, "Importar", "Archivo cargado correctamente.");
+                GlassDialog.Informar(Owner, "Importar", "Archivo cargado correctamente." +
+                    (informe.Novedades.Count > 0
+                        ? "\n\nLos técnicos verán " + informe.Novedades.Count +
+                          (informe.Novedades.Count == 1 ? " cambio" : " cambios") + " del catálogo al abrir."
+                        : ""));
             }
             catch (Exception ex)
             {

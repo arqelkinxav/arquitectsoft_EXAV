@@ -38,7 +38,13 @@ namespace arquitectSoft.Engine
         public string Titular { get; set; }
         public string Error { get; set; }
 
-        public InformeImport() { Bloques = new List<BloqueInforme>(); }
+        /// <summary>
+        /// Lo mismo que los bloques, pero redactado para los técnicos y SIN tope ni usuarios:
+        /// es lo que se apunta como novedades del catálogo si el import sale bien.
+        /// </summary>
+        public List<string> Novedades { get; set; }
+
+        public InformeImport() { Bloques = new List<BloqueInforme>(); Novedades = new List<string>(); }
 
         public bool HayPerdidas { get { return Perdidas > 0; } }
     }
@@ -226,17 +232,43 @@ namespace arquitectSoft.Engine
             var cambios = new List<string>();
             var altas = new List<string>();
 
+            // Novedades para los técnicos: los usuarios no se cuentan.
+            bool avisar = !string.Equals(s.Tabla, "usuario", StringComparison.OrdinalIgnoreCase);
+            Dictionary<string, string> acab = string.Equals(s.Tabla, "subcomponentes", StringComparison.OrdinalIgnoreCase)
+                ? Diccionario(LeerTabla(con, "acabados"), "Id_Acabado", "Codigo_Homologacion") : null;
+            Func<string, string> nombre = k => Nombre(k, acab);
+
             foreach (var par in aqui)
             {
                 string[] f;
-                if (!alla.TryGetValue(par.Key, out f)) { perdidas.Add(par.Key); continue; }
+                if (!alla.TryGetValue(par.Key, out f))
+                {
+                    perdidas.Add(par.Key);
+                    if (avisar) inf.Novedades.Add("Se elimina " + s.Singular + " " + nombre(par.Key));
+                    continue;
+                }
 
                 string detalle = Diferencias(s, par.Value, t, f);
-                if (detalle != null) cambios.Add(par.Key + ": " + detalle);
+                if (detalle != null)
+                {
+                    cambios.Add(par.Key + ": " + detalle);
+                    if (avisar) inf.Novedades.Add(Mayuscula(s.Singular) + " " + nombre(par.Key) + ": " + detalle);
+                }
             }
 
             foreach (var par in alla)
-                if (!aqui.ContainsKey(par.Key)) altas.Add(par.Key);
+                if (!aqui.ContainsKey(par.Key))
+                {
+                    altas.Add(par.Key);
+                    if (!avisar) continue;
+                    string desc = "";
+                    if (t.IndiceDe("Descripcion") >= 0)
+                    {
+                        string d = t.Valor(par.Value, "Descripcion");
+                        if (!string.IsNullOrWhiteSpace(d)) desc = " (" + Corto(d) + ")";
+                    }
+                    inf.Novedades.Add("Se añade " + s.Singular + " " + nombre(par.Key) + desc);
+                }
 
             if (perdidas.Count > 0)
                 Agregar(inf, NivelDif.Perdida, TituloPerdida(perdidas.Count, s.Singular),
@@ -309,12 +341,24 @@ namespace arquitectSoft.Engine
             foreach (var par in aqui)
             {
                 string destino;
-                if (!alla.TryGetValue(par.Key, out destino)) { perdidas.Add(par.Key + " -> " + par.Value); continue; }
+                if (!alla.TryGetValue(par.Key, out destino))
+                {
+                    perdidas.Add(par.Key + " -> " + par.Value);
+                    inf.Novedades.Add("Se elimina regla de vidrio " + par.Key + " -> " + par.Value);
+                    continue;
+                }
                 if (!MismoValor(par.Value, destino))
+                {
                     cambios.Add(par.Key + ": pasa a " + destino + " (aqui era " + par.Value + ")");
+                    inf.Novedades.Add("Regla de vidrio " + par.Key + ": pasa a " + destino + " (antes " + par.Value + ")");
+                }
             }
             foreach (var par in alla)
-                if (!aqui.ContainsKey(par.Key)) altas.Add(par.Key + " -> " + par.Value);
+                if (!aqui.ContainsKey(par.Key))
+                {
+                    altas.Add(par.Key + " -> " + par.Value);
+                    inf.Novedades.Add("Se añade regla de vidrio " + par.Key + " -> " + par.Value);
+                }
 
             if (perdidas.Count > 0)
                 Agregar(inf, NivelDif.Perdida, TituloPerdida(perdidas.Count, "regla de vidrio"),
@@ -528,15 +572,15 @@ namespace arquitectSoft.Engine
 
             if (hayDetalle)
                 CompararDespiece(con, dump, inf, "componentes_detalle", "Id_Componente", CAMPOS_DETALLE,
-                                 cv, cd, "despiece de componente");
+                                 cv, cd, "despiece de componente", "Componente");
             if (hayEspecial)
                 CompararDespiece(con, dump, inf, "componentes_especial_detalle", "Id_Componente_especial", CAMPOS_ESPECIAL,
-                                 cv, cd, "despiece especial (vidrios y paneles)");
+                                 cv, cd, "despiece especial (vidrios y paneles)", "Componente especial");
         }
 
         private static void CompararDespiece(Generals.Conexion con, Dictionary<string, TablaDump> dump, InformeImport inf,
                                              string tabla, string colComp, CampoDespiece[] campos,
-                                             Catalogos cv, Catalogos cd, string singular)
+                                             Catalogos cv, Catalogos cd, string singular, string etiqueta)
         {
             DataTable viva = LeerTabla(con, tabla);
             TablaDump t = dump[tabla];
@@ -567,7 +611,12 @@ namespace arquitectSoft.Engine
                 List<string> dif = DiferenciasDespiece(par.Value, otras, campos);
                 if (dif.Count == 0) continue;
                 componentes++;
-                foreach (string d in dif) lineas.Add(par.Key + ": " + d);
+                foreach (string d in dif)
+                {
+                    lineas.Add(par.Key + ": " + d);
+                    inf.Novedades.Add(etiqueta + " " + par.Key + ": " +
+                        d.Replace("se QUITA ", "se quita ").Replace("se AÑADE ", "se añade "));
+                }
             }
 
             if (componentes > 0)
@@ -836,6 +885,22 @@ namespace arquitectSoft.Engine
                 case "corte_izquierdo": return "corte izquierdo";
                 default: return columna;
             }
+        }
+
+        private static string Mayuscula(string s)
+        {
+            return string.IsNullOrEmpty(s) ? s : char.ToUpper(s[0]) + s.Substring(1);
+        }
+
+        /// <summary>
+        /// Clave de negocio para enseñar: la de subcomponentes es "codigo · id de acabado" y el
+        /// técnico lo conoce como "IMC0015B-01", así que se traduce el acabado.
+        /// </summary>
+        private static string Nombre(string clave, Dictionary<string, string> acabados)
+        {
+            if (acabados == null) return clave;
+            string[] p = clave.Split(new[] { " · " }, StringSplitOptions.None);
+            return p.Length == 2 ? CodigoSub(p[0], p[1], acabados) : clave;
         }
 
         private static string Corto(string s)

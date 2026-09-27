@@ -159,6 +159,7 @@
     <Compile Include="Engine\FilaPuerta.cs" />
     <Compile Include="Engine\RespaldoDiff.cs" />
     <Compile Include="Engine\RespaldoSinUsuarios.cs" />
+    <Compile Include="Engine\NovedadesDatos.cs" />
     <Compile Include="Engine\VidrioResolver.cs" />
     <Compile Include="Engine\ExcelExporter.cs" />
     <Compile Include="Engine\ResultadoAnalisis.cs" />

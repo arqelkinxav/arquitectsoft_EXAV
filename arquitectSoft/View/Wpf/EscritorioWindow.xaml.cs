@@ -54,15 +54,29 @@ namespace arquitectSoft.View.Wpf
             try
             {
                 string usuario = Generals.Global.Usuario;
-                var cambios = Engine.Novedades.Pendientes(usuario);
-                if (cambios.Count == 0) return;
+                var programa = Engine.Novedades.Pendientes(usuario);
+                long hasta;
+                var catalogo = Engine.NovedadesDatos.Pendientes(usuario, out hasta);
+                if (programa.Count == 0 && catalogo.Count == 0) return;
+
+                var lista = new List<Engine.Novedades.Cambio>();
+                if (programa.Count > 0)
+                {
+                    lista.Add(new Engine.Novedades.Cambio { EsCabecera = true, Titulo = "PROGRAMA" });
+                    lista.AddRange(programa);
+                }
+                if (catalogo.Count > 0)
+                {
+                    lista.Add(new Engine.Novedades.Cambio { EsCabecera = true, Titulo = "CATÁLOGO (componentes, subcomponentes, despieces…)" });
+                    lista.AddRange(catalogo);
+                }
+
                 string nombre = string.IsNullOrWhiteSpace(Generals.Global.Nombre) ? usuario : Generals.Global.Nombre;
-                GlassDialog.Novedades(this, "Actualización instalada",
-                    "Hola " + nombre + ", arquitectSoft se ha actualizado. "
-                    + (cambios.Count == 1 ? "Este es el cambio" : "Estos son los " + cambios.Count + " cambios")
-                    + " desde la última vez que lo abriste:",
-                    cambios);
+                GlassDialog.Novedades(this, programa.Count > 0 ? "Actualización instalada" : "Catálogo actualizado",
+                    "Hola " + nombre + ", esto es lo que ha cambiado desde la última vez que abriste arquitectSoft:",
+                    lista);
                 Engine.Novedades.MarcarVisto(usuario);
+                Engine.NovedadesDatos.MarcarVisto(usuario, hasta);
             }
             catch { /* un aviso nunca puede impedir trabajar */ }
         }

@@ -18,18 +18,38 @@ namespace arquitectSoft.Engine
     /// </summary>
     public static class RespaldoSinUsuarios
     {
-        // El bloque va desde "-- Definition of usuario" hasta el siguiente encabezado de
-        // sección. "Dumping data for table usuario" queda DENTRO (no corta).
-        private static readonly Regex INICIO = new Regex(@"^--\s*Definition of usuario\s*$");
+        // El bloque de una tabla va desde "-- Definition of <tabla>" hasta el siguiente
+        // encabezado de sección. "Dumping data for table <tabla>" queda DENTRO (no corta).
         private static readonly Regex FIN = new Regex(@"^--\s*(Dumping functions|Dumping procedures|Definition of )");
-        private static readonly Regex RESTOS = new Regex(
-            @"(DROP TABLE IF EXISTS|CREATE TABLE|INSERT INTO)\s+`?usuario`?[\s(]", RegexOptions.IgnoreCase);
+
+        /// <summary>
+        /// Tablas que un Importar no debe tocar NUNCA, con o sin casilla: el historial de
+        /// novedades del catálogo es de la base donde se importa (ver NovedadesDatos).
+        /// </summary>
+        private static readonly string[] SIEMPRE = { NovedadesDatos.TABLA, NovedadesDatos.VISTAS };
+
+        private static Regex Inicio(string tabla)
+        {
+            return new Regex(@"^--\s*Definition of " + Regex.Escape(tabla) + @"\s*$");
+        }
+
+        private static Regex Restos(string tabla)
+        {
+            return new Regex(@"(DROP TABLE IF EXISTS|CREATE TABLE|INSERT INTO)\s+`?" + Regex.Escape(tabla) + @"`?[\s(]",
+                             RegexOptions.IgnoreCase);
+        }
 
         /// <summary>¿El respaldo trae la tabla `usuario`?</summary>
         public static bool TraeUsuarios(string ruta)
         {
+            return Trae(ruta, "usuario");
+        }
+
+        private static bool Trae(string ruta, string tabla)
+        {
+            Regex ini = Inicio(tabla);
             foreach (string l in File.ReadLines(ruta, Encoding.UTF8))
-                if (INICIO.IsMatch(l)) return true;
+                if (ini.IsMatch(l)) return true;
             return false;
         }
 
@@ -40,50 +60,67 @@ namespace arquitectSoft.Engine
         /// </summary>
         public static int Quitar(string origen, string destino)
         {
-            string[] lineas = File.ReadAllLines(origen, Encoding.UTF8);
+            if (!TraeUsuarios(origen)) throw new InvalidOperationException("El respaldo no trae la tabla usuario.");
+            return QuitarTablas(origen, destino, new[] { "usuario" });
+        }
 
-            int ini = -1, fin = -1;
-            for (int i = 0; i < lineas.Length; i++)
+        /// <summary>Quita los bloques de <paramref name="tablas"/> (las que no estén, se ignoran).</summary>
+        private static int QuitarTablas(string origen, string destino, string[] tablas)
+        {
+            var lineas = new List<string>(File.ReadAllLines(origen, Encoding.UTF8));
+            int total = 0;
+
+            foreach (string tabla in tablas)
             {
-                if (ini < 0) { if (INICIO.IsMatch(lineas[i])) ini = i; continue; }
-                if (FIN.IsMatch(lineas[i])) { fin = i; break; }
+                Regex ini = Inicio(tabla);
+                int desde = lineas.FindIndex(l => ini.IsMatch(l));
+                if (desde < 0) continue;
+                int fin = lineas.FindIndex(desde + 1, l => FIN.IsMatch(l));
+                if (fin < 0) fin = lineas.Count;
+
+                // El comentario abre con un "--" suelto encima; se recorta también.
+                if (desde > 0 && lineas[desde - 1].Trim() == "--") desde--;
+
+                lineas.RemoveRange(desde, fin - desde);
+                lineas.InsertRange(desde, new[]
+                {
+                    "-- [arquitectSoft] Bloque de la tabla `" + tabla + "` retirado a proposito:",
+                    tabla == "usuario"
+                        ? "-- en la beta manda la tabla de usuarios de la beta, no la de Olimpo."
+                        : "-- el historial de novedades es de la base donde se importa.",
+                    ""
+                });
+                total += fin - desde;
+
+                Regex restos = Restos(tabla);
+                foreach (string l in lineas)
+                    if (restos.IsMatch(l))
+                        throw new InvalidOperationException(
+                            "Después de quitar la tabla " + tabla + " siguen apareciendo sentencias sobre ella:\n" +
+                            (l.Length > 100 ? l.Substring(0, 100) + "…" : l));
             }
-            if (ini < 0) throw new InvalidOperationException("El respaldo no trae la tabla usuario.");
-            if (fin < 0) fin = lineas.Length;
 
-            // El comentario abre con un "--" suelto encima; se recorta también.
-            int desde = ini;
-            if (desde > 0 && lineas[desde - 1].Trim() == "--") desde--;
-
-            var salida = new List<string>(lineas.Length);
-            for (int i = 0; i < desde; i++) salida.Add(lineas[i]);
-            salida.Add("-- [arquitectSoft] Bloque de la tabla `usuario` retirado a proposito:");
-            salida.Add("-- en la beta manda la tabla de usuarios de la beta, no la de Olimpo.");
-            salida.Add("");
-            for (int i = fin; i < lineas.Length; i++) salida.Add(lineas[i]);
-
-            foreach (string l in salida)
-                if (RESTOS.IsMatch(l))
-                    throw new InvalidOperationException(
-                        "Después de quitar la tabla usuario siguen apareciendo sentencias sobre ella:\n" +
-                        (l.Length > 100 ? l.Substring(0, 100) + "…" : l));
-
-            File.WriteAllLines(destino, salida, new UTF8Encoding(false));
-            return fin - desde;
+            File.WriteAllLines(destino, lineas, new UTF8Encoding(false));
+            return total;
         }
 
         /// <summary>
-        /// Para Importar: si el respaldo trae `usuario`, deja una copia sin ella en %TEMP% y
-        /// devuelve su ruta (hay que borrarla al acabar). Si no la trae, devuelve null y se
-        /// importa el original tal cual.
+        /// Para Importar: deja en %TEMP% una copia sin las tablas que no se deben tocar
+        /// (`usuario` si <paramref name="sinUsuarios"/>, y siempre el historial de novedades) y
+        /// devuelve su ruta (hay que borrarla al acabar). Si el archivo no trae ninguna,
+        /// devuelve null y se importa el original tal cual.
         /// </summary>
-        public static string CopiaTemporal(string ruta)
+        public static string CopiaTemporal(string ruta, bool sinUsuarios)
         {
-            if (!TraeUsuarios(ruta)) return null;
+            var tablas = new List<string>(SIEMPRE);
+            if (sinUsuarios) tablas.Add("usuario");
+            tablas.RemoveAll(t => !Trae(ruta, t));
+            if (tablas.Count == 0) return null;
+
             string tmp = Path.Combine(Path.GetTempPath(),
-                "arquitectSoft_" + Path.GetFileNameWithoutExtension(ruta) + "_sin_usuarios_" +
+                "arquitectSoft_" + Path.GetFileNameWithoutExtension(ruta) + "_import_" +
                 DateTime.Now.ToString("HHmmss") + ".sql");
-            Quitar(ruta, tmp);
+            QuitarTablas(ruta, tmp, tablas.ToArray());
             return tmp;
         }
 

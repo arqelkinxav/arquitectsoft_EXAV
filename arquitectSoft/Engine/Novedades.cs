@@ -24,7 +24,9 @@ namespace arquitectSoft.Engine
             public string Hash { get; set; }
             public string Titulo { get; set; }
             public DateTime Fecha { get; set; }
-            public string FechaTexto { get { return Fecha.ToString("dd/MM/yyyy"); } }
+            /// <summary>Título de apartado ("Programa", "Catálogo") en vez de un cambio.</summary>
+            public bool EsCabecera { get; set; }
+            public string FechaTexto { get { return EsCabecera ? "" : Fecha.ToString("dd/MM/yyyy"); } }
         }
 
         private const string RECURSO = "arquitectSoft.Novedades.txt";
