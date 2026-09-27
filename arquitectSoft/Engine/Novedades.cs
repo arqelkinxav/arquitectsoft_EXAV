@@ -29,7 +29,13 @@ namespace arquitectSoft.Engine
 
         private const string RECURSO = "arquitectSoft.Novedades.txt";
         private const string ARCHIVO = "novedades_vistas.txt";
-        private const int MAX = 25;
+        private const int MAX = 100;
+
+        // Claves "de sistema" en el mismo archivo (no son usuarios): la versión que corre en
+        // esta carpeta y la que había antes. Con la anterior, quien abre por primera vez ve
+        // los cambios desde la última actualización de la beta, no un número arbitrario.
+        private const string CLAVE_VERSION = "__version";
+        private const string CLAVE_ANTERIOR = "__anterior";
 
         /// <summary>Commits incluidos en este .exe, del más nuevo al más viejo (vacío si no se incrustaron).</summary>
         public static List<Cambio> Todos()
@@ -70,12 +76,14 @@ namespace arquitectSoft.Engine
 
         /// <summary>
         /// Cambios que le toca ver a <paramref name="usuario"/> (vacío si ya vio esta versión).
-        /// La primera vez, los de las últimas semanas.
+        /// La primera vez, los que trae esta versión respecto a la que había antes en la carpeta.
         /// </summary>
         public static List<Cambio> Pendientes(string usuario)
         {
             var todos = Todos();
             if (todos.Count == 0 || string.IsNullOrWhiteSpace(usuario)) return new List<Cambio>();
+
+            RegistrarVersion(todos);
 
             string visto = Visto(usuario);
             if (visto == todos[0].Hash) return new List<Cambio>();
@@ -83,7 +91,12 @@ namespace arquitectSoft.Engine
             int i = visto == null ? -1 : todos.FindIndex(c => c.Hash == visto);
             if (i >= 0) return todos.Take(Math.Min(i, MAX)).ToList();
 
-            // Nunca vio ninguna (o la suya es tan vieja que ya no está en la lista).
+            // Nunca vio ninguna: desde la versión que había antes de esta actualización.
+            string anterior = Visto(CLAVE_ANTERIOR);
+            int a = anterior == null ? -1 : todos.FindIndex(c => c.Hash == anterior);
+            if (a > 0) return todos.Take(Math.Min(a, MAX)).ToList();
+
+            // Sin rastro de la anterior (o es tan vieja que ya no está en la lista).
             DateTime desde = todos[0].Fecha.AddDays(-30);
             var recientes = todos.TakeWhile(c => c.Fecha >= desde).Take(MAX).ToList();
             return recientes.Count >= 5 ? recientes : todos.Take(Math.Min(5, todos.Count)).ToList();
@@ -94,8 +107,50 @@ namespace arquitectSoft.Engine
         {
             var todos = Todos();
             if (todos.Count == 0 || string.IsNullOrWhiteSpace(usuario)) return;
-            if (!Guardar(RutaCompartida(), usuario, todos[0].Hash))
-                Guardar(RutaLocal(), usuario, todos[0].Hash);
+            Marcar(usuario, todos[0].Hash);
+        }
+
+        /// <summary>
+        /// Apunta la versión que corre y, si cambió, cuál había antes. La primera vez que se
+        /// usa (archivo de antes de esto) la anterior es la más nueva que vio algún usuario:
+        /// esa es la que tenían en la empresa.
+        /// </summary>
+        private static void RegistrarVersion(List<Cambio> todos)
+        {
+            string actual = todos[0].Hash;
+            string version = Visto(CLAVE_VERSION);
+            if (version == actual) return;
+
+            string anterior = version ?? MasNuevaVistaPorUsuarios(todos);
+            if (anterior != null && anterior != actual) Marcar(CLAVE_ANTERIOR, anterior);
+            Marcar(CLAVE_VERSION, actual);
+        }
+
+        private static string MasNuevaVistaPorUsuarios(List<Cambio> todos)
+        {
+            int mejor = int.MaxValue;
+            foreach (string ruta in new[] { RutaCompartida(), RutaLocal() })
+            {
+                try
+                {
+                    if (!File.Exists(ruta)) continue;
+                    foreach (string l in File.ReadAllLines(ruta, Encoding.UTF8))
+                    {
+                        string[] p = l.Split('\t');
+                        if (p.Length < 2 || p[0].Trim().StartsWith("__")) continue;
+                        int i = todos.FindIndex(c => c.Hash == p[1].Trim());
+                        if (i > 0 && i < mejor) mejor = i;
+                    }
+                }
+                catch { }
+            }
+            return mejor == int.MaxValue ? null : todos[mejor].Hash;
+        }
+
+        private static void Marcar(string clave, string hash)
+        {
+            if (!Guardar(RutaCompartida(), clave, hash))
+                Guardar(RutaLocal(), clave, hash);
         }
 
         // ===== archivo "usuario<TAB>hash" =====
