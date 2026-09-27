@@ -766,6 +766,8 @@
   <!-- Novedades: la lista de commits va dentro del .exe para el aviso de "Actualización
        instalada" (Engine\Novedades.cs). Si no hay git, se compila sin ella y no sale aviso. -->
   <Target Name="GenerarNovedades" BeforeTargets="BeforeBuild">
+    <!-- En una compilacion limpia obj\ aun no existe y el > fallaria: exe sin novedades. -->
+    <MakeDir Directories="$(IntermediateOutputPath)" />
     <Exec Command="git -C &quot;$(MSBuildProjectDirectory)&quot; log -n 250 --pretty=reference &gt; &quot;$(IntermediateOutputPath)Novedades.txt&quot;"
           ContinueOnError="true" StandardOutputImportance="low" />
     <ItemGroup Condition="Exists('$(IntermediateOutputPath)Novedades.txt')">
