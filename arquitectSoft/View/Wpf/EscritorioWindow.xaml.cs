@@ -253,9 +253,9 @@ namespace arquitectSoft.View.Wpf
         }
 
         private void Respaldo_Click(object sender, RoutedEventArgs e) =>
-            AbrirPanel("Respaldo de base de datos", "", new DbaBackupPanel(), 560, 300);
+            AbrirPanel("Respaldo de base de datos", "", new DbaBackupPanel(), 560, 390);
         private void Importar_Click(object sender, RoutedEventArgs e) =>
-            AbrirPanel("Importar base de datos", "", new DbaImportPanel(), 560, 360);
+            AbrirPanel("Importar base de datos", "", new DbaImportPanel(), 560, 440);
         private void Usuarios_Click(object sender, RoutedEventArgs e) =>
             AbrirPanel("Usuarios", "", new UsuariosPanel(), 1240, 600);
         private void MiCuenta_Click(object sender, RoutedEventArgs e) =>

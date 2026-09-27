@@ -49,6 +49,26 @@ namespace arquitectSoft.View.Wpf.Panels
                 File.WriteAllText(backupFilePath, header + existing);
 
                 LblEstado.Text = "Respaldo creado: " + fileName;
+
+                // Copia para la beta: el mismo respaldo sin la tabla usuario, al lado.
+                if (ChkSinUsuarios.IsChecked == true)
+                {
+                    try
+                    {
+                        string sinUsuarios = Engine.RespaldoSinUsuarios.RutaHermana(backupFilePath);
+                        Engine.RespaldoSinUsuarios.Quitar(backupFilePath, sinUsuarios);
+                        LblEstado.Text = "Respaldo creado: " + fileName +
+                                         "\nPara la beta: " + Path.GetFileName(sinUsuarios);
+                        result += "\n\nPara la beta lleva este (no toca los usuarios de allí):\n" +
+                                  Path.GetFileName(sinUsuarios);
+                    }
+                    catch (Exception ex)
+                    {
+                        result += "\n\nOJO: el respaldo completo está bien, pero NO se pudo sacar la copia sin usuarios:\n" +
+                                  ex.Message;
+                    }
+                }
+
                 GlassDialog.Informar(Owner, "Respaldo", result);
             }
             catch (Exception ex)

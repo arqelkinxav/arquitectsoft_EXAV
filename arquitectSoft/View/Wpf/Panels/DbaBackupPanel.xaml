@@ -94,6 +94,40 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
+        <!-- CheckBox oscuro con marca peach (como ExportDialog) -->
+        <Style x:Key="Check" TargetType="CheckBox">
+            <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+            <Setter Property="FontSize" Value="12.5"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="CheckBox">
+                        <StackPanel Orientation="Horizontal" Background="Transparent">
+                            <Border x:Name="box" Width="20" Height="20" CornerRadius="6"
+                                    Background="{StaticResource InputDark}"
+                                    BorderBrush="{StaticResource PanelBorder}" BorderThickness="1"
+                                    VerticalAlignment="Center">
+                                <Path x:Name="check" Stroke="#201712" StrokeThickness="2"
+                                      StrokeStartLineCap="Round" StrokeEndLineCap="Round"
+                                      Data="M 4,9 L 8,13 L 15,5" Opacity="0"/>
+                            </Border>
+                            <ContentPresenter VerticalAlignment="Center" Margin="9,0,0,0"/>
+                        </StackPanel>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="box" Property="Background" Value="{StaticResource Accent}"/>
+                                <Setter TargetName="box" Property="BorderBrush" Value="{StaticResource Accent}"/>
+                                <Setter TargetName="check" Property="Opacity" Value="1"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="box" Property="BorderBrush" Value="{StaticResource Accent}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </UserControl.Resources>
 
     <!-- Contenido (el chrome de ventana y el liquid glass los aporta MdiChild) -->
@@ -101,7 +135,7 @@
           Margin="24,16,24,20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/><RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/><RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/><RowDefinition Height="*"/><RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <TextBlock Grid.Row="0" Text="CARPETA DESTINO" Style="{StaticResource Cap}"/>
@@ -111,11 +145,18 @@
             <Button Grid.Column="1" Style="{StaticResource Ghost}" Content="Examinar…" Margin="10,0,0,0" Click="Examinar_Click"/>
         </Grid>
 
-        <TextBlock x:Name="LblEstado" Grid.Row="2" VerticalAlignment="Bottom" Margin="3,12,0,0"
+        <StackPanel Grid.Row="2" Margin="3,16,0,0">
+            <CheckBox x:Name="ChkSinUsuarios" Style="{StaticResource Check}"
+                      Content="Sacar también una copia SIN usuarios (para pasar a la beta)"/>
+            <TextBlock Margin="29,4,0,0" Foreground="{StaticResource TextMuted}" FontSize="11" TextWrapping="Wrap"
+                       Text="El respaldo completo se hace siempre. La copia …_sin_usuarios.sql no lleva la tabla usuario: al importarla en la beta no toca las cuentas ni las contraseñas de los técnicos."/>
+        </StackPanel>
+
+        <TextBlock x:Name="LblEstado" Grid.Row="3" VerticalAlignment="Bottom" Margin="3,12,0,0"
                    Foreground="{StaticResource TextMuted}" FontSize="11.5" TextWrapping="Wrap"
                    Text="Se generará un archivo .sql con la fecha y hora actuales."/>
 
-        <Button x:Name="BtnBackup" Grid.Row="3" Style="{StaticResource Primary}" Content="Crear respaldo"
+        <Button x:Name="BtnBackup" Grid.Row="4" Style="{StaticResource Primary}" Content="Crear respaldo"
                 HorizontalAlignment="Right" Margin="0,16,0,0" Click="Backup_Click"/>
     </Grid>
 </UserControl>

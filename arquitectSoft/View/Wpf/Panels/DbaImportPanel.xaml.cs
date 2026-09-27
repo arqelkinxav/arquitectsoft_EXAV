@@ -53,9 +53,40 @@ namespace arquitectSoft.View.Wpf.Panels
                 return;
             }
 
+            // 0. SIN USUARIOS. Un respaldo completo hace DROP TABLE `usuario` y reemplaza las
+            //    cuentas de esta base. Con la casilla se revisa e importa una copia en %TEMP% sin
+            //    ese bloque (se borra al acabar); el original no se toca.
+            string original = TxtPath.Text;
+            string temporal = null;
+            if (ChkSinUsuarios.IsChecked == true)
+            {
+                try
+                {
+                    temporal = RespaldoSinUsuarios.CopiaTemporal(original);
+                }
+                catch (Exception ex)
+                {
+                    GlassDialog.Informar(Owner, "Importar",
+                        "No se pudo preparar la copia sin usuarios, así que no se importa nada:\n\n" + ex.Message);
+                    return;
+                }
+            }
+
+            try
+            {
+                await Importar(original, temporal ?? original);
+            }
+            finally
+            {
+                if (temporal != null) try { File.Delete(temporal); } catch { }
+            }
+        }
+
+        /// <summary>Revisa e importa <paramref name="ruta"/>; <paramref name="original"/> es solo el nombre que se enseña.</summary>
+        private async Task Importar(string original, string ruta)
+        {
             // 1. REVISION. El import reemplaza tabla por tabla, asi que lo que haya aqui y no
             //    venga en el archivo se pierde. Antes de tocar nada se compara y se enseña.
-            string ruta = TxtPath.Text;
             InformeImport informe;
 
             BtnImportar.IsEnabled = false;
@@ -77,7 +108,7 @@ namespace arquitectSoft.View.Wpf.Panels
             }
 
             var revision = new RevisionImportDialog { Owner = Owner };
-            revision.Cargar(informe, Path.GetFileName(ruta));
+            revision.Cargar(informe, Path.GetFileName(original) + (ruta != original ? "  (sin la tabla usuario)" : ""));
             if (revision.ShowDialog() != true) return;
 
             // 2. IMPORT. Ojo: ImportBackupMysql NO lanza, devuelve el fallo en el retorno.
@@ -111,6 +142,22 @@ namespace arquitectSoft.View.Wpf.Panels
             {
                 CargarUltima();
                 GlassDialog.Informar(Owner, "Importar", "No se pudo importar:\n" + ex.Message);
+            }
+        }
+
+        private void ChkSinUsuarios_Cambio(object sender, RoutedEventArgs e)
+        {
+            if (LblSinUsuarios == null) return;   // durante InitializeComponent
+            if (ChkSinUsuarios.IsChecked == true)
+            {
+                LblSinUsuarios.Foreground = (System.Windows.Media.Brush)FindResource("TextMuted");
+                LblSinUsuarios.Text = "Si el archivo trae la tabla usuario, se importa sin ella: cuentas, contraseñas y perfiles de aquí se quedan como están.";
+            }
+            else
+            {
+                LblSinUsuarios.Foreground = new System.Windows.Media.SolidColorBrush(
+                    System.Windows.Media.Color.FromRgb(0xF0, 0x9A, 0x3E));
+                LblSinUsuarios.Text = "⚠ Los usuarios de esta base se REEMPLAZAN por los del archivo (cuentas, contraseñas y perfil asignado).";
             }
         }
 
