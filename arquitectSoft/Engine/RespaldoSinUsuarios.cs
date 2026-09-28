@@ -15,6 +15,12 @@ namespace arquitectSoft.Engine
     ///
     /// OJO: también deja fuera cambios de ESQUEMA de `usuario`; si algún día se le añaden
     /// columnas, ese ALTER hay que aplicarlo a mano en la beta.
+    ///
+    /// Los PERFILES (beta_perfil + beta_rol_boton) van con los usuarios: cada base gestiona
+    /// los suyos (en la empresa se crean perfiles que Olimpo no tiene, y el Id de un perfil
+    /// nuevo de Olimpo pisaría a otro distinto de la empresa). Esas tablas no se borran ni se
+    /// rellenan: solo queda su CREATE TABLE IF NOT EXISTS, para que en una base que aún no
+    /// las tenga se creen vacías y los triggers del respaldo (que las nombran) no fallen.
     /// </summary>
     public static class RespaldoSinUsuarios
     {
@@ -27,6 +33,15 @@ namespace arquitectSoft.Engine
         /// novedades del catálogo es de la base donde se importa (ver NovedadesDatos).
         /// </summary>
         private static readonly string[] SIEMPRE = { NovedadesDatos.TABLA, NovedadesDatos.VISTAS };
+
+        /// <summary>Tablas de perfiles: con la casilla, se conservan las de la base destino.</summary>
+        private static readonly string[] PERFILES = { "beta_perfil", "beta_rol_boton" };
+
+        private static Regex DropOInsert(string tabla)
+        {
+            return new Regex(@"^\s*(DROP TABLE IF EXISTS|INSERT INTO)\s+`?" + Regex.Escape(tabla) + @"`?[\s(;]",
+                             RegexOptions.IgnoreCase);
+        }
 
         private static Regex Inicio(string tabla)
         {
@@ -61,14 +76,29 @@ namespace arquitectSoft.Engine
         public static int Quitar(string origen, string destino)
         {
             if (!TraeUsuarios(origen)) throw new InvalidOperationException("El respaldo no trae la tabla usuario.");
-            return QuitarTablas(origen, destino, new[] { "usuario" });
+            return QuitarTablas(origen, destino, new[] { "usuario" }, PERFILES);
         }
 
-        /// <summary>Quita los bloques de <paramref name="tablas"/> (las que no estén, se ignoran).</summary>
-        private static int QuitarTablas(string origen, string destino, string[] tablas)
+        /// <summary>
+        /// Quita los bloques de <paramref name="tablas"/> y deja las <paramref name="conservar"/>
+        /// sin DROP ni datos (las que no estén en el respaldo, se ignoran).
+        /// </summary>
+        private static int QuitarTablas(string origen, string destino, string[] tablas, string[] conservar)
         {
             var lineas = new List<string>(File.ReadAllLines(origen, Encoding.UTF8));
             int total = 0;
+
+            foreach (string tabla in conservar)
+            {
+                Regex quitar = DropOInsert(tabla);
+                int antes = lineas.Count;
+                lineas.RemoveAll(l => quitar.IsMatch(l));
+                if (lineas.Count == antes) continue;
+                total += antes - lineas.Count;
+                int ini = lineas.FindIndex(l => Inicio(tabla).IsMatch(l));
+                if (ini >= 0)
+                    lineas.Insert(ini + 1, "-- [arquitectSoft] Sin DROP ni datos a proposito: los perfiles son de la base donde se importa.");
+            }
 
             foreach (string tabla in tablas)
             {
@@ -106,21 +136,23 @@ namespace arquitectSoft.Engine
 
         /// <summary>
         /// Para Importar: deja en %TEMP% una copia sin las tablas que no se deben tocar
-        /// (`usuario` si <paramref name="sinUsuarios"/>, y siempre el historial de novedades) y
+        /// (`usuario` y los perfiles si <paramref name="sinUsuarios"/>, y siempre el historial de novedades) y
         /// devuelve su ruta (hay que borrarla al acabar). Si el archivo no trae ninguna,
         /// devuelve null y se importa el original tal cual.
         /// </summary>
         public static string CopiaTemporal(string ruta, bool sinUsuarios)
         {
             var tablas = new List<string>(SIEMPRE);
-            if (sinUsuarios) tablas.Add("usuario");
+            var conservar = new List<string>();
+            if (sinUsuarios) { tablas.Add("usuario"); conservar.AddRange(PERFILES); }
             tablas.RemoveAll(t => !Trae(ruta, t));
-            if (tablas.Count == 0) return null;
+            conservar.RemoveAll(t => !Trae(ruta, t));
+            if (tablas.Count == 0 && conservar.Count == 0) return null;
 
             string tmp = Path.Combine(Path.GetTempPath(),
                 "arquitectSoft_" + Path.GetFileNameWithoutExtension(ruta) + "_import_" +
                 DateTime.Now.ToString("HHmmss") + ".sql");
-            QuitarTablas(ruta, tmp, tablas.ToArray());
+            QuitarTablas(ruta, tmp, tablas.ToArray(), conservar.ToArray());
             return tmp;
         }
 

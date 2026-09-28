@@ -146,11 +146,11 @@
 
         <StackPanel Grid.Row="3" Margin="3,16,0,0">
             <CheckBox x:Name="ChkSinUsuarios" Style="{StaticResource Check}" IsChecked="True"
-                      Content="No tocar los usuarios de esta base"
+                      Content="No tocar los usuarios ni los perfiles de esta base"
                       Checked="ChkSinUsuarios_Cambio" Unchecked="ChkSinUsuarios_Cambio"/>
             <TextBlock x:Name="LblSinUsuarios" Margin="29,4,0,0" Foreground="{DynamicResource TextMuted}"
                        FontSize="11" TextWrapping="Wrap"
-                       Text="Si el archivo trae la tabla usuario, se importa sin ella: cuentas, contraseñas y perfiles de aquí se quedan como están."/>
+                       Text="Cuentas, contraseñas, perfiles y los botones de cada perfil de esta base se quedan como están."/>
         </StackPanel>
 
         <TextBlock Grid.Row="4" VerticalAlignment="Bottom" Margin="3,12,0,0" TextWrapping="Wrap"

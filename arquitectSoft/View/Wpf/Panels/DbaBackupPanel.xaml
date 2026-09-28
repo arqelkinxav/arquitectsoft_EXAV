@@ -140,7 +140,7 @@
             <CheckBox x:Name="ChkSinUsuarios" Style="{StaticResource Check}"
                       Content="Sacar también una copia SIN usuarios (para pasar a la beta)"/>
             <TextBlock Margin="29,4,0,0" Foreground="{DynamicResource TextMuted}" FontSize="11" TextWrapping="Wrap"
-                       Text="El respaldo completo se hace siempre. La copia …_sin_usuarios.sql no lleva la tabla usuario: al importarla en la beta no toca las cuentas ni las contraseñas de los técnicos."/>
+                       Text="El respaldo completo se hace siempre. La copia …_sin_usuarios.sql no lleva usuarios ni perfiles: al importarla en la beta no toca las cuentas, contraseñas ni perfiles de los técnicos."/>
         </StackPanel>
 
         <TextBlock x:Name="LblEstado" Grid.Row="3" VerticalAlignment="Bottom" Margin="3,12,0,0"

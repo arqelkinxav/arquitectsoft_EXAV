@@ -59,7 +59,7 @@ namespace arquitectSoft.View.Wpf.Panels
                         Engine.RespaldoSinUsuarios.Quitar(backupFilePath, sinUsuarios);
                         LblEstado.Text = "Respaldo creado: " + fileName +
                                          "\nPara la beta: " + Path.GetFileName(sinUsuarios);
-                        result += "\n\nPara la beta lleva este (no toca los usuarios de allí):\n" +
+                        result += "\n\nPara la beta lleva este (no toca los usuarios ni los perfiles de allí):\n" +
                                   Path.GetFileName(sinUsuarios);
                     }
                     catch (Exception ex)

@@ -107,7 +107,7 @@ namespace arquitectSoft.View.Wpf.Panels
 
             var revision = new RevisionImportDialog { Owner = Owner };
             revision.Cargar(informe, Path.GetFileName(original) +
-                (ruta != original && ChkSinUsuarios.IsChecked == true ? "  (sin la tabla usuario)" : ""));
+                (ruta != original && ChkSinUsuarios.IsChecked == true ? "  (sin usuarios ni perfiles)" : ""));
             if (revision.ShowDialog() != true) return;
 
             // 2. IMPORT. Ojo: ImportBackupMysql NO lanza, devuelve el fallo en el retorno.
@@ -156,14 +156,14 @@ namespace arquitectSoft.View.Wpf.Panels
             if (LblSinUsuarios == null) return;   // durante InitializeComponent
             if (ChkSinUsuarios.IsChecked == true)
             {
-                LblSinUsuarios.Foreground = (System.Windows.Media.Brush)FindResource("TextMuted");
-                LblSinUsuarios.Text = "Si el archivo trae la tabla usuario, se importa sin ella: cuentas, contraseñas y perfiles de aquí se quedan como están.";
+                LblSinUsuarios.SetResourceReference(System.Windows.Controls.TextBlock.ForegroundProperty, "TextMuted");
+                LblSinUsuarios.Text = "Cuentas, contraseñas, perfiles y los botones de cada perfil de esta base se quedan como están.";
             }
             else
             {
                 LblSinUsuarios.Foreground = new System.Windows.Media.SolidColorBrush(
                     System.Windows.Media.Color.FromRgb(0xF0, 0x9A, 0x3E));
-                LblSinUsuarios.Text = "⚠ Los usuarios de esta base se REEMPLAZAN por los del archivo (cuentas, contraseñas y perfil asignado).";
+                LblSinUsuarios.Text = "⚠ Los usuarios y los perfiles de esta base se REEMPLAZAN por los del archivo (cuentas, contraseñas, perfiles y sus botones).";
             }
         }
 
