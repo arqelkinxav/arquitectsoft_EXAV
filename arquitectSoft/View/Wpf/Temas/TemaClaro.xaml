@@ -1,4 +1,4 @@
-﻿<!-- GENERADO por tematizar.py: tema Claro. El oscuro son los colores de siempre;
+﻿<!-- Generado al principio por tematizar.py (ya se edita a mano): tema Claro. El oscuro son los colores de siempre;
      el claro, su pareja diurna. Clave T.XXXXXX = color oscuro original. -->
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
@@ -69,4 +69,10 @@
     <SolidColorBrush x:Key="T.05FFFFFF" Color="#05000000"/>
     <SolidColorBrush x:Key="T.08FFFFFF" Color="#05000000"/>
     <SolidColorBrush x:Key="T.0BFFFFFF" Color="#05000000"/>
+    <!-- Botón principal peach: degradado en noche; en día liso y más claro. -->
+    <SolidColorBrush x:Key="BotonPrimario" Color="#F2A98E"/>
+    <SolidColorBrush x:Key="PestanaActiva" Color="#F2A98E"/>
+    <!-- Brillo peach exterior (hover de botones / pestaña activa). En día no hay. -->
+    <x:Null x:Key="BrilloPeach"/>
+    <x:Null x:Key="BrilloPestana"/>
 </ResourceDictionary>

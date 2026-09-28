@@ -213,16 +213,11 @@
                                 </MultiTrigger.ExitActions>
                             </MultiTrigger>
                             <Trigger Property="IsSelected" Value="True">
-                                <Setter TargetName="bd" Property="Background" Value="{StaticResource Accent}"/>
+                                <Setter TargetName="bd" Property="Background" Value="{DynamicResource PestanaActiva}"/>
                                 <Setter Property="Foreground" Value="#201712"/>
                                 <Setter Property="FontWeight" Value="SemiBold"/>
                                 <Setter TargetName="underline" Property="Visibility" Value="Collapsed"/>
-                                <Setter TargetName="bd" Property="Effect">
-                                    <Setter.Value>
-                                        <DropShadowEffect Color="#E07B5B" BlurRadius="12"
-                                                          ShadowDepth="0" Opacity="0.45"/>
-                                    </Setter.Value>
-                                </Setter>
+                                <Setter TargetName="bd" Property="Effect" Value="{DynamicResource BrilloPestana}"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
