@@ -4,7 +4,7 @@
         Title="arquitectSoft"
         Width="1408" Height="770" MinWidth="900" MinHeight="600"
         WindowStyle="None" ResizeMode="CanResize" WindowStartupLocation="Manual"
-        Background="#0A0A0C"
+        Background="{DynamicResource T.0A0A0C}"
         TextOptions.TextFormattingMode="Display" UseLayoutRounding="True">
 
     <WindowChrome.WindowChrome>
@@ -28,18 +28,18 @@
                         <ControlTemplate TargetType="Button">
                             <StackPanel x:Name="sp" Background="Transparent" HorizontalAlignment="Center" Width="80">
                                 <TextBlock x:Name="ico" Text="{TemplateBinding Tag}" FontFamily="Segoe MDL2 Assets"
-                                           FontSize="23" Foreground="{StaticResource TextPrimary}" HorizontalAlignment="Center"
+                                           FontSize="23" Foreground="{DynamicResource TextPrimary}" HorizontalAlignment="Center"
                                            RenderTransformOrigin="0.5,0.5">
                                     <TextBlock.RenderTransform><ScaleTransform x:Name="icoScale" ScaleX="1" ScaleY="1"/></TextBlock.RenderTransform>
                                 </TextBlock>
-                                <TextBlock x:Name="lbl" Text="{TemplateBinding Content}" Foreground="{StaticResource TextMuted}"
+                                <TextBlock x:Name="lbl" Text="{TemplateBinding Content}" Foreground="{DynamicResource TextMuted}"
                                            FontSize="11" FontWeight="Medium" HorizontalAlignment="Center" Margin="0,5,0,0"
                                            TextAlignment="Center" TextWrapping="Wrap"/>
                             </StackPanel>
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsMouseOver" Value="True">
                                     <Setter TargetName="ico" Property="Foreground" Value="{StaticResource Accent}"/>
-                                    <Setter TargetName="lbl" Property="Foreground" Value="{StaticResource TextPrimary}"/>
+                                    <Setter TargetName="lbl" Property="Foreground" Value="{DynamicResource TextPrimary}"/>
                                     <Trigger.EnterActions>
                                         <BeginStoryboard><Storyboard>
                                             <DoubleAnimation Storyboard.TargetName="icoScale" Storyboard.TargetProperty="ScaleX" To="1.16" Duration="0:0:0.12"/>
@@ -60,37 +60,17 @@
                 </Setter>
             </Style>
 
-            <Style x:Key="WinDot" TargetType="Button">
-                <Setter Property="Width" Value="14"/><Setter Property="Height" Value="14"/>
-                <Setter Property="Margin" Value="5,0"/><Setter Property="Cursor" Value="Hand"/>
-                <Setter Property="Foreground" Value="#0B0B0B"/>
-                <Setter Property="FontFamily" Value="Segoe MDL2 Assets"/><Setter Property="FontSize" Value="7"/>
-                <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True"/>
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="Button">
-                            <Grid><Ellipse x:Name="dot" Fill="#3A3A3A"/>
-                                <ContentPresenter x:Name="g" Opacity="0" HorizontalAlignment="Center" VerticalAlignment="Center"/></Grid>
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter TargetName="dot" Property="Fill" Value="#E07B5B"/>
-                                    <Setter TargetName="g" Property="Opacity" Value="1"/></Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
 
             <!-- Botón de la barra de tareas (icono + título de cada ventana abierta) -->
             <Style x:Key="TaskButton" TargetType="Button">
                 <Setter Property="Cursor" Value="Hand"/>
                 <Setter Property="Margin" Value="4,0"/>
                 <Setter Property="Height" Value="32"/>
-                <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+                <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="Button">
-                            <Border x:Name="bd" CornerRadius="9" Background="#26FFFFFF" Padding="10,0"
+                            <Border x:Name="bd" CornerRadius="9" Background="{DynamicResource T.26FFFFFF}" Padding="10,0"
                                     BorderThickness="0,0,0,2" BorderBrush="{TemplateBinding BorderBrush}">
                                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                     <TextBlock x:Name="ico" Text="{TemplateBinding Tag}" FontFamily="Segoe MDL2 Assets"
@@ -101,7 +81,7 @@
                             </Border>
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter TargetName="bd" Property="Background" Value="#3DFFFFFF"/></Trigger>
+                                    <Setter TargetName="bd" Property="Background" Value="{DynamicResource T.3DFFFFFF}"/></Trigger>
                                 <!-- "Activa" se marca cambiando el Tag de fondo desde código vía la propiedad attached no;
                                      usamos un DataTrigger sobre IsEnabled? Mejor: el borde inferior peach se pone por código. -->
                             </ControlTemplate.Triggers>
@@ -112,14 +92,14 @@
         </ResourceDictionary>
     </Window.Resources>
 
-    <Grid TextElement.FontFamily="{StaticResource Jakarta}" TextElement.Foreground="{StaticResource TextPrimary}">
+    <Grid TextElement.FontFamily="{StaticResource Jakarta}" TextElement.Foreground="{DynamicResource TextPrimary}">
         <Grid.RowDefinitions>
             <RowDefinition Height="38"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
         <!-- ===== Barra de título de la app (arrastrable entre monitores) ===== -->
-        <Grid Grid.Row="0" Background="#0A0A0C" MouseLeftButtonDown="TitleBar_MouseDown">
+        <Grid Grid.Row="0" Background="{DynamicResource T.0A0A0C}" MouseLeftButtonDown="TitleBar_MouseDown">
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="14,0,0,0">
                 <Border Width="11" Height="11" CornerRadius="3" Background="{StaticResource Accent}" Margin="0,0,10,0"/>
                 <TextBlock Text="arquitectSoft" FontSize="12.5" FontWeight="Bold" VerticalAlignment="Center"/>
@@ -130,26 +110,26 @@
                             Margin="0,0,18,0" Visibility="Collapsed" Background="Transparent"
                             ToolTipService.InitialShowDelay="200" ToolTipService.ShowDuration="30000">
                     <TextBlock Text="&#xE81C;" FontFamily="Segoe MDL2 Assets" FontSize="12"
-                               Foreground="{StaticResource TextMuted}" VerticalAlignment="Center" Margin="0,0,7,0"/>
+                               Foreground="{DynamicResource TextMuted}" VerticalAlignment="Center" Margin="0,0,7,0"/>
                     <TextBlock Text="Base actualizada: " FontSize="11.5"
-                               Foreground="{StaticResource TextMuted}" VerticalAlignment="Center"/>
+                               Foreground="{DynamicResource TextMuted}" VerticalAlignment="Center"/>
                     <TextBlock x:Name="LblUltimoCambio" FontSize="11.5" FontWeight="Medium"
-                               Foreground="{StaticResource TextPrimary}" VerticalAlignment="Center"/>
+                               Foreground="{DynamicResource TextPrimary}" VerticalAlignment="Center"/>
                 </StackPanel>
                 <!-- Sesión actual + cerrar sesión -->
                 <TextBlock Text="&#xE77B;" FontFamily="Segoe MDL2 Assets" FontSize="13"
-                           Foreground="{StaticResource TextMuted}" VerticalAlignment="Center" Margin="0,0,7,0"/>
+                           Foreground="{DynamicResource TextMuted}" VerticalAlignment="Center" Margin="0,0,7,0"/>
                 <TextBlock x:Name="LblSesion" FontSize="11.5" FontWeight="Medium"
-                           Foreground="{StaticResource TextPrimary}" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                           Foreground="{DynamicResource TextPrimary}" VerticalAlignment="Center" Margin="0,0,10,0"/>
                 <Button x:Name="BtnCerrarSesion" Click="CerrarSesion_Click" Cursor="Hand"
                         VerticalAlignment="Center" Margin="0,0,14,0"
-                        Background="#22FFFFFF" Foreground="{StaticResource TextPrimary}"
+                        Background="{DynamicResource T.22FFFFFF}" Foreground="{DynamicResource TextPrimary}"
                         FontSize="11" FontWeight="Medium" Content="Cerrar sesión"
                         ToolTip="Cerrar la sesión y volver al inicio de sesión">
                     <Button.Template>
                         <ControlTemplate TargetType="Button">
                             <Border x:Name="bd" CornerRadius="7" Background="{TemplateBinding Background}" Padding="12,4"
-                                    BorderThickness="1" BorderBrush="{StaticResource PanelBorder}">
+                                    BorderThickness="1" BorderBrush="{DynamicResource PanelBorder}">
                                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                     <TextBlock Text="&#xF3B1;" FontFamily="Segoe MDL2 Assets" FontSize="12"
                                                VerticalAlignment="Center" Margin="0,0,7,0"/>
@@ -165,10 +145,34 @@
                         </ControlTemplate>
                     </Button.Template>
                 </Button>
+                <!-- Modo diurno / nocturno (se recuerda por usuario de Windows) -->
+                <Button x:Name="BtnTema" Click="Tema_Click" Cursor="Hand"
+                        VerticalAlignment="Center" Margin="0,0,10,0"
+                        Background="{DynamicResource T.22FFFFFF}" Foreground="{DynamicResource TextPrimary}"
+                        FontSize="11" FontWeight="Medium">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="bd" CornerRadius="7" Background="{TemplateBinding Background}" Padding="12,4"
+                                    BorderThickness="1" BorderBrush="{DynamicResource PanelBorder}">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <TextBlock x:Name="ico" Text="{TemplateBinding Tag}" FontFamily="Segoe MDL2 Assets" FontSize="13"
+                                               Foreground="#E07B5B" VerticalAlignment="Center" Margin="0,0,7,0"/>
+                                    <ContentPresenter VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="bd" Property="BorderBrush" Value="#E07B5B"/>
+                                    <Setter TargetName="bd" Property="Background" Value="#33E07B5B"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
                 <!-- Toggle cristal ↔ modo rendimiento -->
                 <Button x:Name="BtnRendimiento" Click="Rendimiento_Click" Cursor="Hand"
                         VerticalAlignment="Center" Margin="0,0,14,0"
-                        Background="#22FFFFFF" Foreground="{StaticResource TextPrimary}"
+                        Background="{DynamicResource T.22FFFFFF}" Foreground="{DynamicResource TextPrimary}"
                         FontSize="11" FontWeight="Medium" Content="Cristal"
                         ToolTip="Alternar cristal / modo rendimiento (apaga el efecto para ir más fluido con varias ventanas)">
                     <Button.Template>
@@ -183,9 +187,9 @@
                         </ControlTemplate>
                     </Button.Template>
                 </Button>
-                <Button Style="{StaticResource WinDot}" Content="&#xE921;" Click="MinimizarApp_Click" ToolTip="Minimizar"/>
-                <Button Style="{StaticResource WinDot}" Content="&#xE922;" Click="MaximizarApp_Click" ToolTip="Maximizar / Restaurar"/>
-                <Button Style="{StaticResource WinDot}" Content="&#xE8BB;" Click="CerrarApp_Click" ToolTip="Salir"/>
+                <Button Style="{StaticResource BotonVentana}" Content="&#xE921;" Click="MinimizarApp_Click" ToolTip="Minimizar"/>
+                <Button Style="{StaticResource BotonVentana}" Content="&#xE922;" Click="MaximizarApp_Click" ToolTip="Maximizar / Restaurar"/>
+                <Button Style="{StaticResource BotonVentanaCerrar}" Content="&#xE8BB;" Click="CerrarApp_Click" ToolTip="Salir"/>
             </StackPanel>
         </Grid>
 
@@ -196,8 +200,8 @@
             </Grid.ColumnDefinitions>
 
             <!-- ===== Barra lateral (dock) ===== -->
-            <Border Grid.Column="0" Width="96" CornerRadius="18" Background="#CC161616"
-                    BorderBrush="{StaticResource PanelBorder}" BorderThickness="1" Margin="0,0,10,0">
+            <Border Grid.Column="0" Width="96" CornerRadius="18" Background="{DynamicResource T.CC161616}"
+                    BorderBrush="{DynamicResource PanelBorder}" BorderThickness="1" Margin="0,0,10,0">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <StackPanel Margin="0,12,0,12">
                         <Button x:Name="BtnAnalisis" Style="{StaticResource IconButton}" Tag="&#xE8F1;" Content="Análisis" Click="Analisis_Click"/>
@@ -222,7 +226,7 @@
             </Border>
 
             <!-- ===== Escritorio (canvas) ===== -->
-            <Border Grid.Column="1" x:Name="DeskCard" CornerRadius="18" BorderBrush="{StaticResource PanelBorder}" BorderThickness="1"
+            <Border Grid.Column="1" x:Name="DeskCard" CornerRadius="18" BorderBrush="{DynamicResource PanelBorder}" BorderThickness="1"
                     ClipToBounds="True">
                 <Border.Background>
                     <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
@@ -241,7 +245,7 @@
 
                     <!-- Área de ventanas -->
                     <Grid Grid.Row="0">
-                        <TextBlock Text="Escritorio" Foreground="#5C5C5C" FontSize="11" FontWeight="Medium"
+                        <TextBlock Text="Escritorio" Foreground="{DynamicResource T.5C5C5C}" FontSize="11" FontWeight="Medium"
                                    HorizontalAlignment="Left" VerticalAlignment="Top" Margin="16,12,0,0"/>
                         <Canvas x:Name="Lienzo" Background="Transparent" SizeChanged="Lienzo_SizeChanged"/>
                         <!-- Vista previa de la zona de snap (Aero Snap) -->
@@ -252,8 +256,8 @@
 
                     <!-- Barra de tareas (se oculta cuando no hay ventanas) -->
                     <Border x:Name="BarraTareasHost" Grid.Row="1" Visibility="Collapsed"
-                            Margin="8,6,8,8" CornerRadius="14" Background="#B2161616"
-                            BorderBrush="{StaticResource PanelBorder}" BorderThickness="1">
+                            Margin="8,6,8,8" CornerRadius="14" Background="{DynamicResource T.B2161616}"
+                            BorderBrush="{DynamicResource PanelBorder}" BorderThickness="1">
                         <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
                             <StackPanel x:Name="BarraTareas" Orientation="Horizontal" Margin="6,5"/>
                         </ScrollViewer>

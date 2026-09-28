@@ -22,10 +22,6 @@
     <Window.Resources>
         <FontFamily x:Key="Jakarta">pack://application:,,,/Resources/Fonts/#Plus Jakarta Sans</FontFamily>
         <SolidColorBrush x:Key="Accent"      Color="#E07B5B"/>
-        <SolidColorBrush x:Key="PanelBorder" Color="#2F2F2F"/>
-        <SolidColorBrush x:Key="InputDark"   Color="#0E0E0E"/>
-        <SolidColorBrush x:Key="TextPrimary" Color="#ECECEC"/>
-        <SolidColorBrush x:Key="TextMuted"   Color="#8C8C8C"/>
 
         <!-- Botón primario peach -->
         <Style x:Key="Primary" TargetType="Button">
@@ -72,7 +68,7 @@
         <!-- Botón secundario (contorno) -->
         <Style x:Key="Ghost" TargetType="Button">
             <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="Foreground" Value="{StaticResource TextMuted}"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextMuted}"/>
             <Setter Property="FontWeight" Value="Medium"/>
             <Setter Property="FontSize" Value="13"/>
             <Setter Property="Height" Value="38"/>
@@ -81,13 +77,13 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Border x:Name="bd" CornerRadius="9" Background="Transparent"
-                                BorderBrush="{StaticResource PanelBorder}" BorderThickness="1" Padding="16,0">
+                                BorderBrush="{DynamicResource PanelBorder}" BorderThickness="1" Padding="16,0">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="bd" Property="Background" Value="#1C1C1C"/>
-                                <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+                                <Setter TargetName="bd" Property="Background" Value="{DynamicResource T.1C1C1C}"/>
+                                <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -97,11 +93,11 @@
 
         <Style x:Key="Field" TargetType="TextBox">
             <Setter Property="Height" Value="38"/>
-            <Setter Property="Background" Value="{StaticResource InputDark}"/>
-            <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+            <Setter Property="Background" Value="{DynamicResource InputDark}"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
             <Setter Property="CaretBrush" Value="{StaticResource Accent}"/>
             <Setter Property="SelectionBrush" Value="{StaticResource Accent}"/>
-            <Setter Property="BorderBrush" Value="{StaticResource PanelBorder}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource PanelBorder}"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="Padding" Value="11,0"/>
@@ -123,7 +119,7 @@
             </Setter>
         </Style>
         <Style x:Key="Cap" TargetType="TextBlock">
-            <Setter Property="Foreground" Value="{StaticResource TextMuted}"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextMuted}"/>
             <Setter Property="FontSize" Value="10"/>
             <Setter Property="FontWeight" Value="Medium"/>
             <Setter Property="Margin" Value="3,0,0,5"/>
@@ -161,11 +157,11 @@
 
     <!-- El tinte translúcido lo da el Background de la ventana; aquí sólo un
          contorno sutil + un reflejo de cristal para que se vea brillante. -->
-    <Border x:Name="FrameRim" Background="#CC000000" CornerRadius="14"
-            BorderBrush="#3DFFFFFF" BorderThickness="1"
+    <Border x:Name="FrameRim" Background="{DynamicResource T.CC000000}" CornerRadius="14"
+            BorderBrush="{DynamicResource T.3DFFFFFF}" BorderThickness="1"
             RenderTransformOrigin="0.5,0.5"
             TextElement.FontFamily="{StaticResource Jakarta}"
-            TextElement.Foreground="{StaticResource TextPrimary}">
+            TextElement.Foreground="{DynamicResource TextPrimary}">
         <Border.RenderTransform>
             <ScaleTransform x:Name="WinScale" ScaleX="1" ScaleY="1"/>
         </Border.RenderTransform>
@@ -196,7 +192,7 @@
             </StackPanel>
 
             <TextBlock x:Name="LblMensaje" Grid.Row="1" TextWrapping="Wrap" FontSize="13"
-                       Foreground="{StaticResource TextPrimary}" Margin="0,0,0,4" LineHeight="20"/>
+                       Foreground="{DynamicResource TextPrimary}" Margin="0,0,0,4" LineHeight="20"/>
 
             <!-- Área de entrada (sólo modo acabado) -->
             <StackPanel x:Name="PanelInput" Grid.Row="2" Margin="0,14,0,0" Visibility="Collapsed">
@@ -213,12 +209,12 @@
                     <TextBox x:Name="TxtAcabado2" Style="{StaticResource Field}" Margin="0,0,8,0"/>
                 </DockPanel>
                 <TextBlock Text="Pulsa el icono para elegir de la lista, o escribe CÓDIGO-DESCRIPCIÓN."
-                           Foreground="#7A7A7A" FontSize="10" Margin="3,8,0,0" TextWrapping="Wrap"/>
+                           Foreground="{DynamicResource T.7A7A7A}" FontSize="10" Margin="3,8,0,0" TextWrapping="Wrap"/>
             </StackPanel>
 
             <!-- Lista de cambios (sólo modo novedades) -->
             <Border x:Name="PanelLista" Grid.Row="2" Margin="0,14,0,0" Visibility="Collapsed"
-                    CornerRadius="10" Background="#66000000" BorderBrush="{StaticResource PanelBorder}" BorderThickness="1">
+                    CornerRadius="10" Background="{DynamicResource T.66000000}" BorderBrush="{DynamicResource PanelBorder}" BorderThickness="1">
                 <ScrollViewer MaxHeight="380" VerticalScrollBarVisibility="Auto" Padding="4,6">
                     <ItemsControl x:Name="ListaCambios">
                         <ItemsControl.ItemTemplate>
@@ -246,7 +242,7 @@
                                             <Style TargetType="TextBlock">
                                                 <Setter Property="Grid.Column" Value="1"/>
                                                 <Setter Property="FontSize" Value="12.5"/>
-                                                <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+                                                <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
                                                 <Style.Triggers>
                                                     <DataTrigger Binding="{Binding EsCabecera}" Value="True">
                                                         <Setter Property="Grid.Column" Value="0"/>
@@ -261,7 +257,7 @@
                                         </TextBlock.Style>
                                     </TextBlock>
                                     <TextBlock Grid.Column="2" Text="{Binding FechaTexto}" FontSize="11"
-                                               Foreground="{StaticResource TextMuted}" Margin="12,2,0,0"/>
+                                               Foreground="{DynamicResource TextMuted}" Margin="12,2,0,0"/>
                                 </Grid>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>

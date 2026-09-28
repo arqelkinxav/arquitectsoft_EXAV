@@ -180,7 +180,7 @@ namespace arquitectSoft.View.Wpf
         {
             try
             {
-                string ruta = Path.Combine(Directory.GetCurrentDirectory(), "FondoApp.png");
+                string ruta = Tema.RutaFondo();
                 if (!File.Exists(ruta)) return;
 
                 // Decodifica la imagen al ancho de la pantalla (no a full-res 14MB): así el
@@ -231,7 +231,7 @@ namespace arquitectSoft.View.Wpf
             {
                 int round = DWMWCP_ROUND;
                 DwmSetWindowAttribute(hwnd, DWMWA_WINDOW_CORNER_PREFERENCE, ref round, sizeof(int));
-                int dark = 1;
+                int dark = Tema.DwmOscuro;
                 DwmSetWindowAttribute(hwnd, DWMWA_USE_IMMERSIVE_DARK_MODE, ref dark, sizeof(int));
                 int backdrop = DWMSBT_TRANSIENTWINDOW;
                 DwmSetWindowAttribute(hwnd, DWMWA_SYSTEMBACKDROP_TYPE, ref backdrop, sizeof(int));

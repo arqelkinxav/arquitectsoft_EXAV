@@ -6,28 +6,7 @@
     <UserControl.Resources>
         <FontFamily x:Key="Jakarta">pack://application:,,,/Resources/Fonts/#Plus Jakarta Sans</FontFamily>
         <SolidColorBrush x:Key="Accent" Color="#E07B5B"/>
-        <SolidColorBrush x:Key="TextPrimary" Color="#ECECEC"/>
 
-        <!-- Botón de control de ventana (minimizar / maximizar / cerrar) estilo macOS -->
-        <Style x:Key="WinDot" TargetType="Button">
-            <Setter Property="Width" Value="13"/><Setter Property="Height" Value="13"/>
-            <Setter Property="Margin" Value="5,0"/><Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="Foreground" Value="#0B0B0B"/>
-            <Setter Property="FontFamily" Value="Segoe MDL2 Assets"/><Setter Property="FontSize" Value="7"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Grid><Ellipse x:Name="dot" Fill="#3A3A3A"/>
-                            <ContentPresenter x:Name="g" Opacity="0" HorizontalAlignment="Center" VerticalAlignment="Center"/></Grid>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="dot" Property="Fill" Value="#E07B5B"/>
-                                <Setter TargetName="g" Property="Opacity" Value="1"/></Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
 
         <!-- Plantilla de Thumb transparente reutilizable para los agarres de redimensión -->
         <ControlTemplate x:Key="ThumbTransparente" TargetType="Thumb">
@@ -39,7 +18,7 @@
     <Grid>
     <vw:SoftShadow Margin="-22" Opacity="0.55"/>
     <Border x:Name="Frame" CornerRadius="12" Background="Transparent" BorderThickness="1.2"
-            TextElement.FontFamily="{StaticResource Jakarta}" TextElement.Foreground="{StaticResource TextPrimary}">
+            TextElement.FontFamily="{StaticResource Jakarta}" TextElement.Foreground="{DynamicResource TextPrimary}">
         <Border.BorderBrush>
             <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                 <GradientStop Color="#73FFFFFF" Offset="0"/><GradientStop Color="#1FFFFFFF" Offset="0.3"/>
@@ -54,7 +33,7 @@
             <!-- Fondo refractado por el shader; lo monta el código (VisualBrush del wallpaper). -->
             <Rectangle x:Name="GlassBackdrop" RadiusX="11" RadiusY="11" IsHitTestVisible="False"/>
             <!-- Tinte oscuro encima del cristal -->
-            <Rectangle Fill="#9E000000" RadiusX="11" RadiusY="11" IsHitTestVisible="False"/>
+            <Rectangle Fill="{DynamicResource T.9E000000}" RadiusX="11" RadiusY="11" IsHitTestVisible="False"/>
             <!-- Brillo de cristal diagonal -->
             <Border CornerRadius="11" IsHitTestVisible="False">
                 <Border.Background>
@@ -71,7 +50,7 @@
                 <Grid.RowDefinitions><RowDefinition Height="34"/><RowDefinition Height="*"/></Grid.RowDefinitions>
 
                 <!-- Barra de título (arrastrable) -->
-                <Border Grid.Row="0" Background="#59121214" CornerRadius="11,11,0,0">
+                <Border Grid.Row="0" Background="{DynamicResource T.59121214}" CornerRadius="11,11,0,0">
                     <Grid>
                         <Thumb x:Name="DragThumb" Background="Transparent" Opacity="0" Template="{StaticResource ThumbTransparente}"/>
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="12,0,0,0" IsHitTestVisible="False">
@@ -79,9 +58,9 @@
                             <TextBlock x:Name="LblTitulo" Text="Ventana" FontSize="12.5" FontWeight="Bold" VerticalAlignment="Center"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,14,0">
-                            <Button x:Name="BtnMin" Style="{StaticResource WinDot}" Content="&#xE921;" Click="Minimizar_Click" ToolTip="Minimizar"/>
-                            <Button x:Name="BtnMax" Style="{StaticResource WinDot}" Content="&#xE922;" Click="Maximizar_Click" ToolTip="Maximizar en el escritorio"/>
-                            <Button x:Name="BtnClose" Style="{StaticResource WinDot}" Content="&#xE8BB;" Click="Cerrar_Click" ToolTip="Cerrar"/>
+                            <Button x:Name="BtnMin" Style="{StaticResource BotonVentana}" Content="&#xE921;" Click="Minimizar_Click" ToolTip="Minimizar"/>
+                            <Button x:Name="BtnMax" Style="{StaticResource BotonVentana}" Content="&#xE922;" Click="Maximizar_Click" ToolTip="Maximizar en el escritorio"/>
+                            <Button x:Name="BtnClose" Style="{StaticResource BotonVentanaCerrar}" Content="&#xE8BB;" Click="Cerrar_Click" ToolTip="Cerrar"/>
                         </StackPanel>
                     </Grid>
                 </Border>

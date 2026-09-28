@@ -14,17 +14,8 @@
         <FontFamily x:Key="Jakarta">pack://application:,,,/Resources/Fonts/#Plus Jakarta Sans</FontFamily>
 
         <!-- ===== Paleta gris NEUTRO (sin azul) + acento naranja ===== -->
-        <SolidColorBrush x:Key="Base"        Color="#0B0B0B"/>
-        <SolidColorBrush x:Key="Panel"       Color="#1E1E1E"/>
-        <SolidColorBrush x:Key="PanelBorder" Color="#2F2F2F"/>
-        <SolidColorBrush x:Key="InputDark"   Color="#0E0E0E"/>
-        <SolidColorBrush x:Key="Header"       Color="#262626"/>
-        <SolidColorBrush x:Key="Hover"        Color="#2A2A2A"/>
         <SolidColorBrush x:Key="Accent"       Color="#E07B5B"/>
         <SolidColorBrush x:Key="AccentDark"   Color="#C96A4C"/>
-        <SolidColorBrush x:Key="TextPrimary"  Color="#ECECEC"/>
-        <SolidColorBrush x:Key="TextMuted"    Color="#8C8C8C"/>
-        <SolidColorBrush x:Key="TopLight"     Color="#16FFFFFF"/>
 
         <!-- ===== Icono-acción SIN botón: solo icono + texto; icono naranja al hover ===== -->
         <Style x:Key="IconButton" TargetType="Button">
@@ -39,7 +30,7 @@
                                     HorizontalAlignment="Center" Width="74">
                             <TextBlock x:Name="ico" Text="{TemplateBinding Tag}"
                                        FontFamily="Segoe MDL2 Assets" FontSize="24"
-                                       Foreground="{StaticResource TextPrimary}"
+                                       Foreground="{DynamicResource TextPrimary}"
                                        HorizontalAlignment="Center"
                                        RenderTransformOrigin="0.5,0.5">
                                 <TextBlock.RenderTransform>
@@ -47,7 +38,7 @@
                                 </TextBlock.RenderTransform>
                             </TextBlock>
                             <TextBlock Text="{TemplateBinding Content}"
-                                       Foreground="{StaticResource TextMuted}" FontSize="12" FontWeight="Medium"
+                                       Foreground="{DynamicResource TextMuted}" FontSize="12" FontWeight="Medium"
                                        HorizontalAlignment="Center" Margin="0,6,0,0"/>
                         </StackPanel>
                         <ControlTemplate.Triggers>
@@ -92,14 +83,14 @@
             <Setter Property="Height" Value="14"/>
             <Setter Property="Margin" Value="5,0"/>
             <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="Foreground" Value="#0B0B0B"/>
+            <Setter Property="Foreground" Value="{DynamicResource T.0B0B0B}"/>
             <Setter Property="FontFamily" Value="Segoe MDL2 Assets"/>
             <Setter Property="FontSize" Value="7"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Grid>
-                            <Ellipse x:Name="dot" Fill="#3A3A3A"/>
+                            <Ellipse x:Name="dot" Fill="{DynamicResource T.3A3A3A}"/>
                             <ContentPresenter x:Name="g" Opacity="0"
                                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Grid>
@@ -120,8 +111,8 @@
         <!-- ===== Caja de texto numérica (fondo oscuro, foco naranja) ===== -->
         <Style x:Key="DarkBox" TargetType="Border">
             <Setter Property="CornerRadius" Value="9"/>
-            <Setter Property="Background" Value="{StaticResource InputDark}"/>
-            <Setter Property="BorderBrush" Value="{StaticResource PanelBorder}"/>
+            <Setter Property="Background" Value="{DynamicResource InputDark}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource PanelBorder}"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Height" Value="38"/>
             <Style.Triggers>
@@ -132,7 +123,7 @@
         </Style>
         <Style x:Key="SpinButton" TargetType="RepeatButton">
             <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Foreground" Value="{StaticResource TextMuted}"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextMuted}"/>
             <Setter Property="FontSize" Value="7"/>
             <Setter Property="FontFamily" Value="Segoe MDL2 Assets"/>
             <Setter Property="Cursor" Value="Hand"/>
@@ -154,7 +145,7 @@
         <Style x:Key="NumTextBox" TargetType="TextBox">
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
             <Setter Property="CaretBrush" Value="{StaticResource Accent}"/>
             <Setter Property="SelectionBrush" Value="{StaticResource Accent}"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
@@ -162,7 +153,7 @@
             <Setter Property="FontSize" Value="13"/>
         </Style>
         <Style x:Key="FieldLabel" TargetType="TextBlock">
-            <Setter Property="Foreground" Value="{StaticResource TextMuted}"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextMuted}"/>
             <Setter Property="FontSize" Value="10"/>
             <Setter Property="FontWeight" Value="Medium"/>
             <Setter Property="Margin" Value="3,0,0,5"/>
@@ -170,7 +161,7 @@
 
         <!-- ===== Pestañas ===== -->
         <Style TargetType="TabItem">
-            <Setter Property="Foreground" Value="{StaticResource TextMuted}"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextMuted}"/>
             <Setter Property="FontSize" Value="13"/>
             <Setter Property="FontWeight" Value="Medium"/>
             <Setter Property="Template">
@@ -197,7 +188,7 @@
                                     <Condition Property="IsMouseOver" Value="True"/>
                                     <Condition Property="IsSelected" Value="False"/>
                                 </MultiTrigger.Conditions>
-                                <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+                                <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
                                 <MultiTrigger.EnterActions>
                                     <BeginStoryboard>
                                         <Storyboard>
@@ -246,14 +237,14 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Thumb">
-                        <Border x:Name="t" CornerRadius="5" Background="#3C3C3C" Margin="2">
+                        <Border x:Name="t" CornerRadius="5" Background="{DynamicResource T.3C3C3C}" Margin="2">
                             <Border.Effect>
                                 <DropShadowEffect Color="Black" BlurRadius="5" ShadowDepth="0" Opacity="0.6"/>
                             </Border.Effect>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="t" Property="Background" Value="#565656"/>
+                                <Setter TargetName="t" Property="Background" Value="{DynamicResource T.565656}"/>
                             </Trigger>
                             <Trigger Property="IsDragging" Value="True">
                                 <Setter TargetName="t" Property="Background" Value="{StaticResource Accent}"/>
@@ -332,44 +323,44 @@
             <Setter Property="IsReadOnly" Value="True"/>
             <Setter Property="HeadersVisibility" Value="Column"/>
             <Setter Property="GridLinesVisibility" Value="Horizontal"/>
-            <Setter Property="HorizontalGridLinesBrush" Value="#262626"/>
+            <Setter Property="HorizontalGridLinesBrush" Value="{DynamicResource T.262626}"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="RowBackground" Value="Transparent"/>
-            <Setter Property="AlternatingRowBackground" Value="#232323"/>
+            <Setter Property="AlternatingRowBackground" Value="{DynamicResource T.232323}"/>
             <Setter Property="RowHeaderWidth" Value="0"/>
             <Setter Property="SelectionUnit" Value="FullRow"/>
             <Setter Property="FontSize" Value="12"/>
             <Setter Property="ColumnHeaderHeight" Value="38"/>
             <Setter Property="EnableRowVirtualization" Value="True"/>
-            <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
         </Style>
         <Style TargetType="DataGridColumnHeader">
-            <Setter Property="Background" Value="{StaticResource Header}"/>
-            <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+            <Setter Property="Background" Value="{DynamicResource Header}"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
             <Setter Property="FontSize" Value="12"/>
             <Setter Property="Padding" Value="10,0"/>
             <Setter Property="BorderThickness" Value="0,0,1,0"/>
-            <Setter Property="BorderBrush" Value="#363636"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource T.363636}"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
         </Style>
         <Style TargetType="DataGridCell">
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Padding" Value="4,6"/>
-            <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
             <Style.Triggers>
                 <Trigger Property="IsSelected" Value="True">
                     <Setter Property="Background" Value="Transparent"/>
-                    <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+                    <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
                 </Trigger>
             </Style.Triggers>
         </Style>
         <Style TargetType="DataGridRow">
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#241B12"/>
+                    <Setter Property="Background" Value="{DynamicResource T.241B12}"/>
                 </Trigger>
                 <Trigger Property="IsSelected" Value="True">
                     <Setter Property="Background" Value="#33E07B5B"/>
@@ -379,9 +370,9 @@
 
         <!-- ===== Menú contextual oscuro ===== -->
         <Style TargetType="ContextMenu">
-            <Setter Property="Background" Value="#1B1B1B"/>
-            <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
-            <Setter Property="BorderBrush" Value="{StaticResource PanelBorder}"/>
+            <Setter Property="Background" Value="{DynamicResource T.1B1B1B}"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource PanelBorder}"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Template">
                 <Setter.Value>
@@ -399,7 +390,7 @@
             </Setter>
         </Style>
         <Style TargetType="MenuItem">
-            <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
             <Setter Property="FontSize" Value="12.5"/>
             <Setter Property="Padding" Value="12,8"/>
             <Setter Property="Template">
@@ -424,8 +415,8 @@
              arrastra. La sombra no se ve (la tarjeta ocupa toda la pestaña) y sale gratis. -->
         <Style x:Key="CardGrid" TargetType="Border">
             <Setter Property="CornerRadius" Value="14"/>
-            <Setter Property="Background" Value="{StaticResource Panel}"/>
-            <Setter Property="BorderBrush" Value="{StaticResource PanelBorder}"/>
+            <Setter Property="Background" Value="{DynamicResource Panel}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource PanelBorder}"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Padding" Value="6"/>
         </Style>
@@ -433,8 +424,8 @@
         <!-- Tarjeta que envuelve cada DataGrid -->
         <Style x:Key="Card" TargetType="Border">
             <Setter Property="CornerRadius" Value="14"/>
-            <Setter Property="Background" Value="{StaticResource Panel}"/>
-            <Setter Property="BorderBrush" Value="{StaticResource PanelBorder}"/>
+            <Setter Property="Background" Value="{DynamicResource Panel}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource PanelBorder}"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Padding" Value="6"/>
             <Setter Property="Effect">
@@ -450,7 +441,7 @@
     <Grid>
         <!-- ===== Contenido ===== -->
         <Grid Margin="16,10,16,14" TextElement.FontFamily="{StaticResource Jakarta}"
-              TextElement.Foreground="{StaticResource TextPrimary}">
+              TextElement.Foreground="{DynamicResource TextPrimary}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>  <!-- barra-panel superior -->
                 <RowDefinition Height="Auto"/>  <!-- estado -->
@@ -458,8 +449,8 @@
             </Grid.RowDefinitions>
 
             <!-- ===== Barra-panel superior ===== -->
-            <Border Grid.Row="0" Background="{StaticResource Panel}"
-                    BorderBrush="{StaticResource PanelBorder}" BorderThickness="1"
+            <Border Grid.Row="0" Background="{DynamicResource Panel}"
+                    BorderBrush="{DynamicResource PanelBorder}" BorderThickness="1"
                     CornerRadius="16" Padding="20,14">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -534,10 +525,10 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock x:Name="LblEstado" Grid.Column="0" Text="Listo. Carga uno o varios archivos TXT para analizar."
-                           Foreground="{StaticResource TextMuted}" FontSize="12" VerticalAlignment="Center"
+                           Foreground="{DynamicResource TextMuted}" FontSize="12" VerticalAlignment="Center"
                            TextTrimming="CharacterEllipsis" Margin="0,0,16,0"/>
                 <TextBlock x:Name="LblRuta" Grid.Column="1" Text="" HorizontalAlignment="Right"
-                           Foreground="#6A6A6A" FontSize="11" VerticalAlignment="Center"
+                           Foreground="{DynamicResource T.6A6A6A}" FontSize="11" VerticalAlignment="Center"
                            TextTrimming="CharacterEllipsis" MaxWidth="540"/>
             </Grid>
 
@@ -586,7 +577,7 @@
                 <!-- Divisor arrastrable para cambiar el alto del previsualizador -->
                 <GridSplitter x:Name="PreviewSplitter" Grid.Row="1" Height="8"
                               HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                              Background="#262626" ResizeBehavior="PreviousAndNext"
+                              Background="{DynamicResource T.262626}" ResizeBehavior="PreviousAndNext"
                               ResizeDirection="Rows" Visibility="Collapsed"
                               ToolTip="Arrastra para cambiar el alto"/>
 
@@ -596,7 +587,7 @@
                     <DockPanel>
                         <Grid DockPanel.Dock="Top" Margin="6,4,6,8">
                             <TextBlock x:Name="LblPreview" Text="Datos cargados"
-                                       FontWeight="SemiBold" Foreground="{StaticResource TextMuted}"
+                                       FontWeight="SemiBold" Foreground="{DynamicResource TextMuted}"
                                        FontSize="12" VerticalAlignment="Center"/>
                             <Button x:Name="BtnPreviewClose" Style="{StaticResource DotButton}"
                                     Content="&#xE8BB;" HorizontalAlignment="Right"
@@ -611,21 +602,21 @@
                             HorizontalAlignment="Center" VerticalAlignment="Center"
                             Panel.ZIndex="5">
                     <TextBlock Text="&#xE896;" FontFamily="Segoe MDL2 Assets" FontSize="34"
-                               Foreground="#3A3A3A" HorizontalAlignment="Center"/>
+                               Foreground="{DynamicResource T.3A3A3A}" HorizontalAlignment="Center"/>
                     <TextBlock Text="Puedes arrastrar tus archivos .txt aquí"
-                               Foreground="#5C5C5C" FontSize="14" FontWeight="Regular"
+                               Foreground="{DynamicResource T.5C5C5C}" FontSize="14" FontWeight="Regular"
                                HorizontalAlignment="Center" Margin="0,12,0,0"/>
                     <TextBlock Text="o usa el botón Cargar"
-                               Foreground="#444444" FontSize="11"
+                               Foreground="{DynamicResource T.444444}" FontSize="11"
                                HorizontalAlignment="Center" Margin="0,4,0,0"/>
                 </StackPanel>
 
                 <!-- ===== Overlay de cálculo: spinner peach que se vuelve check ===== -->
                 <Grid x:Name="SpinnerOverlay" Grid.Row="0" Grid.RowSpan="3"
-                      Background="#AA060606" Visibility="Collapsed" Panel.ZIndex="10">
+                      Background="{DynamicResource T.AA060606}" Visibility="Collapsed" Panel.ZIndex="10">
                     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                         <Grid Width="72" Height="72">
-                            <Ellipse Width="56" Height="56" Stroke="#2E2E2E" StrokeThickness="4"/>
+                            <Ellipse Width="56" Height="56" Stroke="{DynamicResource T.2E2E2E}" StrokeThickness="4"/>
                             <Ellipse x:Name="SpinArc" Width="56" Height="56"
                                      Stroke="{StaticResource Accent}" StrokeThickness="4"
                                      StrokeDashArray="10 100" StrokeDashCap="Round"
@@ -645,14 +636,14 @@
                         </Grid>
                         <TextBlock x:Name="LblSpinner" Text="Calculando…" Margin="0,14,0,0"
                                    HorizontalAlignment="Center" FontSize="13" FontWeight="Medium"
-                                   Foreground="{StaticResource TextPrimary}"/>
+                                   Foreground="{DynamicResource TextPrimary}"/>
                     </StackPanel>
                 </Grid>
             </Grid>
         </Grid>
 
         <!-- ===== Overlay de arrastrar y soltar archivos (cubre todo el panel) ===== -->
-        <Grid x:Name="DropOverlay" Background="#C8000000"
+        <Grid x:Name="DropOverlay" Background="{DynamicResource T.C8000000}"
               Visibility="Collapsed" IsHitTestVisible="False" Panel.ZIndex="50">
             <Rectangle Margin="34" RadiusX="22" RadiusY="22" Fill="#12E07B5B"
                        Stroke="{StaticResource Accent}" StrokeThickness="2.5"
@@ -661,10 +652,10 @@
                 <TextBlock Text="&#xE896;" FontFamily="Segoe MDL2 Assets" FontSize="54"
                            Foreground="{StaticResource Accent}" HorizontalAlignment="Center"/>
                 <TextBlock Text="Suelta aquí tus archivos .txt" FontSize="18" FontWeight="SemiBold"
-                           Foreground="{StaticResource TextPrimary}" Margin="0,16,0,0"
+                           Foreground="{DynamicResource TextPrimary}" Margin="0,16,0,0"
                            HorizontalAlignment="Center"/>
                 <TextBlock Text="Se cargan igual que con el botón Cargar" FontSize="12"
-                           Foreground="{StaticResource TextMuted}" Margin="0,6,0,0"
+                           Foreground="{DynamicResource TextMuted}" Margin="0,6,0,0"
                            HorizontalAlignment="Center"/>
             </StackPanel>
         </Grid>

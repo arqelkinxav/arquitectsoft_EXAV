@@ -596,7 +596,6 @@ namespace arquitectSoft.View.Wpf.Panels
         }
 
         // ===== Coloreado de filas del grid de Puertas =====
-        private static readonly Brush PuertaSeparador = Congelar(Color.FromRgb(0x2A, 0x2A, 0x2A));
         private static readonly Brush PuertaTitulo    = Congelar(Color.FromArgb(0x4D, 0xE0, 0x7B, 0x5B)); // peach
         private static readonly Brush PuertaVariante  = Congelar(Color.FromArgb(0x4D, 0x53, 0xC5, 0x6E)); // verde
 
@@ -618,7 +617,7 @@ namespace arquitectSoft.View.Wpf.Panels
 
             string v = Convert.ToString(drv.Row[0]);
             if (string.IsNullOrEmpty(v))
-                e.Row.Background = PuertaSeparador;
+                e.Row.SetResourceReference(Control.BackgroundProperty, "T.2A2A2A");   // separador gris (del tema)
             else if (Engine.FilaPuerta.EsCabecera(v))
                 e.Row.Background = PuertaTitulo;
             else if (v.Contains("~"))

@@ -61,7 +61,7 @@ namespace arquitectSoft.View.Wpf
             {
                 int round = DWMWCP_ROUND;
                 DwmSetWindowAttribute(hwnd, DWMWA_WINDOW_CORNER_PREFERENCE, ref round, sizeof(int));
-                int dark = 1;
+                int dark = Tema.DwmOscuro;
                 DwmSetWindowAttribute(hwnd, DWMWA_USE_IMMERSIVE_DARK_MODE, ref dark, sizeof(int));
                 int backdrop = DWMSBT_TRANSIENTWINDOW;
                 DwmSetWindowAttribute(hwnd, DWMWA_SYSTEMBACKDROP_TYPE, ref backdrop, sizeof(int));

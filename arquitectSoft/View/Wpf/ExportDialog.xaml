@@ -22,10 +22,6 @@
     <Window.Resources>
         <FontFamily x:Key="Jakarta">pack://application:,,,/Resources/Fonts/#Plus Jakarta Sans</FontFamily>
         <SolidColorBrush x:Key="Accent"      Color="#E07B5B"/>
-        <SolidColorBrush x:Key="PanelBorder" Color="#2F2F2F"/>
-        <SolidColorBrush x:Key="InputDark"   Color="#0E0E0E"/>
-        <SolidColorBrush x:Key="TextPrimary" Color="#ECECEC"/>
-        <SolidColorBrush x:Key="TextMuted"   Color="#8C8C8C"/>
 
         <Style x:Key="Primary" TargetType="Button">
             <Setter Property="Cursor" Value="Hand"/>
@@ -70,7 +66,7 @@
 
         <Style x:Key="Ghost" TargetType="Button">
             <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="Foreground" Value="{StaticResource TextMuted}"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextMuted}"/>
             <Setter Property="FontWeight" Value="Medium"/>
             <Setter Property="FontSize" Value="13"/>
             <Setter Property="Height" Value="38"/>
@@ -79,13 +75,13 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Border x:Name="bd" CornerRadius="9" Background="Transparent"
-                                BorderBrush="{StaticResource PanelBorder}" BorderThickness="1" Padding="16,0">
+                                BorderBrush="{DynamicResource PanelBorder}" BorderThickness="1" Padding="16,0">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="bd" Property="Background" Value="#1C1C1C"/>
-                                <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+                                <Setter TargetName="bd" Property="Background" Value="{DynamicResource T.1C1C1C}"/>
+                                <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -95,11 +91,11 @@
 
         <Style x:Key="Field" TargetType="TextBox">
             <Setter Property="Height" Value="38"/>
-            <Setter Property="Background" Value="{StaticResource InputDark}"/>
-            <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+            <Setter Property="Background" Value="{DynamicResource InputDark}"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
             <Setter Property="CaretBrush" Value="{StaticResource Accent}"/>
             <Setter Property="SelectionBrush" Value="{StaticResource Accent}"/>
-            <Setter Property="BorderBrush" Value="{StaticResource PanelBorder}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource PanelBorder}"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="Padding" Value="11,0"/>
@@ -122,7 +118,7 @@
         </Style>
 
         <Style x:Key="Cap" TargetType="TextBlock">
-            <Setter Property="Foreground" Value="{StaticResource TextMuted}"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextMuted}"/>
             <Setter Property="FontSize" Value="10"/>
             <Setter Property="FontWeight" Value="Medium"/>
             <Setter Property="Margin" Value="3,0,0,5"/>
@@ -159,7 +155,7 @@
 
         <!-- CheckBox oscuro con marca peach -->
         <Style TargetType="CheckBox">
-            <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
             <Setter Property="FontSize" Value="12.5"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="Margin" Value="0,5"/>
@@ -168,8 +164,8 @@
                     <ControlTemplate TargetType="CheckBox">
                         <StackPanel Orientation="Horizontal" Background="Transparent">
                             <Border x:Name="box" Width="20" Height="20" CornerRadius="6"
-                                    Background="{StaticResource InputDark}"
-                                    BorderBrush="{StaticResource PanelBorder}" BorderThickness="1"
+                                    Background="{DynamicResource InputDark}"
+                                    BorderBrush="{DynamicResource PanelBorder}" BorderThickness="1"
                                     VerticalAlignment="Center">
                                 <Path x:Name="check" Stroke="#201712" StrokeThickness="2"
                                       StrokeStartLineCap="Round" StrokeEndLineCap="Round"
@@ -193,11 +189,11 @@
         </Style>
     </Window.Resources>
 
-    <Border x:Name="FrameRim" Background="#CC000000" CornerRadius="14"
-            BorderBrush="#3DFFFFFF" BorderThickness="1"
+    <Border x:Name="FrameRim" Background="{DynamicResource T.CC000000}" CornerRadius="14"
+            BorderBrush="{DynamicResource T.3DFFFFFF}" BorderThickness="1"
             RenderTransformOrigin="0.5,0.5"
             TextElement.FontFamily="{StaticResource Jakarta}"
-            TextElement.Foreground="{StaticResource TextPrimary}">
+            TextElement.Foreground="{DynamicResource TextPrimary}">
         <Border.RenderTransform>
             <ScaleTransform x:Name="WinScale" ScaleX="1" ScaleY="1"/>
         </Border.RenderTransform>

@@ -216,11 +216,13 @@ namespace arquitectSoft.View.Wpf
         // panel oscuro plano. Se puede alternar en caliente reaplicando el cristal.
         public static bool ModoRendimiento { get; set; }
 
-        // Panel oscuro plano y congelado para el modo rendimiento (opaco, tema negro).
-        private static readonly Brush FondoPlano = CrearFondoPlano();
-        private static Brush CrearFondoPlano()
+        // Panel plano y congelado para el modo rendimiento (opaco; oscuro o crema según el modo).
+        private static readonly Brush FondoPlanoOscuro = CrearFondoPlano(Color.FromRgb(0x1B, 0x1B, 0x1E));
+        private static readonly Brush FondoPlanoClaro = CrearFondoPlano(Color.FromRgb(0xF4, 0xF2, 0xEE));
+        private static Brush FondoPlano => Tema.EsOscuro ? FondoPlanoOscuro : FondoPlanoClaro;
+        private static Brush CrearFondoPlano(Color c)
         {
-            var b = new SolidColorBrush(Color.FromRgb(0x1B, 0x1B, 0x1E));
+            var b = new SolidColorBrush(c);
             b.Freeze();
             return b;
         }

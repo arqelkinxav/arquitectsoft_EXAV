@@ -27,6 +27,9 @@ namespace arquitectSoft
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
+            // Modo diurno / nocturno (colores de todas las ventanas WPF).
+            View.Wpf.Tema.Iniciar();
+
             // Bucle de sesión: login → escritorio → (si "Cerrar sesión") vuelve al login.
             //   - Login cancelado/cerrado  => salir del programa.
             //   - Escritorio cerrado con "Salir" => salir del programa.

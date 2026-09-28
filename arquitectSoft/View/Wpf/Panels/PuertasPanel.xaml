@@ -5,18 +5,13 @@
 
     <UserControl.Resources>
         <FontFamily x:Key="Jakarta">pack://application:,,,/Resources/Fonts/#Plus Jakarta Sans</FontFamily>
-        <SolidColorBrush x:Key="Panel"       Color="#1E1E1E"/>
-        <SolidColorBrush x:Key="PanelBorder" Color="#2F2F2F"/>
-        <SolidColorBrush x:Key="InputDark"   Color="#0E0E0E"/>
         <SolidColorBrush x:Key="Accent"      Color="#E07B5B"/>
-        <SolidColorBrush x:Key="TextPrimary" Color="#ECECEC"/>
-        <SolidColorBrush x:Key="TextMuted"   Color="#8C8C8C"/>
 
         <!-- Botón de duplicar de cada fila: copia la puerta con sus medidas ya escritas
              y la deja justo debajo, para no teclear la misma medida N veces. -->
         <Style x:Key="MiniBtn" TargetType="Button">
             <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="Foreground" Value="{StaticResource TextMuted}"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextMuted}"/>
             <Setter Property="FontSize" Value="13"/>
             <Setter Property="Width" Value="26"/>
             <Setter Property="Height" Value="24"/>
@@ -24,12 +19,12 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Border x:Name="bd" CornerRadius="6" Background="Transparent"
-                                BorderBrush="{StaticResource PanelBorder}" BorderThickness="1">
+                                BorderBrush="{DynamicResource PanelBorder}" BorderThickness="1">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="bd" Property="Background" Value="#241B12"/>
+                                <Setter TargetName="bd" Property="Background" Value="{DynamicResource T.241B12}"/>
                                 <Setter TargetName="bd" Property="BorderBrush" Value="{StaticResource Accent}"/>
                                 <Setter Property="Foreground" Value="{StaticResource Accent}"/>
                             </Trigger>
@@ -47,17 +42,17 @@
         </DataTemplate>
 
         <Style x:Key="Cap" TargetType="TextBlock">
-            <Setter Property="Foreground" Value="{StaticResource TextMuted}"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextMuted}"/>
             <Setter Property="FontSize" Value="10"/><Setter Property="FontWeight" Value="Medium"/>
             <Setter Property="Margin" Value="3,0,0,5"/>
         </Style>
 
         <Style x:Key="Field" TargetType="TextBox">
-            <Setter Property="Height" Value="40"/><Setter Property="Background" Value="{StaticResource InputDark}"/>
-            <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+            <Setter Property="Height" Value="40"/><Setter Property="Background" Value="{DynamicResource InputDark}"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
             <Setter Property="CaretBrush" Value="{StaticResource Accent}"/>
             <Setter Property="SelectionBrush" Value="{StaticResource Accent}"/>
-            <Setter Property="BorderBrush" Value="{StaticResource PanelBorder}"/><Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource PanelBorder}"/><Setter Property="BorderThickness" Value="1"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/><Setter Property="Padding" Value="12,0"/>
             <Setter Property="FontSize" Value="13"/>
             <Setter Property="Template">
@@ -78,20 +73,20 @@
         </Style>
 
         <Style x:Key="Ghost" TargetType="Button">
-            <Setter Property="Cursor" Value="Hand"/><Setter Property="Foreground" Value="{StaticResource TextMuted}"/>
+            <Setter Property="Cursor" Value="Hand"/><Setter Property="Foreground" Value="{DynamicResource TextMuted}"/>
             <Setter Property="FontWeight" Value="Medium"/><Setter Property="FontSize" Value="13"/>
             <Setter Property="Height" Value="40"/><Setter Property="MinWidth" Value="96"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Border x:Name="bd" CornerRadius="9" Background="Transparent"
-                                BorderBrush="{StaticResource PanelBorder}" BorderThickness="1" Padding="14,0">
+                                BorderBrush="{DynamicResource PanelBorder}" BorderThickness="1" Padding="14,0">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="bd" Property="Background" Value="#2A2A2A"/>
-                                <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/></Trigger>
+                                <Setter TargetName="bd" Property="Background" Value="{DynamicResource T.2A2A2A}"/>
+                                <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/></Trigger>
                             <Trigger Property="IsEnabled" Value="False"><Setter Property="Opacity" Value="0.35"/></Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -143,9 +138,9 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Thumb">
-                        <Border x:Name="t" CornerRadius="5" Background="#3C3C3C" Margin="2"/>
+                        <Border x:Name="t" CornerRadius="5" Background="{DynamicResource T.3C3C3C}" Margin="2"/>
                         <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="t" Property="Background" Value="#565656"/></Trigger>
+                            <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="t" Property="Background" Value="{DynamicResource T.565656}"/></Trigger>
                             <Trigger Property="IsDragging" Value="True"><Setter TargetName="t" Property="Background" Value="{StaticResource Accent}"/></Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -194,15 +189,15 @@
 
         <!-- DataGrid oscuro -->
         <Style TargetType="DataGridColumnHeader">
-            <Setter Property="Background" Value="#2A2A2A"/><Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+            <Setter Property="Background" Value="{DynamicResource T.2A2A2A}"/><Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
             <Setter Property="FontWeight" Value="SemiBold"/><Setter Property="FontSize" Value="12"/>
             <Setter Property="Padding" Value="10,0"/><Setter Property="Height" Value="34"/>
-            <Setter Property="BorderThickness" Value="0,0,1,0"/><Setter Property="BorderBrush" Value="#3A3A3A"/>
+            <Setter Property="BorderThickness" Value="0,0,1,0"/><Setter Property="BorderBrush" Value="{DynamicResource T.3A3A3A}"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
         </Style>
         <Style TargetType="DataGridCell">
             <Setter Property="BorderThickness" Value="0"/><Setter Property="Padding" Value="8,5"/>
-            <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="DataGridCell">
@@ -212,15 +207,15 @@
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsSelected" Value="True">
                                 <Setter TargetName="bd" Property="Background" Value="#3DE07B5B"/>
-                                <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/></Trigger>
-                            <Trigger Property="IsEditing" Value="True"><Setter TargetName="bd" Property="Background" Value="#0E0E0E"/></Trigger>
+                                <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/></Trigger>
+                            <Trigger Property="IsEditing" Value="True"><Setter TargetName="bd" Property="Background" Value="{DynamicResource T.0E0E0E}"/></Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
         <Style TargetType="DataGridRow"><Setter Property="FontSize" Value="12"/>
-            <Style.Triggers><Trigger Property="IsMouseOver" Value="True"><Setter Property="Background" Value="#262017"/></Trigger></Style.Triggers>
+            <Style.Triggers><Trigger Property="IsMouseOver" Value="True"><Setter Property="Background" Value="{DynamicResource T.262017}"/></Trigger></Style.Triggers>
         </Style>
 
         <!-- Celdas que Analizar puede señalar en rojo por estar vacías (o el nombre repetido).
@@ -229,7 +224,7 @@
             <Style.Triggers>
                 <DataTrigger Binding="{Binding _NomenMal}" Value="1">
                     <Setter Property="Background" Value="#59D9534F"/>
-                    <Setter Property="Foreground" Value="#FFD9D2"/>
+                    <Setter Property="Foreground" Value="{DynamicResource T.FFD9D2}"/>
                     <Setter Property="FontWeight" Value="SemiBold"/>
                 </DataTrigger>
             </Style.Triggers>
@@ -238,7 +233,7 @@
             <Style.Triggers>
                 <DataTrigger Binding="{Binding _AltMal}" Value="1">
                     <Setter Property="Background" Value="#59D9534F"/>
-                    <Setter Property="Foreground" Value="#FFD9D2"/>
+                    <Setter Property="Foreground" Value="{DynamicResource T.FFD9D2}"/>
                     <Setter Property="FontWeight" Value="SemiBold"/>
                 </DataTrigger>
             </Style.Triggers>
@@ -247,7 +242,7 @@
             <Style.Triggers>
                 <DataTrigger Binding="{Binding _AnchMal}" Value="1">
                     <Setter Property="Background" Value="#59D9534F"/>
-                    <Setter Property="Foreground" Value="#FFD9D2"/>
+                    <Setter Property="Foreground" Value="{DynamicResource T.FFD9D2}"/>
                     <Setter Property="FontWeight" Value="SemiBold"/>
                 </DataTrigger>
             </Style.Triggers>
@@ -269,7 +264,7 @@
             </Setter>
         </Style>
         <Style TargetType="TabItem">
-            <Setter Property="Foreground" Value="{StaticResource TextMuted}"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextMuted}"/>
             <Setter Property="FontSize" Value="13"/>
             <Setter Property="FontWeight" Value="Medium"/>
             <Setter Property="Template">
@@ -290,7 +285,7 @@
                                     <Condition Property="IsMouseOver" Value="True"/>
                                     <Condition Property="IsSelected" Value="False"/>
                                 </MultiTrigger.Conditions>
-                                <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+                                <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
                                 <MultiTrigger.EnterActions>
                                     <BeginStoryboard><Storyboard>
                                         <DoubleAnimation Storyboard.TargetName="ulScale" Storyboard.TargetProperty="ScaleX" To="1" Duration="0:0:0.25">
@@ -321,7 +316,7 @@
     </UserControl.Resources>
 
     <!-- Contenido (el chrome de ventana y el liquid glass los aporta MdiChild) -->
-    <Grid TextElement.FontFamily="{StaticResource Jakarta}" TextElement.Foreground="{StaticResource TextPrimary}"
+    <Grid TextElement.FontFamily="{StaticResource Jakarta}" TextElement.Foreground="{DynamicResource TextPrimary}"
           Margin="16,12,16,14">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>                 <!-- entrada -->
@@ -332,8 +327,8 @@
         </Grid.RowDefinitions>
 
         <!-- ===== Entrada manual (barra opaca) ===== -->
-        <Border Grid.Row="0" CornerRadius="14" Background="{StaticResource Panel}"
-                BorderBrush="{StaticResource PanelBorder}" BorderThickness="1" Padding="14">
+        <Border Grid.Row="0" CornerRadius="14" Background="{DynamicResource Panel}"
+                BorderBrush="{DynamicResource PanelBorder}" BorderThickness="1" Padding="14">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="170"/>
@@ -377,8 +372,8 @@
         </Border>
 
         <!-- ===== Puertas a analizar (editable) ===== -->
-        <Border Grid.Row="1" Margin="0,12,0,0" CornerRadius="14" Background="{StaticResource Panel}"
-                BorderBrush="{StaticResource PanelBorder}" BorderThickness="1" Padding="6">
+        <Border Grid.Row="1" Margin="0,12,0,0" CornerRadius="14" Background="{DynamicResource Panel}"
+                BorderBrush="{DynamicResource PanelBorder}" BorderThickness="1" Padding="6">
             <Grid>
                 <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/></Grid.RowDefinitions>
                 <Grid Grid.Row="0" Margin="6,4,6,6">
@@ -394,10 +389,10 @@
                 </Grid>
                 <DataGrid x:Name="DgNuevas" Grid.Row="1" AutoGenerateColumns="True" IsReadOnly="False"
                           CanUserAddRows="False" CanUserDeleteRows="False"
-                          HeadersVisibility="Column" GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="#2A2A2A"
-                          BorderThickness="0" Background="Transparent" RowBackground="Transparent" AlternatingRowBackground="#242424"
+                          HeadersVisibility="Column" GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="{DynamicResource T.2A2A2A}"
+                          BorderThickness="0" Background="Transparent" RowBackground="Transparent" AlternatingRowBackground="{DynamicResource T.242424}"
                           RowHeaderWidth="0" SelectionMode="Extended" SelectionUnit="FullRow"
-                          Foreground="{StaticResource TextPrimary}"
+                          Foreground="{DynamicResource TextPrimary}"
                           AutoGeneratingColumn="DgNuevas_AutoGeneratingColumn" CellEditEnding="DgNuevas_CellEditEnding"
                           AutoGeneratedColumns="DgNuevas_AutoGeneratedColumns"
                           PreviewKeyDown="DgNuevas_PreviewKeyDown"/>
@@ -410,35 +405,35 @@
             <GridSplitter.Template>
                 <ControlTemplate TargetType="GridSplitter">
                     <Grid Background="{TemplateBinding Background}">
-                        <Border Width="46" Height="4" CornerRadius="2" Background="#454545" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <Border Width="46" Height="4" CornerRadius="2" Background="{DynamicResource T.454545}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     </Grid>
                 </ControlTemplate>
             </GridSplitter.Template>
         </GridSplitter>
 
         <!-- ===== Resultados en pestañas ===== -->
-        <Border Grid.Row="3" Margin="0,2,0,0" CornerRadius="14" Background="{StaticResource Panel}"
-                BorderBrush="{StaticResource PanelBorder}" BorderThickness="1" Padding="10,8,10,10">
+        <Border Grid.Row="3" Margin="0,2,0,0" CornerRadius="14" Background="{DynamicResource Panel}"
+                BorderBrush="{DynamicResource PanelBorder}" BorderThickness="1" Padding="10,8,10,10">
             <TabControl>
                 <TabItem Header="Perfilería de puertas">
                     <DataGrid x:Name="DgPerfil" AutoGenerateColumns="True" IsReadOnly="True"
-                              HeadersVisibility="Column" GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="#2A2A2A"
+                              HeadersVisibility="Column" GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="{DynamicResource T.2A2A2A}"
                               BorderThickness="0" Background="Transparent" RowBackground="Transparent" RowHeaderWidth="0"
-                              SelectionMode="Single" SelectionUnit="FullRow" Foreground="{StaticResource TextPrimary}"
+                              SelectionMode="Single" SelectionUnit="FullRow" Foreground="{DynamicResource TextPrimary}"
                               LoadingRow="DgPerfil_LoadingRow"/>
                 </TabItem>
                 <TabItem Header="Herrajes de puertas">
                     <DataGrid x:Name="DgHerraje" AutoGenerateColumns="True" IsReadOnly="True"
-                              HeadersVisibility="Column" GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="#2A2A2A"
-                              BorderThickness="0" Background="Transparent" RowBackground="Transparent" AlternatingRowBackground="#242424"
-                              RowHeaderWidth="0" SelectionMode="Single" SelectionUnit="FullRow" Foreground="{StaticResource TextPrimary}"
+                              HeadersVisibility="Column" GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="{DynamicResource T.2A2A2A}"
+                              BorderThickness="0" Background="Transparent" RowBackground="Transparent" AlternatingRowBackground="{DynamicResource T.242424}"
+                              RowHeaderWidth="0" SelectionMode="Single" SelectionUnit="FullRow" Foreground="{DynamicResource TextPrimary}"
                               AutoGeneratingColumn="DgHerraje_AutoGeneratingColumn"/>
                 </TabItem>
             </TabControl>
         </Border>
 
         <TextBlock x:Name="LblEstado" Grid.Row="4" Margin="4,10,4,0"
-                   Foreground="{StaticResource TextMuted}" FontSize="11.5" TextWrapping="Wrap"
+                   Foreground="{DynamicResource TextMuted}" FontSize="11.5" TextWrapping="Wrap"
                    Text="Busca un código de puerta y pulsa Agregar; luego edita altura/anchura en la tabla y pulsa Analizar."/>
     </Grid>
 </UserControl>

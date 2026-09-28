@@ -22,11 +22,6 @@
     <Window.Resources>
         <FontFamily x:Key="Jakarta">pack://application:,,,/Resources/Fonts/#Plus Jakarta Sans</FontFamily>
         <SolidColorBrush x:Key="Accent"      Color="#E07B5B"/>
-        <SolidColorBrush x:Key="PanelBorder" Color="#2F2F2F"/>
-        <SolidColorBrush x:Key="InputDark"   Color="#0E0E0E"/>
-        <SolidColorBrush x:Key="Header"      Color="#262626"/>
-        <SolidColorBrush x:Key="TextPrimary" Color="#ECECEC"/>
-        <SolidColorBrush x:Key="TextMuted"   Color="#8C8C8C"/>
 
         <Style x:Key="Primary" TargetType="Button">
             <Setter Property="Cursor" Value="Hand"/>
@@ -71,7 +66,7 @@
 
         <Style x:Key="Ghost" TargetType="Button">
             <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="Foreground" Value="{StaticResource TextMuted}"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextMuted}"/>
             <Setter Property="FontWeight" Value="Medium"/>
             <Setter Property="FontSize" Value="13"/>
             <Setter Property="Height" Value="38"/>
@@ -80,13 +75,13 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Border x:Name="bd" CornerRadius="9" Background="Transparent"
-                                BorderBrush="{StaticResource PanelBorder}" BorderThickness="1" Padding="16,0">
+                                BorderBrush="{DynamicResource PanelBorder}" BorderThickness="1" Padding="16,0">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="bd" Property="Background" Value="#1C1C1C"/>
-                                <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+                                <Setter TargetName="bd" Property="Background" Value="{DynamicResource T.1C1C1C}"/>
+                                <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -96,11 +91,11 @@
 
         <Style x:Key="Field" TargetType="TextBox">
             <Setter Property="Height" Value="40"/>
-            <Setter Property="Background" Value="{StaticResource InputDark}"/>
-            <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+            <Setter Property="Background" Value="{DynamicResource InputDark}"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
             <Setter Property="CaretBrush" Value="{StaticResource Accent}"/>
             <Setter Property="SelectionBrush" Value="{StaticResource Accent}"/>
-            <Setter Property="BorderBrush" Value="{StaticResource PanelBorder}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource PanelBorder}"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="Padding" Value="13,0"/>
@@ -122,36 +117,9 @@
             </Setter>
         </Style>
 
-        <!-- Dot button (cerrar) -->
-        <Style x:Key="DotButton" TargetType="Button">
-            <Setter Property="Width" Value="14"/>
-            <Setter Property="Height" Value="14"/>
-            <Setter Property="Margin" Value="5,0"/>
-            <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="Foreground" Value="#0B0B0B"/>
-            <Setter Property="FontFamily" Value="Segoe MDL2 Assets"/>
-            <Setter Property="FontSize" Value="7"/>
-            <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Grid>
-                            <Ellipse x:Name="dot" Fill="#3A3A3A"/>
-                            <ContentPresenter x:Name="g" Opacity="0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        </Grid>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="dot" Property="Fill" Value="#E07B5B"/>
-                                <Setter TargetName="g" Property="Opacity" Value="1"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
 
         <Style TargetType="CheckBox">
-            <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
             <Setter Property="FontSize" Value="12.5"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
@@ -160,8 +128,8 @@
                     <ControlTemplate TargetType="CheckBox">
                         <StackPanel Orientation="Horizontal" Background="Transparent">
                             <Border x:Name="box" Width="20" Height="20" CornerRadius="6"
-                                    Background="{StaticResource InputDark}"
-                                    BorderBrush="{StaticResource PanelBorder}" BorderThickness="1"
+                                    Background="{DynamicResource InputDark}"
+                                    BorderBrush="{DynamicResource PanelBorder}" BorderThickness="1"
                                     VerticalAlignment="Center">
                                 <Path x:Name="check" Stroke="#201712" StrokeThickness="2"
                                       StrokeStartLineCap="Round" StrokeEndLineCap="Round"
@@ -190,42 +158,42 @@
             <Setter Property="IsReadOnly" Value="True"/>
             <Setter Property="HeadersVisibility" Value="Column"/>
             <Setter Property="GridLinesVisibility" Value="Horizontal"/>
-            <Setter Property="HorizontalGridLinesBrush" Value="#262626"/>
+            <Setter Property="HorizontalGridLinesBrush" Value="{DynamicResource T.262626}"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="RowBackground" Value="Transparent"/>
-            <Setter Property="AlternatingRowBackground" Value="#1B1B1B"/>
+            <Setter Property="AlternatingRowBackground" Value="{DynamicResource T.1B1B1B}"/>
             <Setter Property="RowHeaderWidth" Value="0"/>
             <Setter Property="SelectionUnit" Value="FullRow"/>
             <Setter Property="FontSize" Value="12"/>
             <Setter Property="ColumnHeaderHeight" Value="36"/>
-            <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
         </Style>
         <Style TargetType="DataGridColumnHeader">
-            <Setter Property="Background" Value="{StaticResource Header}"/>
-            <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+            <Setter Property="Background" Value="{DynamicResource Header}"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
             <Setter Property="Padding" Value="10,0"/>
             <Setter Property="BorderThickness" Value="0,0,1,0"/>
-            <Setter Property="BorderBrush" Value="#363636"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource T.363636}"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="HorizontalContentAlignment" Value="Left"/>
         </Style>
         <Style TargetType="DataGridCell">
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Padding" Value="6,6"/>
-            <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
             <Style.Triggers>
                 <Trigger Property="IsSelected" Value="True">
                     <Setter Property="Background" Value="Transparent"/>
-                    <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+                    <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
                 </Trigger>
             </Style.Triggers>
         </Style>
         <Style TargetType="DataGridRow">
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#241B12"/>
+                    <Setter Property="Background" Value="{DynamicResource T.241B12}"/>
                 </Trigger>
                 <Trigger Property="IsSelected" Value="True">
                     <Setter Property="Background" Value="#33E07B5B"/>
@@ -240,14 +208,14 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Thumb">
-                        <Border x:Name="t" CornerRadius="5" Background="#3C3C3C" Margin="2">
+                        <Border x:Name="t" CornerRadius="5" Background="{DynamicResource T.3C3C3C}" Margin="2">
                             <Border.Effect>
                                 <DropShadowEffect Color="Black" BlurRadius="5" ShadowDepth="0" Opacity="0.6"/>
                             </Border.Effect>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="t" Property="Background" Value="#565656"/>
+                                <Setter TargetName="t" Property="Background" Value="{DynamicResource T.565656}"/>
                             </Trigger>
                             <Trigger Property="IsDragging" Value="True">
                                 <Setter TargetName="t" Property="Background" Value="{StaticResource Accent}"/>
@@ -318,11 +286,11 @@
         </Style>
     </Window.Resources>
 
-    <Border x:Name="FrameRim" Background="#CC000000" CornerRadius="14"
-            BorderBrush="#3DFFFFFF" BorderThickness="1"
+    <Border x:Name="FrameRim" Background="{DynamicResource T.CC000000}" CornerRadius="14"
+            BorderBrush="{DynamicResource T.3DFFFFFF}" BorderThickness="1"
             RenderTransformOrigin="0.5,0.5"
             TextElement.FontFamily="{StaticResource Jakarta}"
-            TextElement.Foreground="{StaticResource TextPrimary}">
+            TextElement.Foreground="{DynamicResource TextPrimary}">
         <Border.RenderTransform>
             <ScaleTransform x:Name="WinScale" ScaleX="1" ScaleY="1"/>
         </Border.RenderTransform>
@@ -353,7 +321,7 @@
                                 VerticalAlignment="Center" Margin="0,0,10,0"/>
                         <TextBlock x:Name="LblTitulo" Text="Buscar" FontSize="14" FontWeight="Bold" VerticalAlignment="Center"/>
                     </StackPanel>
-                    <Button Style="{StaticResource DotButton}" Content="&#xE8BB;" HorizontalAlignment="Right"
+                    <Button Style="{StaticResource BotonVentanaCerrar}" Content="&#xE8BB;" HorizontalAlignment="Right"
                             Click="Cerrar_Click" ToolTip="Cerrar"/>
                 </Grid>
 
@@ -373,8 +341,8 @@
                 </Grid>
 
                 <!-- Resultados -->
-                <Border Grid.Row="2" CornerRadius="12" Background="#141414"
-                        BorderBrush="{StaticResource PanelBorder}" BorderThickness="1" Padding="4">
+                <Border Grid.Row="2" CornerRadius="12" Background="{DynamicResource T.141414}"
+                        BorderBrush="{DynamicResource PanelBorder}" BorderThickness="1" Padding="4">
                     <!-- IsVirtualizingWhenGrouping es imprescindible: al agrupar, el DataGrid
                          deja de virtualizar por su cuenta y monta las 223 filas enteras en
                          cada tecla, que es lo que hacía que escribir fuera a tirones. -->
@@ -401,14 +369,14 @@
                                                         <ItemsPresenter/>
                                                         <Border Width="74" HorizontalAlignment="Left"
                                                                 VerticalAlignment="Stretch"
-                                                                Background="#141414"
-                                                                BorderBrush="#363636" BorderThickness="0,0,1,1">
+                                                                Background="{DynamicResource T.141414}"
+                                                                BorderBrush="{DynamicResource T.363636}" BorderThickness="0,0,1,1">
                                                             <StackPanel VerticalAlignment="Center">
                                                                 <TextBlock Text="{Binding Name}"
                                                                            FontWeight="Bold" FontSize="12.5"
                                                                            HorizontalAlignment="Center"/>
                                                                 <TextBlock Text="{Binding ItemCount}"
-                                                                           FontSize="10.5" Foreground="#8C8C8C"
+                                                                           FontSize="10.5" Foreground="{DynamicResource T.8C8C8C}"
                                                                            HorizontalAlignment="Center"/>
                                                             </StackPanel>
                                                         </Border>
@@ -426,7 +394,7 @@
                 <!-- Botones -->
                 <Grid Grid.Row="3" Margin="0,16,0,0">
                     <TextBlock x:Name="LblHint" Text="Doble clic en una fila para seleccionar"
-                               Foreground="{StaticResource TextMuted}" FontSize="11.5" VerticalAlignment="Center"/>
+                               Foreground="{DynamicResource TextMuted}" FontSize="11.5" VerticalAlignment="Center"/>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                         <Button x:Name="BtnMulti" Style="{StaticResource Ghost}" Content="Selección múltiple"
                                 Margin="0,0,10,0" Click="MultiSelect_Click" Visibility="Collapsed"/>

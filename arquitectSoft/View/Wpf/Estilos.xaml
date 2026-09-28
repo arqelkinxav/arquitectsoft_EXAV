@@ -2,26 +2,21 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <FontFamily x:Key="Jakarta">pack://application:,,,/Resources/Fonts/#Plus Jakarta Sans</FontFamily>
-    <SolidColorBrush x:Key="Panel"       Color="#1E1E1E"/>
-    <SolidColorBrush x:Key="PanelBorder" Color="#2F2F2F"/>
-    <SolidColorBrush x:Key="InputDark"   Color="#0E0E0E"/>
     <SolidColorBrush x:Key="Accent"      Color="#E07B5B"/>
-    <SolidColorBrush x:Key="TextPrimary" Color="#ECECEC"/>
-    <SolidColorBrush x:Key="TextMuted"   Color="#8C8C8C"/>
 
     <Style x:Key="Cap" TargetType="TextBlock">
-        <Setter Property="Foreground" Value="{StaticResource TextMuted}"/>
+        <Setter Property="Foreground" Value="{DynamicResource TextMuted}"/>
         <Setter Property="FontSize" Value="10"/><Setter Property="FontWeight" Value="Medium"/>
         <Setter Property="Margin" Value="3,0,0,5"/>
     </Style>
 
     <Style x:Key="Search" TargetType="TextBox">
         <Setter Property="Height" Value="40"/>
-        <Setter Property="Background" Value="{StaticResource InputDark}"/>
-        <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+        <Setter Property="Background" Value="{DynamicResource InputDark}"/>
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
         <Setter Property="CaretBrush" Value="{StaticResource Accent}"/>
         <Setter Property="SelectionBrush" Value="{StaticResource Accent}"/>
-        <Setter Property="BorderBrush" Value="{StaticResource PanelBorder}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource PanelBorder}"/>
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Padding" Value="13,0"/><Setter Property="FontSize" Value="13"/>
@@ -86,7 +81,7 @@
 
     <Style x:Key="Ghost" TargetType="Button">
         <Setter Property="Cursor" Value="Hand"/>
-        <Setter Property="Foreground" Value="{StaticResource TextMuted}"/>
+        <Setter Property="Foreground" Value="{DynamicResource TextMuted}"/>
         <Setter Property="FontWeight" Value="Medium"/><Setter Property="FontSize" Value="13"/>
         <Setter Property="Height" Value="40"/><Setter Property="MinWidth" Value="104"/>
         <Setter Property="Margin" Value="10,0,0,0"/>
@@ -94,13 +89,13 @@
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
                     <Border x:Name="bd" CornerRadius="10" Background="Transparent"
-                            BorderBrush="{StaticResource PanelBorder}" BorderThickness="1" Padding="14,0">
+                            BorderBrush="{DynamicResource PanelBorder}" BorderThickness="1" Padding="14,0">
                         <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="bd" Property="Background" Value="#1C1C1C"/>
-                            <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/></Trigger>
+                            <Setter TargetName="bd" Property="Background" Value="{DynamicResource T.1C1C1C}"/>
+                            <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/></Trigger>
                         <Trigger Property="IsEnabled" Value="False"><Setter Property="Opacity" Value="0.35"/></Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -114,9 +109,9 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Thumb">
-                    <Border x:Name="t" CornerRadius="5" Background="#3C3C3C" Margin="2"/>
+                    <Border x:Name="t" CornerRadius="5" Background="{DynamicResource T.3C3C3C}" Margin="2"/>
                     <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="t" Property="Background" Value="#565656"/></Trigger>
+                        <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="t" Property="Background" Value="{DynamicResource T.565656}"/></Trigger>
                         <Trigger Property="IsDragging" Value="True"><Setter TargetName="t" Property="Background" Value="{StaticResource Accent}"/></Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -165,15 +160,15 @@
 
     <!-- DataGrid oscuro -->
     <Style TargetType="DataGridColumnHeader">
-        <Setter Property="Background" Value="#262626"/><Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+        <Setter Property="Background" Value="{DynamicResource T.262626}"/><Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
         <Setter Property="FontWeight" Value="SemiBold"/><Setter Property="FontSize" Value="12"/>
         <Setter Property="Padding" Value="12,0"/><Setter Property="Height" Value="38"/>
-        <Setter Property="BorderThickness" Value="0,0,1,0"/><Setter Property="BorderBrush" Value="#363636"/>
+        <Setter Property="BorderThickness" Value="0,0,1,0"/><Setter Property="BorderBrush" Value="{DynamicResource T.363636}"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
     </Style>
     <Style TargetType="DataGridCell">
         <Setter Property="BorderThickness" Value="0"/><Setter Property="Padding" Value="10,7"/>
-        <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="DataGridCell">
@@ -183,8 +178,8 @@
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsSelected" Value="True">
                             <Setter TargetName="bd" Property="Background" Value="#3DE07B5B"/>
-                            <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/></Trigger>
-                        <Trigger Property="IsEditing" Value="True"><Setter TargetName="bd" Property="Background" Value="#0E0E0E"/></Trigger>
+                            <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/></Trigger>
+                        <Trigger Property="IsEditing" Value="True"><Setter TargetName="bd" Property="Background" Value="{DynamicResource T.0E0E0E}"/></Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
@@ -193,7 +188,7 @@
     <Style TargetType="DataGridRow">
         <Setter Property="FontSize" Value="12.5"/>
         <Style.Triggers>
-            <Trigger Property="IsMouseOver" Value="True"><Setter Property="Background" Value="#241B12"/></Trigger>
+            <Trigger Property="IsMouseOver" Value="True"><Setter Property="Background" Value="{DynamicResource T.241B12}"/></Trigger>
         </Style.Triggers>
     </Style>
 

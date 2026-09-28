@@ -5,20 +5,15 @@
 
     <UserControl.Resources>
         <FontFamily x:Key="Jakarta">pack://application:,,,/Resources/Fonts/#Plus Jakarta Sans</FontFamily>
-        <SolidColorBrush x:Key="Panel"       Color="#1E1E1E"/>
-        <SolidColorBrush x:Key="PanelBorder" Color="#2F2F2F"/>
-        <SolidColorBrush x:Key="InputDark"   Color="#0E0E0E"/>
         <SolidColorBrush x:Key="Accent"      Color="#E07B5B"/>
-        <SolidColorBrush x:Key="TextPrimary" Color="#ECECEC"/>
-        <SolidColorBrush x:Key="TextMuted"   Color="#8C8C8C"/>
 
         <Style x:Key="Search" TargetType="TextBox">
             <Setter Property="Height" Value="40"/>
-            <Setter Property="Background" Value="{StaticResource InputDark}"/>
-            <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+            <Setter Property="Background" Value="{DynamicResource InputDark}"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
             <Setter Property="CaretBrush" Value="{StaticResource Accent}"/>
             <Setter Property="SelectionBrush" Value="{StaticResource Accent}"/>
-            <Setter Property="BorderBrush" Value="{StaticResource PanelBorder}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource PanelBorder}"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="Padding" Value="13,0"/>
@@ -83,7 +78,7 @@
         </Style>
         <Style x:Key="Ghost" TargetType="Button">
             <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="Foreground" Value="{StaticResource TextMuted}"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextMuted}"/>
             <Setter Property="FontWeight" Value="Medium"/>
             <Setter Property="FontSize" Value="13"/>
             <Setter Property="Height" Value="40"/>
@@ -93,13 +88,13 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Border x:Name="bd" CornerRadius="10" Background="Transparent"
-                                BorderBrush="{StaticResource PanelBorder}" BorderThickness="1" Padding="14,0">
+                                BorderBrush="{DynamicResource PanelBorder}" BorderThickness="1" Padding="14,0">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="bd" Property="Background" Value="#1C1C1C"/>
-                                <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+                                <Setter TargetName="bd" Property="Background" Value="{DynamicResource T.1C1C1C}"/>
+                                <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
                             </Trigger>
                             <Trigger Property="IsEnabled" Value="False">
                                 <Setter Property="Opacity" Value="0.35"/>
@@ -117,14 +112,14 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Thumb">
-                        <Border x:Name="t" CornerRadius="5" Background="#3C3C3C" Margin="2">
+                        <Border x:Name="t" CornerRadius="5" Background="{DynamicResource T.3C3C3C}" Margin="2">
                             <Border.Effect>
                                 <DropShadowEffect Color="Black" BlurRadius="5" ShadowDepth="0" Opacity="0.6"/>
                             </Border.Effect>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="t" Property="Background" Value="#565656"/>
+                                <Setter TargetName="t" Property="Background" Value="{DynamicResource T.565656}"/>
                             </Trigger>
                             <Trigger Property="IsDragging" Value="True">
                                 <Setter TargetName="t" Property="Background" Value="{StaticResource Accent}"/>
@@ -196,20 +191,20 @@
 
         <!-- ===== DataGrid editable oscuro ===== -->
         <Style TargetType="DataGridColumnHeader">
-            <Setter Property="Background" Value="#262626"/>
-            <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+            <Setter Property="Background" Value="{DynamicResource T.262626}"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
             <Setter Property="FontSize" Value="12"/>
             <Setter Property="Padding" Value="12,0"/>
             <Setter Property="Height" Value="38"/>
             <Setter Property="BorderThickness" Value="0,0,1,0"/>
-            <Setter Property="BorderBrush" Value="#363636"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource T.363636}"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
         </Style>
         <Style TargetType="DataGridCell">
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Padding" Value="10,7"/>
-            <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="DataGridCell">
@@ -220,10 +215,10 @@
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsSelected" Value="True">
                                 <Setter TargetName="bd" Property="Background" Value="#3DE07B5B"/>
-                                <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+                                <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
                             </Trigger>
                             <Trigger Property="IsEditing" Value="True">
-                                <Setter TargetName="bd" Property="Background" Value="#0E0E0E"/>
+                                <Setter TargetName="bd" Property="Background" Value="{DynamicResource T.0E0E0E}"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -234,7 +229,7 @@
             <Setter Property="FontSize" Value="12.5"/>
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#241B12"/>
+                    <Setter Property="Background" Value="{DynamicResource T.241B12}"/>
                 </Trigger>
             </Style.Triggers>
         </Style>
@@ -242,7 +237,7 @@
 
     <!-- Contenido (el chrome de ventana lo aporta MdiChild) -->
     <Grid TextElement.FontFamily="{StaticResource Jakarta}"
-          TextElement.Foreground="{StaticResource TextPrimary}"
+          TextElement.Foreground="{DynamicResource TextPrimary}"
           Margin="16,12,16,14">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -264,12 +259,12 @@
 
         <!-- Tabla editable -->
         <Grid Grid.Row="1">
-            <Border CornerRadius="14" Background="#FF0E0E10" IsHitTestVisible="False">
+            <Border CornerRadius="14" Background="{DynamicResource T.FF0E0E10}" IsHitTestVisible="False">
                 <Border.Effect>
                     <DropShadowEffect Color="Black" BlurRadius="30" ShadowDepth="0" Opacity="0.6"/>
                 </Border.Effect>
             </Border>
-            <Border CornerRadius="14" Background="#B0151515" BorderThickness="1.1" Padding="6">
+            <Border CornerRadius="14" Background="{DynamicResource T.B0151515}" BorderThickness="1.1" Padding="6">
                 <Border.BorderBrush>
                     <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                         <GradientStop Color="#59FFFFFF" Offset="0"/>
@@ -281,16 +276,16 @@
                 <DataGrid x:Name="GridAcabados" AutoGenerateColumns="True"
                           IsReadOnly="False" CanUserAddRows="True" CanUserDeleteRows="False"
                           HeadersVisibility="Column" GridLinesVisibility="Horizontal"
-                          HorizontalGridLinesBrush="#262626" BorderThickness="0" Background="Transparent"
-                          RowBackground="Transparent" AlternatingRowBackground="#1B1B1B" RowHeaderWidth="0"
+                          HorizontalGridLinesBrush="{DynamicResource T.262626}" BorderThickness="0" Background="Transparent"
+                          RowBackground="Transparent" AlternatingRowBackground="{DynamicResource T.1B1B1B}" RowHeaderWidth="0"
                           SelectionMode="Single" SelectionUnit="FullRow"
-                          Foreground="{StaticResource TextPrimary}"
+                          Foreground="{DynamicResource TextPrimary}"
                           AutoGeneratingColumn="GridAcabados_AutoGeneratingColumn"
                           RowEditEnding="GridAcabados_RowEditEnding"/>
             </Border>
         </Grid>
 
         <TextBlock x:Name="LblEstado" Grid.Row="2" Margin="4,10,4,0"
-                   Foreground="{StaticResource TextMuted}" FontSize="11.5" TextWrapping="Wrap"/>
+                   Foreground="{DynamicResource TextMuted}" FontSize="11.5" TextWrapping="Wrap"/>
     </Grid>
 </UserControl>

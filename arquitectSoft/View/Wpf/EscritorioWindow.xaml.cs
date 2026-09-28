@@ -28,6 +28,9 @@ namespace arquitectSoft.View.Wpf
         {
             InitializeComponent();
             SourceInitialized += OnSourceInitialized;
+            ActualizarBotonTema();
+            Tema.Cambiado += OnTemaCambiado;
+            Closed += (s, e) => Tema.Cambiado -= OnTemaCambiado;
             Loaded += (s, e) =>
             {
                 CargarFondo(); AplicarPermisos(); MostrarSesion();
@@ -105,7 +108,7 @@ namespace arquitectSoft.View.Wpf
         {
             try
             {
-                string ruta = Path.Combine(Directory.GetCurrentDirectory(), "FondoApp.png");
+                string ruta = Tema.RutaFondo();
                 if (File.Exists(ruta))
                 {
                     var bmp = new BitmapImage();
@@ -339,11 +342,34 @@ namespace arquitectSoft.View.Wpf
             else
             {
                 BtnRendimiento.Content = "Cristal";
-                BtnRendimiento.Background = new System.Windows.Media.SolidColorBrush(
-                    System.Windows.Media.Color.FromArgb(0x22, 0xFF, 0xFF, 0xFF));
-                BtnRendimiento.Foreground = new System.Windows.Media.SolidColorBrush(
-                    System.Windows.Media.Color.FromRgb(0xEC, 0xEC, 0xEC));
+                // Del tema: si no, al pasar a diurno quedaría texto blanco sobre crema.
+                BtnRendimiento.SetResourceReference(BackgroundProperty, "T.22FFFFFF");
+                BtnRendimiento.SetResourceReference(ForegroundProperty, "TextPrimary");
             }
+        }
+
+        // ===== Modo diurno / nocturno =====
+        private void Tema_Click(object sender, RoutedEventArgs e) => Tema.Alternar();
+
+        private void OnTemaCambiado(object sender, EventArgs e)
+        {
+            ActualizarBotonTema();
+            CargarFondo();   // cada modo tiene su imagen
+            // Remontar el cristal de las ventanas abiertas: refracta el fondo nuevo (y en
+            // modo rendimiento el panel plano cambia de oscuro a crema).
+            foreach (UIElement el in Lienzo.Children)
+            {
+                var c = el as MdiChild;
+                if (c != null) c.AplicarGlass();
+            }
+        }
+
+        private void ActualizarBotonTema()
+        {
+            // El botón dice a qué modo se PASA (sol = pasar a diurno, luna = pasar a nocturno).
+            BtnTema.Tag = Tema.EsOscuro ? "" : "";
+            BtnTema.Content = Tema.EsOscuro ? "Modo día" : "Modo noche";
+            BtnTema.ToolTip = Tema.EsOscuro ? "Pasar a colores claros" : "Pasar a colores oscuros";
         }
 
         // ===== Controles de la app =====

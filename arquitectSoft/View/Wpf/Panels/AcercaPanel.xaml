@@ -4,12 +4,9 @@
     <UserControl.Resources>
         <FontFamily x:Key="Jakarta">pack://application:,,,/Resources/Fonts/#Plus Jakarta Sans</FontFamily>
         <SolidColorBrush x:Key="Accent" Color="#E07B5B"/>
-        <SolidColorBrush x:Key="TextPrimary" Color="#ECECEC"/>
-        <SolidColorBrush x:Key="TextMuted" Color="#8C8C8C"/>
-        <SolidColorBrush x:Key="PanelBorder" Color="#2F2F2F"/>
     </UserControl.Resources>
 
-    <Grid TextElement.FontFamily="{StaticResource Jakarta}" TextElement.Foreground="{StaticResource TextPrimary}"
+    <Grid TextElement.FontFamily="{StaticResource Jakarta}" TextElement.Foreground="{DynamicResource TextPrimary}"
           Margin="22,18,22,18">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -25,16 +22,16 @@
             </Border>
             <StackPanel VerticalAlignment="Center">
                 <TextBlock x:Name="LblProducto" Text="Producto" FontSize="18" FontWeight="Bold"/>
-                <TextBlock x:Name="LblVersion" Foreground="{StaticResource TextMuted}" FontSize="11.5"/>
+                <TextBlock x:Name="LblVersion" Foreground="{DynamicResource TextMuted}" FontSize="11.5"/>
             </StackPanel>
         </StackPanel>
 
-        <TextBlock x:Name="LblEmpresa" Grid.Row="1" Foreground="{StaticResource TextMuted}" FontSize="11.5" Margin="0,14,0,0"/>
-        <TextBlock x:Name="LblCopyright" Grid.Row="2" Foreground="{StaticResource TextMuted}" FontSize="11.5" Margin="0,4,0,0" TextWrapping="Wrap"/>
+        <TextBlock x:Name="LblEmpresa" Grid.Row="1" Foreground="{DynamicResource TextMuted}" FontSize="11.5" Margin="0,14,0,0"/>
+        <TextBlock x:Name="LblCopyright" Grid.Row="2" Foreground="{DynamicResource TextMuted}" FontSize="11.5" Margin="0,4,0,0" TextWrapping="Wrap"/>
 
-        <Border Grid.Row="3" Margin="0,14,0,0" CornerRadius="10" Background="#0E0E0E"
-                BorderBrush="{StaticResource PanelBorder}" BorderThickness="1" Padding="12">
-            <TextBlock x:Name="LblDescripcion" Foreground="{StaticResource TextPrimary}" FontSize="12.5"
+        <Border Grid.Row="3" Margin="0,14,0,0" CornerRadius="10" Background="{DynamicResource T.0E0E0E}"
+                BorderBrush="{DynamicResource PanelBorder}" BorderThickness="1" Padding="12">
+            <TextBlock x:Name="LblDescripcion" Foreground="{DynamicResource TextPrimary}" FontSize="12.5"
                        TextWrapping="Wrap" LineHeight="19"/>
         </Border>
     </Grid>

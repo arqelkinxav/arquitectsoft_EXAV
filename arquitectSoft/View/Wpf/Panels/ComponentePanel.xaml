@@ -7,20 +7,15 @@
 
     <UserControl.Resources>
         <FontFamily x:Key="Jakarta">pack://application:,,,/Resources/Fonts/#Plus Jakarta Sans</FontFamily>
-        <SolidColorBrush x:Key="Panel"       Color="#1E1E1E"/>
-        <SolidColorBrush x:Key="PanelBorder" Color="#2F2F2F"/>
-        <SolidColorBrush x:Key="InputDark"   Color="#0E0E0E"/>
         <SolidColorBrush x:Key="Accent"      Color="#E07B5B"/>
-        <SolidColorBrush x:Key="TextPrimary" Color="#ECECEC"/>
-        <SolidColorBrush x:Key="TextMuted"   Color="#8C8C8C"/>
 
         <Style x:Key="Field" TargetType="TextBox">
             <Setter Property="Height" Value="40"/>
-            <Setter Property="Background" Value="{StaticResource InputDark}"/>
-            <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+            <Setter Property="Background" Value="{DynamicResource InputDark}"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
             <Setter Property="CaretBrush" Value="{StaticResource Accent}"/>
             <Setter Property="SelectionBrush" Value="{StaticResource Accent}"/>
-            <Setter Property="BorderBrush" Value="{StaticResource PanelBorder}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource PanelBorder}"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="Padding" Value="13,0"/>
@@ -46,7 +41,7 @@
         </Style>
 
         <Style x:Key="Cap" TargetType="TextBlock">
-            <Setter Property="Foreground" Value="{StaticResource TextMuted}"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextMuted}"/>
             <Setter Property="FontSize" Value="10"/>
             <Setter Property="FontWeight" Value="Medium"/>
             <Setter Property="Margin" Value="3,0,0,5"/>
@@ -54,7 +49,7 @@
 
         <!-- ComboBox oscuro (encabezado Acabado) -->
         <Style x:Key="DarkComboItem" TargetType="ComboBoxItem">
-            <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
             <Setter Property="Padding" Value="11,7"/>
             <Setter Property="Template">
                 <Setter.Value>
@@ -73,7 +68,7 @@
         </Style>
         <Style x:Key="DarkCombo" TargetType="ComboBox">
             <Setter Property="Height" Value="40"/>
-            <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
             <Setter Property="FontSize" Value="13"/>
             <Setter Property="ItemContainerStyle" Value="{StaticResource DarkComboItem}"/>
             <Setter Property="Template">
@@ -84,8 +79,8 @@
                                           IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}">
                                 <ToggleButton.Template>
                                     <ControlTemplate TargetType="ToggleButton">
-                                        <Border x:Name="bd" CornerRadius="10" Background="{StaticResource InputDark}"
-                                                BorderBrush="{StaticResource PanelBorder}" BorderThickness="1">
+                                        <Border x:Name="bd" CornerRadius="10" Background="{DynamicResource InputDark}"
+                                                BorderBrush="{DynamicResource PanelBorder}" BorderThickness="1">
                                             <Grid>
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition Width="*"/>
@@ -95,7 +90,7 @@
                                                                   Content="{Binding SelectionBoxItem, RelativeSource={RelativeSource AncestorType=ComboBox}}"
                                                                   ContentTemplate="{Binding SelectionBoxItemTemplate, RelativeSource={RelativeSource AncestorType=ComboBox}}"/>
                                                 <TextBlock Grid.Column="1" Text="&#xE70D;" FontFamily="Segoe MDL2 Assets" FontSize="8"
-                                                           Foreground="{StaticResource TextMuted}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                           Foreground="{DynamicResource TextMuted}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                             </Grid>
                                         </Border>
                                         <ControlTemplate.Triggers>
@@ -108,7 +103,7 @@
                             </ToggleButton>
                             <Popup IsOpen="{TemplateBinding IsDropDownOpen}" Placement="Bottom" AllowsTransparency="True"
                                    Focusable="False" PopupAnimation="Slide">
-                                <Border Background="#1B1B1B" BorderBrush="{StaticResource PanelBorder}" BorderThickness="1"
+                                <Border Background="{DynamicResource T.1B1B1B}" BorderBrush="{DynamicResource PanelBorder}" BorderThickness="1"
                                         CornerRadius="8" MaxHeight="280"
                                         MinWidth="{Binding ActualWidth, RelativeSource={RelativeSource TemplatedParent}}">
                                     <ScrollViewer><ItemsPresenter/></ScrollViewer>
@@ -127,7 +122,7 @@
 
         <!-- CheckBox cristal (encabezado Especial) -->
         <Style x:Key="DarkCheck" TargetType="CheckBox">
-            <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
             <Setter Property="FontSize" Value="13"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="Cursor" Value="Hand"/>
@@ -136,7 +131,7 @@
                     <ControlTemplate TargetType="CheckBox">
                         <StackPanel Orientation="Horizontal">
                             <Border x:Name="box" Width="20" Height="20" CornerRadius="6"
-                                    Background="{StaticResource InputDark}" BorderBrush="{StaticResource PanelBorder}"
+                                    Background="{DynamicResource InputDark}" BorderBrush="{DynamicResource PanelBorder}"
                                     BorderThickness="1" VerticalAlignment="Center">
                                 <TextBlock x:Name="ck" Text="&#xE73E;" FontFamily="Segoe MDL2 Assets" FontSize="11"
                                            Foreground="#201712" HorizontalAlignment="Center" VerticalAlignment="Center"
@@ -161,14 +156,14 @@
 
         <!-- ComboBox oscuro COMPACTO para edición dentro de las grillas -->
         <Style x:Key="GridCombo" TargetType="ComboBox">
-            <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
             <Setter Property="FontSize" Value="12"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="ItemContainerStyle" Value="{StaticResource DarkComboItem}"/>
             <Setter Property="ItemTemplate">
                 <Setter.Value>
                     <DataTemplate>
-                        <TextBlock Text="{Binding Descripcion}" Foreground="{StaticResource TextPrimary}"/>
+                        <TextBlock Text="{Binding Descripcion}" Foreground="{DynamicResource TextPrimary}"/>
                     </DataTemplate>
                 </Setter.Value>
             </Setter>
@@ -180,8 +175,8 @@
                                           IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}">
                                 <ToggleButton.Template>
                                     <ControlTemplate TargetType="ToggleButton">
-                                        <Border x:Name="bd" CornerRadius="6" Background="{StaticResource InputDark}"
-                                                BorderBrush="{StaticResource PanelBorder}" BorderThickness="1">
+                                        <Border x:Name="bd" CornerRadius="6" Background="{DynamicResource InputDark}"
+                                                BorderBrush="{DynamicResource PanelBorder}" BorderThickness="1">
                                             <Grid>
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition Width="*"/>
@@ -191,7 +186,7 @@
                                                                   Content="{Binding SelectionBoxItem, RelativeSource={RelativeSource AncestorType=ComboBox}}"
                                                                   ContentTemplate="{Binding SelectionBoxItemTemplate, RelativeSource={RelativeSource AncestorType=ComboBox}}"/>
                                                 <TextBlock Grid.Column="1" Text="&#xE70D;" FontFamily="Segoe MDL2 Assets" FontSize="7"
-                                                           Foreground="{StaticResource TextMuted}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                           Foreground="{DynamicResource TextMuted}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                             </Grid>
                                         </Border>
                                         <ControlTemplate.Triggers>
@@ -204,7 +199,7 @@
                             </ToggleButton>
                             <Popup IsOpen="{TemplateBinding IsDropDownOpen}" Placement="Bottom" AllowsTransparency="True"
                                    Focusable="False" PopupAnimation="Slide">
-                                <Border Background="#1F1F1F" BorderBrush="{StaticResource PanelBorder}" BorderThickness="1"
+                                <Border Background="{DynamicResource T.1F1F1F}" BorderBrush="{DynamicResource PanelBorder}" BorderThickness="1"
                                         CornerRadius="8" Padding="3" MaxHeight="260"
                                         MinWidth="{Binding ActualWidth, RelativeSource={RelativeSource TemplatedParent}}">
                                     <Border.Effect><DropShadowEffect Color="Black" BlurRadius="12" ShadowDepth="0" Opacity="0.5"/></Border.Effect>
@@ -221,7 +216,7 @@
              clic o Enter) se puede escribir directamente y la lista salta al mecanizado que
              empieza igual. Necesita la parte PART_EditableTextBox, que GridCombo no tiene. -->
         <Style x:Key="GridComboEdit" TargetType="ComboBox">
-            <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
             <Setter Property="FontSize" Value="12"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="IsEditable" Value="True"/>
@@ -237,7 +232,7 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="ComboBox">
                         <Grid>
-                            <Border x:Name="bd" CornerRadius="6" Background="{StaticResource InputDark}"
+                            <Border x:Name="bd" CornerRadius="6" Background="{DynamicResource InputDark}"
                                     BorderBrush="{StaticResource Accent}" BorderThickness="1"/>
                             <Grid>
                                 <Grid.ColumnDefinitions>
@@ -246,7 +241,7 @@
                                 </Grid.ColumnDefinitions>
                                 <TextBox x:Name="PART_EditableTextBox" Grid.Column="0"
                                          Margin="8,0,0,0" Padding="0" BorderThickness="0"
-                                         Background="Transparent" Foreground="{StaticResource TextPrimary}"
+                                         Background="Transparent" Foreground="{DynamicResource TextPrimary}"
                                          CaretBrush="{StaticResource Accent}" SelectionBrush="{StaticResource Accent}"
                                          VerticalContentAlignment="Center"/>
                                 <ToggleButton x:Name="tb" Grid.Column="1" Focusable="False" ClickMode="Press"
@@ -255,7 +250,7 @@
                                         <ControlTemplate TargetType="ToggleButton">
                                             <Border Background="Transparent">
                                                 <TextBlock Text="&#xE70D;" FontFamily="Segoe MDL2 Assets" FontSize="7"
-                                                           Foreground="{StaticResource TextMuted}"
+                                                           Foreground="{DynamicResource TextMuted}"
                                                            HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                             </Border>
                                         </ControlTemplate>
@@ -264,7 +259,7 @@
                             </Grid>
                             <Popup IsOpen="{TemplateBinding IsDropDownOpen}" Placement="Bottom" AllowsTransparency="True"
                                    Focusable="False" PopupAnimation="Slide">
-                                <Border Background="#1F1F1F" BorderBrush="{StaticResource PanelBorder}" BorderThickness="1"
+                                <Border Background="{DynamicResource T.1F1F1F}" BorderBrush="{DynamicResource PanelBorder}" BorderThickness="1"
                                         CornerRadius="8" Padding="3" MaxHeight="260"
                                         MinWidth="{Binding ActualWidth, RelativeSource={RelativeSource TemplatedParent}}">
                                     <Border.Effect><DropShadowEffect Color="Black" BlurRadius="12" ShadowDepth="0" Opacity="0.5"/></Border.Effect>
@@ -306,7 +301,7 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="CheckBox">
                         <Border x:Name="box" Width="18" Height="18" CornerRadius="5"
-                                Background="{StaticResource InputDark}" BorderBrush="{StaticResource PanelBorder}" BorderThickness="1">
+                                Background="{DynamicResource InputDark}" BorderBrush="{DynamicResource PanelBorder}" BorderThickness="1">
                             <TextBlock x:Name="ck" Text="&#xE73E;" FontFamily="Segoe MDL2 Assets" FontSize="10"
                                        Foreground="#201712" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Collapsed"/>
                         </Border>
@@ -333,11 +328,11 @@
                     <ControlTemplate TargetType="Button">
                         <StackPanel x:Name="sp" Background="Transparent" HorizontalAlignment="Center" Width="78">
                             <TextBlock x:Name="ico" Text="{TemplateBinding Tag}" FontFamily="Segoe MDL2 Assets"
-                                       FontSize="22" Foreground="{StaticResource TextPrimary}" HorizontalAlignment="Center"
+                                       FontSize="22" Foreground="{DynamicResource TextPrimary}" HorizontalAlignment="Center"
                                        RenderTransformOrigin="0.5,0.5">
                                 <TextBlock.RenderTransform><ScaleTransform x:Name="icoScale" ScaleX="1" ScaleY="1"/></TextBlock.RenderTransform>
                             </TextBlock>
-                            <TextBlock Text="{TemplateBinding Content}" Foreground="{StaticResource TextMuted}" FontSize="11.5"
+                            <TextBlock Text="{TemplateBinding Content}" Foreground="{DynamicResource TextMuted}" FontSize="11.5"
                                        FontWeight="Medium" HorizontalAlignment="Center" Margin="0,5,0,0"/>
                         </StackPanel>
                         <ControlTemplate.Triggers>
@@ -366,7 +361,7 @@
 
         <Style x:Key="Ghost" TargetType="Button">
             <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="Foreground" Value="{StaticResource TextMuted}"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextMuted}"/>
             <Setter Property="FontWeight" Value="Medium"/>
             <Setter Property="FontSize" Value="13"/>
             <Setter Property="Height" Value="38"/>
@@ -376,13 +371,13 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Border x:Name="bd" CornerRadius="10" Background="Transparent"
-                                BorderBrush="{StaticResource PanelBorder}" BorderThickness="1" Padding="14,0">
+                                BorderBrush="{DynamicResource PanelBorder}" BorderThickness="1" Padding="14,0">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="bd" Property="Background" Value="#1C1C1C"/>
-                                <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+                                <Setter TargetName="bd" Property="Background" Value="{DynamicResource T.1C1C1C}"/>
+                                <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
                             </Trigger>
                             <Trigger Property="IsEnabled" Value="False"><Setter Property="Opacity" Value="0.35"/></Trigger>
                         </ControlTemplate.Triggers>
@@ -398,11 +393,11 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Thumb">
-                        <Border x:Name="t" CornerRadius="5" Background="#3C3C3C" Margin="2">
+                        <Border x:Name="t" CornerRadius="5" Background="{DynamicResource T.3C3C3C}" Margin="2">
                             <Border.Effect><DropShadowEffect Color="Black" BlurRadius="5" ShadowDepth="0" Opacity="0.6"/></Border.Effect>
                         </Border>
                         <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="t" Property="Background" Value="#565656"/></Trigger>
+                            <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="t" Property="Background" Value="{DynamicResource T.565656}"/></Trigger>
                             <Trigger Property="IsDragging" Value="True"><Setter TargetName="t" Property="Background" Value="{StaticResource Accent}"/></Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -457,20 +452,20 @@
 
         <!-- ===== DataGrid oscuro ===== -->
         <Style TargetType="DataGridColumnHeader">
-            <Setter Property="Background" Value="#262626"/>
-            <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+            <Setter Property="Background" Value="{DynamicResource T.262626}"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
             <Setter Property="FontSize" Value="12"/>
             <Setter Property="Padding" Value="10,0"/>
             <Setter Property="Height" Value="36"/>
             <Setter Property="BorderThickness" Value="0,0,1,0"/>
-            <Setter Property="BorderBrush" Value="#363636"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource T.363636}"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
         </Style>
         <Style TargetType="DataGridCell">
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Padding" Value="8,5"/>
-            <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="DataGridCell">
@@ -480,10 +475,10 @@
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsSelected" Value="True">
                                 <Setter TargetName="bd" Property="Background" Value="#3DE07B5B"/>
-                                <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+                                <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
                             </Trigger>
                             <Trigger Property="IsEditing" Value="True">
-                                <Setter TargetName="bd" Property="Background" Value="#0E0E0E"/>
+                                <Setter TargetName="bd" Property="Background" Value="{DynamicResource T.0E0E0E}"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -493,7 +488,7 @@
         <Style TargetType="DataGridRow">
             <Setter Property="FontSize" Value="12"/>
             <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True"><Setter Property="Background" Value="#241B12"/></Trigger>
+                <Trigger Property="IsMouseOver" Value="True"><Setter Property="Background" Value="{DynamicResource T.241B12}"/></Trigger>
             </Style.Triggers>
         </Style>
 
@@ -503,13 +498,13 @@
             <Setter Property="FontSize" Value="12"/>
             <Setter Property="Background" Value="{Binding Asignacion_puertas, Converter={StaticResource PuertaBrush}}"/>
             <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True"><Setter Property="Background" Value="#241B12"/></Trigger>
+                <Trigger Property="IsMouseOver" Value="True"><Setter Property="Background" Value="{DynamicResource T.241B12}"/></Trigger>
             </Style.Triggers>
         </Style>
 
         <!-- Menú contextual oscuro (acciones por fila) -->
         <Style x:Key="DarkMenuItem" TargetType="MenuItem">
-            <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="Padding" Value="12,7"/>
             <Setter Property="FontSize" Value="12.5"/>
@@ -532,7 +527,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="ContextMenu">
-                        <Border Background="#1F1F1F" BorderBrush="{StaticResource PanelBorder}"
+                        <Border Background="{DynamicResource T.1F1F1F}" BorderBrush="{DynamicResource PanelBorder}"
                                 BorderThickness="1" CornerRadius="10" Padding="5">
                             <Border.Effect>
                                 <DropShadowEffect Color="Black" BlurRadius="14" ShadowDepth="0" Opacity="0.55"/>
@@ -552,7 +547,7 @@
     </UserControl.Resources>
 
     <!-- Contenido (el chrome de ventana y el liquid glass los aporta MdiChild) -->
-    <Grid TextElement.FontFamily="{StaticResource Jakarta}" TextElement.Foreground="{StaticResource TextPrimary}"
+    <Grid TextElement.FontFamily="{StaticResource Jakarta}" TextElement.Foreground="{DynamicResource TextPrimary}"
           Margin="16,12,16,14">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>   <!-- barra (campos + iconos) -->
@@ -562,7 +557,7 @@
         </Grid.RowDefinitions>
 
         <!-- ===== Barra opaca: campos + iconos de acción ===== -->
-        <Border Grid.Row="0" Background="{StaticResource Panel}" BorderBrush="{StaticResource PanelBorder}"
+        <Border Grid.Row="0" Background="{DynamicResource Panel}" BorderBrush="{DynamicResource PanelBorder}"
                 BorderThickness="1" CornerRadius="16" Padding="16,14">
             <Grid>
                 <Grid.RowDefinitions>
@@ -590,7 +585,7 @@
                         <TextBlock Text="ACABADO" Style="{StaticResource Cap}"/>
                         <ComboBox x:Name="CmbAcabado" Style="{StaticResource DarkCombo}" SelectedValuePath="Id_Acabado">
                             <ComboBox.ItemTemplate>
-                                <DataTemplate><TextBlock Text="{Binding Descripcion}" Foreground="{StaticResource TextPrimary}"/></DataTemplate>
+                                <DataTemplate><TextBlock Text="{Binding Descripcion}" Foreground="{DynamicResource TextPrimary}"/></DataTemplate>
                             </ComboBox.ItemTemplate>
                         </ComboBox>
                     </StackPanel>
@@ -619,8 +614,8 @@
             <!-- Sombra pre-renderizada (9-slice) en vez de DropShadowEffect: coste ~0 al maximizar -->
             <vw:SoftShadow Margin="-30" Opacity="0.6"/>
             <!-- Base opaca (la tarjeta es semi-transparente y necesita fondo solido) -->
-            <Border CornerRadius="14" Background="#FF0E0E10" IsHitTestVisible="False"/>
-            <Border CornerRadius="14" Background="#B0151515" BorderThickness="1.1" Padding="6">
+            <Border CornerRadius="14" Background="{DynamicResource T.FF0E0E10}" IsHitTestVisible="False"/>
+            <Border CornerRadius="14" Background="{DynamicResource T.B0151515}" BorderThickness="1.1" Padding="6">
                 <Border.BorderBrush>
                     <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                         <GradientStop Color="#59FFFFFF" Offset="0"/>
@@ -632,20 +627,20 @@
                 <DataGrid x:Name="GridComponente" AutoGenerateColumns="False"
                           CanUserAddRows="False" CanUserDeleteRows="False"
                           HeadersVisibility="Column" GridLinesVisibility="Horizontal"
-                          HorizontalGridLinesBrush="#262626" BorderThickness="0" Background="Transparent"
+                          HorizontalGridLinesBrush="{DynamicResource T.262626}" BorderThickness="0" Background="Transparent"
                           RowHeaderWidth="0"
                           SelectionMode="Extended" SelectionUnit="FullRow"
                           RowStyle="{StaticResource FilaGenerica}"
                           ContextMenu="{StaticResource MenuGenerico}"
                           ContextMenuOpening="GridComponente_ContextMenuOpening"
                           CellEditEnding="GridComponente_CellEditEnding"
-                          Foreground="{StaticResource TextPrimary}"/>
+                          Foreground="{DynamicResource TextPrimary}"/>
             </Border>
         </Grid>
 
         <!-- ===== Grilla especial ===== -->
         <Border x:Name="EspPanel" Grid.Row="2" Margin="0,12,0,0" Height="190" CornerRadius="14"
-                Background="#B0151515" BorderThickness="1.1" Padding="6" Visibility="Collapsed">
+                Background="{DynamicResource T.B0151515}" BorderThickness="1.1" Padding="6" Visibility="Collapsed">
             <Border.BorderBrush>
                 <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                     <GradientStop Color="#59FFFFFF" Offset="0"/>
@@ -657,13 +652,13 @@
             <DataGrid x:Name="GridComponenteEsp" AutoGenerateColumns="False"
                       CanUserAddRows="False" CanUserDeleteRows="False"
                       HeadersVisibility="Column" GridLinesVisibility="Horizontal"
-                      HorizontalGridLinesBrush="#262626" BorderThickness="0" Background="Transparent"
-                      RowBackground="Transparent" AlternatingRowBackground="#1B1B1B" RowHeaderWidth="0"
+                      HorizontalGridLinesBrush="{DynamicResource T.262626}" BorderThickness="0" Background="Transparent"
+                      RowBackground="Transparent" AlternatingRowBackground="{DynamicResource T.1B1B1B}" RowHeaderWidth="0"
                       SelectionMode="Extended" SelectionUnit="FullRow"
-                      Foreground="{StaticResource TextPrimary}"/>
+                      Foreground="{DynamicResource TextPrimary}"/>
         </Border>
 
         <TextBlock x:Name="LblEstado" Grid.Row="3" Margin="4,10,4,0"
-                   Foreground="{StaticResource TextMuted}" FontSize="11.5" TextWrapping="Wrap"/>
+                   Foreground="{DynamicResource TextMuted}" FontSize="11.5" TextWrapping="Wrap"/>
     </Grid>
 </UserControl>

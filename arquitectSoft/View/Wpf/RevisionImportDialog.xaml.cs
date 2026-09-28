@@ -42,7 +42,7 @@ namespace arquitectSoft.View.Wpf
         private static readonly Brush ROJO = new SolidColorBrush(Color.FromRgb(0xE0, 0x6C, 0x6C));
         private static readonly Brush AMBAR = new SolidColorBrush(Color.FromRgb(0xE0, 0xA9, 0x5B));
         private static readonly Brush VERDE = new SolidColorBrush(Color.FromRgb(0x7F, 0xB8, 0x8A));
-        private static readonly Brush GRIS = new SolidColorBrush(Color.FromRgb(0x8C, 0x8C, 0x8C));
+        private static Brush GRIS => Tema.Pincel("TextMuted");
 
         public RevisionImportDialog()
         {
@@ -105,7 +105,7 @@ namespace arquitectSoft.View.Wpf
             {
                 int round = DWMWCP_ROUND;
                 DwmSetWindowAttribute(hwnd, DWMWA_WINDOW_CORNER_PREFERENCE, ref round, sizeof(int));
-                int dark = 1;
+                int dark = Tema.DwmOscuro;
                 DwmSetWindowAttribute(hwnd, DWMWA_USE_IMMERSIVE_DARK_MODE, ref dark, sizeof(int));
                 int backdrop = DWMSBT_TRANSIENTWINDOW;
                 DwmSetWindowAttribute(hwnd, DWMWA_SYSTEMBACKDROP_TYPE, ref backdrop, sizeof(int));

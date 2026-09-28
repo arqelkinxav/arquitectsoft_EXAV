@@ -18,41 +18,11 @@
 
     <Window.Resources>
         <FontFamily x:Key="Jakarta">pack://application:,,,/Resources/Fonts/#Plus Jakarta Sans</FontFamily>
-        <SolidColorBrush x:Key="PanelBorder" Color="#2F2F2F"/>
-        <SolidColorBrush x:Key="InputDark"   Color="#0E0E0E"/>
         <SolidColorBrush x:Key="Accent"      Color="#E07B5B"/>
-        <SolidColorBrush x:Key="TextPrimary" Color="#ECECEC"/>
-        <SolidColorBrush x:Key="TextMuted"   Color="#8C8C8C"/>
 
-        <Style x:Key="DotButton" TargetType="Button">
-            <Setter Property="Width" Value="14"/>
-            <Setter Property="Height" Value="14"/>
-            <Setter Property="Margin" Value="5,0"/>
-            <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="Foreground" Value="#0B0B0B"/>
-            <Setter Property="FontFamily" Value="Segoe MDL2 Assets"/>
-            <Setter Property="FontSize" Value="7"/>
-            <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Grid>
-                            <Ellipse x:Name="dot" Fill="#3A3A3A"/>
-                            <ContentPresenter x:Name="g" Opacity="0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        </Grid>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="dot" Property="Fill" Value="#E07B5B"/>
-                                <Setter TargetName="g" Property="Opacity" Value="1"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
 
         <Style x:Key="Cap" TargetType="TextBlock">
-            <Setter Property="Foreground" Value="{StaticResource TextMuted}"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextMuted}"/>
             <Setter Property="FontSize" Value="11"/>
             <Setter Property="FontWeight" Value="Medium"/>
             <Setter Property="Margin" Value="2,0,0,6"/>
@@ -60,7 +30,7 @@
 
         <!-- Caja de texto oscura (usuario) -->
         <Style x:Key="Field" TargetType="TextBox">
-            <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
             <Setter Property="CaretBrush" Value="{StaticResource Accent}"/>
             <Setter Property="FontSize" Value="14"/>
             <Setter Property="Height" Value="42"/>
@@ -68,8 +38,8 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="TextBox">
-                        <Border x:Name="bd" CornerRadius="10" Background="{StaticResource InputDark}"
-                                BorderBrush="{StaticResource PanelBorder}" BorderThickness="1">
+                        <Border x:Name="bd" CornerRadius="10" Background="{DynamicResource InputDark}"
+                                BorderBrush="{DynamicResource PanelBorder}" BorderThickness="1">
                             <ScrollViewer x:Name="PART_ContentHost" Margin="{TemplateBinding Padding}"
                                           VerticalAlignment="Center"/>
                         </Border>
@@ -85,7 +55,7 @@
 
         <!-- Caja de contraseña oscura (mismo aspecto) -->
         <Style x:Key="FieldPass" TargetType="PasswordBox">
-            <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
             <Setter Property="CaretBrush" Value="{StaticResource Accent}"/>
             <Setter Property="FontSize" Value="14"/>
             <Setter Property="Height" Value="42"/>
@@ -93,8 +63,8 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="PasswordBox">
-                        <Border x:Name="bd" CornerRadius="10" Background="{StaticResource InputDark}"
-                                BorderBrush="{StaticResource PanelBorder}" BorderThickness="1">
+                        <Border x:Name="bd" CornerRadius="10" Background="{DynamicResource InputDark}"
+                                BorderBrush="{DynamicResource PanelBorder}" BorderThickness="1">
                             <ScrollViewer x:Name="PART_ContentHost" Margin="{TemplateBinding Padding}"
                                           VerticalAlignment="Center"/>
                         </Border>
@@ -111,7 +81,7 @@
         <!-- Casilla "Recordar mis datos" on-theme (marca peach) -->
         <Style x:Key="Recordar" TargetType="CheckBox">
             <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="Foreground" Value="{StaticResource TextMuted}"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextMuted}"/>
             <Setter Property="FontSize" Value="12"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="Template">
@@ -119,8 +89,8 @@
                     <ControlTemplate TargetType="CheckBox">
                         <StackPanel Orientation="Horizontal" Background="Transparent">
                             <Border x:Name="box" Width="17" Height="17" CornerRadius="5"
-                                    Background="{StaticResource InputDark}" BorderThickness="1"
-                                    BorderBrush="{StaticResource PanelBorder}" VerticalAlignment="Center">
+                                    Background="{DynamicResource InputDark}" BorderThickness="1"
+                                    BorderBrush="{DynamicResource PanelBorder}" VerticalAlignment="Center">
                                 <TextBlock x:Name="tick" Text="&#xE73E;" FontFamily="Segoe MDL2 Assets"
                                            FontSize="10" Foreground="#201712" Opacity="0"
                                            HorizontalAlignment="Center" VerticalAlignment="Center"/>
@@ -135,7 +105,7 @@
                             </Trigger>
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter TargetName="box" Property="BorderBrush" Value="{StaticResource Accent}"/>
-                                <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+                                <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -145,7 +115,7 @@
 
         <Style x:Key="Ghost" TargetType="Button">
             <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="Foreground" Value="{StaticResource TextMuted}"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextMuted}"/>
             <Setter Property="FontSize" Value="13"/>
             <Setter Property="Height" Value="40"/>
             <Setter Property="MinWidth" Value="100"/>
@@ -153,13 +123,13 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Border x:Name="bd" CornerRadius="11" BorderThickness="1"
-                                BorderBrush="{StaticResource PanelBorder}" Background="#12FFFFFF">
+                                BorderBrush="{DynamicResource PanelBorder}" Background="{DynamicResource T.12FFFFFF}">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter TargetName="bd" Property="BorderBrush" Value="{StaticResource Accent}"/>
-                                <Setter Property="Foreground" Value="{StaticResource TextPrimary}"/>
+                                <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -221,14 +191,14 @@
             </LinearGradientBrush>
         </Border.BorderBrush>
 
-    <Grid TextElement.FontFamily="{StaticResource Jakarta}" TextElement.Foreground="{StaticResource TextPrimary}">
+    <Grid TextElement.FontFamily="{StaticResource Jakarta}" TextElement.Foreground="{DynamicResource TextPrimary}">
         <Grid.RowDefinitions>
             <RowDefinition Height="44"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
         <Rectangle x:Name="GlassBackdrop" Grid.Row="0" Grid.RowSpan="2" IsHitTestVisible="False" RadiusX="7" RadiusY="7"/>
-        <Rectangle Grid.Row="0" Grid.RowSpan="2" IsHitTestVisible="False" Fill="#9E000000" RadiusX="7" RadiusY="7"/>
+        <Rectangle Grid.Row="0" Grid.RowSpan="2" IsHitTestVisible="False" Fill="{DynamicResource T.9E000000}" RadiusX="7" RadiusY="7"/>
 
         <Border Grid.Row="0" Grid.RowSpan="2" IsHitTestVisible="False" Panel.ZIndex="0">
             <Border.Background>
@@ -247,7 +217,7 @@
                 <TextBlock Text="arquitectSoft" FontSize="13" FontWeight="Bold" VerticalAlignment="Center"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,18,0">
-                <Button Style="{StaticResource DotButton}" Content="&#xE8BB;" Click="Cancelar_Click" ToolTip="Salir"/>
+                <Button Style="{StaticResource BotonVentanaCerrar}" Content="&#xE8BB;" Click="Cancelar_Click" ToolTip="Salir"/>
             </StackPanel>
         </Grid>
 
