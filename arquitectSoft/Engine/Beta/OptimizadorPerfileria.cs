@@ -265,11 +265,16 @@ WHERE cd.Asignacion_puertas=0 AND cd.Id_Unidad_Calculada IN (1,5)";
 
         // ================= cálculo de hoy =================
 
+        /// <summary>
+        /// Piezas de la Medida Base que pide hoy el Excel: la regla del procedimiento de agrupar
+        /// (decimal &lt; 0,1 → hacia abajo × desperdicio) y, como el exportador, redondeado hacia
+        /// ARRIBA (9,45 → 10). Compararse con el 9,45 hacía parecer que hoy gastaba menos.
+        /// </summary>
         public static double PiezasHoy(double suma, int b, double desp)
         {
             double x = suma / b;
-            if (x - Math.Floor(x) < 0.1) return Math.Floor(x) * desp;
-            return Math.Ceiling(suma * desp / b);
+            double pz = x - Math.Floor(x) < 0.1 ? Math.Floor(x) * desp : suma * desp / b;
+            return Math.Ceiling(pz - 1e-9);
         }
 
         public static int PiezasPorBarra(int b) { return b + Margen <= Barra ? Math.Max(1, Barra / (b + Margen)) : 1; }

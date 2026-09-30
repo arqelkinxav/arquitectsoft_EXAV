@@ -720,9 +720,11 @@ namespace arquitectSoft.Engine.Beta
             }
 
             Encabezado(ws, f, "Tubo en bruto", "Descripción", "Acabado", "Tubos hoy", "Tubos propuesta", "Diferencia",
-                       "Retazos del almacén usados", "Restos al almacén hoy", "Restos al almacén propuesta");
+                       "Retazos del almacén usados", "Restos al almacén hoy", "Restos al almacén propuesta",
+                       "Metros netos hoy", "Metros netos propuesta", "Ahorro (m)");
             f++;
             int tHoy = 0, tTub = 0, tRet = 0;
+            double mHoyT = 0, mPropT = 0;
             foreach (var g in grupos.OrderBy(x => x.Clave))
             {
                 // Hoy: recopilatorias en piezas de la Medida Base (N por tubo) y piezas a medida aparte.
@@ -734,6 +736,10 @@ namespace arquitectSoft.Engine.Beta
                     for (int i = 0; i < tubRec; i++) guardaHoy.Add(O.Retazo(a.BaseHoy));
                 int tub = g.Tubos.Count(t => t.Origen == "nuevo");
                 int ret = g.Tubos.Count - tub;
+                // Neto = tubo cortado menos los restos de 1000 o más que vuelven al almacén (los
+                // colores sin código no se guardan). Aquí se ve el ahorro aunque no baje ningún tubo.
+                double mHoy = (tubHoy * (double)O.Barra - (g.SinCodigo ? 0 : guardaHoy.Sum())) / 1000.0;
+                double mProp = O.Neto(g.Tubos, !g.SinCodigo) / 1000.0;
                 ws.Cell(f, 1).Value = g.Codigo;
                 ws.Cell(f, 2).Value = g.Descripcion;
                 ws.Cell(f, 3).Value = g.Acabado + (g.SinCodigo ? " (sin código: sin almacén)" : "");
@@ -743,9 +749,15 @@ namespace arquitectSoft.Engine.Beta
                 ws.Cell(f, 7).Value = ret;
                 ws.Cell(f, 8).Value = Lista(guardaHoy);
                 ws.Cell(f, 9).Value = Lista(g.Tubos.Where(t => t.Libre >= O.MinEnvio).Select(t => t.Libre));
+                ws.Cell(f, 10).Value = Math.Round(mHoy, 2);
+                ws.Cell(f, 11).Value = Math.Round(mProp, 2);
+                ws.Cell(f, 12).Value = Math.Round(mHoy - mProp, 2);
                 if (tub < tubHoy) ws.Cell(f, 6).Style.Fill.BackgroundColor = Verde;
                 else if (tub > tubHoy) ws.Cell(f, 6).Style.Fill.BackgroundColor = Naranja;
+                if (mHoy - mProp > 0.005) ws.Cell(f, 12).Style.Fill.BackgroundColor = Verde;
+                else if (mHoy - mProp < -0.005) ws.Cell(f, 12).Style.Fill.BackgroundColor = Naranja;
                 tHoy += tubHoy; tTub += tub; tRet += ret;
+                mHoyT += mHoy; mPropT += mProp;
                 f++;
             }
             ws.Cell(f, 1).Value = "TOTAL";
@@ -753,13 +765,24 @@ namespace arquitectSoft.Engine.Beta
             ws.Cell(f, 5).Value = tTub;
             ws.Cell(f, 6).Value = Pct(tTub, tHoy);
             ws.Cell(f, 7).Value = tRet;
-            ws.Range(f, 1, f, 9).Style.Font.Bold = true;
-            ws.Range(f, 1, f, 9).Style.Fill.BackgroundColor = Verde;
+            ws.Cell(f, 10).Value = Math.Round(mHoyT, 2);
+            ws.Cell(f, 11).Value = Math.Round(mPropT, 2);
+            ws.Cell(f, 12).Value = Math.Round(mHoyT - mPropT, 2);
+            if (mHoyT > 0)
+            {
+                double p = 100 * (mHoyT - mPropT) / mHoyT;
+                ws.Cell(f, 9).Value = Math.Abs(p) < 0.05 ? "Metros netos: igual"
+                    : "Metros netos: " + Math.Abs(p).ToString("0.0", Es) + (p > 0 ? " % menos" : " % más");
+            }
+            ws.Range(f, 1, f, 12).Style.Font.Bold = true;
+            ws.Range(f, 1, f, 12).Style.Fill.BackgroundColor = Verde;
+            ws.Range(f - 1 - grupos.Count, 10, f, 12).Style.NumberFormat.Format = "0.00";
             f += 2;
             string[] notas =
             {
                 "Tubos = tubos de 6000 nuevos que hay que cortar. Los restos de 1000 mm o más van al almacén; se listan aparte porque solo ahorran si se usan en otra obra.",
-                "Hoy: recopilatorias como las calcula arquitectSoft (suma ÷ Medida Base + %, las piezas que quepan por tubo) y piezas a medida encajadas en tubos de 6000 aparte.",
+                "Metros netos = tubo cortado menos los restos de 1000 mm o más que vuelven al almacén. En obras pequeñas casi nunca baja un tubo entero: el ahorro se ve aquí, como resto guardado.",
+                "Hoy: recopilatorias como las pide el Excel de arquitectSoft (suma ÷ Medida Base + %, redondeado hacia arriba), las piezas que quepan por tubo, y piezas a medida encajadas en tubos de 6000 aparte.",
                 "Propuesta: recopilatorias repartidas tramo a tramo (media pieza, empalmes solo si ahorran 1 m, trozos ≥ 300; repuestos solo en obras de 5 frentes o más y donde la holgura no llega al 2 %) cortadas en los mismos tubos que las piezas a medida.",
                 "El acabado es el real (después de \"Cambiar Acabado\"). Los aceros de 20 (IMC0003 y variantes) comparten tubo en bruto. Los colores sin código no tienen almacén.",
                 "Con archivo de almacén (almacen_retazos.csv junto al programa: id;codigo;largo_mm) se usan primero sus retazos y la hoja \"Del almacén\" dice cuáles dar de baja."
@@ -774,6 +797,7 @@ namespace arquitectSoft.Engine.Beta
             ws.Column(1).Width = 18; ws.Column(2).Width = 42; ws.Column(3).Width = 28;
             for (int c = 4; c <= 8; c++) ws.Column(c).Width = 16;
             ws.Column(9).Width = 32;
+            for (int c = 10; c <= 12; c++) ws.Column(c).Width = 14;
         }
 
         private void HojaFabrica(XLWorkbook wb, List<Grupo> grupos)
