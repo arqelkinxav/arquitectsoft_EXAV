@@ -385,7 +385,111 @@ namespace arquitectSoft.View.Wpf
         }
 
         // ===== Modo diurno / nocturno =====
-        private void Tema_Click(object sender, RoutedEventArgs e) => Tema.Alternar();
+        private void Tema_Click(object sender, RoutedEventArgs e) => CambiarTemaAnimado();
+
+        // Transición día ⇄ noche: foto del programa tal cual está, encima; debajo se cambia el
+        // tema; en la foto se abre un círculo desde el botón (borde apenas difuminado) que
+        // deja ver el modo nuevo. Si algo falla, se cambia sin animación: nunca bloquea.
+        private const double DuracionTema = .7;
+        private Image _fotoTema;
+
+        private void CambiarTemaAnimado()
+        {
+            if (_fotoTema != null) return;                        // ya hay una en curso
+            if (!SystemParameters.ClientAreaAnimation || Raiz.ActualWidth < 1)
+            {
+                Tema.Alternar();
+                AnimarIconoTema();
+                return;
+            }
+
+            bool cambiado = false;
+            try
+            {
+                double w = Raiz.ActualWidth, h = Raiz.ActualHeight;
+                DpiScale dpi = VisualTreeHelper.GetDpi(this);
+                var dv = new DrawingVisual();
+                using (DrawingContext dc = dv.RenderOpen())
+                    dc.DrawRectangle(new VisualBrush(Raiz) { Stretch = Stretch.None, AlignmentX = AlignmentX.Left, AlignmentY = AlignmentY.Top },
+                                     null, new Rect(0, 0, w, h));
+                var foto = new RenderTargetBitmap((int)Math.Ceiling(w * dpi.DpiScaleX), (int)Math.Ceiling(h * dpi.DpiScaleY),
+                                                  dpi.PixelsPerInchX, dpi.PixelsPerInchY, PixelFormats.Pbgra32);
+                foto.Render(dv);
+                foto.Freeze();
+
+                // Centro = el botón; radio final = hasta la esquina más lejana.
+                Point c = BtnTema.TranslatePoint(new Point(BtnTema.ActualWidth / 2, BtnTema.ActualHeight / 2), Raiz);
+                double rMax = 0;
+                foreach (var esquina in new[] { new Point(0, 0), new Point(w, 0), new Point(0, h), new Point(w, h) })
+                    rMax = Math.Max(rMax, (esquina - c).Length);
+                rMax += 40;   // que el borde difuminado también salga del todo
+
+                // Máscara: transparente dentro del círculo (se ve el tema nuevo), opaca fuera
+                // (sigue la foto del viejo). El último 3 % del radio es el borde suave.
+                var mascara = new RadialGradientBrush
+                {
+                    MappingMode = BrushMappingMode.Absolute,
+                    Center = c, GradientOrigin = c,
+                    RadiusX = 0, RadiusY = 0
+                };
+                mascara.GradientStops.Add(new GradientStop(Colors.Transparent, 0));
+                mascara.GradientStops.Add(new GradientStop(Colors.Transparent, .97));
+                mascara.GradientStops.Add(new GradientStop(Colors.Black, 1));
+
+                _fotoTema = new Image
+                {
+                    Source = foto, Width = w, Height = h, Stretch = Stretch.Fill,
+                    HorizontalAlignment = HorizontalAlignment.Left, VerticalAlignment = VerticalAlignment.Top,
+                    OpacityMask = mascara
+                };
+                RenderOptions.SetBitmapScalingMode(_fotoTema, BitmapScalingMode.NearestNeighbor);  // 1:1, sin suavizar
+                Grid.SetRowSpan(_fotoTema, Math.Max(1, Raiz.RowDefinitions.Count));
+                Panel.SetZIndex(_fotoTema, int.MaxValue);
+                Raiz.Children.Add(_fotoTema);                     // tapa (y bloquea clics) durante el cambio
+
+                Tema.Alternar();                                  // por debajo: colores, fondo, cristal
+                cambiado = true;
+                AnimarIconoTema();
+
+                var curva = new QuarticEase { EasingMode = EasingMode.EaseInOut };
+                var abrir = new DoubleAnimation(0, rMax, TimeSpan.FromSeconds(DuracionTema)) { EasingFunction = curva };
+                abrir.Completed += (s, e) => QuitarFotoTema();
+                mascara.BeginAnimation(RadialGradientBrush.RadiusXProperty, abrir);
+                mascara.BeginAnimation(RadialGradientBrush.RadiusYProperty,
+                    new DoubleAnimation(0, rMax, TimeSpan.FromSeconds(DuracionTema)) { EasingFunction = curva });
+            }
+            catch
+            {
+                QuitarFotoTema();
+                if (!cambiado) { Tema.Alternar(); AnimarIconoTema(); }   // sin animación, pero cambia
+            }
+        }
+
+        private void QuitarFotoTema()
+        {
+            if (_fotoTema == null) return;
+            Raiz.Children.Remove(_fotoTema);
+            _fotoTema = null;
+        }
+
+        // El sol / la luna del botón entra girando un poco.
+        private void AnimarIconoTema()
+        {
+            try
+            {
+                var ico = BtnTema.Template.FindName("ico", BtnTema) as TextBlock;
+                if (ico == null) return;
+                var giro = new RotateTransform();
+                ico.RenderTransformOrigin = new Point(.5, .5);
+                ico.RenderTransform = giro;
+                var curva = new CubicEase { EasingMode = EasingMode.EaseOut };
+                giro.BeginAnimation(RotateTransform.AngleProperty,
+                    new DoubleAnimation(-90, 0, TimeSpan.FromSeconds(.6)) { EasingFunction = curva });
+                ico.BeginAnimation(OpacityProperty,
+                    new DoubleAnimation(0, 1, TimeSpan.FromSeconds(.45)) { EasingFunction = curva });
+            }
+            catch { }
+        }
 
         private void OnTemaCambiado(object sender, EventArgs e)
         {

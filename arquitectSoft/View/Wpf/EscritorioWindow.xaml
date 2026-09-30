@@ -93,7 +93,7 @@
         </ResourceDictionary>
     </Window.Resources>
 
-    <Grid TextElement.FontFamily="{StaticResource Jakarta}" TextElement.Foreground="{DynamicResource TextPrimary}">
+    <Grid x:Name="Raiz" TextElement.FontFamily="{StaticResource Jakarta}" TextElement.Foreground="{DynamicResource TextPrimary}">
         <Grid.RowDefinitions>
             <RowDefinition Height="38"/>
             <RowDefinition Height="*"/>
