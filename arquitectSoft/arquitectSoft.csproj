@@ -154,6 +154,7 @@
     <Compile Include="View\Wpf\SelectorCarpeta.cs" />
     <Compile Include="Engine\CatalogoRevitExporter.cs" />
     <Compile Include="Engine\DependenciaResolver.cs" />
+    <Compile Include="Engine\PerfilesOcultos.cs" />
     <Compile Include="Engine\Novedades.cs" />
     <Compile Include="Engine\DumpSql.cs" />
     <Compile Include="Engine\FilaPuerta.cs" />

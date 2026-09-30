@@ -1,4 +1,4 @@
-using arquitectSoft.Class;
+﻿using arquitectSoft.Class;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -74,6 +74,7 @@ namespace arquitectSoft.View.Wpf.Panels
             TxtCodigo.IsEnabled = false;
             TxtDescripcion.IsEnabled = false;
             ChkVidrios.IsEnabled = false;
+            ChkOculto.IsEnabled = false;
             CmbAcabado.IsEnabled = false;
             MultiPanel.Visibility = Visibility.Collapsed;
 
@@ -94,6 +95,7 @@ namespace arquitectSoft.View.Wpf.Panels
             TxtCodigo.IsEnabled = opcion != "Editar";   // en edición el código no se toca
             TxtDescripcion.IsEnabled = true;
             ChkVidrios.IsEnabled = true;
+            ChkOculto.IsEnabled = true;
             CmbAcabado.IsEnabled = true;
 
             BtnNuevo.IsEnabled = false;
@@ -111,6 +113,7 @@ namespace arquitectSoft.View.Wpf.Panels
             TxtCodigo.IsEnabled = false;
             TxtDescripcion.IsEnabled = false;
             ChkVidrios.IsEnabled = false;
+            ChkOculto.IsEnabled = false;
             CmbAcabado.IsEnabled = false;
 
             BtnNuevo.IsEnabled = true;
@@ -127,6 +130,7 @@ namespace arquitectSoft.View.Wpf.Panels
             TxtCodigo.Text = "";
             TxtDescripcion.Text = "";
             ChkVidrios.IsChecked = false;
+            ChkOculto.IsChecked = false;
             CmbAcabado.SelectedIndex = 0;
             _idSubComponente = "";
             _multi.Clear();
@@ -162,10 +166,12 @@ namespace arquitectSoft.View.Wpf.Panels
             int.TryParse(bsc.ReturnItem3, out idAc);
             CmbAcabado.SelectedValue = idAc;
             ChkVidrios.IsChecked = bsc.ReturnItem4 == "1";
+            ChkOculto.IsChecked = Engine.PerfilesOcultos.EstaMarcado(TxtCodigo.Text);
 
             TxtCodigo.IsEnabled = false;
             TxtDescripcion.IsEnabled = false;
             ChkVidrios.IsEnabled = false;
+            ChkOculto.IsEnabled = false;
             CmbAcabado.IsEnabled = false;
 
             BtnCancelar.IsEnabled = true;
@@ -232,6 +238,10 @@ namespace arquitectSoft.View.Wpf.Panels
             {
                 bool chk = ChkVidrios.IsChecked == true;
                 resul = dto.SaveSubComponent(TxtCodigo.Text, TxtDescripcion.Text, AcabadoSeleccionado(), chk, _opc, resul);
+
+                // Oculto: va por código base (todos sus acabados), en beta_perfil_oculto.
+                string errOculto = Engine.PerfilesOcultos.Marcar(TxtCodigo.Text, ChkOculto.IsChecked == true);
+                if (errOculto != "") resul += " (No se pudo guardar la casilla Oculto: " + errOculto + ")";
 
                 // Multi-acabado: replica el subcomponente para cada acabado seleccionado.
                 if (_multi.Count > 0)

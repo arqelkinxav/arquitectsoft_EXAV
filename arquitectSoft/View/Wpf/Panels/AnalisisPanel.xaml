@@ -494,6 +494,25 @@
                             </Border>
                         </StackPanel>
 
+                        <!-- Perfiles ocultos (zócalo OX…): base propuesta por el programa, editable.
+                             Vacía = vuelve a la propuesta. Engine/PerfilesOcultos.cs -->
+                        <StackPanel x:Name="PanelBaseOcultos" Margin="10,0" IsEnabled="False"
+                                    ToolTip="Medida base de los perfiles ocultos (zócalo OX…). La propone el programa para enviar lo mínimo a obra; se puede cambiar a mano. Vacía = vuelve a la propuesta.">
+                            <TextBlock x:Name="LblBaseOcultos" Text="BASE OCULTOS" Style="{StaticResource FieldLabel}"/>
+                            <Border Style="{StaticResource DarkBox}" Width="108">
+                                <DockPanel>
+                                    <StackPanel DockPanel.Dock="Right" Width="22">
+                                        <RepeatButton Style="{StaticResource SpinButton}" Height="19"
+                                                      Content="&#xE70E;" Click="OcultosUp_Click"/>
+                                        <RepeatButton Style="{StaticResource SpinButton}" Height="19"
+                                                      Content="&#xE70D;" Click="OcultosDown_Click"/>
+                                    </StackPanel>
+                                    <TextBox x:Name="TxtBaseOcultos" Text=""
+                                             Style="{StaticResource NumTextBox}" PreviewTextInput="SoloEnteros"/>
+                                </DockPanel>
+                            </Border>
+                        </StackPanel>
+
                         <StackPanel Margin="10,0">
                             <TextBlock Text="% DESPERDICIO" Style="{StaticResource FieldLabel}"/>
                             <Border Style="{StaticResource DarkBox}" Width="90">

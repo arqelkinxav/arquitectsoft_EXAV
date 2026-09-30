@@ -44,6 +44,14 @@ namespace arquitectSoft.View.Wpf.Panels
         /// </summary>
         private readonly bool _beta;
 
+        // Perfiles ocultos (zócalo OX…): su propia medida base para los tramos recopilatorios.
+        // La propone el programa (lo mínimo a obra); si se escribe a mano, se respeta en los
+        // recálculos hasta cargar otro proyecto o dejar la caja vacía.
+        private HashSet<string> _ocultos = new HashSet<string>();
+        private int _ocultosPropuesta = 0;   // 0 = el proyecto no tiene ocultos recopilatorios
+        private int _ocultosValor = 0;       // la que está aplicada ahora
+        private bool _ocultosManual = false;
+
         public AnalisisPanel() : this(false) { }
 
         public AnalisisPanel(bool beta)
@@ -65,6 +73,18 @@ namespace arquitectSoft.View.Wpf.Panels
                 tb.KeyDown += Valor_KeyDown;
                 tb.LostKeyboardFocus += (s, ev) => AplicarValores();
             }
+
+            TxtBaseOcultos.TextChanged += (s, ev) =>
+            {
+                if (PanelBaseOcultos.IsEnabled && LeerEntero(TxtBaseOcultos.Text) != _ocultosValor)
+                    LblEstado.Text = "Pulsa Enter para aplicar la base de ocultos (vacía = la propuesta; Esc deshace).";
+            };
+            TxtBaseOcultos.KeyDown += (s, ev) =>
+            {
+                if (ev.Key == Key.Enter || ev.Key == Key.Return) { ev.Handled = true; AplicarOcultos(); }
+                else if (ev.Key == Key.Escape) { ev.Handled = true; TxtBaseOcultos.Text = _ocultosValor.ToString(); }
+            };
+            TxtBaseOcultos.LostKeyboardFocus += (s, ev) => AplicarOcultos();
 
             // Ajuste de columnas (centrado + wrap de descripción) en todas las grillas.
             foreach (var dg in TodasLasGrillas())
@@ -116,6 +136,66 @@ namespace arquitectSoft.View.Wpf.Panels
             Flecha(TxtDesperdicio, +1, DesperdicioMin, DesperdicioMax);
         private void DesperdicioDown_Click(object sender, RoutedEventArgs e) =>
             Flecha(TxtDesperdicio, -1, DesperdicioMin, DesperdicioMax);
+
+        private void OcultosUp_Click(object sender, RoutedEventArgs e) => FlechaOcultos(+PerfilesOcultos.Paso);
+        private void OcultosDown_Click(object sender, RoutedEventArgs e) => FlechaOcultos(-PerfilesOcultos.Paso);
+
+        private void FlechaOcultos(int paso)
+        {
+            // Salta a múltiplos de 100 (1590 → 1600 ↑ / 1500 ↓).
+            int v = LeerEntero(TxtBaseOcultos.Text);
+            v = paso > 0 ? (v / PerfilesOcultos.Paso + 1) * PerfilesOcultos.Paso
+                         : ((v + PerfilesOcultos.Paso - 1) / PerfilesOcultos.Paso - 1) * PerfilesOcultos.Paso;
+            TxtBaseOcultos.Text = Clamp(v, PerfilesOcultos.Paso, MedidaMax).ToString();
+            AplicarOcultos();
+        }
+
+        /// <summary>Aplica lo escrito en "Base ocultos". No recalcula (no va a la base):
+        /// solo rehace la vista desde el último análisis.</summary>
+        private void AplicarOcultos()
+        {
+            if (!PanelBaseOcultos.IsEnabled || _base == null) return;
+            int v = LeerEntero(TxtBaseOcultos.Text);
+            if (v <= 0)
+            {
+                v = _ocultosPropuesta;                    // vacía = vuelve a la propuesta
+                TxtBaseOcultos.Text = v.ToString();
+            }
+            _ocultosManual = v != _ocultosPropuesta;
+            if (v == _ocultosValor) { LblEstado.Text = ResumenOcultos(); return; }
+            _ocultosValor = v;
+            RefrescarDesdeBase(false);
+            LblEstado.Text = ResumenOcultos();
+        }
+
+        /// <summary>Tras un cálculo fresco: relee qué perfiles son ocultos y propone su base.</summary>
+        private void PrepararOcultos()
+        {
+            _ocultos = PerfilesOcultos.Cargar();
+            _ocultosPropuesta = PerfilesOcultos.Proponer(_base.PerfilMetalico, _ocultos);
+            if (_ocultosPropuesta == 0)
+            {
+                _ocultosValor = 0;
+                _ocultosManual = false;
+                TxtBaseOcultos.Text = "";
+                PanelBaseOcultos.IsEnabled = false;
+                return;
+            }
+            if (!_ocultosManual || _ocultosValor <= 0) { _ocultosValor = _ocultosPropuesta; _ocultosManual = false; }
+            TxtBaseOcultos.Text = _ocultosValor.ToString();
+            PanelBaseOcultos.IsEnabled = true;
+        }
+
+        private string ResumenOcultos()
+        {
+            if (_ocultosValor <= 0) return "";
+            string s = "Base ocultos " + _ocultosValor + (_ocultosManual
+                ? " (a mano; la propuesta es " + _ocultosPropuesta + ")"
+                : " (propuesta)");
+            if (_ocultosValor > PerfilesOcultos.BaseMax) s += " · ojo: más de " + PerfilesOcultos.BaseMax + " no cabe en el transporte";
+            else if (_ocultosValor < PerfilesOcultos.BaseMin) s += " · ojo: fábrica no envía piezas de menos de " + PerfilesOcultos.BaseMin;
+            return s;
+        }
 
         private void Flecha(TextBox tb, int paso, int min, int max)
         {
@@ -178,6 +258,7 @@ namespace arquitectSoft.View.Wpf.Panels
 
             LblRuta.Text = _engine.DirectorioActual ?? "";
             ActualizarTituloVentana();
+            _ocultosManual = false;   // proyecto nuevo: la base de ocultos vuelve a la propuesta
             await RecalcularAsync(seleccionarPestana: true);
         }
 
@@ -327,10 +408,12 @@ namespace arquitectSoft.View.Wpf.Panels
             _base = res.Copiar();
             _resolver = DependenciaResolver.Cargar();
             _acabadoPerfil = AcabadoPorDefecto(res.PerfilMetalico);
+            PrepararOcultos();
             RefrescarDesdeBase(seleccionarPestana);
 
             LblEstado.Text = res.TieneDatos
                 ? string.Format("Listo · {0:0.0} s", sw.ElapsedMilliseconds / 1000.0)
+                  + (_ocultosValor > 0 ? " · " + ResumenOcultos() : "")
                 : "No se encontraron datos para analizar.";
 
             SpinnerListo();
@@ -441,6 +524,10 @@ namespace arquitectSoft.View.Wpf.Panels
             if (_base == null) return;
 
             ResultadoAnalisis vista = _base.Copiar();
+
+            // 0) Perfiles ocultos: sus recopilatorias van con la base de ocultos.
+            if (_ocultosValor > 0)
+                PerfilesOcultos.Aplicar(vista.PerfilMetalico, _ocultos, _ocultosValor);
 
             // 1) Lleva la perfilería del valor por defecto al vigente (si cambió).
             string defecto = AcabadoPorDefecto(_base.PerfilMetalico);
@@ -645,6 +732,10 @@ namespace arquitectSoft.View.Wpf.Panels
             BtnVidrio.Visibility = Visibility.Collapsed;
             _engine.SeleccionVidrio = null;
             HintVacio.Visibility = Visibility.Visible;
+            _ocultosValor = _ocultosPropuesta = 0;
+            _ocultosManual = false;
+            TxtBaseOcultos.Text = "";
+            PanelBaseOcultos.IsEnabled = false;
             LblEstado.Text = "Listo. Carga uno o varios archivos TXT para analizar.";
             LblRuta.Text = "";
         }
