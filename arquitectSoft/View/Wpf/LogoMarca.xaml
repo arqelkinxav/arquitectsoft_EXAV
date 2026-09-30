@@ -1,0 +1,43 @@
+<UserControl x:Class="arquitectSoft.View.Wpf.LogoMarca"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!-- Logo de arquitectSoft: tres barras de perfil cortadas en tramos; la pieza que se
+         calcula en melocotón y el retal en gris. Tamaño de barra de título; la entrada
+         del escritorio lo usa escalado. Los colores siguen al tema (día / noche). -->
+    <StackPanel Orientation="Horizontal">
+        <Viewbox Width="20" Height="20" VerticalAlignment="Center">
+            <Canvas Width="64" Height="64">
+                <Canvas>
+                    <Canvas.RenderTransform><ScaleTransform x:Name="EscFila1" CenterX="4"/></Canvas.RenderTransform>
+                    <Rectangle Canvas.Left="4" Canvas.Top="10" Width="34" Height="9" Fill="{DynamicResource TextPrimary}"/>
+                    <Rectangle Canvas.Left="42" Canvas.Top="10" Width="18" Height="9" Fill="{DynamicResource TextPrimary}">
+                        <Rectangle.RenderTransform><TranslateTransform x:Name="Corte1"/></Rectangle.RenderTransform>
+                    </Rectangle>
+                </Canvas>
+                <Canvas>
+                    <Canvas.RenderTransform><ScaleTransform x:Name="EscFila2" CenterX="4"/></Canvas.RenderTransform>
+                    <Rectangle Canvas.Left="4" Canvas.Top="27" Width="20" Height="9" Fill="{DynamicResource TextPrimary}"/>
+                    <Canvas>
+                        <Canvas.RenderTransform><TranslateTransform x:Name="Corte2"/></Canvas.RenderTransform>
+                        <Rectangle Canvas.Left="28" Canvas.Top="27" Width="32" Height="9" Fill="{DynamicResource TextPrimary}"/>
+                        <Rectangle x:Name="Pieza" Canvas.Left="28" Canvas.Top="27" Width="32" Height="9" Fill="{DynamicResource Accent}"/>
+                    </Canvas>
+                </Canvas>
+                <Canvas>
+                    <Canvas.RenderTransform><ScaleTransform x:Name="EscFila3" CenterX="4"/></Canvas.RenderTransform>
+                    <Rectangle Canvas.Left="4" Canvas.Top="44" Width="44" Height="9" Fill="{DynamicResource TextPrimary}"/>
+                    <Canvas>
+                        <Canvas.RenderTransform><TranslateTransform x:Name="Corte3"/></Canvas.RenderTransform>
+                        <Rectangle Canvas.Left="52" Canvas.Top="44" Width="8" Height="9" Fill="{DynamicResource TextPrimary}"/>
+                        <Rectangle x:Name="Retal" Canvas.Left="52" Canvas.Top="44" Width="8" Height="9" Fill="{DynamicResource T.5C5C5C}"/>
+                    </Canvas>
+                </Canvas>
+            </Canvas>
+        </Viewbox>
+        <TextBlock x:Name="Palabra" FontSize="13.5" Margin="8,0,0,1" VerticalAlignment="Center"
+                   Foreground="{DynamicResource TextPrimary}">
+            <TextBlock.RenderTransform><TranslateTransform x:Name="PalabraMov"/></TextBlock.RenderTransform>
+            <Run Text="arquitect" FontWeight="Medium"/><Run Text="Soft" FontWeight="Bold" Foreground="{DynamicResource Accent}"/>
+        </TextBlock>
+    </StackPanel>
+</UserControl>

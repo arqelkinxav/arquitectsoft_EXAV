@@ -278,6 +278,14 @@
     <Compile Include="View\Wpf\GlassDialog.xaml.cs">
       <DependentUpon>GlassDialog.xaml</DependentUpon>
     </Compile>
+    <Page Include="View\Wpf\LogoMarca.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Compile Include="View\Wpf\LogoMarca.xaml.cs">
+      <DependentUpon>LogoMarca.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Wpf\EntradaWindow.cs" />
     <Page Include="View\Wpf\ExportDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

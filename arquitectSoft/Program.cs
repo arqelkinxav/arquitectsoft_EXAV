@@ -40,7 +40,13 @@ namespace arquitectSoft
                 login.ShowDialog();
                 if (!login.LoginOk) break;                 // no se autenticó -> fin
 
-                var esc = new View.Wpf.EscritorioWindow();
+                // Entrada: el logo se arma sin fondo sobre el escritorio de Windows y, cuando
+                // el escritorio del programa ya está pintado, vuela a la barra de título.
+                var entrada = new View.Wpf.EntradaWindow();
+                entrada.Show();
+                View.Wpf.EntradaWindow.Esperar(View.Wpf.EntradaWindow.Armado);
+
+                var esc = new View.Wpf.EscritorioWindow(entrada);
                 esc.ShowDialog();
                 if (!esc.CerrarSesion) break;              // cerró el programa -> fin
                 // CerrarSesion == true -> otra vuelta al login

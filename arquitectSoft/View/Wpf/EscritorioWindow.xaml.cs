@@ -5,8 +5,12 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Interop;
+using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 
 namespace arquitectSoft.View.Wpf
 {
@@ -24,8 +28,11 @@ namespace arquitectSoft.View.Wpf
         /// </summary>
         public bool CerrarSesion { get; private set; }
 
-        public EscritorioWindow()
+        /// <param name="entrada">Ventana sin fondo donde se armó el logo tras el login; al pintarse
+        /// el escritorio, el logo vuela desde ella a la barra de título. Null = sin entrada.</param>
+        public EscritorioWindow(EntradaWindow entrada = null)
         {
+            _entrada = entrada;
             InitializeComponent();
             SourceInitialized += OnSourceInitialized;
             ActualizarBotonTema();
@@ -37,10 +44,23 @@ namespace arquitectSoft.View.Wpf
                 IniciarUltimoCambio();
                 // Catálogo para la auditoría de Revit, al día desde que se abre el programa.
                 Engine.CatalogoRevitExporter.ExportarEnSegundoPlano();
-                // Versión nueva: se enseñan los cambios, una vez por usuario.
-                Dispatcher.BeginInvoke(new Action(MostrarNovedades),
-                                       System.Windows.Threading.DispatcherPriority.ApplicationIdle);
+                // Las novedades salen al acabar la entrada (TerminarEntrada), no encima de ella.
             };
+
+            // Entrada: el logo de la barra se enseña cuando llega el que viene volando.
+            LogoTitulo.Opacity = 0;
+            ContentRendered += (s, e) =>
+            {
+                if (_entrada != null) _entrada.VolarA(LogoTitulo, TerminarEntrada);
+                else TerminarEntrada();
+            };
+            PreviewKeyDown += (s, e) =>          // cualquier tecla la salta
+            {
+                if (_entradaHecha || _entrada == null) return;
+                _entrada.Terminar(TerminarEntrada);
+                e.Handled = true;
+            };
+            Closed += (s, e) => { if (_entrada != null) _entrada.Terminar(null); };
 
             // Tamaño "restaurado" centrado en el MONITOR PRINCIPAL (al que se vuelve si el
             // usuario quita el maximizado con doble clic en la barra de título).
@@ -50,6 +70,22 @@ namespace arquitectSoft.View.Wpf
 
             // Arrancar MAXIMIZADA (respeta la barra de tareas por el hook WM_GETMINMAXINFO).
             WindowState = WindowState.Maximized;
+        }
+
+        // ===== Entrada tras el login =====
+        // El logo se arma sin fondo sobre el escritorio de Windows (EntradaWindow) y, al
+        // pintarse esta ventana, vuela hasta LogoTitulo; entonces se enseña el de verdad.
+        private readonly EntradaWindow _entrada;
+        private bool _entradaHecha;
+
+        private void TerminarEntrada()
+        {
+            if (_entradaHecha) return;
+            _entradaHecha = true;
+            // Queda debajo del que llega volando; el barrido de EntradaWindow lo va descubriendo.
+            LogoTitulo.Opacity = 1;
+            // Versión nueva: se enseñan los cambios, una vez por usuario.
+            Dispatcher.BeginInvoke(new Action(MostrarNovedades), DispatcherPriority.ApplicationIdle);
         }
 
         private void MostrarNovedades()
